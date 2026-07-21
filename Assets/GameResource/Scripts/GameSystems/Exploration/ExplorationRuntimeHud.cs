@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
@@ -41,6 +42,10 @@ namespace Backend.GameSystems.Exploration
 
             ExplorationChannels.OnLogStreaming
                 .Subscribe(UpdateLog)
+                .AddTo(_disposables);
+
+            DynamicEventChannels.OnEventResolved
+                .Subscribe(AppendDynamicEventLog)
                 .AddTo(_disposables);
 
             ExplorationChannels.OnStateChanged
@@ -136,6 +141,15 @@ namespace Backend.GameSystems.Exploration
 
             _logBuilder.Remove(startIndex, endIndex - startIndex);
             _logBuilder.Insert(startIndex, entry.Text + "\n");
+            _logText.text = _logBuilder.ToString();
+        }
+
+        private void AppendDynamicEventLog(DynamicEvent.Data.DynamicEventInstance instance)
+        {
+            if (instance == null || string.IsNullOrEmpty(instance.LlmResultNarration))
+                return;
+
+            _logBuilder.AppendLine("[이벤트] " + instance.LlmResultNarration);
             _logText.text = _logBuilder.ToString();
         }
 
