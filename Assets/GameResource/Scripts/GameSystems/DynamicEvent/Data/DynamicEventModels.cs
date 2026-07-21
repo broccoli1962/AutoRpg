@@ -56,6 +56,7 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public string PlayerChoiceId;
         public DynamicEventOutcomeEffect ResolvedOutcome;
         public string LlmResultNarration;
+        public bool IsSceneReady;
         public bool IsResolved;
     }
 }
