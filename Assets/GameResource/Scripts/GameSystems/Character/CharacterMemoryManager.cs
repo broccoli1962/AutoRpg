@@ -82,6 +82,22 @@ namespace Backend.GameSystems.Character
             Instance.RecordExplorationEventInternal(explorationEvent, party);
         }
 
+        public static List<CharacterMemory> ExportMemories()
+        {
+            if (GameStateUtil.IsQuitting)
+                return new List<CharacterMemory>();
+
+            return Instance.ExportMemoriesInternal();
+        }
+
+        public static void ImportMemories(List<CharacterMemory> memories)
+        {
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            Instance.ImportMemoriesInternal(memories);
+        }
+
         private void BindPartyInternal(PartyState party)
         {
             foreach (var member in party.Members)
@@ -247,6 +263,30 @@ namespace Backend.GameSystems.Character
             }
 
             return builder.Length > 0 ? builder.ToString() : string.Empty;
+        }
+
+        private List<CharacterMemory> ExportMemoriesInternal()
+        {
+            var list = new List<CharacterMemory>(_memories.Count);
+            foreach (var pair in _memories)
+                list.Add(pair.Value);
+
+            return list;
+        }
+
+        private void ImportMemoriesInternal(List<CharacterMemory> memories)
+        {
+            _memories.Clear();
+            if (memories == null)
+                return;
+
+            foreach (var memory in memories)
+            {
+                if (memory == null || string.IsNullOrEmpty(memory.CharacterId))
+                    continue;
+
+                _memories[memory.CharacterId] = memory;
+            }
         }
 
         private static CharacterState FindMember(PartyState party, string characterId)

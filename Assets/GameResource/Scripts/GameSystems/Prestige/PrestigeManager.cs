@@ -3,6 +3,7 @@ using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Simulation;
 using Backend.GameSystems.Prestige.Data;
+using Backend.GameSystems.Save;
 using Backend.Util;
 using Backend.Util.Management;
 using R3;
@@ -42,6 +43,17 @@ namespace Backend.GameSystems.Prestige
                 return 0;
 
             return Instance._meta.LegacyPoints * 8;
+        }
+
+        public static void ImportMeta(MetaProgressionState meta)
+        {
+            if (GameStateUtil.IsQuitting || meta == null)
+                return;
+
+            Instance._meta.LegacyPoints = meta.LegacyPoints;
+            Instance._meta.PrestigeCount = meta.PrestigeCount;
+            Instance._meta.DeepestFloorReached = meta.DeepestFloorReached;
+            Instance._meta.ChronicleEntries = meta.ChronicleEntries ?? new System.Collections.Generic.List<string>();
         }
 
         protected override void OnAwake()
@@ -86,6 +98,7 @@ namespace Backend.GameSystems.Prestige
                 $"[PrestigeManager] Prestige #{_meta.PrestigeCount}: +{legacyGain} legacy " +
                 $"(total={_meta.LegacyPoints}, floor={state.CurrentFloor}, reason={reason})");
 
+            GameSaveManager.Save();
             ScheduleAutoRestart().Forget();
         }
 
