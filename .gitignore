@@ -105,3 +105,7 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Local LLM model weights (large binaries, not tracked in git)
+/[Aa]ssets/StreamingAssets/Models/*.gguf
+/[Aa]ssets/StreamingAssets/Models/*.gguf.meta
