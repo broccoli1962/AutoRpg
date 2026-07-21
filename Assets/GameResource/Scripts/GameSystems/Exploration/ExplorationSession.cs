@@ -43,6 +43,9 @@ namespace Backend.GameSystems.Exploration
             if (State == null || !State.IsExploring || State.IsPaused)
                 return new ExplorationTickResult();
 
+            if (DynamicEventManager.HasActiveUnresolvedEvent)
+                return new ExplorationTickResult();
+
             var tickResult = _simulator.Tick(State, _random);
             PublishTickEvents(tickResult);
 

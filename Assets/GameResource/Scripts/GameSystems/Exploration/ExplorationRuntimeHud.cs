@@ -83,6 +83,8 @@ namespace Backend.GameSystems.Exploration
 
             var rect = _logText.rectTransform;
             rect.sizeDelta = new Vector2(Screen.width - 40f, Screen.height - 160f);
+
+            canvasGo.AddComponent<DynamicEventRuntimePopup>();
         }
 
         private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, TextAnchor anchor)

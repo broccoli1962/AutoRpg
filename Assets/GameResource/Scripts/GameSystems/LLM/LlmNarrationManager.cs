@@ -24,12 +24,13 @@ namespace Backend.GameSystems.LLM
         private const int MaxTokens = 128;
 
         private readonly Queue<LlmNarrationJob> _queue = new();
+        private readonly SemaphoreSlim _inferenceLock = new(1, 1);
         private LlamaInferenceService _service;
         private bool _isModelReady;
         private bool _isModelLoading;
         private bool _isProcessing;
 
-        public bool IsModelReady => _isModelReady;
+        public static bool IsModelReady => !GameStateUtil.IsQuitting && Instance._isModelReady;
 
         protected override void OnAwake()
         {
@@ -63,6 +64,42 @@ namespace Backend.GameSystems.LLM
                 return;
 
             Instance.Enqueue(job);
+        }
+
+        /// <summary>
+        /// 동적 이벤트 등 단발성 LLM 호출용. 로그 큐와 동일한 추론 락을 공유한다.
+        /// </summary>
+        public static async UniTask<string> GenerateTextAsync(
+            string prompt,
+            int maxTokens,
+            float temperature,
+            CancellationToken cancellationToken = default)
+        {
+            if (GameStateUtil.IsQuitting || string.IsNullOrWhiteSpace(prompt))
+                return null;
+
+            return await Instance.GenerateTextInternalAsync(prompt, maxTokens, temperature, cancellationToken);
+        }
+
+        private async UniTask<string> GenerateTextInternalAsync(
+            string prompt,
+            int maxTokens,
+            float temperature,
+            CancellationToken cancellationToken)
+        {
+            if (!_isModelReady || _service == null)
+                return null;
+
+            await _inferenceLock.WaitAsync(cancellationToken);
+            try
+            {
+                return await UniTask.RunOnThreadPool(async () =>
+                    await _service.GenerateAsync(prompt, maxTokens, temperature, null, cancellationToken));
+            }
+            finally
+            {
+                _inferenceLock.Release();
+            }
         }
 
         private void Enqueue(LlmNarrationJob job)
@@ -168,13 +205,21 @@ namespace Backend.GameSystems.LLM
             try
             {
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(InferenceTimeoutSeconds));
-                resultText = await UniTask.RunOnThreadPool(async () =>
-                    await _service.GenerateAsync(
-                        prompt,
-                        maxTokens,
-                        0.8f,
-                        token => PublishStreamingToken(job, accumulated, token),
-                        cts.Token));
+                await _inferenceLock.WaitAsync(cts.Token);
+                try
+                {
+                    resultText = await UniTask.RunOnThreadPool(async () =>
+                        await _service.GenerateAsync(
+                            prompt,
+                            maxTokens,
+                            0.8f,
+                            token => PublishStreamingToken(job, accumulated, token),
+                            cts.Token));
+                }
+                finally
+                {
+                    _inferenceLock.Release();
+                }
             }
             catch (OperationCanceledException)
             {

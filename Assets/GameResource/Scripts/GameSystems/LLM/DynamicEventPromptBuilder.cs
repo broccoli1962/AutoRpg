@@ -53,5 +53,31 @@ namespace Backend.GameSystems.LLM
                 "<|im_start|>user\n" + user + ImEnd + "\n" +
                 "<|im_start|>assistant\n";
         }
+
+        public static string BuildResultPrompt(
+            DynamicEventTemplate template,
+            PartyState party,
+            string choiceId,
+            DynamicEventOutcomeEffect outcome)
+        {
+            var leader = party?.Leader;
+            var user = new StringBuilder();
+            user.AppendLine("[이벤트 결과 연출]");
+            user.Append("event_id: ");
+            user.AppendLine(template.EventId);
+            user.Append("leader: ");
+            user.AppendLine(leader?.DisplayName ?? "탐험대");
+            user.Append("choice_id: ");
+            user.AppendLine(choiceId);
+            user.Append("outcome: ");
+            user.AppendLine(outcome.ToString());
+            user.AppendLine();
+            user.AppendLine("선택 결과를 1~2문장 한국어로 서술하세요. JSON 없이 문장만 출력하세요.");
+
+            return
+                "<|im_start|>system\n" + SystemPrompt + "\n" + ImEnd + "\n" +
+                "<|im_start|>user\n" + user + ImEnd + "\n" +
+                "<|im_start|>assistant\n";
+        }
     }
 }
