@@ -1,4 +1,5 @@
 using System.Text;
+using Backend.GameSystems.Character;
 using Backend.GameSystems.DynamicEvent.Data;
 using Backend.GameSystems.Exploration.Data;
 
@@ -32,6 +33,16 @@ namespace Backend.GameSystems.LLM
             user.AppendLine(floor.ToString());
             user.Append("leader: ");
             user.AppendLine(leader?.DisplayName ?? "탐험대");
+
+            if (leader != null)
+            {
+                var memoryContext = CharacterMemoryManager.BuildPromptContext(leader.CharacterId);
+                if (!string.IsNullOrEmpty(memoryContext))
+                {
+                    user.AppendLine(memoryContext);
+                }
+            }
+
             user.AppendLine("choices:");
             foreach (var choice in template.Choices)
             {

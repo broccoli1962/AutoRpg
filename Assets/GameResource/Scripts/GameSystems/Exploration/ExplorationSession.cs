@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Backend.GameSystems.Character;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
@@ -132,6 +133,7 @@ namespace Backend.GameSystems.Exploration
             foreach (var explorationEvent in tickResult.Events)
             {
                 var log = _narrator.Narrate(explorationEvent, State.Party);
+                CharacterMemoryManager.RecordExplorationEvent(explorationEvent, State.Party);
                 ExplorationChannels.PublishLogAdded(log);
             }
         }
