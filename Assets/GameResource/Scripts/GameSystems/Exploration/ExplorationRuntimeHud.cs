@@ -49,6 +49,10 @@ namespace Backend.GameSystems.Exploration
                 .Subscribe(AppendDynamicEventLog)
                 .AddTo(_disposables);
 
+            ExplorationChannels.OnExplorationEnded
+                .Subscribe(AppendPrestigeChronicle)
+                .AddTo(_disposables);
+
             PrestigeManager.EnsureInitialized();
 
             ExplorationChannels.OnStateChanged
@@ -155,6 +159,17 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             _logBuilder.AppendLine("[이벤트] " + instance.LlmResultNarration);
+            _logText.text = _logBuilder.ToString();
+        }
+
+        private void AppendPrestigeChronicle(Exploration.Simulation.ExplorationEndReason reason)
+        {
+            var meta = PrestigeManager.GetMeta();
+            if (meta?.ChronicleEntries == null || meta.ChronicleEntries.Count == 0)
+                return;
+
+            var latest = meta.ChronicleEntries[meta.ChronicleEntries.Count - 1];
+            _logBuilder.AppendLine("[연대기] " + latest);
             _logText.text = _logBuilder.ToString();
         }
 
