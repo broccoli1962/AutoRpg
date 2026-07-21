@@ -31,6 +31,20 @@ namespace Backend.GameSystems.LLM
 
         public static bool UseDynamicEventResultLlm => Current == LlmQualityMode.High;
 
+        public static bool ShouldUseLogLlm(ExplorationEvent explorationEvent)
+        {
+            if (explorationEvent == null)
+                return false;
+
+            if (Current == LlmQualityMode.Performance &&
+                explorationEvent.Salience < SalienceGrade.Milestone)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public static float InferenceTimeoutSeconds => Current switch
         {
             LlmQualityMode.High => 10f,

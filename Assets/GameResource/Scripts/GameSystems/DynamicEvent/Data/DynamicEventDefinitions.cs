@@ -13,6 +13,8 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public const string ForkWaterSoundId = "fork_water_sound_01";
         public const string EncounterScholarId = "encounter_scholar_01";
         public const string TrapPitId = "trap_pit_01";
+        public const string EncounterWandererId = "encounter_wanderer_01";
+        public const string ArtifactCrystalId = "artifact_crystal_01";
 
         private static readonly DynamicEventTemplate Fork002 = CreateFork002();
         private static readonly DynamicEventTemplate EncounterMerchant = CreateEncounterMerchant();
@@ -22,6 +24,8 @@ namespace Backend.GameSystems.DynamicEvent.Data
         private static readonly DynamicEventTemplate ForkWaterSound = CreateForkWaterSound();
         private static readonly DynamicEventTemplate EncounterScholar = CreateEncounterScholar();
         private static readonly DynamicEventTemplate TrapPit = CreateTrapPit();
+        private static readonly DynamicEventTemplate EncounterWanderer = CreateEncounterWanderer();
+        private static readonly DynamicEventTemplate ArtifactCrystal = CreateArtifactCrystal();
 
         public static IReadOnlyList<DynamicEventTemplate> All { get; } = new List<DynamicEventTemplate>
         {
@@ -32,7 +36,9 @@ namespace Backend.GameSystems.DynamicEvent.Data
             HazardGas,
             ForkWaterSound,
             EncounterScholar,
-            TrapPit
+            TrapPit,
+            EncounterWanderer,
+            ArtifactCrystal
         };
 
         public static DynamicEventTemplate Get(string eventId)
@@ -165,6 +171,36 @@ namespace Backend.GameSystems.DynamicEvent.Data
                     (DynamicEventOutcomeEffect.SafePass, 0.6f),
                     (DynamicEventOutcomeEffect.InjuryLight, 0.4f)),
                 Choice("climb", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateEncounterWanderer() => new()
+        {
+            EventId = EncounterWandererId,
+            Category = DynamicEventCategory.Encounter,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.07f, 4, 18),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("help",
+                    (DynamicEventOutcomeEffect.MinorResource, 0.5f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.5f)),
+                Choice("ignore", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateArtifactCrystal() => new()
+        {
+            EventId = ArtifactCrystalId,
+            Category = DynamicEventCategory.Artifact,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.06f, 6, 22),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("take",
+                    (DynamicEventOutcomeEffect.GoldBonus, 0.45f),
+                    (DynamicEventOutcomeEffect.RareEncounter, 0.55f)),
+                Choice("leave", (DynamicEventOutcomeEffect.SafePass, 1f))
             }
         };
 

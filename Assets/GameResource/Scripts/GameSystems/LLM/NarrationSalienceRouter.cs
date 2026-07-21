@@ -13,6 +13,9 @@ namespace Backend.GameSystems.LLM
             if (explorationEvent == null || explorationEvent.Salience < SalienceGrade.Significant)
                 return false;
 
+            if (!LlmQualitySettings.ShouldUseLogLlm(explorationEvent))
+                return false;
+
             return explorationEvent.EventType switch
             {
                 EventType.CombatResult => true,
