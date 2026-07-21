@@ -1,0 +1,124 @@
+using System.Collections.Generic;
+using System.IO;
+using Backend.GameSystems.Character;
+using Backend.GameSystems.Character.Data;
+using Backend.GameSystems.Prestige;
+using Backend.GameSystems.Prestige.Data;
+using Backend.GameSystems.Save.Data;
+using Backend.Util;
+using Backend.Util.Management;
+using Newtonsoft.Json;
+using UnityEngine;
+
+namespace Backend.GameSystems.Save
+{
+    /// <summary>
+    /// 메타 진행·캐릭터 기억·관계 데이터를 JSON으로 영속화한다.
+    /// </summary>
+    public sealed class GameSaveManager : SingletonGameObject<GameSaveManager>
+    {
+        private const string SaveFileName = "abyss_chronicle_save.json";
+
+        private static string SavePath => Path.Combine(Application.persistentDataPath, SaveFileName);
+
+        public static void EnsureInitialized()
+        {
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            _ = Instance;
+        }
+
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+                Save();
+        }
+
+        private void OnApplicationQuit()
+        {
+            Save();
+        }
+
+        public static void Save()
+        {
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            Instance.SaveInternal();
+        }
+
+        public static void Load()
+        {
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            Instance.LoadInternal();
+        }
+
+        private void SaveInternal()
+        {
+            try
+            {
+                var data = new GameSaveData
+                {
+                    Meta = CloneMeta(PrestigeManager.GetMeta()),
+                    CharacterMemories = CharacterMemoryManager.ExportMemories(),
+                    Affinities = RelationshipManager.ExportAffinities()
+                };
+
+                var json = JsonConvert.SerializeObject(data, Formatting.Indented);
+                File.WriteAllText(SavePath, json);
+                Debug.Log($"[GameSaveManager] Saved to {SavePath}");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[GameSaveManager] Save failed: {e.Message}");
+            }
+        }
+
+        private void LoadInternal()
+        {
+            if (!File.Exists(SavePath))
+                return;
+
+            try
+            {
+                var json = File.ReadAllText(SavePath);
+                var data = JsonConvert.DeserializeObject<GameSaveData>(json);
+                if (data == null)
+                    return;
+
+                if (data.Meta != null)
+                    PrestigeManager.ImportMeta(data.Meta);
+
+                CharacterMemoryManager.ImportMemories(data.CharacterMemories);
+                RelationshipManager.ImportAffinities(data.Affinities);
+                Debug.Log($"[GameSaveManager] Loaded save (legacy={data.Meta?.LegacyPoints ?? 0})");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[GameSaveManager] Load failed: {e.Message}");
+            }
+        }
+
+        private static MetaProgressionState CloneMeta(MetaProgressionState source)
+        {
+            if (source == null)
+                return new MetaProgressionState();
+
+            return new MetaProgressionState
+            {
+                LegacyPoints = source.LegacyPoints,
+                PrestigeCount = source.PrestigeCount,
+                DeepestFloorReached = source.DeepestFloorReached,
+                ChronicleEntries = new List<string>(source.ChronicleEntries)
+            };
+        }
+    }
+}

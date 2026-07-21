@@ -1,3 +1,4 @@
+using Backend.GameSystems.Character;
 using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Exploration.Data;
 
@@ -20,6 +21,7 @@ namespace Backend.GameSystems.Exploration.Simulation
             var loot = new System.Collections.Generic.List<LootEntry>();
             var expGained = new System.Collections.Generic.Dictionary<string, int>();
             var partyIds = new System.Collections.Generic.List<string>();
+            var bondMultiplier = RelationshipManager.GetBondCombatMultiplier(party);
 
             foreach (var member in party.Members)
             {
@@ -44,7 +46,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                     partyHpSum += member.CurrentHp;
                     partyMaxHpSum += member.MaxHp;
 
-                    var damage = CalculateDamage(member, monster, random);
+                    var damage = (int)(CalculateDamage(member, monster, random) * bondMultiplier);
                     enemyHp -= damage;
                     totalDamageDealt += damage;
                 }

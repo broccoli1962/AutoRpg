@@ -121,6 +121,13 @@ namespace Backend.GameSystems.LLM
                     userContext.AppendLine();
                     userContext.Append(memoryContext);
                 }
+
+                var relationshipContext = RelationshipManager.BuildPartyPromptContext(party);
+                if (!string.IsNullOrEmpty(relationshipContext))
+                {
+                    userContext.AppendLine();
+                    userContext.Append(relationshipContext);
+                }
             }
             else
             {
