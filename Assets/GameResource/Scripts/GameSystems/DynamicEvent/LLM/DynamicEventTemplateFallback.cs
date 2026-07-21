@@ -28,6 +28,10 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                     $"{floor}층에서 필기구를 든 학자가 지도를 펼치고 있다. \"이 근처에 흥미로운 기록이 있소.\"",
                 DynamicEventDefinitions.TrapPitId =>
                     $"{floor}층 바닥이 갑자기 꺼져 깊은 구덩이가 드러났다. 건너뛰거나 벽을 타고 올라갈 수 있다.",
+                DynamicEventDefinitions.EncounterWandererId =>
+                    $"{floor}층 어둠 속에서 길을 잃은 나그네가 도움을 요청한다.",
+                DynamicEventDefinitions.ArtifactCrystalId =>
+                    $"{floor}층 벽 틈에서 희미하게 빛나는 결정체가 보인다.",
                 _ => $"{leaderName}(은)는 {floor}층에서 예상치 못한 상황에 맞닥뜨렸다."
             };
 
@@ -95,6 +99,18 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                             ? "뛰어넘다 발목을 삐었다."
                             : "가볍게 뛰어넘어 무사히 건넜다."
                         : "벽을 타고 올라가며 시간을 들였지만 안전했다.",
+                DynamicEventDefinitions.EncounterWandererId =>
+                    choiceId == "help"
+                        ? outcome == DynamicEventOutcomeEffect.MinorResource
+                            ? "나그네를 도와 작은 보답을 받았다."
+                            : "나그네를 돕다 함정에 빠져 다쳤다."
+                        : "나그네를 지나쳤고, 길은 조용히 이어졌다.",
+                DynamicEventDefinitions.ArtifactCrystalId =>
+                    choiceId == "take"
+                        ? outcome == DynamicEventOutcomeEffect.GoldBonus
+                            ? "결정체를 채취해 값나가는 광물을 얻었다."
+                            : "결정체를 건드리자 수호자가 나타났다."
+                        : "결정체를 내버려 두고 조용히 지나갔다.",
                 _ => $"선택({choiceId})의 결과: {outcome}"
             };
         }
@@ -134,6 +150,10 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 (DynamicEventDefinitions.EncounterScholarId, "ignore") => "외면한다",
                 (DynamicEventDefinitions.TrapPitId, "jump") => "뛰어넘는다",
                 (DynamicEventDefinitions.TrapPitId, "climb") => "벽을 타고 올라간다",
+                (DynamicEventDefinitions.EncounterWandererId, "help") => "나그네를 돕는다",
+                (DynamicEventDefinitions.EncounterWandererId, "ignore") => "지나친다",
+                (DynamicEventDefinitions.ArtifactCrystalId, "take") => "결정체를 채취한다",
+                (DynamicEventDefinitions.ArtifactCrystalId, "leave") => "내버려 둔다",
                 _ => choiceId
             };
         }

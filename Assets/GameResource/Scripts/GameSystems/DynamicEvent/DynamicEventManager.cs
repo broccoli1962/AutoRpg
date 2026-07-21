@@ -178,10 +178,19 @@ namespace Backend.GameSystems.DynamicEvent
                             break;
                         case DynamicEventDefinitions.ArtifactMuralId:
                         case DynamicEventDefinitions.EncounterScholarId:
+                        case DynamicEventDefinitions.EncounterWandererId:
                             if (tag == PersonalityTag.Greedy || tag == PersonalityTag.Cheerful)
                                 return GetFirstChoiceId(template);
                             if (tag == PersonalityTag.Cynical)
                                 return GetSecondChoiceId(template);
+                            if (tag == PersonalityTag.Loyal && template.EventId == DynamicEventDefinitions.EncounterWandererId)
+                                return "help";
+                            break;
+                        case DynamicEventDefinitions.ArtifactCrystalId:
+                            if (tag == PersonalityTag.Greedy)
+                                return "take";
+                            if (tag == PersonalityTag.Cautious)
+                                return "leave";
                             break;
                     }
                 }
