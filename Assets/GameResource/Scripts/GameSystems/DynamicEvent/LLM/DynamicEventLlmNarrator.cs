@@ -12,10 +12,7 @@ namespace Backend.GameSystems.DynamicEvent.LLM
     /// </summary>
     public static class DynamicEventLlmNarrator
     {
-        private const int SceneMaxTokens = 220;
-        private const int ResultMaxTokens = 96;
         private const float Temperature = 0.75f;
-        private const float InferenceTimeoutSeconds = 10f;
 
         public static async UniTask<DynamicEventLlmNarration> TryGenerateSceneAsync(
             DynamicEventTemplate template,
@@ -23,7 +20,11 @@ namespace Backend.GameSystems.DynamicEvent.LLM
             int floor,
             CancellationToken externalCt = default)
         {
-            if (template == null || !Application.isPlaying)
+            if (template == null || !Application.isPlaying || !LlmQualitySettings.UseDynamicEventLlm)
+                return null;
+
+            var sceneMaxTokens = LlmQualitySettings.DynamicSceneMaxTokens;
+            if (sceneMaxTokens <= 0)
                 return null;
 
             LlmNarrationManager.EnsureInitialized();
@@ -32,9 +33,9 @@ namespace Backend.GameSystems.DynamicEvent.LLM
 
             var prompt = DynamicEventPromptBuilder.BuildScenePrompt(template, party, floor);
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(externalCt);
-            cts.CancelAfterSlim(System.TimeSpan.FromSeconds(InferenceTimeoutSeconds));
+            cts.CancelAfterSlim(System.TimeSpan.FromSeconds(LlmQualitySettings.InferenceTimeoutSeconds));
 
-            var raw = await LlmNarrationManager.GenerateTextAsync(prompt, SceneMaxTokens, Temperature, cts.Token);
+            var raw = await LlmNarrationManager.GenerateTextAsync(prompt, sceneMaxTokens, Temperature, cts.Token);
             if (string.IsNullOrWhiteSpace(raw))
                 return null;
 
@@ -55,7 +56,11 @@ namespace Backend.GameSystems.DynamicEvent.LLM
             DynamicEventOutcomeEffect outcome,
             CancellationToken externalCt = default)
         {
-            if (template == null || !Application.isPlaying)
+            if (template == null || !Application.isPlaying || !LlmQualitySettings.UseDynamicEventResultLlm)
+                return null;
+
+            var resultMaxTokens = LlmQualitySettings.DynamicResultMaxTokens;
+            if (resultMaxTokens <= 0)
                 return null;
 
             LlmNarrationManager.EnsureInitialized();
@@ -64,9 +69,9 @@ namespace Backend.GameSystems.DynamicEvent.LLM
 
             var prompt = DynamicEventPromptBuilder.BuildResultPrompt(template, party, choiceId, outcome);
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(externalCt);
-            cts.CancelAfterSlim(System.TimeSpan.FromSeconds(InferenceTimeoutSeconds));
+            cts.CancelAfterSlim(System.TimeSpan.FromSeconds(LlmQualitySettings.InferenceTimeoutSeconds));
 
-            var raw = await LlmNarrationManager.GenerateTextAsync(prompt, ResultMaxTokens, Temperature, cts.Token);
+            var raw = await LlmNarrationManager.GenerateTextAsync(prompt, resultMaxTokens, Temperature, cts.Token);
             if (string.IsNullOrWhiteSpace(raw))
                 return null;
 

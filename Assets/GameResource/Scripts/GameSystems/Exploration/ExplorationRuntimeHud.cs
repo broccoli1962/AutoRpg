@@ -4,6 +4,7 @@ using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
+using Backend.GameSystems.LLM;
 using Backend.Util;
 using R3;
 using UnityEngine;
@@ -71,6 +72,15 @@ namespace Backend.GameSystems.Exploration
         private void OnDestroy()
         {
             _disposables?.Dispose();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                LlmQualitySettings.CycleMode();
+                RefreshStatus(ExplorationManager.GetCurrentState());
+            }
         }
 
         private void BuildUi()
@@ -184,7 +194,7 @@ namespace Backend.GameSystems.Exploration
             var meta = PrestigeManager.GetMeta();
             _statusText.text =
                 $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
-                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · Tick {state.CurrentTick}";
+                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · Tick {state.CurrentTick}";
         }
     }
 }

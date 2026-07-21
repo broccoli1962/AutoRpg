@@ -196,7 +196,7 @@ namespace Backend.GameSystems.LLM
             }
 
             var prompt = LogPromptBuilder.BuildLogPrompt(job.Event, job.Party);
-            var maxTokens = job.Event.Salience >= SalienceGrade.Milestone ? 180 : MaxTokens;
+            var maxTokens = LlmQualitySettings.GetLogMaxTokens(job.Event.Salience);
             var sw = System.Diagnostics.Stopwatch.StartNew();
             string resultText = null;
             var timedOut = false;
@@ -204,7 +204,7 @@ namespace Backend.GameSystems.LLM
 
             try
             {
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(InferenceTimeoutSeconds));
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(LlmQualitySettings.InferenceTimeoutSeconds));
                 await _inferenceLock.WaitAsync(cts.Token);
                 try
                 {
