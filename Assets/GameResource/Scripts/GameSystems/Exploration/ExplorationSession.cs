@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
@@ -11,6 +12,7 @@ namespace Backend.GameSystems.Exploration
         private readonly ExplorationSimulator _simulator = new();
         private readonly ILogNarrator _narrator;
         private DeterministicRandom _random;
+        private int _lastFloor = 1;
 
         public ExplorationState State { get; private set; }
 
@@ -22,6 +24,7 @@ namespace Backend.GameSystems.Exploration
         public void StartNew(int seed, PartyState party, string zoneId = ZoneDefinitions.MossyHollowId)
         {
             _random = new DeterministicRandom(seed);
+            _lastFloor = 1;
             State = new ExplorationState
             {
                 Seed = seed,
@@ -42,6 +45,12 @@ namespace Backend.GameSystems.Exploration
 
             var tickResult = _simulator.Tick(State, _random);
             PublishTickEvents(tickResult);
+
+            if (State.CurrentFloor > _lastFloor)
+            {
+                DynamicEventManager.TryTriggerOnFloorEnter(State, _random, State.CurrentFloor);
+                _lastFloor = State.CurrentFloor;
+            }
 
             if (tickResult.ExplorationEnded)
                 ExplorationChannels.PublishExplorationEnded(tickResult.EndReason);

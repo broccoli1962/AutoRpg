@@ -1,4 +1,5 @@
 using System;
+using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
@@ -24,6 +25,7 @@ namespace Backend.GameSystems.Exploration
         {
             base.OnAwake();
             LlmNarrationManager.EnsureInitialized();
+            DynamicEventManager.EnsureInitialized();
             _session = new ExplorationSession(new HybridLogNarrator());
         }
 
