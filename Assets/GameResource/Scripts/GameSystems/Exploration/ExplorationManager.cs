@@ -1,4 +1,5 @@
 using System;
+using Backend.GameSystems.Character;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
@@ -26,6 +27,7 @@ namespace Backend.GameSystems.Exploration
             base.OnAwake();
             LlmNarrationManager.EnsureInitialized();
             DynamicEventManager.EnsureInitialized();
+            CharacterMemoryManager.EnsureInitialized();
             _session = new ExplorationSession(new HybridLogNarrator());
         }
 
@@ -47,7 +49,9 @@ namespace Backend.GameSystems.Exploration
 
         private void StartExploration_Internal(int seed)
         {
-            _session.StartNew(seed, ZoneDefinitions.CreateDefaultParty());
+            var party = ZoneDefinitions.CreateDefaultParty();
+            _session.StartNew(seed, party);
+            CharacterMemoryManager.BindParty(party);
             _tickAccumulator = 0f;
             ExplorationChannels.PublishStateChanged(_session.State);
             Debug.Log($"[ExplorationManager] Exploration started. Seed={seed}");

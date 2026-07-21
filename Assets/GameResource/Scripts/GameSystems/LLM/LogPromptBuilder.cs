@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using Backend.GameSystems.Character;
 using Backend.GameSystems.Exploration.Data;
 
 namespace Backend.GameSystems.LLM
@@ -113,6 +114,13 @@ namespace Backend.GameSystems.LLM
                 userContext.Append(FormatRole(leader.Role));
                 userContext.Append(" / 성격: ");
                 userContext.AppendLine(FormatPersonalities(leader.PersonalityTags));
+
+                var memoryContext = CharacterMemoryManager.BuildPromptContext(leader.CharacterId);
+                if (!string.IsNullOrEmpty(memoryContext))
+                {
+                    userContext.AppendLine();
+                    userContext.Append(memoryContext);
+                }
             }
             else
             {
