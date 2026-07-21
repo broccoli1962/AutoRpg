@@ -33,6 +33,10 @@ namespace Backend.Object.UI.Exploration
             ExplorationChannels.OnLogUpdated
                 .Subscribe(UpdateLog)
                 .AddTo(_disposables);
+
+            ExplorationChannels.OnLogStreaming
+                .Subscribe(UpdateLog)
+                .AddTo(_disposables);
         }
 
         protected override void OnHide()
