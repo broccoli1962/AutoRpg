@@ -16,6 +16,8 @@ namespace Backend.GameSystems.LLM
     /// </summary>
     public sealed class LlamaInferenceService : IDisposable
     {
+        private static readonly string ImEnd = "<|" + "im_end" + "|>";
+
         private LLamaWeights _weights;
         private ModelParams _modelParams;
         private bool _isLoaded;
@@ -59,7 +61,7 @@ namespace Backend.GameSystems.LLM
             var inferenceParams = new InferenceParams
             {
                 MaxTokens = maxTokens,
-                AntiPrompts = new[] { "<|im_end|>", "<|endoftext|>" },
+                AntiPrompts = new[] { ImEnd, "<|endoftext|>" },
                 SamplingPipeline = new DefaultSamplingPipeline
                 {
                     Temperature = temperature,

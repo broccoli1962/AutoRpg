@@ -12,5 +12,7 @@ namespace Backend.GameSystems.Exploration.Narration
         public long TimestampTick;
         public int Floor;
         public bool IsBookmarked;
+        public bool IsPending;
+        public bool UsedLlm;
     }
 }
