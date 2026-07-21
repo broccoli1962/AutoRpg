@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.GameSystems.Prestige;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
@@ -47,6 +48,8 @@ namespace Backend.GameSystems.Exploration
             DynamicEventChannels.OnEventResolved
                 .Subscribe(AppendDynamicEventLog)
                 .AddTo(_disposables);
+
+            PrestigeManager.EnsureInitialized();
 
             ExplorationChannels.OnStateChanged
                 .Subscribe(RefreshStatus)
@@ -163,8 +166,10 @@ namespace Backend.GameSystems.Exploration
                 return;
             }
 
+            var meta = PrestigeManager.GetMeta();
             _statusText.text =
-                $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · 골드 {state.Gold} · Tick {state.CurrentTick}";
+                $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
+                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · Tick {state.CurrentTick}";
         }
     }
 }
