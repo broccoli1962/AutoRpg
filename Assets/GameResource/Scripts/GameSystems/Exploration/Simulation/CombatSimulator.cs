@@ -1,3 +1,4 @@
+using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Exploration.Data;
 
 namespace Backend.GameSystems.Exploration.Simulation
@@ -176,10 +177,10 @@ namespace Backend.GameSystems.Exploration.Simulation
         {
             var attack = attacker.Role switch
             {
-                CharacterRole.Warrior => attacker.Str * 1.2f + attacker.Vit * 0.2f,
-                CharacterRole.Rogue => attacker.Agi * 1.1f + attacker.Str * 0.5f,
-                CharacterRole.Mage => attacker.Int * 1.3f,
-                _ => attacker.Str
+                CharacterRole.Warrior => EquipmentService.GetEffectiveStr(attacker) * 1.2f + EquipmentService.GetEffectiveVit(attacker) * 0.2f,
+                CharacterRole.Rogue => EquipmentService.GetEffectiveAgi(attacker) * 1.1f + EquipmentService.GetEffectiveStr(attacker) * 0.5f,
+                CharacterRole.Mage => EquipmentService.GetEffectiveInt(attacker) * 1.3f,
+                _ => EquipmentService.GetEffectiveStr(attacker)
             };
 
             var critMultiplier = random.RollChance(0.15f) ? 1.5f : 1f;
@@ -195,10 +196,10 @@ namespace Backend.GameSystems.Exploration.Simulation
         {
             var defense = target.Role switch
             {
-                CharacterRole.Warrior => target.Vit * 0.8f + target.Str * 0.3f,
-                CharacterRole.Rogue => target.Agi * 0.4f + target.Vit * 0.3f,
-                CharacterRole.Mage => target.Int * 0.2f + target.Vit * 0.2f,
-                _ => target.Vit * 0.3f
+                CharacterRole.Warrior => EquipmentService.GetEffectiveVit(target) * 0.8f + EquipmentService.GetEffectiveStr(target) * 0.3f,
+                CharacterRole.Rogue => EquipmentService.GetEffectiveAgi(target) * 0.4f + EquipmentService.GetEffectiveVit(target) * 0.3f,
+                CharacterRole.Mage => EquipmentService.GetEffectiveInt(target) * 0.2f + EquipmentService.GetEffectiveVit(target) * 0.2f,
+                _ => EquipmentService.GetEffectiveVit(target) * 0.3f
             };
 
             var variance = random.NextRange(0.9f, 1.1f);

@@ -1,3 +1,4 @@
+using Backend.GameSystems.Equipment;
 using System.Collections.Generic;
 using Backend.GameSystems.Exploration.Data;
 
@@ -77,6 +78,7 @@ namespace Backend.GameSystems.Exploration.Simulation
 
             TrackEvent(EventType.CombatResult);
             ApplyCombatOutcome(state, combat);
+            EquipmentService.TryProcessCombatDrop(state, combat, monster.Rarity, random);
 
             return new ExplorationEvent
             {

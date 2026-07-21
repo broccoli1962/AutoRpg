@@ -19,6 +19,8 @@ namespace Backend.GameSystems.Exploration.Data
         public int MaxHp;
         public List<PersonalityTag> PersonalityTags = new();
         public InjurySeverity Injury = InjurySeverity.None;
+        public string EquippedWeaponId;
+        public string EquippedArmorId;
     }
 
     [Serializable]

@@ -1,6 +1,8 @@
 using System;
 using Backend.GameSystems.Character;
 using Backend.GameSystems.DynamicEvent;
+using Backend.GameSystems.Equipment;
+using Backend.GameSystems.Prestige;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
@@ -28,6 +30,7 @@ namespace Backend.GameSystems.Exploration
             LlmNarrationManager.EnsureInitialized();
             DynamicEventManager.EnsureInitialized();
             CharacterMemoryManager.EnsureInitialized();
+            PrestigeManager.EnsureInitialized();
             _session = new ExplorationSession(new HybridLogNarrator());
         }
 
@@ -50,7 +53,9 @@ namespace Backend.GameSystems.Exploration
         private void StartExploration_Internal(int seed)
         {
             var party = ZoneDefinitions.CreateDefaultParty();
+            EquipmentService.ClearPartyEquipment(party);
             _session.StartNew(seed, party);
+            _session.State.Gold = PrestigeManager.GetStartingGoldBonus();
             CharacterMemoryManager.BindParty(party);
             _tickAccumulator = 0f;
             ExplorationChannels.PublishStateChanged(_session.State);
