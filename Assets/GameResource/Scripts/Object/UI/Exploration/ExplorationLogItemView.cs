@@ -11,10 +11,17 @@ namespace Backend.Object.UI.Exploration
         [SerializeField] private Text _messageText;
         [SerializeField] private Image _categoryIcon;
 
+        public string EventId { get; private set; }
+
         public void Bind(LogEntry entry)
         {
+            EventId = entry.EventId;
+
             if (_messageText != null)
+            {
                 _messageText.text = entry.Text;
+                _messageText.fontStyle = entry.IsPending ? FontStyle.Italic : FontStyle.Normal;
+            }
 
             if (_categoryIcon != null)
                 _categoryIcon.color = GetCategoryColor(entry.Category);

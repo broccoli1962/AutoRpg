@@ -41,10 +41,11 @@ namespace Backend.GameSystems.LLM.EditorTools
                 await service.LoadAsync(modelPath);
                 var loadMs = sw.ElapsedMilliseconds;
 
-                const string prompt =
-                    "<|im_start|>system\n당신은 판타지 RPG의 이야기꾼입니다. 짧고 생생하게 한국어로 묘사하세요.<|im_end|>\n" +
-                    "<|im_start|>user\n검사 '레온'이 어두운 던전 입구에 도착했다. 한 문장으로 묘사해줘.<|im_end|>\n" +
-                    "<|im_start|>assistant\n";
+                var imEnd = "<|" + "im_end" + "|>";
+                const string promptPrefix = "<|im_start|>system\n당신은 판타지 RPG의 이야기꾼입니다. 짧고 생생하게 한국어로 묘사하세요.\n";
+                const string promptUser = "<|im_start|>user\n검사 '레온'이 어두운 던전 입구에 도착했다. 한 문장으로 묘사해줘.\n";
+                const string promptAssistant = "<|im_start|>assistant\n";
+                var prompt = promptPrefix + imEnd + "\n" + promptUser + imEnd + "\n" + promptAssistant;
 
                 sw.Restart();
                 var result = await service.GenerateAsync(prompt, maxTokens: 96, temperature: 0.7f);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
@@ -19,6 +20,7 @@ namespace Backend.GameSystems.Exploration
         private Text _logText;
         private CompositeDisposable _disposables;
         private readonly System.Text.StringBuilder _logBuilder = new();
+        private readonly Dictionary<string, int> _lineStartByEventId = new();
 
         private void Awake()
         {
@@ -31,6 +33,10 @@ namespace Backend.GameSystems.Exploration
 
             ExplorationChannels.OnLogAdded
                 .Subscribe(AppendLog)
+                .AddTo(_disposables);
+
+            ExplorationChannels.OnLogUpdated
+                .Subscribe(UpdateLog)
                 .AddTo(_disposables);
 
             ExplorationChannels.OnStateChanged
@@ -94,9 +100,38 @@ namespace Backend.GameSystems.Exploration
         private void AppendLog(LogEntry entry)
         {
             if (_logBuilder.Length > 6000)
+            {
                 _logBuilder.Clear();
+                _lineStartByEventId.Clear();
+            }
+
+            if (!string.IsNullOrEmpty(entry.EventId))
+                _lineStartByEventId[entry.EventId] = _logBuilder.Length;
 
             _logBuilder.AppendLine(entry.Text);
+            _logText.text = _logBuilder.ToString();
+        }
+
+        private void UpdateLog(LogEntry entry)
+        {
+            if (string.IsNullOrEmpty(entry.EventId) ||
+                !_lineStartByEventId.TryGetValue(entry.EventId, out var startIndex))
+            {
+                return;
+            }
+
+            var endIndex = _logBuilder.Length;
+            for (var i = startIndex; i < _logBuilder.Length; i++)
+            {
+                if (_logBuilder[i] == '\n')
+                {
+                    endIndex = i + 1;
+                    break;
+                }
+            }
+
+            _logBuilder.Remove(startIndex, endIndex - startIndex);
+            _logBuilder.Insert(startIndex, entry.Text + "\n");
             _logText.text = _logBuilder.ToString();
         }
 

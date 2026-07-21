@@ -2,6 +2,7 @@ using System;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
+using Backend.GameSystems.LLM;
 using Backend.Util;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
@@ -22,7 +23,8 @@ namespace Backend.GameSystems.Exploration
         protected override void OnAwake()
         {
             base.OnAwake();
-            _session = new ExplorationSession(new TemplateLogNarrator());
+            LlmNarrationManager.EnsureInitialized();
+            _session = new ExplorationSession(new HybridLogNarrator());
         }
 
         private void Update()
