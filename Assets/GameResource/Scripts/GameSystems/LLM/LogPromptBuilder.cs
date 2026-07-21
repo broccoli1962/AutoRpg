@@ -22,12 +22,81 @@ namespace Backend.GameSystems.LLM
             "- 구역 분위기(습하고 어둑한 동굴)를 반영하세요.";
 
         /// <summary>
+        /// Salience Significant+ 이벤트용 프롬프트를 이벤트 타입에 맞게 생성한다.
+        /// </summary>
+        public static string BuildLogPrompt(ExplorationEvent explorationEvent, PartyState party)
+        {
+            return explorationEvent.EventType switch
+            {
+                EventType.CombatResult => BuildCombatLogPrompt(explorationEvent, party),
+                EventType.Discovery => BuildDiscoveryLogPrompt(explorationEvent, party),
+                EventType.FloorClear => BuildFloorClearLogPrompt(explorationEvent, party),
+                _ => BuildGenericLogPrompt(explorationEvent, party)
+            };
+        }
+
+        /// <summary>
         /// Phase 2 PoC: 전투 결과(CombatResult) 이벤트용 프롬프트를 생성한다.
         /// </summary>
         public static string BuildCombatLogPrompt(ExplorationEvent explorationEvent, PartyState party)
         {
-            var leader = party?.Leader;
             var userContext = new StringBuilder();
+            AppendWorldAndCharacterContext(userContext, explorationEvent, party);
+            userContext.AppendLine("[이벤트 컨텍스트]");
+            userContext.AppendLine(BuildCombatContextJson(explorationEvent));
+            userContext.AppendLine();
+            userContext.AppendLine("[출력 형식 지시]");
+            userContext.Append("2~4문장, 한국어, 3인칭 서술. 결과 수치를 바꾸지 말 것.");
+            return BuildChatPrompt(userContext.ToString());
+        }
+
+        public static string BuildDiscoveryLogPrompt(ExplorationEvent explorationEvent, PartyState party)
+        {
+            var userContext = new StringBuilder();
+            AppendWorldAndCharacterContext(userContext, explorationEvent, party);
+            userContext.AppendLine("[이벤트 컨텍스트]");
+            userContext.Append("{ \"event_type\": \"discovery\", \"item\": \"");
+            userContext.Append(explorationEvent.DiscoveryDisplayName ?? "보물");
+            userContext.Append("\", \"gold_gained\": ");
+            userContext.Append(explorationEvent.GoldDelta);
+            userContext.AppendLine(" }");
+            userContext.AppendLine();
+            userContext.AppendLine("[출력 형식 지시]");
+            userContext.Append("1~3문장, 한국어, 3인칭 서술. 캐릭터 성격을 반영하되 수치를 바꾸지 말 것.");
+            return BuildChatPrompt(userContext.ToString());
+        }
+
+        public static string BuildFloorClearLogPrompt(ExplorationEvent explorationEvent, PartyState party)
+        {
+            var userContext = new StringBuilder();
+            AppendWorldAndCharacterContext(userContext, explorationEvent, party);
+            userContext.AppendLine("[이벤트 컨텍스트]");
+            userContext.Append("{ \"event_type\": \"floor_clear\", \"floor\": ");
+            userContext.Append(explorationEvent.Floor);
+            userContext.AppendLine(" }");
+            userContext.AppendLine();
+            userContext.AppendLine("[출력 형식 지시]");
+            userContext.Append("2~3문장, 한국어, 층 돌파의 성취감을 담아 서술.");
+            return BuildChatPrompt(userContext.ToString());
+        }
+
+        public static string BuildGenericLogPrompt(ExplorationEvent explorationEvent, PartyState party)
+        {
+            var userContext = new StringBuilder();
+            AppendWorldAndCharacterContext(userContext, explorationEvent, party);
+            userContext.AppendLine("[이벤트 컨텍스트]");
+            userContext.Append("{ \"event_type\": \"");
+            userContext.Append(explorationEvent.EventType.ToString().ToLowerInvariant());
+            userContext.AppendLine("\" }");
+            userContext.AppendLine();
+            userContext.AppendLine("[출력 형식 지시]");
+            userContext.Append("2~4문장, 한국어, 3인칭 서술.");
+            return BuildChatPrompt(userContext.ToString());
+        }
+
+        private static void AppendWorldAndCharacterContext(StringBuilder userContext, ExplorationEvent explorationEvent, PartyState party)
+        {
+            var leader = party?.Leader;
             userContext.AppendLine("[월드 컨텍스트]");
             userContext.Append("구역: ");
             userContext.Append(ZoneDefinitions.GetZoneDisplayName(explorationEvent.ZoneId));
@@ -35,7 +104,6 @@ namespace Backend.GameSystems.LLM
             userContext.Append(explorationEvent.Floor);
             userContext.AppendLine("층 (습하고 어둑함, 감각적 묘사 위주)");
             userContext.AppendLine();
-
             userContext.AppendLine("[캐릭터 컨텍스트]");
             if (leader != null)
             {
@@ -52,13 +120,6 @@ namespace Backend.GameSystems.LLM
             }
 
             userContext.AppendLine();
-            userContext.AppendLine("[이벤트 컨텍스트]");
-            userContext.AppendLine(BuildCombatContextJson(explorationEvent));
-            userContext.AppendLine();
-            userContext.AppendLine("[출력 형식 지시]");
-            userContext.Append("2~4문장, 한국어, 3인칭 서술. 결과 수치를 바꾸지 말 것.");
-
-            return BuildChatPrompt(userContext.ToString());
         }
 
         private static string BuildChatPrompt(string userMessage)

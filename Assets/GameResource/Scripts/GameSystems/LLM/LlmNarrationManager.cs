@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
@@ -8,14 +9,13 @@ using Backend.GameSystems.Exploration.Narration;
 using Backend.Util;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
-using ExplorationEventType = Backend.GameSystems.Exploration.Data.EventType;
 using UnityEngine;
 
 namespace Backend.GameSystems.LLM
 {
     /// <summary>
     /// 로컬 LLM 추론 큐를 관리한다. 메인 스레드를 블로킹하지 않고 백그라운드에서 순차 처리하며,
-    /// 타임아웃·실패 시 템플릿 fallback으로 전환한다. (Phase 2 PoC)
+    /// 캐시 재사용·스트리밍·타임아웃·템플릿 fallback을 제공한다.
     /// </summary>
     public sealed class LlmNarrationManager : SingletonGameObject<LlmNarrationManager>
     {
@@ -55,7 +55,7 @@ namespace Backend.GameSystems.LLM
         }
 
         /// <summary>
-        /// Significant 이상 전투 로그를 LLM 큐에 등록한다.
+        /// Salience Significant+ 이벤트를 LLM 큐에 등록한다.
         /// </summary>
         public static void EnqueueJob(LlmNarrationJob job)
         {
@@ -63,15 +63,6 @@ namespace Backend.GameSystems.LLM
                 return;
 
             Instance.Enqueue(job);
-        }
-
-        /// <summary>
-        /// Phase 2 PoC: 전투 결과 + Significant 이상만 LLM 대상.
-        /// </summary>
-        public static bool ShouldUseLlm(ExplorationEvent explorationEvent)
-        {
-            return explorationEvent.EventType == ExplorationEventType.CombatResult &&
-                   explorationEvent.Salience >= SalienceGrade.Significant;
         }
 
         private void Enqueue(LlmNarrationJob job)
@@ -147,22 +138,43 @@ namespace Backend.GameSystems.LLM
 
         private async UniTask ProcessJobAsync(LlmNarrationJob job)
         {
+            if (NarrationResultCache.TryGetCached(job.Event, job.Party, out var cachedText))
+            {
+                job.PendingEntry.Text = cachedText;
+                job.PendingEntry.IsPending = false;
+                job.PendingEntry.UsedLlm = true;
+
+                await UniTask.SwitchToMainThread();
+                if (!GameStateUtil.IsQuitting)
+                    ExplorationChannels.PublishLogUpdated(job.PendingEntry);
+
+                Debug.Log($"[LlmNarrationManager] Cache hit for {job.Event.EventId}");
+                return;
+            }
+
             if (!_isModelReady || _service == null)
             {
                 await PublishFallbackAsync(job);
                 return;
             }
 
-            var prompt = LogPromptBuilder.BuildCombatLogPrompt(job.Event, job.Party);
+            var prompt = LogPromptBuilder.BuildLogPrompt(job.Event, job.Party);
+            var maxTokens = job.Event.Salience >= SalienceGrade.Milestone ? 180 : MaxTokens;
             var sw = System.Diagnostics.Stopwatch.StartNew();
             string resultText = null;
             var timedOut = false;
+            var accumulated = new StringBuilder();
 
             try
             {
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(InferenceTimeoutSeconds));
                 resultText = await UniTask.RunOnThreadPool(async () =>
-                    await _service.GenerateAsync(prompt, MaxTokens, 0.8f, null, cts.Token));
+                    await _service.GenerateAsync(
+                        prompt,
+                        maxTokens,
+                        0.8f,
+                        token => PublishStreamingToken(job, accumulated, token),
+                        cts.Token));
             }
             catch (OperationCanceledException)
             {
@@ -185,6 +197,8 @@ namespace Backend.GameSystems.LLM
             }
 
             var trimmed = resultText.Trim();
+            NarrationResultCache.Store(job.Event, job.Party, trimmed);
+
             Debug.Log(
                 $"[LlmNarrationManager] Generated for {job.Event.EventId}: " +
                 $"elapsedMs={sw.ElapsedMilliseconds}, chars={trimmed.Length}");
@@ -196,6 +210,23 @@ namespace Backend.GameSystems.LLM
             await UniTask.SwitchToMainThread();
             if (!GameStateUtil.IsQuitting)
                 ExplorationChannels.PublishLogUpdated(job.PendingEntry);
+        }
+
+        private static void PublishStreamingToken(LlmNarrationJob job, StringBuilder accumulated, string token)
+        {
+            accumulated.Append(token);
+            PublishStreamingOnMainThread(job, accumulated.ToString()).Forget();
+        }
+
+        private static async UniTaskVoid PublishStreamingOnMainThread(LlmNarrationJob job, string snapshot)
+        {
+            await UniTask.SwitchToMainThread();
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            job.PendingEntry.Text = snapshot;
+            job.PendingEntry.IsPending = true;
+            ExplorationChannels.PublishLogStreaming(job.PendingEntry);
         }
 
         private static async UniTask PublishFallbackAsync(LlmNarrationJob job)

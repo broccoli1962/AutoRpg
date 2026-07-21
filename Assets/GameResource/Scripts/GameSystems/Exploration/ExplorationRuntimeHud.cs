@@ -39,6 +39,10 @@ namespace Backend.GameSystems.Exploration
                 .Subscribe(UpdateLog)
                 .AddTo(_disposables);
 
+            ExplorationChannels.OnLogStreaming
+                .Subscribe(UpdateLog)
+                .AddTo(_disposables);
+
             ExplorationChannels.OnStateChanged
                 .Subscribe(RefreshStatus)
                 .AddTo(_disposables);

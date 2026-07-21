@@ -9,11 +9,13 @@ namespace Backend.GameSystems.Exploration
     {
         private static readonly Subject<LogEntry> LogAddedSubject = new();
         private static readonly Subject<LogEntry> LogUpdatedSubject = new();
+        private static readonly Subject<LogEntry> LogStreamingSubject = new();
         private static readonly Subject<ExplorationState> StateChangedSubject = new();
         private static readonly Subject<ExplorationEndReason> ExplorationEndedSubject = new();
 
         public static Observable<LogEntry> OnLogAdded => LogAddedSubject;
         public static Observable<LogEntry> OnLogUpdated => LogUpdatedSubject;
+        public static Observable<LogEntry> OnLogStreaming => LogStreamingSubject;
         public static Observable<ExplorationState> OnStateChanged => StateChangedSubject;
         public static Observable<ExplorationEndReason> OnExplorationEnded => ExplorationEndedSubject;
 
@@ -25,6 +27,11 @@ namespace Backend.GameSystems.Exploration
         internal static void PublishLogUpdated(LogEntry entry)
         {
             LogUpdatedSubject.OnNext(entry);
+        }
+
+        internal static void PublishLogStreaming(LogEntry entry)
+        {
+            LogStreamingSubject.OnNext(entry);
         }
 
         internal static void PublishStateChanged(ExplorationState state)
