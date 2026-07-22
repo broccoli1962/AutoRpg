@@ -208,7 +208,8 @@ namespace Backend.GameSystems.LLM
             }
 
             var prompt = LogPromptBuilder.BuildLogPrompt(job.Event, job.Party);
-            var maxTokens = LlmQualitySettings.GetLogMaxTokens(job.Event.Salience);
+            var maxTokens = LlmQualitySettings.GetLogMaxTokens(job.Event.Salience) +
+                            ExplorationNarrationBonus.GetExtraLogMaxTokens(job.Party);
             var sw = System.Diagnostics.Stopwatch.StartNew();
             string resultText = null;
             var timedOut = false;

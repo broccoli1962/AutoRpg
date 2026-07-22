@@ -92,7 +92,7 @@ namespace Backend.GameSystems.Exploration
 
             foreach (var topEvent in offlineResult.TopEvents)
             {
-                if (!LogFrequencySettings.ShouldPublishLog(topEvent))
+                if (!LogFrequencySettings.ShouldPublishLog(topEvent, State.Party))
                     continue;
 
                 var log = _narrator.Narrate(topEvent, State.Party);
@@ -156,7 +156,7 @@ namespace Backend.GameSystems.Exploration
             foreach (var explorationEvent in tickResult.Events)
             {
                 ExplorationRollingSummary.Record(explorationEvent, State.Party);
-                if (!LogFrequencySettings.ShouldPublishLog(explorationEvent))
+                if (!LogFrequencySettings.ShouldPublishLog(explorationEvent, State.Party))
                     continue;
 
                 var log = _narrator.Narrate(explorationEvent, State.Party);

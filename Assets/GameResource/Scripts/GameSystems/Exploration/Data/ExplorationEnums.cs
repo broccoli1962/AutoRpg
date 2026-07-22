@@ -4,7 +4,8 @@ namespace Backend.GameSystems.Exploration.Data
     {
         Warrior,
         Rogue,
-        Mage
+        Mage,
+        Bard
     }
 
     public enum PersonalityTag

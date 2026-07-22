@@ -187,6 +187,7 @@ namespace Backend.GameSystems.Exploration
                 CharacterRole.Warrior => "전사",
                 CharacterRole.Rogue => "도적",
                 CharacterRole.Mage => "마법사",
+                CharacterRole.Bard => "음유시인",
                 _ => role.ToString()
             };
         }

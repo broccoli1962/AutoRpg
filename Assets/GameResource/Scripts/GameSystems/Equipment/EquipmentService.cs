@@ -127,7 +127,9 @@ namespace Backend.GameSystems.Equipment
                     continue;
 
                 if (slot == EquipmentSlot.Weapon &&
-                    (member.Role == CharacterRole.Warrior || member.Role == CharacterRole.Rogue))
+                    (member.Role == CharacterRole.Warrior ||
+                     member.Role == CharacterRole.Rogue ||
+                     member.Role == CharacterRole.Bard))
                 {
                     best = member;
                     break;

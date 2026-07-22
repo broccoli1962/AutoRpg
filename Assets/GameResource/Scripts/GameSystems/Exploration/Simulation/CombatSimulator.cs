@@ -185,6 +185,9 @@ namespace Backend.GameSystems.Exploration.Simulation
                 CharacterRole.Warrior => EquipmentService.GetEffectiveStr(attacker) * 1.2f + EquipmentService.GetEffectiveVit(attacker) * 0.2f,
                 CharacterRole.Rogue => EquipmentService.GetEffectiveAgi(attacker) * 1.1f + EquipmentService.GetEffectiveStr(attacker) * 0.5f,
                 CharacterRole.Mage => EquipmentService.GetEffectiveInt(attacker) * 1.3f,
+                CharacterRole.Bard => EquipmentService.GetEffectiveInt(attacker) * 1.0f +
+                                      EquipmentService.GetEffectiveAgi(attacker) * 0.6f +
+                                      attacker.Luk * 0.2f,
                 _ => EquipmentService.GetEffectiveStr(attacker)
             };
 
@@ -204,6 +207,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 CharacterRole.Warrior => EquipmentService.GetEffectiveVit(target) * 0.8f + EquipmentService.GetEffectiveStr(target) * 0.3f,
                 CharacterRole.Rogue => EquipmentService.GetEffectiveAgi(target) * 0.4f + EquipmentService.GetEffectiveVit(target) * 0.3f,
                 CharacterRole.Mage => EquipmentService.GetEffectiveInt(target) * 0.2f + EquipmentService.GetEffectiveVit(target) * 0.2f,
+                CharacterRole.Bard => EquipmentService.GetEffectiveAgi(target) * 0.35f + EquipmentService.GetEffectiveVit(target) * 0.25f,
                 _ => EquipmentService.GetEffectiveVit(target) * 0.3f
             };
 

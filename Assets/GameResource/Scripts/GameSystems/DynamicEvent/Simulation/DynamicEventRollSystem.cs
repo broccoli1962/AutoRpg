@@ -1,15 +1,20 @@
 using System.Collections.Generic;
 using Backend.GameSystems.DynamicEvent.Data;
 using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
 
 namespace Backend.GameSystems.DynamicEvent.Simulation
 {
     public static class DynamicEventRollSystem
     {
-        public static DynamicEventTemplate TryRollFloorEnter(string zoneId, int floor, DeterministicRandom random)
+        public static DynamicEventTemplate TryRollFloorEnter(
+            string zoneId,
+            int floor,
+            DeterministicRandom random,
+            float rateMultiplier = 1f)
         {
-            var golden = TryRollRareGolden(zoneId, floor, random);
+            var golden = TryRollRareGolden(zoneId, floor, random, rateMultiplier);
             if (golden != null)
                 return golden;
 
@@ -18,25 +23,37 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
                 if (!IsFloorEnterEligible(template, zoneId, floor))
                     continue;
 
-                if (random.RollChance(template.Trigger.Probability))
+                if (random.RollChance(GetAdjustedProbability(template.Trigger.Probability, rateMultiplier)))
                     return template;
             }
 
             return null;
         }
 
-        private static DynamicEventTemplate TryRollRareGolden(string zoneId, int floor, DeterministicRandom random)
+        private static DynamicEventTemplate TryRollRareGolden(
+            string zoneId,
+            int floor,
+            DeterministicRandom random,
+            float rateMultiplier = 1f)
         {
             foreach (var template in DynamicEventDefinitions.All)
             {
                 if (!IsRareGoldenEligible(template, zoneId, floor))
                     continue;
 
-                if (random.RollChance(template.Trigger.Probability))
+                if (random.RollChance(GetAdjustedProbability(template.Trigger.Probability, rateMultiplier)))
                     return template;
             }
 
             return null;
+        }
+
+        private static float GetAdjustedProbability(float baseProbability, float rateMultiplier)
+        {
+            if (rateMultiplier <= 1f)
+                return baseProbability;
+
+            return System.Math.Min(1f, baseProbability * rateMultiplier);
         }
 
         /// <summary>
