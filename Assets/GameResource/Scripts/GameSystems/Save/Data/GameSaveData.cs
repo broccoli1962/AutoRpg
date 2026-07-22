@@ -15,5 +15,6 @@ namespace Backend.GameSystems.Save.Data
         public int LlmQualityMode;
         public int DynamicEventAutoPolicy;
         public int GoldenEventAutoPause = 1;
+        public int LogFrequencyMode;
     }
 }

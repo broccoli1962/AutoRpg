@@ -1,6 +1,7 @@
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.LLM;
 using Backend.GameSystems.Prestige;
 
@@ -17,7 +18,7 @@ namespace Backend.GameSystems.Exploration
             var equipment = EquipmentService.GetLeaderEquipmentSummary(state.Party);
             return
                 $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
-                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · {DynamicEventAutoPolicySettings.GetDisplayLabel()} · {GoldenEventSettings.GetDisplayLabel()}\n" +
+                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · {LogFrequencySettings.GetDisplayLabel()} · {DynamicEventAutoPolicySettings.GetDisplayLabel()} · {GoldenEventSettings.GetDisplayLabel()}\n" +
                 $"장비 {equipment} · Tick {state.CurrentTick}";
         }
     }

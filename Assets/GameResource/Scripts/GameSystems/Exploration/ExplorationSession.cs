@@ -92,6 +92,9 @@ namespace Backend.GameSystems.Exploration
 
             foreach (var topEvent in offlineResult.TopEvents)
             {
+                if (!LogFrequencySettings.ShouldPublishLog(topEvent))
+                    continue;
+
                 var log = _narrator.Narrate(topEvent, State.Party);
                 ExplorationChannels.PublishLogAdded(log);
             }
@@ -150,6 +153,9 @@ namespace Backend.GameSystems.Exploration
             foreach (var explorationEvent in tickResult.Events)
             {
                 ExplorationRollingSummary.Record(explorationEvent, State.Party);
+                if (!LogFrequencySettings.ShouldPublishLog(explorationEvent))
+                    continue;
+
                 var log = _narrator.Narrate(explorationEvent, State.Party);
                 CharacterMemoryManager.RecordExplorationEvent(explorationEvent, State.Party);
                 RelationshipManager.RecordExplorationEvent(explorationEvent, State.Party);
