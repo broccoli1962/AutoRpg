@@ -52,6 +52,7 @@ namespace Backend.GameSystems.Prestige
 
             Instance._meta.LegacyPoints = meta.LegacyPoints;
             Instance._meta.ManaShards = meta.ManaShards;
+            Instance._meta.ScriptoriumLevel = meta.ScriptoriumLevel;
             Instance._meta.PrestigeCount = meta.PrestigeCount;
             Instance._meta.DeepestFloorReached = meta.DeepestFloorReached;
             Instance._meta.ChronicleEntries = meta.ChronicleEntries ?? new System.Collections.Generic.List<string>();
