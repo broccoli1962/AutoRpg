@@ -76,7 +76,8 @@ namespace Backend.GameSystems.Save
                     LlmQualityMode = LlmQualitySettings.ExportMode(),
                     DynamicEventAutoPolicy = DynamicEventAutoPolicySettings.ExportPolicy(),
                     GoldenEventAutoPause = GoldenEventSettings.ExportSetting(),
-                    LogFrequencyMode = LogFrequencySettings.ExportMode()
+                    LogFrequencyMode = LogFrequencySettings.ExportMode(),
+                    OfflineSummaryDetailMode = OfflineSummaryDetailSettings.ExportMode()
                 };
 
                 var json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -110,6 +111,7 @@ namespace Backend.GameSystems.Save
                 DynamicEventAutoPolicySettings.ImportPolicy(data.DynamicEventAutoPolicy);
                 GoldenEventSettings.ImportSetting(data.GoldenEventAutoPause);
                 LogFrequencySettings.ImportMode(data.LogFrequencyMode);
+                OfflineSummaryDetailSettings.ImportMode(data.OfflineSummaryDetailMode);
                 Debug.Log($"[GameSaveManager] Loaded save (legacy={data.Meta?.LegacyPoints ?? 0})");
             }
             catch (System.Exception e)

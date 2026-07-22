@@ -16,5 +16,6 @@ namespace Backend.GameSystems.Save.Data
         public int DynamicEventAutoPolicy;
         public int GoldenEventAutoPause = 1;
         public int LogFrequencyMode;
+        public int OfflineSummaryDetailMode;
     }
 }

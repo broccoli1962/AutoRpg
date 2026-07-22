@@ -75,6 +75,18 @@ namespace Backend.GameSystems.Exploration.Narration
             builder.Append(context.GoldGained);
             builder.Append("G를 챙겼다.");
 
+            if (OfflineSummaryDetailSettings.IsDetailed)
+            {
+                builder.AppendLine();
+                builder.Append("전투 ");
+                builder.Append(context.CombatCount);
+                builder.Append("회 · 발견 ");
+                builder.Append(context.DiscoveryCount);
+                builder.Append("회 · 마일스톤 ");
+                builder.Append(context.MilestoneCount);
+                builder.Append("회");
+            }
+
             return new LogEntry
             {
                 EventId = "offline_summary",

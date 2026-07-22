@@ -106,7 +106,10 @@ namespace Backend.GameSystems.Exploration
                 GoldGained = State.Gold - startGold,
                 StartFloor = startFloor,
                 EndFloor = State.CurrentFloor,
-                ZoneDisplayName = ZoneDefinitions.GetZoneDisplayName(State.ZoneId)
+                ZoneDisplayName = ZoneDefinitions.GetZoneDisplayName(State.ZoneId),
+                CombatCount = CountEvents(offlineResult.AllEvents, EventType.CombatResult),
+                DiscoveryCount = CountEvents(offlineResult.AllEvents, EventType.Discovery),
+                MilestoneCount = CountMilestones(offlineResult.AllEvents)
             });
 
             ExplorationChannels.PublishLogAdded(summary);
@@ -161,6 +164,34 @@ namespace Backend.GameSystems.Exploration
                 RelationshipManager.RecordExplorationEvent(explorationEvent, State.Party);
                 ExplorationChannels.PublishLogAdded(log);
             }
+        }
+
+        private static int CountEvents(IReadOnlyList<ExplorationEvent> events, EventType eventType)
+        {
+            var count = 0;
+            foreach (var explorationEvent in events)
+            {
+                if (explorationEvent.EventType == eventType)
+                    count++;
+            }
+
+            return count;
+        }
+
+        private static int CountMilestones(IReadOnlyList<ExplorationEvent> events)
+        {
+            var count = 0;
+            foreach (var explorationEvent in events)
+            {
+                if (explorationEvent.Salience >= SalienceGrade.Milestone ||
+                    explorationEvent.EventType == EventType.FloorClear ||
+                    explorationEvent.EventType == EventType.ZoneTransition)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         private static PartyState CloneParty(PartyState source)
