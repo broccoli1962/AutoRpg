@@ -29,6 +29,7 @@ namespace Backend.Object.UI
         [SerializeField] private Text _helpText;
 
         private ChronicleRuntimePanel _chroniclePanel;
+        private ExplorationSettingsRuntimePanel _settingsPanel;
         private ExplorationHudShortcuts _shortcuts;
 
         protected override void Awake()
@@ -49,7 +50,8 @@ namespace Backend.Object.UI
             ExplorationLogFeedView logFeedView,
             Text filterText,
             Text helpText,
-            ChronicleRuntimePanel chroniclePanel)
+            ChronicleRuntimePanel chroniclePanel,
+            ExplorationSettingsRuntimePanel settingsPanel)
         {
             _zoneFloorText = zoneFloorText;
             _goldText = goldText;
@@ -62,6 +64,7 @@ namespace Backend.Object.UI
             _filterText = filterText;
             _helpText = helpText;
             _chroniclePanel = chroniclePanel;
+            _settingsPanel = settingsPanel;
         }
 
         internal void BindShortcuts(System.Action refreshStatus)
@@ -69,7 +72,8 @@ namespace Backend.Object.UI
             if (_shortcuts == null)
                 _shortcuts = gameObject.AddComponent<ExplorationHudShortcuts>();
 
-            _shortcuts.Initialize(_logFeedView, _chroniclePanel, _filterText, refreshStatus);
+            _settingsPanel?.Configure(refreshStatus);
+            _shortcuts.Initialize(_logFeedView, _chroniclePanel, _settingsPanel, _filterText, refreshStatus);
         }
 
         public Text ZoneFloorText => _zoneFloorText;
