@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Backend.GameSystems.DynamicEvent.Data;
 using Backend.GameSystems.Exploration.Simulation;
 
@@ -9,13 +10,7 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
         {
             foreach (var template in DynamicEventDefinitions.All)
             {
-                if (template.Trigger.Type != DynamicEventTriggerType.FloorEnter)
-                    continue;
-
-                if (template.Trigger.ZoneIds.Count > 0 && !template.Trigger.ZoneIds.Contains(zoneId))
-                    continue;
-
-                if (floor < template.Trigger.MinFloor || floor > template.Trigger.MaxFloor)
+                if (!IsFloorEnterEligible(template, zoneId, floor))
                     continue;
 
                 if (random.RollChance(template.Trigger.Probability))
@@ -23,6 +18,35 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// 확률 롤 없이 현재 층에서 발생 가능한 템플릿 중 하나를 고른다 (Tick 보장용).
+        /// </summary>
+        public static DynamicEventTemplate RollGuaranteed(string zoneId, int floor, DeterministicRandom random)
+        {
+            var eligible = new List<DynamicEventTemplate>();
+            foreach (var template in DynamicEventDefinitions.All)
+            {
+                if (IsFloorEnterEligible(template, zoneId, floor))
+                    eligible.Add(template);
+            }
+
+            if (eligible.Count == 0)
+                return null;
+
+            return eligible[random.NextInt(eligible.Count)];
+        }
+
+        private static bool IsFloorEnterEligible(DynamicEventTemplate template, string zoneId, int floor)
+        {
+            if (template.Trigger.Type != DynamicEventTriggerType.FloorEnter)
+                return false;
+
+            if (template.Trigger.ZoneIds.Count > 0 && !template.Trigger.ZoneIds.Contains(zoneId))
+                return false;
+
+            return floor >= template.Trigger.MinFloor && floor <= template.Trigger.MaxFloor;
         }
     }
 }
