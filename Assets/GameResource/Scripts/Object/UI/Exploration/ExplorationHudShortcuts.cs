@@ -14,17 +14,20 @@ namespace Backend.Object.UI.Exploration
     {
         private ExplorationLogFeedView _logFeed;
         private ChronicleRuntimePanel _chroniclePanel;
+        private ExplorationSettingsRuntimePanel _settingsPanel;
         private Text _filterText;
         private System.Action _refreshStatus;
 
         public void Initialize(
             ExplorationLogFeedView logFeed,
             ChronicleRuntimePanel chroniclePanel,
+            ExplorationSettingsRuntimePanel settingsPanel,
             Text filterText,
             System.Action refreshStatus)
         {
             _logFeed = logFeed;
             _chroniclePanel = chroniclePanel;
+            _settingsPanel = settingsPanel;
             _filterText = filterText;
             _refreshStatus = refreshStatus;
             RefreshFilterLabel();
@@ -59,6 +62,9 @@ namespace Backend.Object.UI.Exploration
                     DynamicEventManager.TrySubmitManualChoice(1);
             }
 
+            if (Input.GetKeyDown(KeyCode.O))
+                _settingsPanel?.Toggle();
+
             if (Input.GetKeyDown(KeyCode.C))
                 _chroniclePanel?.Toggle();
 
@@ -78,10 +84,14 @@ namespace Backend.Object.UI.Exploration
             if (Input.GetKeyDown(KeyCode.B))
                 _logFeed?.ToggleLastBookmark();
 
-            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) && Input.GetKeyDown(KeyCode.LeftBracket))
+            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) &&
+                (_settingsPanel == null || !_settingsPanel.IsVisible) &&
+                Input.GetKeyDown(KeyCode.LeftBracket))
                 _logFeed?.MovePage(older: true);
 
-            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) && Input.GetKeyDown(KeyCode.RightBracket))
+            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) &&
+                (_settingsPanel == null || !_settingsPanel.IsVisible) &&
+                Input.GetKeyDown(KeyCode.RightBracket))
                 _logFeed?.MovePage(older: false);
         }
 

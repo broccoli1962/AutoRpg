@@ -27,6 +27,7 @@ namespace Backend.GameSystems.Exploration
         private Text _filterText;
         private Text _logText;
         private ChronicleRuntimePanel _chroniclePanel;
+        private ExplorationSettingsRuntimePanel _settingsPanel;
         private CompositeDisposable _disposables;
         private readonly System.Text.StringBuilder _logBuilder = new();
         private readonly List<HudLogLine> _logLines = new();
@@ -113,6 +114,9 @@ namespace Backend.GameSystems.Exploration
                     DynamicEventManager.TrySubmitManualChoice(1);
             }
 
+            if (Input.GetKeyDown(KeyCode.O))
+                _settingsPanel?.Toggle();
+
             if (Input.GetKeyDown(KeyCode.C))
                 _chroniclePanel?.Toggle();
 
@@ -134,10 +138,14 @@ namespace Backend.GameSystems.Exploration
             if (Input.GetKeyDown(KeyCode.B))
                 ToggleLastLogBookmark();
 
-            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) && Input.GetKeyDown(KeyCode.LeftBracket))
+            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) &&
+                (_settingsPanel == null || !_settingsPanel.IsVisible) &&
+                Input.GetKeyDown(KeyCode.LeftBracket))
                 MoveLogPage(older: true);
 
-            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) && Input.GetKeyDown(KeyCode.RightBracket))
+            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) &&
+                (_settingsPanel == null || !_settingsPanel.IsVisible) &&
+                Input.GetKeyDown(KeyCode.RightBracket))
                 MoveLogPage(older: false);
         }
 
@@ -184,7 +192,7 @@ namespace Backend.GameSystems.Exploration
 
             _statusText = CreateText(canvasGo.transform, "StatusText", new Vector2(20f, -20f), 22, TextAnchor.UpperLeft);
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
-            _helpText.text = "L:LLM  A:이벤트  G:황금정지  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
+            _helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
             _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
             _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -132f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -195,6 +203,8 @@ namespace Backend.GameSystems.Exploration
 
             canvasGo.AddComponent<DynamicEventRuntimePopup>();
             _chroniclePanel = canvasGo.AddComponent<ChronicleRuntimePanel>();
+            _settingsPanel = canvasGo.AddComponent<ExplorationSettingsRuntimePanel>();
+            _settingsPanel.Configure(() => RefreshStatus(ExplorationManager.GetCurrentState()));
             canvasGo.AddComponent<PartyRuntimePanel>();
 
             var logLeft = PartyRuntimePanel.PanelWidthPx + 24f;

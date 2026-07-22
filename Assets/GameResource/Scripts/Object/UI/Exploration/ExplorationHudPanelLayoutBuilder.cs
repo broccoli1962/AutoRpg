@@ -30,7 +30,7 @@ namespace Backend.Object.UI.Exploration
             progressSlider.gameObject.SetActive(false);
 
             var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -72f), new Vector2(920f, 18f), 13, font);
-            helpText.text = "L:LLM  A:이벤트  G:황금정지  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
+            helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
             var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -92f), new Vector2(420f, 18f), 13, font);
             filterText.color = new Color(0.8f, 0.8f, 0.85f);
 
@@ -101,6 +101,10 @@ namespace Backend.Object.UI.Exploration
             if (chroniclePanel == null)
                 chroniclePanel = panel.gameObject.AddComponent<ChronicleRuntimePanel>();
 
+            var settingsPanel = panel.gameObject.GetComponent<ExplorationSettingsRuntimePanel>();
+            if (settingsPanel == null)
+                settingsPanel = panel.gameObject.AddComponent<ExplorationSettingsRuntimePanel>();
+
             panel.ConfigureRuntime(
                 statusText,
                 goldText,
@@ -112,7 +116,8 @@ namespace Backend.Object.UI.Exploration
                 logFeedView,
                 filterText,
                 helpText,
-                chroniclePanel);
+                chroniclePanel,
+                settingsPanel);
 
             return true;
         }
