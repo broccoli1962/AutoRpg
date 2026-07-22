@@ -42,7 +42,7 @@ namespace Backend.Object.UI.Exploration
             logFeedGo.transform.SetParent(rootRect, false);
             var logFeedRect = logFeedGo.AddComponent<RectTransform>();
             StretchFull(logFeedRect);
-            logFeedRect.offsetMin = new Vector2(24f, 24f);
+            logFeedRect.offsetMin = new Vector2(PartyRuntimePanel.PanelWidthPx + 24f, 24f);
             logFeedRect.offsetMax = new Vector2(-24f, -156f);
 
             var logFeedView = logFeedGo.AddComponent<ExplorationLogFeedView>();
@@ -104,6 +104,9 @@ namespace Backend.Object.UI.Exploration
             var settingsPanel = panel.gameObject.GetComponent<ExplorationSettingsRuntimePanel>();
             if (settingsPanel == null)
                 settingsPanel = panel.gameObject.AddComponent<ExplorationSettingsRuntimePanel>();
+
+            if (panel.gameObject.GetComponent<PartyRuntimePanel>() == null)
+                panel.gameObject.AddComponent<PartyRuntimePanel>();
 
             panel.ConfigureRuntime(
                 statusText,
