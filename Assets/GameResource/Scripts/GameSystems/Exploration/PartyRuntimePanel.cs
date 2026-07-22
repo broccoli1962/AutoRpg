@@ -1,28 +1,24 @@
-using System.Text;
 using Backend.GameSystems.Character;
 using Backend.GameSystems.Exploration.Data;
-using Backend.GameSystems.Equipment;
 using Backend.Object.UI;
 using R3;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Backend.GameSystems.Exploration
 {
     /// <summary>
-    /// Phase 6 프로토타입 파티/캐릭터 카드 좌측 패널 (12_UIUX.md).
+    /// v2 좌측 파티 카드 4장 갱신. UI 구조는 프리팹에 고정.
     /// </summary>
     public sealed class PartyRuntimePanel : MonoBehaviour
     {
-        private Text _contentText;
+        private PartyMemberCardView[] _cards;
         private CompositeDisposable _disposables;
-        private readonly StringBuilder _builder = new();
 
         public static float PanelWidthPx => ExplorationHudLayoutMetrics.LeftPanelWidth;
 
         private void Start()
         {
-            BuildUi();
+            BindCards();
             RelationshipManager.EnsureInitialized();
             _disposables = new CompositeDisposable();
 
@@ -38,241 +34,35 @@ namespace Backend.GameSystems.Exploration
             _disposables?.Dispose();
         }
 
-        private void BuildUi()
+        private void BindCards()
         {
-            var canvas = GetComponentInParent<Canvas>();
-            if (canvas == null)
-                return;
-
-            var container = FindHudContainer("Body/LeftPanel");
-            var contentRoot = EnsureContentRoot(container, canvas.transform, "PartyContent");
-
-            var title = CreateText(contentRoot, "PartyTitle", new Vector2(12f, -8f), 18, "[ 파티 ]");
-            title.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.LeftPanelContentWidth, 28f);
-
-            _contentText = CreateText(contentRoot, "PartyContentText", new Vector2(12f, -40f), 14, string.Empty);
-            var contentRect = _contentText.rectTransform;
-            contentRect.anchorMin = new Vector2(0f, 0f);
-            contentRect.anchorMax = new Vector2(1f, 1f);
-            contentRect.offsetMin = new Vector2(12f, 12f);
-            contentRect.offsetMax = new Vector2(-12f, -40f);
-            _contentText.lineSpacing = 1.1f;
-        }
-
-        private static Transform EnsureContentRoot(Transform container, Transform canvasRoot, string name)
-        {
-            if (container != null)
+            var content = FindHudTransform("Body/LeftPanel/PartyScroll/Viewport/Content");
+            if (content == null)
             {
-                var existing = container.Find(name);
-                if (existing != null)
-                    return existing;
-
-                var go = new GameObject(name, typeof(RectTransform));
-                go.transform.SetParent(container, false);
-                StretchFull(go.GetComponent<RectTransform>());
-                return go.transform;
+                _cards = GetComponentsInChildren<PartyMemberCardView>(true);
+                return;
             }
 
-            var fallback = new GameObject(name, typeof(RectTransform));
-            fallback.transform.SetParent(canvasRoot, false);
-            var rect = fallback.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 0f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 0.5f);
-            rect.anchoredPosition = new Vector2(ExplorationHudLayoutMetrics.HorizontalPadding, 0f);
-            rect.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.LeftPanelWidth, -ExplorationHudLayoutMetrics.TopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
-            return fallback.transform;
+            _cards = content.GetComponentsInChildren<PartyMemberCardView>(true);
         }
 
-        private Transform FindHudContainer(string relativePath)
+        private Transform FindHudTransform(string relativePath)
         {
             var hudPanel = GetComponent<ExplorationHudPanel>() ?? GetComponentInParent<ExplorationHudPanel>();
             return hudPanel == null ? null : hudPanel.transform.Find(relativePath);
         }
 
-        private static void StretchFull(RectTransform rect)
-        {
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = Vector2.zero;
-        }
-
         private void Refresh(ExplorationState state)
         {
-            if (_contentText == null)
+            if (_cards == null || _cards.Length == 0)
                 return;
-
-            _builder.Clear();
 
             var members = state?.Party?.Members;
-            if (members == null || members.Count == 0)
+            for (var i = 0; i < _cards.Length; i++)
             {
-                _contentText.text = "파티 정보 없음";
-                return;
+                var member = members != null && i < members.Count ? members[i] : null;
+                _cards[i].Bind(member, i == 0);
             }
-
-            for (var i = 0; i < members.Count; i++)
-            {
-                if (i > 0)
-                    _builder.AppendLine();
-
-                AppendMemberCard(members[i], i == 0);
-            }
-
-            var relationshipSummary = RelationshipManager.BuildHudSummary(state?.Party);
-            if (!string.IsNullOrEmpty(relationshipSummary))
-            {
-                _builder.AppendLine();
-                _builder.Append(relationshipSummary);
-            }
-
-            _contentText.text = _builder.ToString();
-        }
-
-        private void AppendMemberCard(CharacterState member, bool isLeader)
-        {
-            var hpRatio = member.MaxHp > 0 ? (float)member.CurrentHp / member.MaxHp : 0f;
-            var hpColor = hpRatio > 0.5f ? "#9fd49f" : hpRatio > 0.25f ? "#e6c96f" : "#e07a7a";
-
-            _builder.Append("<b>");
-            if (isLeader)
-                _builder.Append("★ ");
-
-            _builder.Append(member.DisplayName);
-            _builder.Append("</b> Lv.");
-            _builder.Append(member.Level);
-            _builder.Append(' ');
-            _builder.Append(GetRoleLabel(member.Role));
-            _builder.AppendLine("  <color=#8899aa>I:상세</color>");
-
-            var tierTitle = CharacterTierManager.GetTierTitle(member.CharacterId);
-            if (!string.IsNullOrEmpty(tierTitle) && tierTitle != "견습")
-            {
-                _builder.Append("<color=#c8b878>");
-                _builder.Append(tierTitle);
-                if (member.WeaponEnhanceLevel > 0 || member.ArmorEnhanceLevel > 0)
-                {
-                    _builder.Append(" · +");
-                    _builder.Append(member.WeaponEnhanceLevel);
-                    _builder.Append('/');
-                    _builder.Append(member.ArmorEnhanceLevel);
-                }
-
-                _builder.AppendLine("</color>");
-            }
-            else if (member.WeaponEnhanceLevel > 0 || member.ArmorEnhanceLevel > 0)
-            {
-                _builder.Append("<color=#c8b878>강화 +");
-                _builder.Append(member.WeaponEnhanceLevel);
-                _builder.Append('/');
-                _builder.Append(member.ArmorEnhanceLevel);
-                _builder.AppendLine("</color>");
-            }
-
-            _builder.Append("<color=");
-            _builder.Append(hpColor);
-            _builder.Append(">HP ");
-            _builder.Append(member.CurrentHp);
-            _builder.Append('/');
-            _builder.Append(member.MaxHp);
-            _builder.Append("</color>");
-
-            if (member.Injury != InjurySeverity.None)
-            {
-                _builder.Append(" · ");
-                _builder.Append(GetInjuryLabel(member.Injury));
-            }
-
-            _builder.AppendLine();
-
-            if (member.PersonalityTags != null && member.PersonalityTags.Count > 0)
-            {
-                _builder.Append("<color=#9ab0c8>");
-                for (var i = 0; i < member.PersonalityTags.Count; i++)
-                {
-                    if (i > 0)
-                        _builder.Append(", ");
-
-                    _builder.Append(GetPersonalityLabel(member.PersonalityTags[i]));
-                }
-
-                _builder.AppendLine("</color>");
-            }
-
-            var equipment = EquipmentService.GetMemberEquipmentSummary(member);
-            if (!string.IsNullOrEmpty(equipment))
-            {
-                _builder.Append("<color=#b8a878>");
-                _builder.Append(equipment);
-                _builder.AppendLine("</color>");
-            }
-
-            var memoryPreview = CharacterMemoryManager.BuildHudPreview(member.CharacterId);
-            if (!string.IsNullOrEmpty(memoryPreview))
-                _builder.AppendLine(memoryPreview);
-        }
-
-        private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, string text)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = anchoredPos;
-
-            var label = go.AddComponent<Text>();
-            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            label.fontSize = fontSize;
-            label.alignment = TextAnchor.UpperLeft;
-            label.color = Color.white;
-            label.supportRichText = true;
-            label.text = text;
-            label.horizontalOverflow = HorizontalWrapMode.Wrap;
-            label.verticalOverflow = VerticalWrapMode.Overflow;
-            return label;
-        }
-
-        private static string GetRoleLabel(CharacterRole role)
-        {
-            return role switch
-            {
-                CharacterRole.Warrior => "전사",
-                CharacterRole.Rogue => "도적",
-                CharacterRole.Mage => "마법사",
-                CharacterRole.Bard => "음유시인",
-                CharacterRole.Cleric => "성직자",
-                _ => role.ToString()
-            };
-        }
-
-        private static string GetPersonalityLabel(PersonalityTag tag)
-        {
-            return tag switch
-            {
-                PersonalityTag.Cautious => "신중",
-                PersonalityTag.Greedy => "탐욕",
-                PersonalityTag.Reckless => "무모",
-                PersonalityTag.Cheerful => "쾌활",
-                PersonalityTag.Loyal => "충직",
-                PersonalityTag.Cynical => "냉소",
-                _ => tag.ToString()
-            };
-        }
-
-        private static string GetInjuryLabel(InjurySeverity severity)
-        {
-            return severity switch
-            {
-                InjurySeverity.Light => "경상",
-                InjurySeverity.Moderate => "중상",
-                InjurySeverity.Severe => "중증",
-                InjurySeverity.Fatal => "치명",
-                _ => severity.ToString()
-            };
         }
     }
 }

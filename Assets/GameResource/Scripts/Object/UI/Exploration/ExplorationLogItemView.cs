@@ -12,6 +12,7 @@ namespace Backend.Object.UI.Exploration
     {
         [SerializeField] private Text _messageText;
         [SerializeField] private Image _categoryIcon;
+        [SerializeField] private Image _accentImage;
 
         public string EventId { get; private set; }
         public string PlainText { get; private set; }
@@ -159,10 +160,49 @@ namespace Backend.Object.UI.Exploration
         {
             RefreshRichText();
             if (_messageText != null)
+            {
                 _messageText.fontStyle = fontStyle;
+                _messageText.color = ModernUiStyle.BodyText;
+            }
 
+            ApplyCategoryIcon();
+        }
+
+        private void ApplyCategoryIcon()
+        {
             if (_categoryIcon != null)
-                _categoryIcon.color = LogDisplayUtil.GetDisplayColor(_category, _salience);
+            {
+                var iconCategory = ResolveIconCategory();
+                RuntimeUiSprites.ApplySimpleImage(
+                    _categoryIcon,
+                    RuntimeUiSprites.GetLogIconKey(iconCategory),
+                    Color.white);
+            }
+
+            if (_accentImage == null)
+                return;
+
+            _accentImage.color = ResolveIconCategory() switch
+            {
+                RuntimeUiSprites.LogIconCategory.Combat => ModernUiStyle.DangerRed,
+                RuntimeUiSprites.LogIconCategory.Discovery => ModernUiStyle.AccentGreen,
+                RuntimeUiSprites.LogIconCategory.Event => ModernUiStyle.TitleGold,
+                _ => ModernUiStyle.AccentCyan
+            };
+        }
+
+        private RuntimeUiSprites.LogIconCategory ResolveIconCategory()
+        {
+            if (IsDynamicEvent)
+                return RuntimeUiSprites.LogIconCategory.Event;
+
+            if (IsCombat || _category == LogCategory.Combat)
+                return RuntimeUiSprites.LogIconCategory.Combat;
+
+            if (IsDiscovery || _category == LogCategory.Discovery)
+                return RuntimeUiSprites.LogIconCategory.Discovery;
+
+            return RuntimeUiSprites.LogIconCategory.Narrative;
         }
     }
 }

@@ -111,15 +111,18 @@ namespace Backend.GameSystems.Exploration
             panelRect.sizeDelta = new Vector2(640f, 420f);
 
             var panelImage = _panelRoot.AddComponent<Image>();
-            panelImage.color = new Color(0.08f, 0.1f, 0.14f, 0.96f);
+            RuntimeUiSprites.ApplyPanelLarge(panelImage);
+            if (panelImage.sprite == null)
+                panelImage.color = new Color(0.08f, 0.1f, 0.14f, 0.96f);
 
-            var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22, "[ 길드 시설 ]");
+            var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22, "길드 시설");
+            ModernUiStyle.ApplySectionHeader(title, "길드 시설");
             title.rectTransform.sizeDelta = new Vector2(600f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
                 "6:서고  7:훈련  8:대장  9:여관  0:서점  -:스킬  (O:탐험 설정)");
             hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
-            hint.color = new Color(0.75f, 0.75f, 0.8f);
+            ModernUiStyle.ApplyMuted(hint, 13);
 
             _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -68f), 16, string.Empty);
             _contentText.rectTransform.sizeDelta = new Vector2(600f, 300f);
@@ -154,10 +157,10 @@ namespace Backend.GameSystems.Exploration
             rect.sizeDelta = new Vector2(600f, 40f);
 
             var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = RuntimeUiFont.Get();
             text.fontSize = fontSize;
             text.alignment = TextAnchor.UpperLeft;
-            text.color = Color.white;
+            text.color = ModernUiStyle.BodyText;
             text.supportRichText = true;
             text.text = initial;
             return text;
