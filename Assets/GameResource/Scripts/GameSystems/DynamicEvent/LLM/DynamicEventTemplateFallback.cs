@@ -50,6 +50,10 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                     $"{floor}층 천장에서 포자 구름이 피어나며 기침을 유발한다.",
                 DynamicEventDefinitions.EncounterHermitId =>
                     $"{floor}층 구석에서 오래된 담요를 두른 은둔자가 조용히 손짓한다.",
+                DynamicEventDefinitions.FactionGoblinTributeId =>
+                    $"{floor}층 좁은 통로에서 고블린 조공단이 길을 막고 조공을 요구한다.",
+                DynamicEventDefinitions.NarrativeRivalMemoryId =>
+                    $"{floor}층 벽면 낙서에서 파티원은 잊고 싶었던 라이벌의 이름을 발견한다.",
                 _ => $"{leaderName}(은)는 {floor}층에서 예상치 못한 상황에 맞닥뜨렸다."
             };
 
@@ -183,6 +187,20 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                             ? "은둔자와 나눈 이야기 끝에 작은 보답을 받았다."
                             : "음식을 나누다 은둔자의 함정에 걸렸다."
                         : "조용히 지나쳤다.",
+                DynamicEventDefinitions.FactionGoblinTributeId =>
+                    choiceId == "pay_tribute"
+                        ? outcome == DynamicEventOutcomeEffect.GoldBonus
+                            ? "조공을 치르자 고블린이 숨겨둔 보물 단서를 알려주었다."
+                            : "조공을 요구하다 함정에 빠져 다쳤다."
+                        : outcome == DynamicEventOutcomeEffect.RareEncounter
+                            ? "거절하자 고블린 무리와 대치했다."
+                            : "고블린을 피해 무사히 길을 재개했다.",
+                DynamicEventDefinitions.NarrativeRivalMemoryId =>
+                    choiceId == "confront"
+                        ? outcome == DynamicEventOutcomeEffect.MinorResource
+                            ? "과거를 직면하며 숨겨둔 단서를 회복했다."
+                            : "오래된 감정이 격해져 경미한 부상을 입었다."
+                        : "기억을 덮고 조용히 길을 이어갔다.",
                 _ => $"선택({choiceId})의 결과: {outcome}"
             };
         }
@@ -244,6 +262,10 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 (DynamicEventDefinitions.HazardSporeBloomId, "retreat_slow") => "천천히 후퇴한다",
                 (DynamicEventDefinitions.EncounterHermitId, "share_food") => "음식을 나눈다",
                 (DynamicEventDefinitions.EncounterHermitId, "pass_by") => "지나친다",
+                (DynamicEventDefinitions.FactionGoblinTributeId, "pay_tribute") => "조공을 치른다",
+                (DynamicEventDefinitions.FactionGoblinTributeId, "refuse") => "거절한다",
+                (DynamicEventDefinitions.NarrativeRivalMemoryId, "confront") => "과거를 직면한다",
+                (DynamicEventDefinitions.NarrativeRivalMemoryId, "walk_away") => "그냥 지나간다",
                 _ => choiceId
             };
         }

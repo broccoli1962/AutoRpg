@@ -24,6 +24,8 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public const string ForkEchoPassageId = "fork_echo_passage_01";
         public const string HazardSporeBloomId = "hazard_spore_bloom_01";
         public const string EncounterHermitId = "encounter_hermit_01";
+        public const string FactionGoblinTributeId = "faction_goblin_tribute_01";
+        public const string NarrativeRivalMemoryId = "narrative_rival_memory_01";
 
         private static readonly DynamicEventTemplate Fork002 = CreateFork002();
         private static readonly DynamicEventTemplate EncounterMerchant = CreateEncounterMerchant();
@@ -44,6 +46,8 @@ namespace Backend.GameSystems.DynamicEvent.Data
         private static readonly DynamicEventTemplate ForkEchoPassage = CreateForkEchoPassage();
         private static readonly DynamicEventTemplate HazardSporeBloom = CreateHazardSporeBloom();
         private static readonly DynamicEventTemplate EncounterHermit = CreateEncounterHermit();
+        private static readonly DynamicEventTemplate FactionGoblinTribute = CreateFactionGoblinTribute();
+        private static readonly DynamicEventTemplate NarrativeRivalMemory = CreateNarrativeRivalMemory();
 
         public static IReadOnlyList<DynamicEventTemplate> All { get; } = new List<DynamicEventTemplate>
         {
@@ -65,7 +69,9 @@ namespace Backend.GameSystems.DynamicEvent.Data
             GoldenChamber,
             ForkEchoPassage,
             HazardSporeBloom,
-            EncounterHermit
+            EncounterHermit,
+            FactionGoblinTribute,
+            NarrativeRivalMemory
         };
 
         public static DynamicEventTemplate Get(string eventId)
@@ -363,6 +369,38 @@ namespace Backend.GameSystems.DynamicEvent.Data
                     (DynamicEventOutcomeEffect.MinorResource, 0.65f),
                     (DynamicEventOutcomeEffect.InjuryLight, 0.35f)),
                 Choice("pass_by", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateFactionGoblinTribute() => new()
+        {
+            EventId = FactionGoblinTributeId,
+            Category = DynamicEventCategory.Faction,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.06f, 5, 22),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("pay_tribute",
+                    (DynamicEventOutcomeEffect.GoldBonus, 0.5f),
+                    (DynamicEventOutcomeEffect.MinorTrapDamage, 0.5f)),
+                Choice("refuse",
+                    (DynamicEventOutcomeEffect.SafePass, 0.6f),
+                    (DynamicEventOutcomeEffect.RareEncounter, 0.4f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateNarrativeRivalMemory() => new()
+        {
+            EventId = NarrativeRivalMemoryId,
+            Category = DynamicEventCategory.PersonalStory,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.05f, 8, 20),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("confront",
+                    (DynamicEventOutcomeEffect.MinorResource, 0.45f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.55f)),
+                Choice("walk_away", (DynamicEventOutcomeEffect.SafePass, 1f))
             }
         };
 
