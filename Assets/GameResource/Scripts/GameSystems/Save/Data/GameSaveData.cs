@@ -12,5 +12,6 @@ namespace Backend.GameSystems.Save.Data
         public MetaProgressionState Meta = new();
         public List<CharacterMemory> CharacterMemories = new();
         public Dictionary<string, int> Affinities = new();
+        public int LlmQualityMode;
     }
 }

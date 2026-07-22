@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Prestige;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration;
@@ -20,7 +21,9 @@ namespace Backend.GameSystems.Exploration
         [SerializeField] private bool _autoStartOnAwake = true;
 
         private Text _statusText;
+        private Text _helpText;
         private Text _logText;
+        private ChronicleRuntimePanel _chroniclePanel;
         private CompositeDisposable _disposables;
         private readonly System.Text.StringBuilder _logBuilder = new();
         private readonly Dictionary<string, int> _lineStartByEventId = new();
@@ -81,6 +84,16 @@ namespace Backend.GameSystems.Exploration
                 LlmQualitySettings.CycleMode();
                 RefreshStatus(ExplorationManager.GetCurrentState());
             }
+
+            if (Input.GetKeyDown(KeyCode.C))
+                _chroniclePanel?.Toggle();
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                var state = ExplorationManager.GetCurrentState();
+                if (state != null && state.IsExploring)
+                    ExplorationManager.ReturnToGuild();
+            }
         }
 
         private void BuildUi()
@@ -94,6 +107,8 @@ namespace Backend.GameSystems.Exploration
             canvasGo.AddComponent<GraphicRaycaster>();
 
             _statusText = CreateText(canvasGo.transform, "StatusText", new Vector2(20f, -20f), 22, TextAnchor.UpperLeft);
+            _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
+            _helpText.text = "L:LLM품질  C:연대기  R:귀환";
             _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -120f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
             _logText.verticalOverflow = VerticalWrapMode.Overflow;
@@ -102,6 +117,7 @@ namespace Backend.GameSystems.Exploration
             rect.sizeDelta = new Vector2(Screen.width - 40f, Screen.height - 160f);
 
             canvasGo.AddComponent<DynamicEventRuntimePopup>();
+            _chroniclePanel = canvasGo.AddComponent<ChronicleRuntimePanel>();
         }
 
         private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, TextAnchor anchor)
@@ -192,9 +208,11 @@ namespace Backend.GameSystems.Exploration
             }
 
             var meta = PrestigeManager.GetMeta();
+            var equipment = EquipmentService.GetLeaderEquipmentSummary(state.Party);
             _statusText.text =
                 $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
-                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · Tick {state.CurrentTick}";
+                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()}\n" +
+                $"장비 {equipment} · Tick {state.CurrentTick}";
         }
     }
 }

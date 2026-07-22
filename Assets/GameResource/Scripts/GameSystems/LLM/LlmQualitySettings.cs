@@ -1,4 +1,5 @@
 using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Save;
 using UnityEngine;
 
 namespace Backend.GameSystems.LLM
@@ -95,6 +96,7 @@ namespace Backend.GameSystems.LLM
             };
 
             Debug.Log($"[LlmQualitySettings] Mode changed to {Current}");
+            GameSaveManager.Save();
         }
 
         public static string GetDisplayLabel()
@@ -105,6 +107,14 @@ namespace Backend.GameSystems.LLM
                 LlmQualityMode.Balanced => "LLM:균형",
                 _ => "LLM:성능"
             };
+        }
+
+        public static int ExportMode() => (int)Current;
+
+        public static void ImportMode(int mode)
+        {
+            var clamped = Mathf.Clamp(mode, (int)LlmQualityMode.High, (int)LlmQualityMode.Performance);
+            Current = (LlmQualityMode)clamped;
         }
     }
 }

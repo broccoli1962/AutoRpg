@@ -7,6 +7,7 @@ using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.Util;
 using Backend.Util.Management;
+using ExplorationEventType = Backend.GameSystems.Exploration.Data.EventType;
 using R3;
 using UnityEngine;
 
@@ -168,7 +169,7 @@ namespace Backend.GameSystems.Character
 
         private void TryAddCoreMemories(ExplorationEvent explorationEvent, PartyState party)
         {
-            if (explorationEvent.EventType != EventType.CombatResult || party?.Leader == null)
+            if (explorationEvent.EventType != ExplorationEventType.CombatResult || party?.Leader == null)
                 return;
 
             var leader = party.Leader;
