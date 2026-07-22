@@ -74,6 +74,12 @@ namespace Backend.Object.UI
 
             _settingsPanel?.Configure(refreshStatus);
             _shortcuts.Initialize(_logFeedView, _chroniclePanel, _settingsPanel, _filterText, refreshStatus);
+
+            var enhancePanel = gameObject.GetComponent<EnhanceRuntimePanel>();
+            var guildPanel = gameObject.GetComponent<GuildFacilityRuntimePanel>();
+            var tabController = gameObject.GetComponent<GuildHudTabController>();
+            guildPanel?.Configure(refreshStatus);
+            tabController?.Initialize(_chroniclePanel, enhancePanel, guildPanel, refreshStatus);
         }
 
         public Text ZoneFloorText => _zoneFloorText;

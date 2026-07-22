@@ -64,6 +64,55 @@ namespace Backend.GameSystems.Prestige
             Instance._meta.ChronicleEntries = meta.ChronicleEntries ?? new System.Collections.Generic.List<string>();
             Instance._meta.FavoriteMoments = meta.FavoriteMoments ?? new System.Collections.Generic.List<string>();
             Instance._meta.LoreEntries = meta.LoreEntries ?? new System.Collections.Generic.List<string>();
+            Instance._meta.MonsterEntries = meta.MonsterEntries ?? new System.Collections.Generic.List<string>();
+            Instance._meta.UnlockedSkillIds = meta.UnlockedSkillIds ?? new System.Collections.Generic.List<string>();
+            Instance._meta.CharacterTiers = CloneTierRecords(meta.CharacterTiers);
+            Instance._meta.EquipmentEnhances = CloneEnhanceRecords(meta.EquipmentEnhances);
+        }
+
+        private static System.Collections.Generic.List<CharacterTierRecord> CloneTierRecords(
+            System.Collections.Generic.List<CharacterTierRecord> source)
+        {
+            var clone = new System.Collections.Generic.List<CharacterTierRecord>();
+            if (source == null)
+                return clone;
+
+            foreach (var record in source)
+            {
+                if (record == null)
+                    continue;
+
+                clone.Add(new CharacterTierRecord
+                {
+                    CharacterId = record.CharacterId,
+                    TierIndex = record.TierIndex
+                });
+            }
+
+            return clone;
+        }
+
+        private static System.Collections.Generic.List<EquipmentEnhanceRecord> CloneEnhanceRecords(
+            System.Collections.Generic.List<EquipmentEnhanceRecord> source)
+        {
+            var clone = new System.Collections.Generic.List<EquipmentEnhanceRecord>();
+            if (source == null)
+                return clone;
+
+            foreach (var record in source)
+            {
+                if (record == null)
+                    continue;
+
+                clone.Add(new EquipmentEnhanceRecord
+                {
+                    CharacterId = record.CharacterId,
+                    Slot = record.Slot,
+                    Level = record.Level
+                });
+            }
+
+            return clone;
         }
 
         protected override void OnAwake()
@@ -117,11 +166,12 @@ namespace Backend.GameSystems.Prestige
 
         private static int CalculateLegacyGain(ExplorationState state, ExplorationEndReason reason)
         {
-            var basePoints = Mathf.Max(1, state.CurrentFloor / 2);
+            var zoneBonus = ZoneDefinitions.GetZoneIndex(state.ZoneId);
+            var basePoints = Mathf.Max(1, state.CurrentFloor / 2 + zoneBonus);
             return reason switch
             {
                 ExplorationEndReason.ZoneComplete => basePoints + ZoneDefinitions.GetZoneCompleteLegacyBonus(state.ZoneId),
-                ExplorationEndReason.ManualReturn => basePoints + 1,
+                ExplorationEndReason.ManualReturn => basePoints + 2,
                 ExplorationEndReason.PartyDefeated => basePoints,
                 _ => 0
             };

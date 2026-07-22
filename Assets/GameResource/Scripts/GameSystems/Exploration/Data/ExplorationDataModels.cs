@@ -21,6 +21,8 @@ namespace Backend.GameSystems.Exploration.Data
         public InjurySeverity Injury = InjurySeverity.None;
         public string EquippedWeaponId;
         public string EquippedArmorId;
+        public int WeaponEnhanceLevel;
+        public int ArmorEnhanceLevel;
     }
 
     [Serializable]

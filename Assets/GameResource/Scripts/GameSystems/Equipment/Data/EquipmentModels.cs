@@ -12,5 +12,6 @@ namespace Backend.GameSystems.Equipment.Data
         public int AgiBonus;
         public int IntBonus;
         public int VitBonus;
+        public string SetId;
     }
 }

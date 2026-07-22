@@ -206,7 +206,7 @@ namespace Backend.GameSystems.Exploration
             _statusText.supportRichText = true;
             _statusText.fontSize = 17;
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
-            _helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
+            _helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그  하단탭:탐험·강화·길드·연대기·도감";
             _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
             _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -132f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -219,12 +219,24 @@ namespace Backend.GameSystems.Exploration
             _chroniclePanel = canvasGo.AddComponent<ChronicleRuntimePanel>();
             _settingsPanel = canvasGo.AddComponent<ExplorationSettingsRuntimePanel>();
             _settingsPanel.Configure(() => RefreshStatus(ExplorationManager.GetCurrentState()));
+            var enhancePanel = canvasGo.AddComponent<EnhanceRuntimePanel>();
+            var guildPanel = canvasGo.AddComponent<GuildFacilityRuntimePanel>();
+            guildPanel.Configure(() => RefreshStatus(ExplorationManager.GetCurrentState()));
             canvasGo.AddComponent<PartyRuntimePanel>();
+
+            var tabController = canvasGo.AddComponent<GuildHudTabController>();
+            tabController.Initialize(
+                _chroniclePanel,
+                enhancePanel,
+                guildPanel,
+                () => RefreshStatus(ExplorationManager.GetCurrentState()));
 
             var logLeft = PartyRuntimePanel.PanelWidthPx + 24f;
             var logRect = _logText.rectTransform;
             logRect.anchoredPosition = new Vector2(logLeft, logRect.anchoredPosition.y);
-            logRect.sizeDelta = new Vector2(Screen.width - logLeft - 20f, Screen.height - 172f);
+            logRect.sizeDelta = new Vector2(
+                Screen.width - logLeft - 20f,
+                Screen.height - 172f - GuildHudTabController.BottomInsetPx);
         }
 
         private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, TextAnchor anchor)
