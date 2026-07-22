@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Backend.GameSystems.Character;
 using Backend.GameSystems.Character.Data;
+using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.LLM;
 using Backend.GameSystems.Prestige;
 using Backend.GameSystems.Prestige.Data;
@@ -71,7 +72,8 @@ namespace Backend.GameSystems.Save
                     Meta = CloneMeta(PrestigeManager.GetMeta()),
                     CharacterMemories = CharacterMemoryManager.ExportMemories(),
                     Affinities = RelationshipManager.ExportAffinities(),
-                    LlmQualityMode = LlmQualitySettings.ExportMode()
+                    LlmQualityMode = LlmQualitySettings.ExportMode(),
+                    DynamicEventAutoPolicy = DynamicEventAutoPolicySettings.ExportPolicy()
                 };
 
                 var json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -102,6 +104,7 @@ namespace Backend.GameSystems.Save
                 CharacterMemoryManager.ImportMemories(data.CharacterMemories);
                 RelationshipManager.ImportAffinities(data.Affinities);
                 LlmQualitySettings.ImportMode(data.LlmQualityMode);
+                DynamicEventAutoPolicySettings.ImportPolicy(data.DynamicEventAutoPolicy);
                 Debug.Log($"[GameSaveManager] Loaded save (legacy={data.Meta?.LegacyPoints ?? 0})");
             }
             catch (System.Exception e)

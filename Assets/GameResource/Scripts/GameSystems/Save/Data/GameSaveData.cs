@@ -13,5 +13,6 @@ namespace Backend.GameSystems.Save.Data
         public List<CharacterMemory> CharacterMemories = new();
         public Dictionary<string, int> Affinities = new();
         public int LlmQualityMode;
+        public int DynamicEventAutoPolicy;
     }
 }
