@@ -1,4 +1,5 @@
 using System.Text;
+using Backend.GameSystems.Character;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Equipment;
 using R3;
@@ -23,6 +24,7 @@ namespace Backend.GameSystems.Exploration
         private void Start()
         {
             BuildUi();
+            RelationshipManager.EnsureInitialized();
             _disposables = new CompositeDisposable();
 
             ExplorationChannels.OnStateChanged
@@ -84,6 +86,13 @@ namespace Backend.GameSystems.Exploration
                     _builder.AppendLine();
 
                 AppendMemberCard(members[i], i == 0);
+            }
+
+            var relationshipSummary = RelationshipManager.BuildHudSummary(state?.Party);
+            if (!string.IsNullOrEmpty(relationshipSummary))
+            {
+                _builder.AppendLine();
+                _builder.Append(relationshipSummary);
             }
 
             _contentText.text = _builder.ToString();
