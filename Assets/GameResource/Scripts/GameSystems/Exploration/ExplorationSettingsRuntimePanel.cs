@@ -1,4 +1,7 @@
 using Backend.GameSystems.DynamicEvent;
+using Backend.GameSystems.Exploration.Narration;
+using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.LLM;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,6 +56,13 @@ namespace Backend.GameSystems.Exploration
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
+
+            if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+            {
+                LogFrequencySettings.CycleMode();
+                RefreshContent();
+                _onSettingsChanged?.Invoke();
+            }
         }
 
         public void Toggle()
@@ -85,7 +95,7 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(600f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:LLM 품질  2:이벤트 정책  3:황금 자동정지  (O:닫기)");
+                "1:LLM 품질  2:이벤트 정책  3:황금 자동정지  4:로그 빈도  (O:닫기)");
             hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
@@ -140,7 +150,18 @@ namespace Backend.GameSystems.Exploration
             _contentText.text =
                 $"<b>1. LLM 텍스트 품질</b>\n{LlmQualitySettings.GetDisplayLabel()}\n\n" +
                 $"<b>2. 자동 이벤트 선택 정책</b>\n{DynamicEventAutoPolicySettings.GetDisplayLabel()}\n\n" +
-                $"<b>3. 황금 이벤트 자동정지</b>\n{GoldenEventSettings.GetDisplayLabel()}";
+                $"<b>3. 황금 이벤트 자동정지</b>\n{GoldenEventSettings.GetDisplayLabel()}\n\n" +
+                $"<b>4. 로그 생성 빈도</b>\n{LogFrequencySettings.GetDisplayLabel()} · 최소 {GetSalienceLabel(LogFrequencySettings.GetMinimumSalience())}";
+        }
+
+        private static string GetSalienceLabel(SalienceGrade grade)
+        {
+            return grade switch
+            {
+                SalienceGrade.Significant => "Significant+",
+                SalienceGrade.Trivial => "전체",
+                _ => "Notable+"
+            };
         }
     }
 }

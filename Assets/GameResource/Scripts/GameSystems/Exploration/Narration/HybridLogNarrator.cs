@@ -24,7 +24,7 @@ namespace Backend.GameSystems.Exploration.Narration
                 return templateEntry;
 
             var pending = CloneEntry(templateEntry);
-            pending.Text = "…";
+            pending.Text = "서술 중…";
             pending.IsPending = true;
             pending.UsedLlm = false;
 

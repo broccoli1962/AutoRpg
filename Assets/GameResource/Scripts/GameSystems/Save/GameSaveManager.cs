@@ -4,6 +4,7 @@ using Backend.GameSystems.Character;
 using Backend.GameSystems.Character.Data;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.LLM;
+using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Prestige;
 using Backend.GameSystems.Prestige.Data;
 using Backend.GameSystems.Save.Data;
@@ -74,7 +75,8 @@ namespace Backend.GameSystems.Save
                     Affinities = RelationshipManager.ExportAffinities(),
                     LlmQualityMode = LlmQualitySettings.ExportMode(),
                     DynamicEventAutoPolicy = DynamicEventAutoPolicySettings.ExportPolicy(),
-                    GoldenEventAutoPause = GoldenEventSettings.ExportSetting()
+                    GoldenEventAutoPause = GoldenEventSettings.ExportSetting(),
+                    LogFrequencyMode = LogFrequencySettings.ExportMode()
                 };
 
                 var json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -107,6 +109,7 @@ namespace Backend.GameSystems.Save
                 LlmQualitySettings.ImportMode(data.LlmQualityMode);
                 DynamicEventAutoPolicySettings.ImportPolicy(data.DynamicEventAutoPolicy);
                 GoldenEventSettings.ImportSetting(data.GoldenEventAutoPause);
+                LogFrequencySettings.ImportMode(data.LogFrequencyMode);
                 Debug.Log($"[GameSaveManager] Loaded save (legacy={data.Meta?.LegacyPoints ?? 0})");
             }
             catch (System.Exception e)
