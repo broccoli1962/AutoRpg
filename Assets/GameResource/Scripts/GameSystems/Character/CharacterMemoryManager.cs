@@ -299,6 +299,9 @@ namespace Backend.GameSystems.Character
             {
                 ZoneDefinitions.FungalMazeId => "core_enter_fungal_maze",
                 ZoneDefinitions.CrystalCavernId => "core_enter_crystal_cavern",
+                ZoneDefinitions.MoltenDepthsId => "core_enter_molten_depths",
+                ZoneDefinitions.SilentRuinsId => "core_enter_silent_ruins",
+                ZoneDefinitions.AbyssalThresholdId => "core_enter_abyssal_threshold",
                 _ => null
             };
 

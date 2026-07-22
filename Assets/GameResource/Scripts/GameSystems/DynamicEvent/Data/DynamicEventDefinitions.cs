@@ -408,12 +408,7 @@ namespace Backend.GameSystems.DynamicEvent.Data
             new()
             {
                 Type = DynamicEventTriggerType.FloorEnter,
-                ZoneIds = new List<string>
-                {
-                    ZoneDefinitions.MossyHollowId,
-                    ZoneDefinitions.FungalMazeId,
-                    ZoneDefinitions.CrystalCavernId
-                },
+                ZoneIds = ZoneDefinitions.CreateAllZoneIdList(),
                 Probability = probability,
                 MinFloor = minFloor,
                 MaxFloor = maxFloor
@@ -423,12 +418,7 @@ namespace Backend.GameSystems.DynamicEvent.Data
             new()
             {
                 Type = DynamicEventTriggerType.RareGolden,
-                ZoneIds = new List<string>
-                {
-                    ZoneDefinitions.MossyHollowId,
-                    ZoneDefinitions.FungalMazeId,
-                    ZoneDefinitions.CrystalCavernId
-                },
+                ZoneIds = ZoneDefinitions.CreateAllZoneIdList(),
                 Probability = probability,
                 MinFloor = minFloor,
                 MaxFloor = maxFloor
