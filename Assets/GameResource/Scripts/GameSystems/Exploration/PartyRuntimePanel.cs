@@ -116,7 +116,7 @@ namespace Backend.GameSystems.Exploration
             _builder.Append(member.Level);
             _builder.Append(' ');
             _builder.Append(GetRoleLabel(member.Role));
-            _builder.AppendLine();
+            _builder.AppendLine("  <color=#8899aa>I:상세</color>");
 
             var tierTitle = CharacterTierManager.GetTierTitle(member.CharacterId);
             if (!string.IsNullOrEmpty(tierTitle) && tierTitle != "견습")

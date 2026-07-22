@@ -27,7 +27,7 @@ namespace Backend.Object.UI.Exploration
             goldText.gameObject.SetActive(false);
 
             var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -88f), new Vector2(920f, 18f), 13, font);
-            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그  하단탭";
+            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  I:캐릭터  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그  하단탭";
             var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -108f), new Vector2(420f, 18f), 13, font);
             filterText.color = new Color(0.8f, 0.8f, 0.85f);
 
@@ -119,6 +119,9 @@ namespace Backend.Object.UI.Exploration
 
             if (panel.gameObject.GetComponent<ExplorationCenterRuntimePanel>() == null)
                 panel.gameObject.AddComponent<ExplorationCenterRuntimePanel>();
+
+            if (panel.gameObject.GetComponent<CharacterDetailRuntimePanel>() == null)
+                panel.gameObject.AddComponent<CharacterDetailRuntimePanel>();
 
             if (panel.gameObject.GetComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>() == null)
                 panel.gameObject.AddComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>();
