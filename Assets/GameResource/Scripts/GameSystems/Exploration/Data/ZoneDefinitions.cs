@@ -13,6 +13,11 @@ namespace Backend.GameSystems.Exploration.Data
         public const int FungalMazeMinFloor = 16;
         public const int FungalMazeMaxFloor = 30;
 
+        public const string CrystalCavernId = "crystal_cavern";
+        public const string CrystalCavernDisplayName = "수정 공동";
+        public const int CrystalCavernMinFloor = 31;
+        public const int CrystalCavernMaxFloor = 45;
+
         public const float BaseProgressPerTick = 4.5f;
         public const float FloorDifficultyStep = 0.08f;
         public const float BaseEventRollChance = 0.35f;
@@ -32,7 +37,14 @@ namespace Backend.GameSystems.Exploration.Data
                 FungalMazeMinFloor,
                 FungalMazeMaxFloor,
                 rewardMultiplier: 1.3f,
-                riskMultiplier: 1.4f)
+                riskMultiplier: 1.4f),
+            new(
+                CrystalCavernId,
+                CrystalCavernDisplayName,
+                CrystalCavernMinFloor,
+                CrystalCavernMaxFloor,
+                rewardMultiplier: 1.8f,
+                riskMultiplier: 1.9f)
         };
 
         private static readonly MonsterDefinition[] MossyHollowMonsters =
@@ -53,6 +65,15 @@ namespace Backend.GameSystems.Exploration.Data
             new("mycelial_overmind", "균사체 군주", MonsterRarity.Boss, 95, 24, 26, 75)
         };
 
+        private static readonly MonsterDefinition[] CrystalCavernMonsters =
+        {
+            new("crystal_wisp", "수정 정령", MonsterRarity.Common, 20, 6, 9, 14),
+            new("radiant_moth_swarm", "광휘 나비떼", MonsterRarity.Notable, 32, 11, 14, 26),
+            new("mana_serpent", "마나 뱀", MonsterRarity.Rare, 52, 18, 16, 42),
+            new("crystal_golem", "결정 골렘", MonsterRarity.Rare, 62, 20, 22, 50),
+            new("prism_sovereign", "프리즘 군주", MonsterRarity.Boss, 110, 28, 30, 90)
+        };
+
         private static readonly string[] MossyHollowMoveDescriptionIds =
         {
             "damp_passage",
@@ -71,6 +92,15 @@ namespace Backend.GameSystems.Exploration.Data
             "whispering_spores"
         };
 
+        private static readonly string[] CrystalCavernMoveDescriptionIds =
+        {
+            "prismatic_glow",
+            "mana_surge",
+            "crystal_echo",
+            "refracted_path",
+            "humming_resonance"
+        };
+
         private static readonly DiscoveryDefinition[] MossyHollowDiscoveries =
         {
             new("mana_shard", "마나결정", 1, 12),
@@ -85,6 +115,14 @@ namespace Backend.GameSystems.Exploration.Data
             new("fungal_cap", "발광 버섯갓", 1, 14),
             new("mycelium_thread", "균사 실", 1, 22),
             new("spore_filter_mask", "포자 차단 마스크", 1, 30)
+        };
+
+        private static readonly DiscoveryDefinition[] CrystalCavernDiscoveries =
+        {
+            new("pure_mana_shard", "순수 마나결정", 2, 20),
+            new("crystal_lens", "수정 렌즈", 1, 28),
+            new("resonance_stone", "공명석", 1, 35),
+            new("prismatic_dust", "프리즘 가루", 1, 18)
         };
 
         public static string GetZoneDisplayName(string zoneId)
@@ -136,6 +174,22 @@ namespace Backend.GameSystems.Exploration.Data
             return false;
         }
 
+        public static int GetZoneIndex(string zoneId)
+        {
+            for (var i = 0; i < AllZones.Length; i++)
+            {
+                if (AllZones[i].Id == zoneId)
+                    return i;
+            }
+
+            return 0;
+        }
+
+        public static int GetZoneCompleteLegacyBonus(string zoneId)
+        {
+            return 6 + GetZoneIndex(zoneId) * 4;
+        }
+
         public static float GetFloorDifficulty(string zoneId, int floor)
         {
             var relativeFloor = GetZoneRelativeFloor(zoneId, floor);
@@ -148,6 +202,7 @@ namespace Backend.GameSystems.Exploration.Data
             return zoneId switch
             {
                 FungalMazeId => FungalMazeMonsters,
+                CrystalCavernId => CrystalCavernMonsters,
                 _ => MossyHollowMonsters
             };
         }
@@ -157,6 +212,7 @@ namespace Backend.GameSystems.Exploration.Data
             return zoneId switch
             {
                 FungalMazeId => FungalMazeMoveDescriptionIds,
+                CrystalCavernId => CrystalCavernMoveDescriptionIds,
                 _ => MossyHollowMoveDescriptionIds
             };
         }
@@ -168,6 +224,7 @@ namespace Backend.GameSystems.Exploration.Data
             return zoneId switch
             {
                 FungalMazeId => FungalMazeDiscoveries,
+                CrystalCavernId => CrystalCavernDiscoveries,
                 _ => MossyHollowDiscoveries
             };
         }
