@@ -59,6 +59,7 @@ namespace Backend.GameSystems.Exploration
         {
             var party = ZoneDefinitions.CreateDefaultParty();
             TrainingGroundManager.ApplyPartyBonuses(party);
+            SkillTreeManager.ApplyPartyBonuses(party);
             EquipmentService.ClearPartyEquipment(party);
             BlacksmithManager.ApplyStartingEquipment(party);
             _session.StartNew(seed, party);

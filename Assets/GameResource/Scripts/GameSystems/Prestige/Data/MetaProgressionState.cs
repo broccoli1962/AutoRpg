@@ -21,5 +21,6 @@ namespace Backend.GameSystems.Prestige.Data
         public List<string> FavoriteMoments = new();
         public List<string> LoreEntries = new();
         public List<string> MonsterEntries = new();
+        public List<string> UnlockedSkillIds = new();
     }
 }

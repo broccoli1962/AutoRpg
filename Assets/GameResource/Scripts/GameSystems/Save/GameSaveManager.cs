@@ -141,7 +141,8 @@ namespace Backend.GameSystems.Save
                 ChronicleEntries = new List<string>(source.ChronicleEntries),
                 FavoriteMoments = new List<string>(source.FavoriteMoments ?? new List<string>()),
                 LoreEntries = new List<string>(source.LoreEntries ?? new List<string>()),
-                MonsterEntries = new List<string>(source.MonsterEntries ?? new List<string>())
+                MonsterEntries = new List<string>(source.MonsterEntries ?? new List<string>()),
+                UnlockedSkillIds = new List<string>(source.UnlockedSkillIds ?? new List<string>())
             };
         }
     }

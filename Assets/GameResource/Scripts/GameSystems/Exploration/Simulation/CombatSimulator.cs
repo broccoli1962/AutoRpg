@@ -198,7 +198,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 _ => EquipmentService.GetEffectiveStr(attacker)
             };
 
-            var critMultiplier = random.RollChance(0.15f) ? 1.5f : 1f;
+            var critMultiplier = random.RollChance(0.15f + SkillTreeManager.GetRogueCritChanceBonus(attacker)) ? 1.5f : 1f;
             var variance = random.NextRange(0.9f, 1.1f);
             var raw = (attack - monster.Defense * 0.5f) * critMultiplier * variance;
             return System.Math.Max(1, (int)raw);

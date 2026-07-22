@@ -40,7 +40,8 @@ namespace Backend.GameSystems.Exploration
             if (party?.Members == null)
                 return;
 
-            var healMultiplier = GetRestHealMultiplier() * ExplorationSurvivalBonus.GetRestHealMultiplier(party);
+            var healMultiplier = GetRestHealMultiplier() * ExplorationSurvivalBonus.GetRestHealMultiplier(party) *
+                                 SkillTreeManager.GetClericRestHealBonus(party);
             var injuryHpThreshold = Level >= 3 ? 0.3f : Level >= 2 ? 0.4f : 0.5f;
             injuryHpThreshold -= ExplorationSurvivalBonus.GetInjuryRecoveryThresholdBonus(party);
             injuryHpThreshold = Mathf.Clamp(injuryHpThreshold, 0.2f, 0.6f);

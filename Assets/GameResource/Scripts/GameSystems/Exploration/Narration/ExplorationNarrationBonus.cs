@@ -1,5 +1,6 @@
 using Backend.GameSystems.Exploration.Data;
 using ScriptoriumManager = Backend.GameSystems.Exploration.ScriptoriumManager;
+using SkillTreeManager = Backend.GameSystems.Exploration.SkillTreeManager;
 
 namespace Backend.GameSystems.Exploration.Narration
 {
@@ -30,6 +31,7 @@ namespace Backend.GameSystems.Exploration.Narration
         {
             var bonus = PartyHasBard(party) ? BardTokenBonus : 0;
             bonus += ScriptoriumManager.GetTokenBonus();
+            bonus += SkillTreeManager.GetBardTokenBonus(party);
             return bonus;
         }
 
