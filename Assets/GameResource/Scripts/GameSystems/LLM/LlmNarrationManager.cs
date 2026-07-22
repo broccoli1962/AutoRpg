@@ -9,6 +9,7 @@ using Backend.GameSystems.Exploration.Narration;
 using Backend.Util;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
+using LLama.Sampling;
 using UnityEngine;
 
 namespace Backend.GameSystems.LLM
@@ -75,16 +76,27 @@ namespace Backend.GameSystems.LLM
             float temperature,
             CancellationToken cancellationToken = default)
         {
+            return await GenerateTextAsync(prompt, maxTokens, temperature, null, cancellationToken);
+        }
+
+        public static async UniTask<string> GenerateTextAsync(
+            string prompt,
+            int maxTokens,
+            float temperature,
+            Grammar grammar,
+            CancellationToken cancellationToken = default)
+        {
             if (GameStateUtil.IsQuitting || string.IsNullOrWhiteSpace(prompt))
                 return null;
 
-            return await Instance.GenerateTextInternalAsync(prompt, maxTokens, temperature, cancellationToken);
+            return await Instance.GenerateTextInternalAsync(prompt, maxTokens, temperature, grammar, cancellationToken);
         }
 
         private async UniTask<string> GenerateTextInternalAsync(
             string prompt,
             int maxTokens,
             float temperature,
+            Grammar grammar,
             CancellationToken cancellationToken)
         {
             if (!_isModelReady || _service == null)
@@ -94,7 +106,7 @@ namespace Backend.GameSystems.LLM
             try
             {
                 return await UniTask.RunOnThreadPool(async () =>
-                    await _service.GenerateAsync(prompt, maxTokens, temperature, null, cancellationToken));
+                    await _service.GenerateAsync(prompt, maxTokens, temperature, null, grammar, cancellationToken));
             }
             finally
             {
@@ -214,6 +226,7 @@ namespace Backend.GameSystems.LLM
                             maxTokens,
                             0.8f,
                             token => PublishStreamingToken(job, accumulated, token),
+                            null,
                             cts.Token));
                 }
                 finally

@@ -51,6 +51,7 @@ namespace Backend.GameSystems.LLM
             int maxTokens = 128,
             float temperature = 0.7f,
             Action<string> onToken = null,
+            Grammar grammar = null,
             CancellationToken ct = default)
         {
             if (!_isLoaded)
@@ -58,14 +59,17 @@ namespace Backend.GameSystems.LLM
 
             var executor = new StatelessExecutor(_weights, _modelParams);
 
+            var samplingPipeline = new DefaultSamplingPipeline
+            {
+                Temperature = temperature,
+                Grammar = grammar
+            };
+
             var inferenceParams = new InferenceParams
             {
                 MaxTokens = maxTokens,
                 AntiPrompts = new[] { ImEnd, "<|endoftext|>" },
-                SamplingPipeline = new DefaultSamplingPipeline
-                {
-                    Temperature = temperature,
-                },
+                SamplingPipeline = samplingPipeline,
             };
 
             var builder = new StringBuilder();
