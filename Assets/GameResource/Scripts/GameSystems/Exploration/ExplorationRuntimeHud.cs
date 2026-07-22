@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Prestige;
 using Backend.GameSystems.DynamicEvent;
-using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.LLM;
@@ -18,15 +17,20 @@ namespace Backend.GameSystems.Exploration
     /// </summary>
     public class ExplorationRuntimeHud : CachedMonobehaviour
     {
+        private const int MaxLogLines = 120;
+
         [SerializeField] private bool _autoStartOnAwake = true;
 
         private Text _statusText;
         private Text _helpText;
+        private Text _filterText;
         private Text _logText;
         private ChronicleRuntimePanel _chroniclePanel;
         private CompositeDisposable _disposables;
         private readonly System.Text.StringBuilder _logBuilder = new();
-        private readonly Dictionary<string, int> _lineStartByEventId = new();
+        private readonly List<HudLogLine> _logLines = new();
+        private readonly Dictionary<string, int> _indexByEventId = new();
+        private LogFeedFilter _filter = LogFeedFilter.All;
 
         private void Awake()
         {
@@ -70,6 +74,7 @@ namespace Backend.GameSystems.Exploration
             }
 
             RefreshStatus(ExplorationManager.GetCurrentState());
+            RefreshFilterLabel();
         }
 
         private void OnDestroy()
@@ -94,6 +99,13 @@ namespace Backend.GameSystems.Exploration
                 if (state != null && state.IsExploring)
                     ExplorationManager.ReturnToGuild();
             }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _filter = LogFeedFilterUtil.Cycle(_filter);
+                RefreshFilterLabel();
+                RebuildLogText();
+            }
         }
 
         private void BuildUi()
@@ -108,13 +120,14 @@ namespace Backend.GameSystems.Exploration
 
             _statusText = CreateText(canvasGo.transform, "StatusText", new Vector2(20f, -20f), 22, TextAnchor.UpperLeft);
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
-            _helpText.text = "L:LLM품질  C:연대기  R:귀환";
-            _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -120f), 16, TextAnchor.UpperLeft);
+            _helpText.text = "L:LLM품질  C:연대기  R:귀환  F:로그필터";
+            _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
+            _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -132f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
             _logText.verticalOverflow = VerticalWrapMode.Overflow;
 
             var rect = _logText.rectTransform;
-            rect.sizeDelta = new Vector2(Screen.width - 40f, Screen.height - 160f);
+            rect.sizeDelta = new Vector2(Screen.width - 40f, Screen.height - 172f);
 
             canvasGo.AddComponent<DynamicEventRuntimePopup>();
             _chroniclePanel = canvasGo.AddComponent<ChronicleRuntimePanel>();
@@ -143,40 +156,20 @@ namespace Backend.GameSystems.Exploration
 
         private void AppendLog(LogEntry entry)
         {
-            if (_logBuilder.Length > 6000)
-            {
-                _logBuilder.Clear();
-                _lineStartByEventId.Clear();
-            }
-
-            if (!string.IsNullOrEmpty(entry.EventId))
-                _lineStartByEventId[entry.EventId] = _logBuilder.Length;
-
-            _logBuilder.AppendLine(entry.Text);
-            _logText.text = _logBuilder.ToString();
+            TrimIfNeeded();
+            AddLine(HudLogLine.FromEntry(entry));
         }
 
         private void UpdateLog(LogEntry entry)
         {
             if (string.IsNullOrEmpty(entry.EventId) ||
-                !_lineStartByEventId.TryGetValue(entry.EventId, out var startIndex))
+                !_indexByEventId.TryGetValue(entry.EventId, out var index))
             {
                 return;
             }
 
-            var endIndex = _logBuilder.Length;
-            for (var i = startIndex; i < _logBuilder.Length; i++)
-            {
-                if (_logBuilder[i] == '\n')
-                {
-                    endIndex = i + 1;
-                    break;
-                }
-            }
-
-            _logBuilder.Remove(startIndex, endIndex - startIndex);
-            _logBuilder.Insert(startIndex, entry.Text + "\n");
-            _logText.text = _logBuilder.ToString();
+            _logLines[index] = HudLogLine.FromEntry(entry);
+            RebuildLogText();
         }
 
         private void AppendDynamicEventLog(DynamicEvent.Data.DynamicEventInstance instance)
@@ -184,8 +177,8 @@ namespace Backend.GameSystems.Exploration
             if (instance == null || string.IsNullOrEmpty(instance.LlmResultNarration))
                 return;
 
-            _logBuilder.AppendLine("[이벤트] " + instance.LlmResultNarration);
-            _logText.text = _logBuilder.ToString();
+            TrimIfNeeded();
+            AddLine(HudLogLine.FromDynamicEvent(instance.LlmResultNarration));
         }
 
         private void AppendPrestigeChronicle(Exploration.Simulation.ExplorationEndReason reason)
@@ -195,8 +188,58 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             var latest = meta.ChronicleEntries[meta.ChronicleEntries.Count - 1];
-            _logBuilder.AppendLine("[연대기] " + latest);
+            TrimIfNeeded();
+            AddLine(HudLogLine.FromChronicle(latest));
+        }
+
+        private void AddLine(HudLogLine line)
+        {
+            if (!string.IsNullOrEmpty(line.EventId))
+                _indexByEventId[line.EventId] = _logLines.Count;
+
+            _logLines.Add(line);
+            RebuildLogText();
+        }
+
+        private void TrimIfNeeded()
+        {
+            while (_logLines.Count >= MaxLogLines)
+            {
+                var removed = _logLines[0];
+                _logLines.RemoveAt(0);
+
+                if (!string.IsNullOrEmpty(removed.EventId))
+                    _indexByEventId.Remove(removed.EventId);
+
+                _indexByEventId.Clear();
+                for (var i = 0; i < _logLines.Count; i++)
+                {
+                    var eventId = _logLines[i].EventId;
+                    if (!string.IsNullOrEmpty(eventId))
+                        _indexByEventId[eventId] = i;
+                }
+            }
+        }
+
+        private void RebuildLogText()
+        {
+            _logBuilder.Clear();
+
+            foreach (var line in _logLines)
+            {
+                if (!line.MatchesFilter(_filter))
+                    continue;
+
+                _logBuilder.AppendLine(line.RichText);
+            }
+
             _logText.text = _logBuilder.ToString();
+        }
+
+        private void RefreshFilterLabel()
+        {
+            if (_filterText != null)
+                _filterText.text = $"로그 필터: {LogFeedFilterUtil.GetDisplayLabel(_filter)} (F)";
         }
 
         private void RefreshStatus(ExplorationState state)
@@ -213,6 +256,68 @@ namespace Backend.GameSystems.Exploration
                 $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
                 $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()}\n" +
                 $"장비 {equipment} · Tick {state.CurrentTick}";
+        }
+
+        private sealed class HudLogLine
+        {
+            public string EventId;
+            public bool IsCombat;
+            public bool IsDiscovery;
+            public bool IsDynamicEvent;
+            public bool IsNarrative;
+            public string RichText;
+
+            public bool MatchesFilter(LogFeedFilter filter)
+            {
+                return filter switch
+                {
+                    LogFeedFilter.Combat => IsCombat,
+                    LogFeedFilter.Discovery => IsDiscovery,
+                    LogFeedFilter.Event => IsDynamicEvent,
+                    LogFeedFilter.Narrative => IsNarrative,
+                    _ => true
+                };
+            }
+
+            public static HudLogLine FromEntry(LogEntry entry)
+            {
+                return new HudLogLine
+                {
+                    EventId = entry.EventId,
+                    IsCombat = entry.Category == LogCategory.Combat,
+                    IsDiscovery = entry.Category == LogCategory.Discovery,
+                    IsDynamicEvent = false,
+                    IsNarrative = entry.UsedLlm
+                        || entry.Salience >= SalienceGrade.Significant
+                        || entry.Category == LogCategory.Milestone,
+                    RichText = LogDisplayUtil.FormatRichText(entry)
+                };
+            }
+
+            public static HudLogLine FromDynamicEvent(string narration)
+            {
+                return new HudLogLine
+                {
+                    IsDynamicEvent = true,
+                    IsNarrative = true,
+                    RichText = LogDisplayUtil.FormatTaggedLine(
+                        "이벤트",
+                        narration,
+                        LogDisplayUtil.GetCategoryColor(LogCategory.Milestone))
+                };
+            }
+
+            public static HudLogLine FromChronicle(string text)
+            {
+                return new HudLogLine
+                {
+                    IsNarrative = true,
+                    RichText = LogDisplayUtil.FormatTaggedLine(
+                        "연대기",
+                        text,
+                        LogDisplayUtil.GetCategoryColor(LogCategory.Milestone))
+                };
+            }
         }
     }
 }
