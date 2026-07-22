@@ -15,8 +15,128 @@ MonoBehaviour:
   m_GroupName: InGame
   m_GUID: fd407f833ba14004d8055d0f5f377ba9
   m_SerializeEntries:
+  - m_GUID: 06061f20c287c8648a93149585330955
+    m_Address: Assets/GameResource/Images/GameUI/v2/log_accent_strip.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 080a71eaf164acc4987e31f6ae7805e4
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_panel_s.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d4d557fc13c2bf45a4a35431685a20f
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_tab_off.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ea48afa1c04b864192b6e8865f234ae
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_btn_secondary.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32d46ae11ca4cfe459f9bd0214ae517c
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_progress_fill.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 32fcbefcc52a4bf4e8036b14d617ecbc
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_progress_track.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38a1d9e317bfda6439e00fa393fe616f
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_log_event.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 415abd21d1d6dcc48a3fa758cdf52383
+    m_Address: Assets/Fonts/BMJUA_ttf.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5673f21cd7c60e54b826dec095057d8c
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_tab_guild.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 574bf705f1efb0846bbd361e3a22eb6c
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_log_discovery.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d35333a595823e4f9511d0ca29746d1
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_tab_explore.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ae1bac2cd21303439726f7a78e2fe02
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_tab_compendium.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c1962dd6cbe788438b5f51619530e9a
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_panel_l.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e2b0cc5c4936974094e18adcd3d10d0
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_btn_primary.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 807d0e12a8566b84d9350d4b8085f9d4
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_tab_chronicle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82b42afd6e724fb449b5756af0f96a81
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_tab_on.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 854f06931533db64cbbfb86cfcafca09
+    m_Address: Assets/GameResource/Images/GameUI/v2/illust_zone_banner.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 920380f647d359248b22fe6fbc931d71
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_bar_bottom.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 931db2b18f7d87246aef8622cf09c2ab
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_bar_top.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94ffaf90ea8459f46866c25d0a152985
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_log_combat.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99bad822e04079947ae796ff8299ab52
+    m_Address: Assets/GameResource/Images/GameUI/v2/illust_guild_start.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a3aad7f6d62f35448a7c0139e29879a
     m_Address: Assets/GameResource/Images
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b62538313ab37d24fbfc63743f749b75
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_tab_enhance.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca8038a21e0e40242a59bab591096cf8
+    m_Address: Assets/GameResource/Images/GameUI/v2/icon_log_narrative.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f73bc34bf05297e45913873958d05a48
+    m_Address: Assets/GameResource/Images/GameUI/v2/portrait_frame.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

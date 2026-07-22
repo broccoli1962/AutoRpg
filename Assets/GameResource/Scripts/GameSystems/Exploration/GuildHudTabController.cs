@@ -1,8 +1,6 @@
-using System;
-using UnityEngine;
 using Backend.Util;
+using UnityEngine;
 using UnityEngine.UI;
-
 namespace Backend.GameSystems.Exploration
 {
     /// <summary>
@@ -93,11 +91,13 @@ namespace Backend.GameSystems.Exploration
             barRect.sizeDelta = new Vector2(0f, TabBarHeight);
 
             var barImage = barRoot.AddComponent<Image>();
-            barImage.color = new Color(0.06f, 0.07f, 0.1f, 0.94f);
+            RuntimeUiSprites.ApplyTabBarBackground(barImage);
+            if (barImage.sprite == null)
+                barImage.color = new Color(0.06f, 0.07f, 0.1f, 0.94f);
 
             var labels = new[] { "탐험", "강화/장비", "길드시설", "연대기", "도감" };
             _tabButtons = new Button[labels.Length];
-            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            var font = RuntimeUiFont.Get();
 
             for (var i = 0; i < labels.Length; i++)
             {
@@ -120,9 +120,16 @@ namespace Backend.GameSystems.Exploration
 
                 var tabIndex = i;
                 _tabButtons[i] = tabTransform.GetComponent<Button>();
-                if (_tabButtons[i] != null)
-                    _tabButtons[i].onClick.AddListener(() => SelectTab((HudBottomTab)tabIndex));
+                if (_tabButtons[i] == null)
+                    continue;
+
+                _tabButtons[i].onClick.RemoveAllListeners();
+                _tabButtons[i].onClick.AddListener(() => SelectTab((HudBottomTab)tabIndex));
+                StyleTabButton(_tabButtons[i], (int)_currentTab == i);
+                StyleTabLabel(tabTransform, (int)_currentTab == i);
             }
+
+            barRoot.SetAsLastSibling();
         }
 
         private Button CreateTabButton(Transform parent, string label, int index, int count, Font font)
@@ -137,7 +144,7 @@ namespace Backend.GameSystems.Exploration
             rect.offsetMax = new Vector2(-2f, -4f);
 
             var image = go.AddComponent<Image>();
-            image.color = _inactiveColor;
+            StyleTabButtonImage(image, index == (int)_currentTab);
             var button = go.AddComponent<Button>();
             button.targetGraphic = image;
 
@@ -151,9 +158,9 @@ namespace Backend.GameSystems.Exploration
 
             var text = labelGo.AddComponent<Text>();
             text.font = font;
-            text.fontSize = 14;
+            text.fontSize = 11;
             text.alignment = TextAnchor.MiddleCenter;
-            text.color = Color.white;
+            text.color = index == (int)_currentTab ? ModernUiStyle.TitleGold : ModernUiStyle.BodyText;
             text.text = label;
             return button;
         }
@@ -183,6 +190,9 @@ namespace Backend.GameSystems.Exploration
 
             UpdateTabHighlight();
             _onRefreshStatus?.Invoke();
+
+            var startPanel = GetComponent<ExplorationStartRuntimePanel>();
+            startPanel?.SetGuildTabActive(tab == HudBottomTab.Explore);
         }
 
         private void UpdateTabHighlight()
@@ -192,10 +202,40 @@ namespace Backend.GameSystems.Exploration
 
             for (var i = 0; i < _tabButtons.Length; i++)
             {
-                var image = _tabButtons[i].GetComponent<Image>();
-                if (image != null)
-                    image.color = (int)_currentTab == i ? _activeColor : _inactiveColor;
+                if (_tabButtons[i] == null)
+                    continue;
+
+                StyleTabButton(_tabButtons[i], (int)_currentTab == i);
+                StyleTabLabel(_tabButtons[i].transform, (int)_currentTab == i);
             }
+        }
+
+        private static void StyleTabLabel(Transform tabRoot, bool active)
+        {
+            var label = tabRoot.Find("Content/Label") ?? tabRoot.Find("Label");
+            if (label == null)
+                return;
+
+            var text = label.GetComponent<Text>();
+            if (text != null)
+                text.color = active ? ModernUiStyle.TitleGold : ModernUiStyle.BodyText;
+        }
+
+        private void StyleTabButton(Button button, bool active)
+        {
+            if (button == null)
+                return;
+
+            var image = button.GetComponent<Image>();
+            if (image != null)
+                StyleTabButtonImage(image, active);
+        }
+
+        private void StyleTabButtonImage(Image image, bool active)
+        {
+            RuntimeUiSprites.ApplyTabBackground(image, active);
+            if (image.sprite == null)
+                image.color = active ? _activeColor : _inactiveColor;
         }
     }
 }

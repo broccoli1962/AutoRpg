@@ -1,12 +1,15 @@
+using Backend.AddressableKey;
+using Backend.Object.Management;
 using UnityEngine;
 
 namespace Backend.Util
 {
     /// <summary>
-    /// 런타임 생성 UI Text용 기본 폰트. LegacyRuntime.ttf 미존재 시 Arial로 대체한다.
+    /// HUD용 폰트. BMJUA(Addressable) 우선, 없으면 LegacyRuntime.
     /// </summary>
     public static class RuntimeUiFont
     {
+        private const string HudFontKey = "BMJUA";
         private static Font _cached;
 
         public static Font Get()
@@ -14,7 +17,13 @@ namespace Backend.Util
             if (_cached != null)
                 return _cached;
 
-            _cached = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            var address = AddressableKeys.InGame.Get(HudFontKey);
+            if (!string.IsNullOrEmpty(address))
+                _cached = ResourceManager.LoadResource<Font>(address);
+
+            if (_cached == null)
+                _cached = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
             if (_cached == null)
                 _cached = Resources.GetBuiltinResource<Font>("Arial.ttf");
 

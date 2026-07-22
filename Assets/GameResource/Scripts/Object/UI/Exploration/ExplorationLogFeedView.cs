@@ -21,10 +21,13 @@ namespace Backend.Object.UI.Exploration
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private RectTransform _contentRoot;
         [SerializeField] private ExplorationLogItemView _itemPrefab;
+        [SerializeField] private GameObject _idlePlaceholderRoot;
+        [SerializeField] private Text _idlePlaceholderText;
 
         private readonly List<ExplorationLogItemView> _items = new();
         private readonly Dictionary<string, ExplorationLogItemView> _itemsByEventId = new();
         private CompositeDisposable _disposables;
+        private GameObject _idlePlaceholder;
         private LogFeedFilter _filter = LogFeedFilter.All;
         private int _pageFromEnd;
 
@@ -42,6 +45,15 @@ namespace Backend.Object.UI.Exploration
 
         protected override void OnShow()
         {
+            if (_idlePlaceholder != null)
+                _idlePlaceholder.SetActive(false);
+
+            if (_idlePlaceholderRoot != null)
+                _idlePlaceholderRoot.SetActive(false);
+
+            if (_scrollRect != null)
+                _scrollRect.gameObject.SetActive(true);
+
             base.OnShow();
             _disposables?.Dispose();
             _disposables = new CompositeDisposable();
@@ -74,6 +86,51 @@ namespace Backend.Object.UI.Exploration
             base.OnHide();
             _disposables?.Dispose();
             _disposables = null;
+        }
+
+        public void ShowIdlePlaceholder()
+        {
+            _disposables?.Dispose();
+            _disposables = null;
+
+            EnsureIdlePlaceholder();
+            if (_idlePlaceholderRoot != null)
+                _idlePlaceholderRoot.SetActive(true);
+
+            if (_scrollRect != null)
+                _scrollRect.gameObject.SetActive(false);
+
+            CachedGameObject.SetActive(true);
+        }
+
+        private void EnsureIdlePlaceholder()
+        {
+            if (_idlePlaceholderRoot != null || _contentRoot == null)
+                return;
+
+            _idlePlaceholder = new GameObject("IdlePlaceholder", typeof(RectTransform));
+            _idlePlaceholder.transform.SetParent(_contentRoot.parent, false);
+            var rect = _idlePlaceholder.GetComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = new Vector2(12f, 12f);
+            rect.offsetMax = new Vector2(-12f, -12f);
+
+            var textGo = new GameObject("Text", typeof(RectTransform));
+            textGo.transform.SetParent(_idlePlaceholder.transform, false);
+            var textRect = textGo.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            _idlePlaceholderText = textGo.AddComponent<Text>();
+            _idlePlaceholderText.font = RuntimeUiFont.Get();
+            _idlePlaceholderText.fontSize = 15;
+            _idlePlaceholderText.alignment = TextAnchor.UpperLeft;
+            _idlePlaceholderText.color = ModernUiStyle.MutedText;
+            _idlePlaceholderText.text = "탐험 시작 전입니다.\n\n중앙 「탐험 시작」 버튼을 누르면\n실시간 탐험 로그가 표시됩니다.";
+            _idlePlaceholderRoot = _idlePlaceholder;
         }
 
         public void CycleFilter()
