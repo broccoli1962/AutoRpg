@@ -17,6 +17,9 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public const string ArtifactCrystalId = "artifact_crystal_01";
         public const string ForkRuneMarkId = "fork_rune_mark_01";
         public const string HazardCollapseId = "hazard_collapse_01";
+        public const string EncounterFairyId = "encounter_fairy_01";
+        public const string ArtifactLoreFragmentId = "artifact_lore_fragment_01";
+        public const string HazardQuicksandId = "hazard_quicksand_01";
 
         private static readonly DynamicEventTemplate Fork002 = CreateFork002();
         private static readonly DynamicEventTemplate EncounterMerchant = CreateEncounterMerchant();
@@ -30,6 +33,9 @@ namespace Backend.GameSystems.DynamicEvent.Data
         private static readonly DynamicEventTemplate ArtifactCrystal = CreateArtifactCrystal();
         private static readonly DynamicEventTemplate ForkRuneMark = CreateForkRuneMark();
         private static readonly DynamicEventTemplate HazardCollapse = CreateHazardCollapse();
+        private static readonly DynamicEventTemplate EncounterFairy = CreateEncounterFairy();
+        private static readonly DynamicEventTemplate ArtifactLoreFragment = CreateArtifactLoreFragment();
+        private static readonly DynamicEventTemplate HazardQuicksand = CreateHazardQuicksand();
 
         public static IReadOnlyList<DynamicEventTemplate> All { get; } = new List<DynamicEventTemplate>
         {
@@ -44,7 +50,10 @@ namespace Backend.GameSystems.DynamicEvent.Data
             EncounterWanderer,
             ArtifactCrystal,
             ForkRuneMark,
-            HazardCollapse
+            HazardCollapse,
+            EncounterFairy,
+            ArtifactLoreFragment,
+            HazardQuicksand
         };
 
         public static DynamicEventTemplate Get(string eventId)
@@ -237,6 +246,51 @@ namespace Backend.GameSystems.DynamicEvent.Data
                     (DynamicEventOutcomeEffect.SafePass, 0.5f),
                     (DynamicEventOutcomeEffect.InjuryLight, 0.5f)),
                 Choice("cover", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateEncounterFairy() => new()
+        {
+            EventId = EncounterFairyId,
+            Category = DynamicEventCategory.Encounter,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.05f, 4, 20),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("accept_gift",
+                    (DynamicEventOutcomeEffect.MinorResource, 0.6f),
+                    (DynamicEventOutcomeEffect.RareEncounter, 0.4f)),
+                Choice("decline", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateArtifactLoreFragment() => new()
+        {
+            EventId = ArtifactLoreFragmentId,
+            Category = DynamicEventCategory.Artifact,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.06f, 7, 25),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("read",
+                    (DynamicEventOutcomeEffect.GoldBonus, 0.5f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.5f)),
+                Choice("leave", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateHazardQuicksand() => new()
+        {
+            EventId = HazardQuicksandId,
+            Category = DynamicEventCategory.Hazard,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.08f, 2, 19),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("pull_free",
+                    (DynamicEventOutcomeEffect.SafePass, 0.55f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.45f)),
+                Choice("wait", (DynamicEventOutcomeEffect.SafePass, 1f))
             }
         };
 
