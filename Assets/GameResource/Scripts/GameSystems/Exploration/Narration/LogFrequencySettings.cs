@@ -28,7 +28,7 @@ namespace Backend.GameSystems.Exploration.Narration
             }
         }
 
-        public static bool ShouldPublishLog(ExplorationEvent explorationEvent)
+        public static bool ShouldPublishLog(ExplorationEvent explorationEvent, PartyState party = null)
         {
             if (explorationEvent == null)
                 return false;
@@ -36,17 +36,22 @@ namespace Backend.GameSystems.Exploration.Narration
             if (explorationEvent.EventType == EventType.OfflineSummary)
                 return true;
 
-            return explorationEvent.Salience >= GetMinimumSalience();
+            return explorationEvent.Salience >= GetMinimumSalience(party);
         }
 
-        public static SalienceGrade GetMinimumSalience()
+        public static SalienceGrade GetMinimumSalience(PartyState party = null)
         {
-            return Current switch
+            var grade = Current switch
             {
                 LogFrequencyMode.Low => SalienceGrade.Significant,
                 LogFrequencyMode.High => SalienceGrade.Trivial,
                 _ => SalienceGrade.Notable
             };
+
+            var reduction = ExplorationNarrationBonus.GetSalienceGradeReduction(party);
+            return reduction > 0
+                ? ExplorationNarrationBonus.LowerSalienceGrade(grade, reduction)
+                : grade;
         }
 
         public static void CycleMode()

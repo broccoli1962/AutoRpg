@@ -17,7 +17,7 @@ namespace Backend.GameSystems.Exploration.Narration
         {
             var templateEntry = _template.Narrate(explorationEvent, party);
 
-            if (!NarrationSalienceRouter.ShouldUseLlm(explorationEvent))
+            if (!NarrationSalienceRouter.ShouldUseLlm(explorationEvent, party))
                 return templateEntry;
 
             if (!Application.isPlaying || GameStateUtil.IsQuitting)

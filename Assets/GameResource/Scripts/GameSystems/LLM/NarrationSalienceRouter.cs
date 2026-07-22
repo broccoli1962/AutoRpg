@@ -1,4 +1,5 @@
 using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Exploration.Narration;
 
 namespace Backend.GameSystems.LLM
 {
@@ -8,9 +9,16 @@ namespace Backend.GameSystems.LLM
     /// </summary>
     public static class NarrationSalienceRouter
     {
-        public static bool ShouldUseLlm(ExplorationEvent explorationEvent)
+        public static bool ShouldUseLlm(ExplorationEvent explorationEvent, PartyState party = null)
         {
-            if (explorationEvent == null || explorationEvent.Salience < SalienceGrade.Significant)
+            if (explorationEvent == null)
+                return false;
+
+            var minimumSalience = SalienceGrade.Significant;
+            if (ExplorationNarrationBonus.PartyHasBard(party))
+                minimumSalience = SalienceGrade.Notable;
+
+            if (explorationEvent.Salience < minimumSalience)
                 return false;
 
             if (!LlmQualitySettings.ShouldUseLogLlm(explorationEvent))

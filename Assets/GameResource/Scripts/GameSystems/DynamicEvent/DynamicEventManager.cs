@@ -1,8 +1,7 @@
 using Backend.GameSystems.DynamicEvent.Data;
 using Backend.GameSystems.DynamicEvent.LLM;
 using Backend.GameSystems.DynamicEvent.Simulation;
-using Backend.GameSystems.Exploration;
-using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
 using Backend.Util;
 using Backend.Util.Management;
@@ -87,8 +86,9 @@ namespace Backend.GameSystems.DynamicEvent
             if (GameStateUtil.IsQuitting || state == null || ActiveEvent != null || _isRunningEventFlow)
                 return false;
 
+            var eventRateMultiplier = ExplorationNarrationBonus.GetDynamicEventRateMultiplier(state.Party);
             var template = useProbabilityRoll
-                ? DynamicEventRollSystem.TryRollFloorEnter(state.ZoneId, floor, random)
+                ? DynamicEventRollSystem.TryRollFloorEnter(state.ZoneId, floor, random, eventRateMultiplier)
                 : DynamicEventRollSystem.RollGuaranteed(state.ZoneId, floor, random);
 
             if (template == null)
