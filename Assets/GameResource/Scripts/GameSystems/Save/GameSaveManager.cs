@@ -134,6 +134,7 @@ namespace Backend.GameSystems.Save
                 ScriptoriumLevel = source.ScriptoriumLevel,
                 TrainingGroundLevel = source.TrainingGroundLevel,
                 BlacksmithLevel = source.BlacksmithLevel,
+                InnLevel = source.InnLevel,
                 PrestigeCount = source.PrestigeCount,
                 DeepestFloorReached = source.DeepestFloorReached,
                 ChronicleEntries = new List<string>(source.ChronicleEntries),

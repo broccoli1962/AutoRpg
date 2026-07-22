@@ -13,6 +13,7 @@ namespace Backend.GameSystems.Prestige.Data
         public int ScriptoriumLevel;
         public int TrainingGroundLevel;
         public int BlacksmithLevel;
+        public int InnLevel;
         public int PrestigeCount;
         public int DeepestFloorReached;
         public List<string> ChronicleEntries = new();

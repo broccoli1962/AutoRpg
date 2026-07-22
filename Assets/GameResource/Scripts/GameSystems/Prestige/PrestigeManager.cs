@@ -57,6 +57,7 @@ namespace Backend.GameSystems.Prestige
             Instance._meta.ScriptoriumLevel = meta.ScriptoriumLevel;
             Instance._meta.TrainingGroundLevel = meta.TrainingGroundLevel;
             Instance._meta.BlacksmithLevel = meta.BlacksmithLevel;
+            Instance._meta.InnLevel = meta.InnLevel;
             Instance._meta.PrestigeCount = meta.PrestigeCount;
             Instance._meta.DeepestFloorReached = meta.DeepestFloorReached;
             Instance._meta.ChronicleEntries = meta.ChronicleEntries ?? new System.Collections.Generic.List<string>();
