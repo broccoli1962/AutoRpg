@@ -19,7 +19,8 @@ namespace Backend.GameSystems.Exploration
             Runs,
             Favorites,
             CharacterJournal,
-            LoreCompendium
+            LoreCompendium,
+            MonsterCompendium
         }
 
         private GameObject _panelRoot;
@@ -67,6 +68,13 @@ namespace Backend.GameSystems.Exploration
             if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
             {
                 _tab = ChronicleTab.LoreCompendium;
+                _pageFromEnd = 0;
+                RefreshContent();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
+            {
+                _tab = ChronicleTab.MonsterCompendium;
                 _pageFromEnd = 0;
                 RefreshContent();
             }
@@ -145,7 +153,7 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(720f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:회차  2:즐겨찾기  3:캐릭터 일지  4:로어 도감  Q/E:캐릭터  PgUp/PgDn 또는 [/]:페이지");
+                "1:회차  2:즐겨찾기  3:캐릭터 일지  4:로어 도감  5:몬스터 도감  Q/E:캐릭터  PgUp/PgDn 또는 [/]:페이지");
             hint.rectTransform.sizeDelta = new Vector2(720f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
@@ -212,6 +220,9 @@ namespace Backend.GameSystems.Exploration
                     break;
                 case ChronicleTab.LoreCompendium:
                     RefreshLoreCompendiumTab();
+                    break;
+                case ChronicleTab.MonsterCompendium:
+                    RefreshMonsterCompendiumTab();
                     break;
             }
         }
@@ -308,6 +319,32 @@ namespace Backend.GameSystems.Exploration
                 bulletPrefix: "• ");
         }
 
+        private void RefreshMonsterCompendiumTab()
+        {
+            var entries = MonsterCompendiumManager.GetEntries();
+            if (entries == null || entries.Count == 0)
+            {
+                _contentText.text = "아직 등록된 몬스터가 없습니다.\n전투 승리로 도감 항목이 해금됩니다.";
+                _pageText.text = string.Empty;
+                return;
+            }
+
+            var list = new System.Collections.Generic.List<string>(entries.Count);
+            foreach (var stored in entries)
+            {
+                var separator = stored.IndexOf('|');
+                list.Add(separator >= 0 && separator < stored.Length - 1
+                    ? stored[(separator + 1)..]
+                    : stored);
+            }
+
+            RenderPagedEntries(
+                list,
+                "<b>[ 몬스터 도감 ]</b>",
+                entry => entry,
+                bulletPrefix: "☠ ");
+        }
+
         private void RefreshLoreCompendiumTab()
         {
             var entries = LoreCompendiumManager.GetEntries();
@@ -382,6 +419,9 @@ namespace Backend.GameSystems.Exploration
         {
             if (_tab == ChronicleTab.LoreCompendium)
                 return LoreCompendiumManager.GetEntries().Count;
+
+            if (_tab == ChronicleTab.MonsterCompendium)
+                return MonsterCompendiumManager.GetEntries().Count;
 
             if (_tab == ChronicleTab.CharacterJournal)
             {

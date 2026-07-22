@@ -140,7 +140,8 @@ namespace Backend.GameSystems.Save
                 DeepestFloorReached = source.DeepestFloorReached,
                 ChronicleEntries = new List<string>(source.ChronicleEntries),
                 FavoriteMoments = new List<string>(source.FavoriteMoments ?? new List<string>()),
-                LoreEntries = new List<string>(source.LoreEntries ?? new List<string>())
+                LoreEntries = new List<string>(source.LoreEntries ?? new List<string>()),
+                MonsterEntries = new List<string>(source.MonsterEntries ?? new List<string>())
             };
         }
     }
