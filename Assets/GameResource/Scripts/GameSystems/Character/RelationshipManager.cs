@@ -79,6 +79,49 @@ namespace Backend.GameSystems.Character
                 Instance._affinities[pair.Key] = pair.Value;
         }
 
+        public static int GetAffinity(string characterIdA, string characterIdB)
+        {
+            if (GameStateUtil.IsQuitting ||
+                string.IsNullOrEmpty(characterIdA) ||
+                string.IsNullOrEmpty(characterIdB))
+            {
+                return 0;
+            }
+
+            var key = BuildPairKey(characterIdA, characterIdB);
+            return Instance._affinities.TryGetValue(key, out var affinity) ? affinity : 20;
+        }
+
+        public static string BuildHudSummary(PartyState party)
+        {
+            if (GameStateUtil.IsQuitting || party?.Members == null || party.Members.Count < 2)
+                return null;
+
+            var builder = new StringBuilder();
+            builder.AppendLine("<color=#9ab0c8><b>[ 관계 ]</b></color>");
+
+            for (var i = 0; i < party.Members.Count; i++)
+            {
+                for (var j = i + 1; j < party.Members.Count; j++)
+                {
+                    var a = party.Members[i];
+                    var b = party.Members[j];
+                    var affinity = GetAffinity(a.CharacterId, b.CharacterId);
+                    var bond = affinity >= BondThreshold ? " ★" : string.Empty;
+
+                    builder.Append(a.DisplayName);
+                    builder.Append("↔");
+                    builder.Append(b.DisplayName);
+                    builder.Append(' ');
+                    builder.Append(affinity);
+                    builder.Append(bond);
+                    builder.AppendLine();
+                }
+            }
+
+            return builder.ToString().TrimEnd();
+        }
+
         private void EnsurePairsExist(PartyState party)
         {
             for (var i = 0; i < party.Members.Count; i++)
