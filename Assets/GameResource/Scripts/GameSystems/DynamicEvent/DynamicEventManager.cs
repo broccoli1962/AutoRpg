@@ -168,6 +168,17 @@ namespace Backend.GameSystems.DynamicEvent
 
         private static string ResolveAutoChoice(DynamicEventTemplate template, ExplorationState state)
         {
+            return DynamicEventAutoPolicySettings.Current switch
+            {
+                DynamicEventAutoPolicy.Safe => GetSafeChoiceId(template),
+                DynamicEventAutoPolicy.Adventure => GetRiskyChoiceId(template),
+                DynamicEventAutoPolicy.Greedy => GetGreedyChoiceId(template),
+                _ => ResolvePersonalityChoice(template, state)
+            };
+        }
+
+        private static string ResolvePersonalityChoice(DynamicEventTemplate template, ExplorationState state)
+        {
             var leader = state.Party?.Leader;
             if (leader?.PersonalityTags != null)
             {
@@ -228,6 +239,19 @@ namespace Backend.GameSystems.DynamicEvent
 
             return GetFirstChoiceId(template);
         }
+
+        private static string GetGreedyChoiceId(DynamicEventTemplate template) =>
+            template.EventId switch
+            {
+                DynamicEventDefinitions.EncounterMerchantId => "trade",
+                DynamicEventDefinitions.EncounterFairyId => "accept_gift",
+                DynamicEventDefinitions.ArtifactCrystalId => "take",
+                DynamicEventDefinitions.ArtifactLoreFragmentId => "read",
+                DynamicEventDefinitions.ArtifactMuralId => "study",
+                DynamicEventDefinitions.EncounterScholarId => "talk",
+                DynamicEventDefinitions.EncounterWandererId => "help",
+                _ => GetFirstChoiceId(template)
+            };
 
         private static string GetFirstChoiceId(DynamicEventTemplate template) =>
             template.Choices.Count > 0 ? template.Choices[0].Id : null;
