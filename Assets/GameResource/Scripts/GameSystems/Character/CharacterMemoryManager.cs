@@ -70,6 +70,17 @@ namespace Backend.GameSystems.Character
         }
 
         /// <summary>
+        /// 파티 패널 카드에 표시할 최근 기억 미리보기(1~2줄).
+        /// </summary>
+        public static string BuildHudPreview(string characterId)
+        {
+            if (GameStateUtil.IsQuitting || string.IsNullOrEmpty(characterId))
+                return string.Empty;
+
+            return Instance.BuildHudPreviewInternal(characterId);
+        }
+
+        /// <summary>
         /// Significant+ 탐험 이벤트를 캐릭터 기억에 기록한다.
         /// </summary>
         public static void RecordExplorationEvent(ExplorationEvent explorationEvent, PartyState party)
@@ -264,6 +275,30 @@ namespace Backend.GameSystems.Character
             }
 
             return builder.Length > 0 ? builder.ToString() : string.Empty;
+        }
+
+        private string BuildHudPreviewInternal(string characterId)
+        {
+            if (!_memories.TryGetValue(characterId, out var memory) || memory.ShortTermBuffer.Count == 0)
+                return string.Empty;
+
+            var builder = new StringBuilder();
+            builder.Append("<color=#8a9ab8>기억: ");
+            var start = Mathf.Max(0, memory.ShortTermBuffer.Count - 2);
+            for (var i = start; i < memory.ShortTermBuffer.Count; i++)
+            {
+                if (i > start)
+                    builder.Append(" / ");
+
+                var line = memory.ShortTermBuffer[i];
+                if (line.Length > 28)
+                    line = line.Substring(0, 28) + "…";
+
+                builder.Append(line);
+            }
+
+            builder.Append("</color>");
+            return builder.ToString();
         }
 
         private List<CharacterMemory> ExportMemoriesInternal()

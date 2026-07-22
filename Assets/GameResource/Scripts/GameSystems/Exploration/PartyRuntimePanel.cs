@@ -151,6 +151,10 @@ namespace Backend.GameSystems.Exploration
                 _builder.Append(equipment);
                 _builder.AppendLine("</color>");
             }
+
+            var memoryPreview = CharacterMemoryManager.BuildHudPreview(member.CharacterId);
+            if (!string.IsNullOrEmpty(memoryPreview))
+                _builder.AppendLine(memoryPreview);
         }
 
         private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, string text)
