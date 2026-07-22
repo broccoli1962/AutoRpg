@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using System.Text;
+using Backend.GameSystems.DynamicEvent;
+using Backend.GameSystems.DynamicEvent.Data;
+using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.Util;
 using Backend.Util.Management;
 using ExplorationEventType = Backend.GameSystems.Exploration.Data.EventType;
+using R3;
 using UnityEngine;
 
 namespace Backend.GameSystems.Character
@@ -17,6 +21,7 @@ namespace Backend.GameSystems.Character
         private const float BondCombatMultiplier = 1.05f;
 
         private readonly Dictionary<string, int> _affinities = new();
+        private CompositeDisposable _disposables;
 
         public static void EnsureInitialized()
         {
@@ -24,6 +29,21 @@ namespace Backend.GameSystems.Character
                 return;
 
             _ = Instance;
+        }
+
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+            _disposables = new CompositeDisposable();
+
+            DynamicEventChannels.OnEventResolved
+                .Subscribe(OnDynamicEventResolved)
+                .AddTo(_disposables);
+        }
+
+        private void OnDestroy()
+        {
+            _disposables?.Dispose();
         }
 
         public static void BindParty(PartyState party)
@@ -120,6 +140,48 @@ namespace Backend.GameSystems.Character
             }
 
             return builder.ToString().TrimEnd();
+        }
+
+        private void OnDynamicEventResolved(DynamicEventInstance instance)
+        {
+            if (instance == null)
+                return;
+
+            var party = ExplorationManager.GetCurrentState()?.Party;
+            if (party?.Members == null || party.Members.Count < 2)
+                return;
+
+            RecordDynamicEventInternal(instance, party);
+        }
+
+        private void RecordDynamicEventInternal(DynamicEventInstance instance, PartyState party)
+        {
+            EnsurePairsExist(party);
+
+            var delta = ResolveDynamicEventAffinityDelta(instance);
+            if (delta <= 0)
+                return;
+
+            AdjustAllPairs(party, delta);
+            Debug.Log($"[RelationshipManager] Dynamic event affinity +{delta} ({instance.TemplateId})");
+        }
+
+        private static int ResolveDynamicEventAffinityDelta(DynamicEventInstance instance)
+        {
+            var bonus = instance.TemplateId == DynamicEventDefinitions.GoldenChamberId ? 2 : 0;
+
+            var baseDelta = instance.ResolvedOutcome switch
+            {
+                DynamicEventOutcomeEffect.GoldBonus => 3,
+                DynamicEventOutcomeEffect.MinorResource => 2,
+                DynamicEventOutcomeEffect.RareEncounter => 2,
+                DynamicEventOutcomeEffect.SafePass => 1,
+                DynamicEventOutcomeEffect.MinorTrapDamage => 1,
+                DynamicEventOutcomeEffect.InjuryLight => 1,
+                _ => 1
+            };
+
+            return baseDelta + bonus;
         }
 
         private void EnsurePairsExist(PartyState party)
