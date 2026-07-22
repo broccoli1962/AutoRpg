@@ -106,6 +106,25 @@ namespace Backend.GameSystems.Exploration
                 RefreshFilterLabel();
                 RebuildLogText();
             }
+
+            if (Input.GetKeyDown(KeyCode.B))
+                ToggleLastLogBookmark();
+        }
+
+        private void ToggleLastLogBookmark()
+        {
+            if (_logLines.Count == 0)
+                return;
+
+            var index = _logLines.Count - 1;
+            var line = _logLines[index];
+            if (string.IsNullOrWhiteSpace(line.PlainText))
+                return;
+
+            line.IsBookmarked = LogBookmarkManager.Toggle(line.PlainText, line.Floor);
+            line.RichText = line.BuildRichText();
+            _logLines[index] = line;
+            RebuildLogText();
         }
 
         private void BuildUi()
@@ -120,7 +139,7 @@ namespace Backend.GameSystems.Exploration
 
             _statusText = CreateText(canvasGo.transform, "StatusText", new Vector2(20f, -20f), 22, TextAnchor.UpperLeft);
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
-            _helpText.text = "L:LLM품질  C:연대기  R:귀환  F:로그필터";
+            _helpText.text = "L:LLM품질  C:연대기  R:귀환  F:로그필터  B:북마크";
             _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
             _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -132f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -267,11 +286,15 @@ namespace Backend.GameSystems.Exploration
         private sealed class HudLogLine
         {
             public string EventId;
+            public string PlainText;
+            public int Floor;
+            public bool IsBookmarked;
             public bool IsCombat;
             public bool IsDiscovery;
             public bool IsDynamicEvent;
             public bool IsNarrative;
             public string RichText;
+            private string _baseRichText;
 
             public bool MatchesFilter(LogFeedFilter filter)
             {
@@ -285,44 +308,66 @@ namespace Backend.GameSystems.Exploration
                 };
             }
 
+            public string BuildRichText() =>
+                LogBookmarkManager.ApplyBookmarkPrefix(_baseRichText, IsBookmarked);
+
             public static HudLogLine FromEntry(LogEntry entry)
             {
-                return new HudLogLine
+                var line = new HudLogLine
                 {
                     EventId = entry.EventId,
+                    PlainText = entry.Text,
+                    Floor = entry.Floor,
                     IsCombat = entry.Category == LogCategory.Combat,
                     IsDiscovery = entry.Category == LogCategory.Discovery,
                     IsDynamicEvent = false,
                     IsNarrative = entry.UsedLlm
                         || entry.Salience >= SalienceGrade.Significant
                         || entry.Category == LogCategory.Milestone,
-                    RichText = LogDisplayUtil.FormatRichText(entry)
+                    _baseRichText = LogDisplayUtil.FormatRichText(entry)
                 };
+                line.IsBookmarked = LogBookmarkManager.IsBookmarked(line.PlainText, line.Floor);
+                line.RichText = line.BuildRichText();
+                return line;
             }
 
             public static HudLogLine FromDynamicEvent(string narration)
             {
-                return new HudLogLine
+                var state = ExplorationManager.GetCurrentState();
+                var floor = state?.CurrentFloor ?? 0;
+                var line = new HudLogLine
                 {
+                    PlainText = narration,
+                    Floor = floor,
                     IsDynamicEvent = true,
                     IsNarrative = true,
-                    RichText = LogDisplayUtil.FormatTaggedLine(
+                    _baseRichText = LogDisplayUtil.FormatTaggedLine(
                         "이벤트",
                         narration,
                         LogDisplayUtil.GetCategoryColor(LogCategory.Milestone))
                 };
+                line.IsBookmarked = LogBookmarkManager.IsBookmarked(line.PlainText, line.Floor);
+                line.RichText = line.BuildRichText();
+                return line;
             }
 
             public static HudLogLine FromChronicle(string text)
             {
-                return new HudLogLine
+                var state = ExplorationManager.GetCurrentState();
+                var floor = state?.CurrentFloor ?? 0;
+                var line = new HudLogLine
                 {
+                    PlainText = text,
+                    Floor = floor,
                     IsNarrative = true,
-                    RichText = LogDisplayUtil.FormatTaggedLine(
+                    _baseRichText = LogDisplayUtil.FormatTaggedLine(
                         "연대기",
                         text,
                         LogDisplayUtil.GetCategoryColor(LogCategory.Milestone))
                 };
+                line.IsBookmarked = LogBookmarkManager.IsBookmarked(line.PlainText, line.Floor);
+                line.RichText = line.BuildRichText();
+                return line;
             }
         }
     }

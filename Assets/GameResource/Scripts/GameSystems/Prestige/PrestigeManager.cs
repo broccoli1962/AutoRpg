@@ -54,6 +54,7 @@ namespace Backend.GameSystems.Prestige
             Instance._meta.PrestigeCount = meta.PrestigeCount;
             Instance._meta.DeepestFloorReached = meta.DeepestFloorReached;
             Instance._meta.ChronicleEntries = meta.ChronicleEntries ?? new System.Collections.Generic.List<string>();
+            Instance._meta.FavoriteMoments = meta.FavoriteMoments ?? new System.Collections.Generic.List<string>();
         }
 
         protected override void OnAwake()
