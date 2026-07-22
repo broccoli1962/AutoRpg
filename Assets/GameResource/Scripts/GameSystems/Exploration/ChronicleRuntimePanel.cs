@@ -9,9 +9,14 @@ namespace Backend.GameSystems.Exploration
     /// </summary>
     public sealed class ChronicleRuntimePanel : MonoBehaviour
     {
+        private const int EntriesPerPage = 4;
+
         private GameObject _panelRoot;
         private Text _contentText;
+        private Text _pageText;
         private bool _isVisible;
+        private bool _showChronicle = true;
+        private int _pageFromEnd;
 
         public bool IsVisible => _isVisible;
 
@@ -27,10 +32,39 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
-                RefreshContent(showChronicle: true);
+            {
+                _showChronicle = true;
+                _pageFromEnd = 0;
+                RefreshContent();
+            }
 
             if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
-                RefreshContent(showChronicle: false);
+            {
+                _showChronicle = false;
+                _pageFromEnd = 0;
+                RefreshContent();
+            }
+
+            if (Input.GetKeyDown(KeyCode.PageUp) || Input.GetKeyDown(KeyCode.LeftBracket))
+                MovePage(older: true);
+
+            if (Input.GetKeyDown(KeyCode.PageDown) || Input.GetKeyDown(KeyCode.RightBracket))
+                MovePage(older: false);
+        }
+
+        private void MovePage(bool older)
+        {
+            var entryCount = GetEntryCount();
+            var totalPages = GetPageCount(entryCount);
+            if (totalPages <= 1)
+                return;
+
+            if (older)
+                _pageFromEnd = Mathf.Min(_pageFromEnd + 1, totalPages - 1);
+            else
+                _pageFromEnd = Mathf.Max(_pageFromEnd - 1, 0);
+
+            RefreshContent();
         }
 
         public void Toggle()
@@ -62,12 +96,16 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(720f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:회차 기록  2:즐겨찾기 순간");
+                "1:회차 기록  2:즐겨찾기  PgUp/PgDn 또는 [/]:페이지");
             hint.rectTransform.sizeDelta = new Vector2(720f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
-            _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -68f), 16, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(720f, 388f);
+            _pageText = CreateText(_panelRoot.transform, "Page", new Vector2(20f, -58f), 12, string.Empty);
+            _pageText.rectTransform.sizeDelta = new Vector2(720f, 18f);
+            _pageText.color = new Color(0.65f, 0.65f, 0.72f);
+
+            _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -78f), 16, string.Empty);
+            _contentText.rectTransform.sizeDelta = new Vector2(720f, 378f);
             _contentText.horizontalOverflow = HorizontalWrapMode.Wrap;
             _contentText.verticalOverflow = VerticalWrapMode.Overflow;
         }
@@ -96,7 +134,8 @@ namespace Backend.GameSystems.Exploration
 
         private void Show()
         {
-            RefreshContent(showChronicle: true);
+            _pageFromEnd = 0;
+            RefreshContent();
             _panelRoot.SetActive(true);
             _isVisible = true;
         }
@@ -109,50 +148,93 @@ namespace Backend.GameSystems.Exploration
             _isVisible = false;
         }
 
-        private void RefreshContent(bool showChronicle)
+        private void RefreshContent()
         {
             var meta = PrestigeManager.GetMeta();
             if (meta == null)
             {
                 _contentText.text = "메타 진행 데이터가 없습니다.";
+                _pageText.text = string.Empty;
                 return;
             }
 
-            if (showChronicle)
+            if (_showChronicle)
             {
                 if (meta.ChronicleEntries == null || meta.ChronicleEntries.Count == 0)
                 {
                     _contentText.text = "아직 기록된 회차가 없습니다.\n탐험을 마치면 연대기가 쌓입니다.";
+                    _pageText.text = string.Empty;
                     return;
                 }
 
-                var builder = new System.Text.StringBuilder();
-                builder.AppendLine("<b>[ 회차 연대기 ]</b>");
-                for (var i = meta.ChronicleEntries.Count - 1; i >= 0; i--)
-                {
-                    builder.Append("• ");
-                    builder.AppendLine(meta.ChronicleEntries[i]);
-                }
-
-                _contentText.text = builder.ToString();
+                RenderPagedEntries(
+                    meta.ChronicleEntries,
+                    "<b>[ 회차 연대기 ]</b>",
+                    entry => entry,
+                    bulletPrefix: "• ");
                 return;
             }
 
             if (meta.FavoriteMoments == null || meta.FavoriteMoments.Count == 0)
             {
                 _contentText.text = "즐겨찾기한 순간이 없습니다.\n로그에서 B키로 북마크할 수 있습니다.";
+                _pageText.text = string.Empty;
                 return;
             }
 
-            var favorites = new System.Text.StringBuilder();
-            favorites.AppendLine("<b>[ 즐겨찾기 순간 ]</b>");
-            for (var i = meta.FavoriteMoments.Count - 1; i >= 0; i--)
+            RenderPagedEntries(
+                meta.FavoriteMoments,
+                "<b>[ 즐겨찾기 순간 ]</b>",
+                entry => $"<color=#ffd966>★</color> {entry}",
+                bulletPrefix: null);
+        }
+
+        private void RenderPagedEntries(
+            System.Collections.Generic.List<string> entries,
+            string header,
+            System.Func<string, string> formatEntry,
+            string bulletPrefix)
+        {
+            var totalPages = GetPageCount(entries.Count);
+            _pageFromEnd = Mathf.Clamp(_pageFromEnd, 0, Mathf.Max(0, totalPages - 1));
+
+            var endExclusive = entries.Count - _pageFromEnd * EntriesPerPage;
+            var startInclusive = Mathf.Max(0, endExclusive - EntriesPerPage);
+
+            var builder = new System.Text.StringBuilder();
+            builder.AppendLine(header);
+            for (var i = endExclusive - 1; i >= startInclusive; i--)
             {
-                favorites.Append("<color=#ffd966>★</color> ");
-                favorites.AppendLine(meta.FavoriteMoments[i]);
+                if (!string.IsNullOrEmpty(bulletPrefix))
+                    builder.Append(bulletPrefix);
+
+                builder.AppendLine(formatEntry(entries[i]));
             }
 
-            _contentText.text = favorites.ToString();
+            _contentText.text = builder.ToString();
+            _pageText.text = totalPages > 1
+                ? $"페이지 {totalPages - _pageFromEnd}/{totalPages}"
+                : string.Empty;
+        }
+
+        private int GetEntryCount()
+        {
+            var meta = PrestigeManager.GetMeta();
+            if (meta == null)
+                return 0;
+
+            if (_showChronicle)
+                return meta.ChronicleEntries?.Count ?? 0;
+
+            return meta.FavoriteMoments?.Count ?? 0;
+        }
+
+        private static int GetPageCount(int entryCount)
+        {
+            if (entryCount <= 0)
+                return 1;
+
+            return Mathf.CeilToInt(entryCount / (float)EntriesPerPage);
         }
     }
 }

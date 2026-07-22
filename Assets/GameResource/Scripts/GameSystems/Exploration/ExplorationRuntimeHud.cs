@@ -17,7 +17,8 @@ namespace Backend.GameSystems.Exploration
     /// </summary>
     public class ExplorationRuntimeHud : CachedMonobehaviour
     {
-        private const int MaxLogLines = 120;
+        private const int MaxLogLines = 500;
+        private const int LogLinesPerPage = 36;
 
         [SerializeField] private bool _autoStartOnAwake = true;
 
@@ -31,6 +32,7 @@ namespace Backend.GameSystems.Exploration
         private readonly List<HudLogLine> _logLines = new();
         private readonly Dictionary<string, int> _indexByEventId = new();
         private LogFeedFilter _filter = LogFeedFilter.All;
+        private int _logPageFromEnd;
 
         private void Awake()
         {
@@ -124,12 +126,34 @@ namespace Backend.GameSystems.Exploration
             if (Input.GetKeyDown(KeyCode.F))
             {
                 _filter = LogFeedFilterUtil.Cycle(_filter);
+                _logPageFromEnd = 0;
                 RefreshFilterLabel();
                 RebuildLogText();
             }
 
             if (Input.GetKeyDown(KeyCode.B))
                 ToggleLastLogBookmark();
+
+            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) && Input.GetKeyDown(KeyCode.LeftBracket))
+                MoveLogPage(older: true);
+
+            if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) && Input.GetKeyDown(KeyCode.RightBracket))
+                MoveLogPage(older: false);
+        }
+
+        private void MoveLogPage(bool older)
+        {
+            var filteredCount = CountFilteredLines();
+            var totalPages = GetLogPageCount(filteredCount);
+            if (totalPages <= 1)
+                return;
+
+            if (older)
+                _logPageFromEnd = Mathf.Min(_logPageFromEnd + 1, totalPages - 1);
+            else
+                _logPageFromEnd = Mathf.Max(_logPageFromEnd - 1, 0);
+
+            RebuildLogText();
         }
 
         private void ToggleLastLogBookmark()
@@ -160,7 +184,7 @@ namespace Backend.GameSystems.Exploration
 
             _statusText = CreateText(canvasGo.transform, "StatusText", new Vector2(20f, -20f), 22, TextAnchor.UpperLeft);
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
-            _helpText.text = "L:LLM  A:이벤트  G:황금정지  C:연대기  R:귀환  F:필터  B:북마크";
+            _helpText.text = "L:LLM  A:이벤트  G:황금정지  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
             _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
             _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -132f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -244,6 +268,12 @@ namespace Backend.GameSystems.Exploration
                 _indexByEventId[line.EventId] = _logLines.Count;
 
             _logLines.Add(line);
+            if (_logPageFromEnd > 0)
+            {
+                var filteredCount = CountFilteredLines();
+                _logPageFromEnd = Mathf.Clamp(_logPageFromEnd, 0, Mathf.Max(0, GetLogPageCount(filteredCount) - 1));
+            }
+
             RebuildLogText();
         }
 
@@ -270,16 +300,74 @@ namespace Backend.GameSystems.Exploration
         private void RebuildLogText()
         {
             _logBuilder.Clear();
+            var filteredCount = CountFilteredLines();
+            var totalPages = GetLogPageCount(filteredCount);
+            _logPageFromEnd = Mathf.Clamp(_logPageFromEnd, 0, Mathf.Max(0, totalPages - 1));
 
+            var startIndex = 0;
+            var endIndex = 0;
+            GetVisibleRange(filteredCount, totalPages, out startIndex, out endIndex);
+
+            var visibleIndex = 0;
             foreach (var line in _logLines)
             {
                 if (!line.MatchesFilter(_filter))
                     continue;
 
+                if (visibleIndex < startIndex)
+                {
+                    visibleIndex++;
+                    continue;
+                }
+
+                if (visibleIndex >= endIndex)
+                    break;
+
                 _logBuilder.AppendLine(line.RichText);
+                visibleIndex++;
+            }
+
+            if (totalPages > 1)
+            {
+                var currentPage = totalPages - _logPageFromEnd;
+                _logBuilder.Insert(0, $"<color=#888888>[로그 {currentPage}/{totalPages}]</color>\n");
             }
 
             _logText.text = _logBuilder.ToString();
+        }
+
+        private int CountFilteredLines()
+        {
+            var count = 0;
+            foreach (var line in _logLines)
+            {
+                if (line.MatchesFilter(_filter))
+                    count++;
+            }
+
+            return count;
+        }
+
+        private static int GetLogPageCount(int filteredCount)
+        {
+            if (filteredCount <= 0)
+                return 1;
+
+            return Mathf.CeilToInt(filteredCount / (float)LogLinesPerPage);
+        }
+
+        private void GetVisibleRange(int filteredCount, int totalPages, out int startIndex, out int endIndex)
+        {
+            if (filteredCount <= 0)
+            {
+                startIndex = 0;
+                endIndex = 0;
+                return;
+            }
+
+            var pageFromEnd = Mathf.Clamp(_logPageFromEnd, 0, totalPages - 1);
+            endIndex = filteredCount - pageFromEnd * LogLinesPerPage;
+            startIndex = Mathf.Max(0, endIndex - LogLinesPerPage);
         }
 
         private void RefreshFilterLabel()
