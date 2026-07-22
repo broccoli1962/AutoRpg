@@ -132,7 +132,8 @@ namespace Backend.GameSystems.Save
                 PrestigeCount = source.PrestigeCount,
                 DeepestFloorReached = source.DeepestFloorReached,
                 ChronicleEntries = new List<string>(source.ChronicleEntries),
-                FavoriteMoments = new List<string>(source.FavoriteMoments ?? new List<string>())
+                FavoriteMoments = new List<string>(source.FavoriteMoments ?? new List<string>()),
+                LoreEntries = new List<string>(source.LoreEntries ?? new List<string>())
             };
         }
     }

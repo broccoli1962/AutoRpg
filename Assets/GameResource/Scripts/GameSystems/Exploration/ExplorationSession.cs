@@ -162,6 +162,7 @@ namespace Backend.GameSystems.Exploration
                 var log = _narrator.Narrate(explorationEvent, State.Party);
                 CharacterMemoryManager.RecordExplorationEvent(explorationEvent, State.Party);
                 RelationshipManager.RecordExplorationEvent(explorationEvent, State.Party);
+                LoreCompendiumManager.RecordDiscovery(explorationEvent);
                 ExplorationChannels.PublishLogAdded(log);
             }
         }
