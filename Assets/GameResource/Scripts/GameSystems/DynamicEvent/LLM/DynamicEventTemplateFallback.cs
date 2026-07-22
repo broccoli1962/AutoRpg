@@ -32,6 +32,10 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                     $"{floor}층 어둠 속에서 길을 잃은 나그네가 도움을 요청한다.",
                 DynamicEventDefinitions.ArtifactCrystalId =>
                     $"{floor}층 벽 틈에서 희미하게 빛나는 결정체가 보인다.",
+                DynamicEventDefinitions.ForkRuneMarkId =>
+                    $"{floor}층 바닥에 희미한 룬 문양이 두 갈래로 갈라진다. 한쪽은 은은한 빛, 다른 쪽은 침묵이다.",
+                DynamicEventDefinitions.HazardCollapseId =>
+                    $"{floor}층 천장에서 먼지와 돌조각이 떨어지기 시작한다. 앞으로 돌파할지, 엄폐할지 결정해야 한다.",
                 _ => $"{leaderName}(은)는 {floor}층에서 예상치 못한 상황에 맞닥뜨렸다."
             };
 
@@ -111,6 +115,18 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                             ? "결정체를 채취해 값나가는 광물을 얻었다."
                             : "결정체를 건드리자 수호자가 나타났다."
                         : "결정체를 내버려 두고 조용히 지나갔다.",
+                DynamicEventDefinitions.ForkRuneMarkId =>
+                    choiceId == "follow_glow"
+                        ? outcome == DynamicEventOutcomeEffect.MinorResource
+                            ? "빛을 따라가 숨겨진 틈에서 작은 보상을 발견했다."
+                            : "룬의 함정에 발을 헛디뎌 경미한 부상을 입었다."
+                        : "룬을 무시하고 안전한 길을 택했다.",
+                DynamicEventDefinitions.HazardCollapseId =>
+                    choiceId == "dash"
+                        ? outcome == DynamicEventOutcomeEffect.InjuryLight
+                            ? "돌파하며 낙석에 스침을 입었다."
+                            : "재빨리 통과해 붕괴를 피했다."
+                        : "엄폐하며 붕괴가 잦아들 때까지 기다렸다.",
                 _ => $"선택({choiceId})의 결과: {outcome}"
             };
         }
@@ -154,6 +170,10 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 (DynamicEventDefinitions.EncounterWandererId, "ignore") => "지나친다",
                 (DynamicEventDefinitions.ArtifactCrystalId, "take") => "결정체를 채취한다",
                 (DynamicEventDefinitions.ArtifactCrystalId, "leave") => "내버려 둔다",
+                (DynamicEventDefinitions.ForkRuneMarkId, "follow_glow") => "빛나는 룬을 따른다",
+                (DynamicEventDefinitions.ForkRuneMarkId, "ignore_runes") => "룬을 무시한다",
+                (DynamicEventDefinitions.HazardCollapseId, "dash") => "앞으로 돌파한다",
+                (DynamicEventDefinitions.HazardCollapseId, "cover") => "엄폐한다",
                 _ => choiceId
             };
         }

@@ -157,6 +157,7 @@ namespace Backend.GameSystems.DynamicEvent
                     {
                         case DynamicEventDefinitions.Fork002Id:
                         case DynamicEventDefinitions.ForkWaterSoundId:
+                        case DynamicEventDefinitions.ForkRuneMarkId:
                             if (tag == PersonalityTag.Cautious)
                                 return GetSecondChoiceId(template);
                             if (tag == PersonalityTag.Reckless)
@@ -171,6 +172,7 @@ namespace Backend.GameSystems.DynamicEvent
                         case DynamicEventDefinitions.TrapPressurePlateId:
                         case DynamicEventDefinitions.TrapPitId:
                         case DynamicEventDefinitions.HazardGasId:
+                        case DynamicEventDefinitions.HazardCollapseId:
                             if (tag == PersonalityTag.Cautious)
                                 return GetSafeChoiceId(template);
                             if (tag == PersonalityTag.Reckless)
@@ -211,6 +213,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.TrapPressurePlateId => "step_back",
                 DynamicEventDefinitions.HazardGasId => "retreat",
                 DynamicEventDefinitions.TrapPitId => "climb",
+                DynamicEventDefinitions.HazardCollapseId => "cover",
                 _ => GetSecondChoiceId(template)
             };
 
@@ -220,6 +223,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.TrapPressurePlateId => "force_through",
                 DynamicEventDefinitions.HazardGasId => "hold_breath",
                 DynamicEventDefinitions.TrapPitId => "jump",
+                DynamicEventDefinitions.HazardCollapseId => "dash",
                 _ => GetFirstChoiceId(template)
             };
 
