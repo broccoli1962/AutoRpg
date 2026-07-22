@@ -59,5 +59,6 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public bool IsSceneReady;
         public bool IsResolved;
         public bool RequiresManualChoice;
+        public DynamicEventIntensity Intensity = DynamicEventIntensity.Standard;
     }
 }
