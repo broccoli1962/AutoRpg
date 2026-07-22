@@ -273,6 +273,20 @@ namespace Backend.GameSystems.DynamicEvent
                             if (tag == PersonalityTag.Loyal && template.EventId == DynamicEventDefinitions.EncounterHermitId)
                                 return "share_food";
                             break;
+                        case DynamicEventDefinitions.FactionGoblinTributeId:
+                            if (tag == PersonalityTag.Greedy)
+                                return "pay_tribute";
+                            if (tag == PersonalityTag.Cautious || tag == PersonalityTag.Loyal)
+                                return "refuse";
+                            if (tag == PersonalityTag.Reckless)
+                                return "refuse";
+                            break;
+                        case DynamicEventDefinitions.NarrativeRivalMemoryId:
+                            if (tag == PersonalityTag.Loyal || tag == PersonalityTag.Reckless)
+                                return "confront";
+                            if (tag == PersonalityTag.Cautious || tag == PersonalityTag.Cynical)
+                                return "walk_away";
+                            break;
                         case DynamicEventDefinitions.ArtifactCrystalId:
                             if (tag == PersonalityTag.Greedy)
                                 return "take";
@@ -297,6 +311,8 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.EncounterScholarId => "talk",
                 DynamicEventDefinitions.EncounterWandererId => "help",
                 DynamicEventDefinitions.EncounterHermitId => "share_food",
+                DynamicEventDefinitions.FactionGoblinTributeId => "pay_tribute",
+                DynamicEventDefinitions.NarrativeRivalMemoryId => "confront",
                 DynamicEventDefinitions.GoldenChamberId => "enter_chamber",
                 _ => GetFirstChoiceId(template)
             };
@@ -316,6 +332,8 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.HazardCollapseId => "cover",
                 DynamicEventDefinitions.HazardQuicksandId => "wait",
                 DynamicEventDefinitions.HazardSporeBloomId => "retreat_slow",
+                DynamicEventDefinitions.FactionGoblinTributeId => "refuse",
+                DynamicEventDefinitions.NarrativeRivalMemoryId => "walk_away",
                 DynamicEventDefinitions.GoldenChamberId => "retreat",
                 _ => GetSecondChoiceId(template)
             };
@@ -328,6 +346,8 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.TrapPitId => "jump",
                 DynamicEventDefinitions.HazardCollapseId => "dash",
                 DynamicEventDefinitions.HazardQuicksandId => "pull_free",
+                DynamicEventDefinitions.FactionGoblinTributeId => "refuse",
+                DynamicEventDefinitions.NarrativeRivalMemoryId => "confront",
                 _ => GetFirstChoiceId(template)
             };
 
