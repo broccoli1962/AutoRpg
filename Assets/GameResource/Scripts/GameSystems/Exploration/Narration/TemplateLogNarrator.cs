@@ -26,7 +26,22 @@ namespace Backend.GameSystems.Exploration.Narration
             { "mana_surge", "마나의 파동이 공기를 떨리게 했고 {leader}는 손끝의 따끔함을 느꼈다." },
             { "crystal_echo", "수정 공동의 메아리가 {leader}의 발소리를 되돌려 보냈다." },
             { "refracted_path", "굴절된 빛 속에서 {leader}는 길의 윤곽을 조심스럽게 짚어 갔다." },
-            { "humming_resonance", "낮은 공명음이 바닥을 울리자 {leader}는 리듬에 맞춰 걸음을 조절했다." }
+            { "humming_resonance", "낮은 공명음이 바닥을 울리자 {leader}는 리듬에 맞춰 걸음을 조절했다." },
+            { "heat_shimmer", "열기에 일렁이는 공기 속에서 {leader}는 발밑의 용암 균열을 피하며 나아갔다." },
+            { "lava_crackle", "용암이 굳어 가며 터지는 소리가 통로를 채웠고 {leader}는 속도를 늦췄다." },
+            { "sulfur_breath", "유황 냄새가 목을 태우자 {leader}는 숨을 얕게 쉬며 전진했다." },
+            { "molten_fissure", "갈라진 지면에서 붉은 빛이 새어 나와 {leader}는 발걸음을 재조정했다." },
+            { "ember_rain", "떨어지는 불꽃 가루 속에서 {leader}는 망토를 두른 채 길을 찾았다." },
+            { "fallen_pillar", "무너진 기둥 사이로 {leader}는 먼지를 뒤집어쓰며 길을 뚫었다." },
+            { "whispering_ruins", "침묵 속에서 들려오는 속삭임에 {leader}는 귀를 기울였다가 고개를 저었다." },
+            { "dust_covered_path", "먼지로 덮인 복도에서 {leader}는 발자국을 지우듯 조심스럽게 걸었다." },
+            { "ancient_inscription", "벽면의 고대 문자를 훑으며 {leader}는 잃어버린 이름을 중얼거렸다." },
+            { "echoing_hall", "메아리치는 홀을 지나며 {leader}는 발소리를 최대한 줄였다." },
+            { "lightless_depth", "빛이 닿지 않는 깊이에서 {leader}는 손끝 감각만 믿고 나아갔다." },
+            { "distorted_echo", "왜곡된 메아리가 방향 감각을 흔들자 {leader}는 잠시 멈춰 숨을 고르며 균형을 잡았다." },
+            { "gravity_shift", "중력이 기울어진 구간에서 {leader}는 벽을 짚으며 균형을 유지했다." },
+            { "void_whisper", "공허한 속삭임이 귓가를 스치자 {leader}는 집중을 끊지 않고 전진했다." },
+            { "threshold_glimmer", "문턱 너머에서 스치는 희미한 빛에 {leader}는 발걸음을 재촉했다." }
         };
 
         public LogEntry Narrate(ExplorationEvent explorationEvent, PartyState party)
