@@ -25,6 +25,8 @@ namespace Backend.Object.UI.Exploration
         private string _baseRichText;
         private CancellationTokenSource _typewriterCts;
         private int _revealedLength;
+        private SalienceGrade _salience = SalienceGrade.Trivial;
+        private LogCategory _category = LogCategory.Move;
 
         internal void ConfigureRuntime(Text messageText, Image categoryIcon)
         {
@@ -49,6 +51,8 @@ namespace Backend.Object.UI.Exploration
                 || entry.Salience >= SalienceGrade.Significant
                 || entry.Category == LogCategory.Milestone;
             IsBookmarked = LogBookmarkManager.IsBookmarked(PlainText, Floor);
+            _salience = entry.Salience;
+            _category = entry.Category;
 
             if (entry.UsedLlm && entry.IsPending)
             {
@@ -59,7 +63,7 @@ namespace Backend.Object.UI.Exploration
             CancelTypewriter();
             _revealedLength = PlainText?.Length ?? 0;
             _baseRichText = LogDisplayUtil.FormatRichText(entry);
-            ApplyDisplay(entry.IsPending ? FontStyle.Italic : FontStyle.Normal, entry.Category);
+            ApplyDisplay(entry.IsPending ? FontStyle.Italic : FontStyle.Normal);
         }
 
         public void BindTagged(string plainText, int floor, string tag, LogCategory category, bool isDynamicEvent, bool isNarrative)
@@ -73,8 +77,10 @@ namespace Backend.Object.UI.Exploration
             IsDynamicEvent = isDynamicEvent;
             IsNarrative = isNarrative;
             IsBookmarked = LogBookmarkManager.IsBookmarked(PlainText, Floor);
+            _salience = SalienceGrade.Notable;
+            _category = category;
             _baseRichText = LogDisplayUtil.FormatTaggedLine(tag, plainText, LogDisplayUtil.GetCategoryColor(category));
-            ApplyDisplay(FontStyle.Normal, category);
+            ApplyDisplay(FontStyle.Normal);
         }
 
         public bool MatchesFilter(LogFeedFilter filter)
@@ -121,20 +127,20 @@ namespace Backend.Object.UI.Exploration
                     var partial = targetText.Substring(0, _revealedLength);
                     var partialEntry = LogTypewriterHelper.WithPartialText(entry, partial, isPending: true);
                     _baseRichText = LogDisplayUtil.FormatRichText(partialEntry);
-                    ApplyDisplay(FontStyle.Italic, entry.Category);
+                    ApplyDisplay(FontStyle.Italic);
                     await UniTask.Delay(LogTypewriterHelper.CharDelayMs, cancellationToken: token);
                 }
 
                 if (!entry.IsPending)
                 {
                     _baseRichText = LogDisplayUtil.FormatRichText(entry);
-                    ApplyDisplay(FontStyle.Normal, entry.Category);
+                    ApplyDisplay(FontStyle.Normal);
                 }
                 else
                 {
                     var partialEntry = LogTypewriterHelper.WithPartialText(entry, targetText, isPending: true);
                     _baseRichText = LogDisplayUtil.FormatRichText(partialEntry);
-                    ApplyDisplay(FontStyle.Italic, entry.Category);
+                    ApplyDisplay(FontStyle.Italic);
                 }
             }
             catch (System.OperationCanceledException)
@@ -149,14 +155,14 @@ namespace Backend.Object.UI.Exploration
             _typewriterCts = null;
         }
 
-        private void ApplyDisplay(FontStyle fontStyle, LogCategory category)
+        private void ApplyDisplay(FontStyle fontStyle)
         {
             RefreshRichText();
             if (_messageText != null)
                 _messageText.fontStyle = fontStyle;
 
             if (_categoryIcon != null)
-                _categoryIcon.color = LogDisplayUtil.GetCategoryColor(category);
+                _categoryIcon.color = LogDisplayUtil.GetDisplayColor(_category, _salience);
         }
     }
 }

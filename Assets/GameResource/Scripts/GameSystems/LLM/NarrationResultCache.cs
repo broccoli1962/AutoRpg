@@ -9,7 +9,8 @@ namespace Backend.GameSystems.LLM
     /// </summary>
     public static class NarrationResultCache
     {
-        private const float ReuseProbability = 0.4f;
+        private const float DefaultReuseProbability = 0.4f;
+        private const float NotableReuseProbability = 0.65f;
         private const int MaxEntriesPerKey = 32;
 
         private static readonly Dictionary<string, List<string>> Pool = new();
@@ -22,7 +23,7 @@ namespace Backend.GameSystems.LLM
             if (!Pool.TryGetValue(key, out var entries) || entries.Count == 0)
                 return false;
 
-            if (Random.NextDouble() > ReuseProbability)
+            if (Random.NextDouble() > GetReuseProbability(explorationEvent.Salience))
                 return false;
 
             text = entries[Random.Next(entries.Count)];
@@ -62,5 +63,8 @@ namespace Backend.GameSystems.LLM
                 combat?.MonsterDisplayName ?? explorationEvent.DiscoveryItemId ?? "none",
                 personality);
         }
+
+        private static float GetReuseProbability(SalienceGrade salience) =>
+            salience == SalienceGrade.Notable ? NotableReuseProbability : DefaultReuseProbability;
     }
 }
