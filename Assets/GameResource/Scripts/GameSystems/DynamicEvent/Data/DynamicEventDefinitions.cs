@@ -21,6 +21,9 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public const string ArtifactLoreFragmentId = "artifact_lore_fragment_01";
         public const string HazardQuicksandId = "hazard_quicksand_01";
         public const string GoldenChamberId = "golden_chamber_01";
+        public const string ForkEchoPassageId = "fork_echo_passage_01";
+        public const string HazardSporeBloomId = "hazard_spore_bloom_01";
+        public const string EncounterHermitId = "encounter_hermit_01";
 
         private static readonly DynamicEventTemplate Fork002 = CreateFork002();
         private static readonly DynamicEventTemplate EncounterMerchant = CreateEncounterMerchant();
@@ -38,6 +41,9 @@ namespace Backend.GameSystems.DynamicEvent.Data
         private static readonly DynamicEventTemplate ArtifactLoreFragment = CreateArtifactLoreFragment();
         private static readonly DynamicEventTemplate HazardQuicksand = CreateHazardQuicksand();
         private static readonly DynamicEventTemplate GoldenChamber = CreateGoldenChamber();
+        private static readonly DynamicEventTemplate ForkEchoPassage = CreateForkEchoPassage();
+        private static readonly DynamicEventTemplate HazardSporeBloom = CreateHazardSporeBloom();
+        private static readonly DynamicEventTemplate EncounterHermit = CreateEncounterHermit();
 
         public static IReadOnlyList<DynamicEventTemplate> All { get; } = new List<DynamicEventTemplate>
         {
@@ -56,7 +62,10 @@ namespace Backend.GameSystems.DynamicEvent.Data
             EncounterFairy,
             ArtifactLoreFragment,
             HazardQuicksand,
-            GoldenChamber
+            GoldenChamber,
+            ForkEchoPassage,
+            HazardSporeBloom,
+            EncounterHermit
         };
 
         public static DynamicEventTemplate Get(string eventId)
@@ -309,6 +318,51 @@ namespace Backend.GameSystems.DynamicEvent.Data
                     (DynamicEventOutcomeEffect.GoldBonus, 0.5f),
                     (DynamicEventOutcomeEffect.RareEncounter, 0.5f)),
                 Choice("retreat", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateForkEchoPassage() => new()
+        {
+            EventId = ForkEchoPassageId,
+            Category = DynamicEventCategory.ForkChoice,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.09f, 4, 17),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("follow_echo",
+                    (DynamicEventOutcomeEffect.MinorResource, 0.5f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.5f)),
+                Choice("ignore_echo", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateHazardSporeBloom() => new()
+        {
+            EventId = HazardSporeBloomId,
+            Category = DynamicEventCategory.Hazard,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.07f, 3, 21),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("burn_spores",
+                    (DynamicEventOutcomeEffect.SafePass, 0.55f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.45f)),
+                Choice("retreat_slow", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateEncounterHermit() => new()
+        {
+            EventId = EncounterHermitId,
+            Category = DynamicEventCategory.Encounter,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.05f, 6, 22),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("share_food",
+                    (DynamicEventOutcomeEffect.MinorResource, 0.65f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.35f)),
+                Choice("pass_by", (DynamicEventOutcomeEffect.SafePass, 1f))
             }
         };
 
