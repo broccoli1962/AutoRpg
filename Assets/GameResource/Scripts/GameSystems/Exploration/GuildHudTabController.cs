@@ -46,14 +46,29 @@ namespace Backend.GameSystems.Exploration
             SelectTab(HudBottomTab.Explore);
         }
 
+        private void Update()
+        {
+            if (_currentTab != HudBottomTab.Compendium ||
+                _chroniclePanel == null ||
+                !_chroniclePanel.IsVisible)
+            {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+                _chroniclePanel.OpenTab(ChronicleRuntimePanel.ChroniclePanelTab.LoreCompendium);
+
+            if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
+                _chroniclePanel.OpenTab(ChronicleRuntimePanel.ChroniclePanelTab.MonsterCompendium);
+        }
+
         private void BuildTabBar()
         {
-            var canvas = GetComponent<Canvas>();
-            if (canvas == null)
+            if (GetComponentInParent<Canvas>() == null)
                 return;
 
             var barRoot = new GameObject("BottomTabBar");
-            barRoot.transform.SetParent(canvas.transform, false);
+            barRoot.transform.SetParent(transform, false);
 
             var barRect = barRoot.AddComponent<RectTransform>();
             barRect.anchorMin = new Vector2(0f, 0f);
