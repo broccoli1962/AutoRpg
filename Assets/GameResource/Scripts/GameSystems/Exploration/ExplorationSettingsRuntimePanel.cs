@@ -91,6 +91,17 @@ namespace Backend.GameSystems.Exploration
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
+
+            if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
+            {
+                if (BlacksmithManager.TryUpgrade(out var message))
+                    Debug.Log($"[ExplorationSettings] {message}");
+                else
+                    Debug.Log($"[ExplorationSettings] 대장간 업그레이드 불가: {message}");
+
+                RefreshContent();
+                _onSettingsChanged?.Invoke();
+            }
         }
 
         public void Toggle()
@@ -123,7 +134,7 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(600f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:LLM 품질  2:이벤트 정책  3:황금 자동정지  4:로그 빈도  5:오프라인 요약  6:필사가의 서고  7:훈련소  (O:닫기)");
+                "1:LLM  2:이벤트  3:황금  4:로그  5:오프라인  6:서고  7:훈련소  8:대장간  (O:닫기)");
             hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
@@ -182,7 +193,8 @@ namespace Backend.GameSystems.Exploration
                 $"<b>4. 로그 생성 빈도</b>\n{LogFrequencySettings.GetDisplayLabel()} · 최소 {GetSalienceLabel(LogFrequencySettings.GetMinimumSalience())}\n\n" +
                 $"<b>5. 오프라인 요약 상세도</b>\n{OfflineSummaryDetailSettings.GetDisplayLabel()}\n\n" +
                 $"<b>6. 필사가의 서고</b>\n{ScriptoriumManager.GetDisplayLabel()}\n{ScriptoriumManager.GetBonusSummary()}\n\n" +
-                $"<b>7. 훈련소</b>\n{TrainingGroundManager.GetDisplayLabel()}\n{TrainingGroundManager.GetBonusSummary()}";
+                $"<b>7. 훈련소</b>\n{TrainingGroundManager.GetDisplayLabel()}\n{TrainingGroundManager.GetBonusSummary()}\n\n" +
+                $"<b>8. 대장간</b>\n{BlacksmithManager.GetDisplayLabel()}\n{BlacksmithManager.GetBonusSummary()}";
         }
 
         private static string GetSalienceLabel(SalienceGrade grade)
