@@ -108,6 +108,9 @@ namespace Backend.Object.UI.Exploration
             if (panel.gameObject.GetComponent<PartyRuntimePanel>() == null)
                 panel.gameObject.AddComponent<PartyRuntimePanel>();
 
+            if (panel.gameObject.GetComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>() == null)
+                panel.gameObject.AddComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>();
+
             panel.ConfigureRuntime(
                 statusText,
                 goldText,

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Prestige;
@@ -6,7 +5,11 @@ using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.LLM;
 using Backend.Util;
+using Cysharp.Threading.Tasks;
 using R3;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +37,8 @@ namespace Backend.GameSystems.Exploration
         private readonly Dictionary<string, int> _indexByEventId = new();
         private LogFeedFilter _filter = LogFeedFilter.All;
         private int _logPageFromEnd;
+        private readonly Dictionary<string, int> _typewriterRevealed = new();
+        private readonly Dictionary<string, CancellationTokenSource> _typewriterTokens = new();
 
         private void Awake()
         {
@@ -83,6 +88,13 @@ namespace Backend.GameSystems.Exploration
         private void OnDestroy()
         {
             _disposables?.Dispose();
+            foreach (var token in _typewriterTokens.Values)
+            {
+                token?.Cancel();
+                token?.Dispose();
+            }
+
+            _typewriterTokens.Clear();
         }
 
         private void Update()
@@ -248,8 +260,66 @@ namespace Backend.GameSystems.Exploration
                 return;
             }
 
+            if (entry.UsedLlm && entry.IsPending)
+            {
+                RunTypewriterAsync(entry, index).Forget();
+                return;
+            }
+
+            CancelTypewriter(entry.EventId);
+            _typewriterRevealed.Remove(entry.EventId);
             _logLines[index] = HudLogLine.FromEntry(entry);
             RebuildLogText();
+        }
+
+        private async UniTaskVoid RunTypewriterAsync(LogEntry entry, int lineIndex)
+        {
+            CancelTypewriter(entry.EventId);
+            var cts = new CancellationTokenSource();
+            _typewriterTokens[entry.EventId] = cts;
+            var token = cts.Token;
+            var targetText = entry.Text ?? string.Empty;
+
+            if (!_typewriterRevealed.TryGetValue(entry.EventId, out var revealed) || targetText.Length < revealed)
+                revealed = 0;
+
+            try
+            {
+                while (revealed < targetText.Length)
+                {
+                    revealed++;
+                    _typewriterRevealed[entry.EventId] = revealed;
+                    var partial = targetText.Substring(0, revealed);
+                    var partialEntry = LogTypewriterHelper.WithPartialText(entry, partial, isPending: true);
+                    _logLines[lineIndex] = HudLogLine.FromEntry(partialEntry);
+                    RebuildLogText();
+                    await UniTask.Delay(LogTypewriterHelper.CharDelayMs, cancellationToken: token);
+                }
+
+                if (!entry.IsPending)
+                {
+                    CancelTypewriter(entry.EventId);
+                    _typewriterRevealed.Remove(entry.EventId);
+                    _logLines[lineIndex] = HudLogLine.FromEntry(entry);
+                    RebuildLogText();
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
+
+        private void CancelTypewriter(string eventId)
+        {
+            if (string.IsNullOrEmpty(eventId))
+                return;
+
+            if (_typewriterTokens.TryGetValue(eventId, out var cts))
+            {
+                cts.Cancel();
+                cts.Dispose();
+                _typewriterTokens.Remove(eventId);
+            }
         }
 
         private void AppendDynamicEventLog(DynamicEvent.Data.DynamicEventInstance instance)
