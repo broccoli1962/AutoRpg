@@ -1,5 +1,4 @@
 using Backend.GameSystems.DynamicEvent;
-using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.LLM;
@@ -70,6 +69,17 @@ namespace Backend.GameSystems.Exploration
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
+
+            if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6))
+            {
+                if (ScriptoriumManager.TryUpgrade(out var message))
+                    Debug.Log($"[ExplorationSettings] {message}");
+                else
+                    Debug.Log($"[ExplorationSettings] 서고 업그레이드 불가: {message}");
+
+                RefreshContent();
+                _onSettingsChanged?.Invoke();
+            }
         }
 
         public void Toggle()
@@ -92,7 +102,7 @@ namespace Backend.GameSystems.Exploration
             var panelRect = _panelRoot.AddComponent<RectTransform>();
             panelRect.anchorMin = new Vector2(0.5f, 0.5f);
             panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(640f, 360f);
+            panelRect.sizeDelta = new Vector2(640f, 400f);
 
             var panelImage = _panelRoot.AddComponent<Image>();
             panelImage.color = new Color(0.08f, 0.1f, 0.14f, 0.96f);
@@ -102,12 +112,12 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(600f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:LLM 품질  2:이벤트 정책  3:황금 자동정지  4:로그 빈도  5:오프라인 요약  (O:닫기)");
+                "1:LLM 품질  2:이벤트 정책  3:황금 자동정지  4:로그 빈도  5:오프라인 요약  6:필사가의 서고  (O:닫기)");
             hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
             _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -68f), 16, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(600f, 228f);
+            _contentText.rectTransform.sizeDelta = new Vector2(600f, 268f);
             _contentText.horizontalOverflow = HorizontalWrapMode.Wrap;
             _contentText.verticalOverflow = VerticalWrapMode.Overflow;
         }
@@ -159,7 +169,8 @@ namespace Backend.GameSystems.Exploration
                 $"<b>2. 자동 이벤트 선택 정책</b>\n{DynamicEventAutoPolicySettings.GetDisplayLabel()}\n\n" +
                 $"<b>3. 황금 이벤트 자동정지</b>\n{GoldenEventSettings.GetDisplayLabel()}\n\n" +
                 $"<b>4. 로그 생성 빈도</b>\n{LogFrequencySettings.GetDisplayLabel()} · 최소 {GetSalienceLabel(LogFrequencySettings.GetMinimumSalience())}\n\n" +
-                $"<b>5. 오프라인 요약 상세도</b>\n{OfflineSummaryDetailSettings.GetDisplayLabel()}";
+                $"<b>5. 오프라인 요약 상세도</b>\n{OfflineSummaryDetailSettings.GetDisplayLabel()}\n\n" +
+                $"<b>6. 필사가의 서고</b>\n{ScriptoriumManager.GetDisplayLabel()}\n{ScriptoriumManager.GetBonusSummary()}";
         }
 
         private static string GetSalienceLabel(SalienceGrade grade)

@@ -1,4 +1,5 @@
 using Backend.GameSystems.Exploration.Data;
+using ScriptoriumManager = Backend.GameSystems.Exploration.ScriptoriumManager;
 
 namespace Backend.GameSystems.Exploration.Narration
 {
@@ -25,14 +26,26 @@ namespace Backend.GameSystems.Exploration.Narration
             return false;
         }
 
-        public static int GetExtraLogMaxTokens(PartyState party) =>
-            PartyHasBard(party) ? BardTokenBonus : 0;
+        public static int GetExtraLogMaxTokens(PartyState party)
+        {
+            var bonus = PartyHasBard(party) ? BardTokenBonus : 0;
+            bonus += ScriptoriumManager.GetTokenBonus();
+            return bonus;
+        }
 
-        public static int GetSalienceGradeReduction(PartyState party) =>
-            PartyHasBard(party) ? BardSalienceReduction : 0;
+        public static int GetSalienceGradeReduction(PartyState party)
+        {
+            var reduction = PartyHasBard(party) ? BardSalienceReduction : 0;
+            reduction += ScriptoriumManager.GetSalienceGradeReduction();
+            return reduction;
+        }
 
-        public static float GetDynamicEventRateMultiplier(PartyState party) =>
-            PartyHasBard(party) ? BardEventRateMultiplier : 1f;
+        public static float GetDynamicEventRateMultiplier(PartyState party)
+        {
+            var multiplier = PartyHasBard(party) ? BardEventRateMultiplier : 1f;
+            multiplier *= ScriptoriumManager.GetEventRateMultiplier();
+            return multiplier;
+        }
 
         public static SalienceGrade LowerSalienceGrade(SalienceGrade grade, int steps)
         {

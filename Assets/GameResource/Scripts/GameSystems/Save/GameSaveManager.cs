@@ -129,6 +129,7 @@ namespace Backend.GameSystems.Save
             {
                 LegacyPoints = source.LegacyPoints,
                 ManaShards = source.ManaShards,
+                ScriptoriumLevel = source.ScriptoriumLevel,
                 PrestigeCount = source.PrestigeCount,
                 DeepestFloorReached = source.DeepestFloorReached,
                 ChronicleEntries = new List<string>(source.ChronicleEntries),
