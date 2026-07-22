@@ -120,12 +120,56 @@ namespace Backend.Editor
                 filterText,
                 helpText);
 
+            CreateBottomTabBarPlaceholder(rootRect, font);
+
             PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
             UnityEngine.Object.DestroyImmediate(root);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
             Debug.Log($"[ExplorationHudPanelPrefabBuilder] Saved {PrefabPath}");
+        }
+
+        private static void CreateBottomTabBarPlaceholder(RectTransform rootRect, Font font)
+        {
+            const float tabBarHeight = 52f;
+            var barRoot = CreateRectChild(rootRect, "BottomTabBar");
+            barRoot.anchorMin = new Vector2(0f, 0f);
+            barRoot.anchorMax = new Vector2(1f, 0f);
+            barRoot.pivot = new Vector2(0.5f, 0f);
+            barRoot.sizeDelta = new Vector2(0f, tabBarHeight);
+            barRoot.gameObject.AddComponent<Image>().color = new Color(0.06f, 0.07f, 0.1f, 0.94f);
+
+            var labels = new[] { "탐험", "강화/장비", "길드시설", "연대기", "도감" };
+            var activeColor = new Color(0.28f, 0.42f, 0.62f, 0.98f);
+            var inactiveColor = new Color(0.14f, 0.16f, 0.22f, 0.95f);
+
+            for (var i = 0; i < labels.Length; i++)
+            {
+                var go = new GameObject($"Tab_{labels[i]}", typeof(RectTransform));
+                go.transform.SetParent(barRoot, false);
+
+                var rect = go.GetComponent<RectTransform>();
+                rect.anchorMin = new Vector2((float)i / labels.Length, 0f);
+                rect.anchorMax = new Vector2((float)(i + 1) / labels.Length, 1f);
+                rect.offsetMin = new Vector2(2f, 4f);
+                rect.offsetMax = new Vector2(-2f, -4f);
+
+                var image = go.AddComponent<Image>();
+                image.color = i == 0 ? activeColor : inactiveColor;
+                var button = go.AddComponent<Button>();
+                button.targetGraphic = image;
+
+                var labelGo = new GameObject("Label", typeof(RectTransform));
+                labelGo.transform.SetParent(go.transform, false);
+                StretchFull(labelGo.GetComponent<RectTransform>());
+                var text = labelGo.AddComponent<Text>();
+                text.font = font;
+                text.fontSize = 14;
+                text.alignment = TextAnchor.MiddleCenter;
+                text.color = Color.white;
+                text.text = labels[i];
+            }
         }
 
         private static void AddRuntimeComponents(GameObject root)
