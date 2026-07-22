@@ -17,9 +17,9 @@ namespace Backend.GameSystems.Exploration
             return gain;
         }
 
-        public static int GrantDiscovery(ExplorationState state, DiscoveryDefinition discovery)
+        public static int GrantDiscovery(ExplorationState state, ZoneDefinitions.DiscoveryDefinition discovery)
         {
-            if (state == null || discovery == null)
+            if (state == null || string.IsNullOrEmpty(discovery.ItemId))
                 return 0;
 
             var gain = ZoneDefinitions.GetRelicFragmentQuantity(discovery);

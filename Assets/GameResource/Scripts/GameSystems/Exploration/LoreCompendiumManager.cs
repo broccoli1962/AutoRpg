@@ -17,7 +17,8 @@ namespace Backend.GameSystems.Exploration
             if (GameStateUtil.IsQuitting)
                 return System.Array.Empty<string>();
 
-            return PrestigeManager.GetMeta()?.LoreEntries ?? System.Array.Empty<string>();
+            var entries = PrestigeManager.GetMeta()?.LoreEntries;
+            return entries != null ? entries : System.Array.Empty<string>();
         }
 
         public static void RecordDiscovery(ExplorationEvent explorationEvent)
