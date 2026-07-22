@@ -90,5 +90,25 @@ namespace Backend.GameSystems.LLM
                 "<|im_start|>user\n" + user + ImEnd + "\n" +
                 "<|im_start|>assistant\n";
         }
+
+        public static string BuildSceneRepairPrompt(string invalidJson, DynamicEventTemplate template)
+        {
+            var user = new StringBuilder();
+            user.AppendLine("[JSON 수정 요청]");
+            user.AppendLine("아래 출력은 JSON 스키마를 따르지 않았습니다. 유효한 JSON만 다시 출력하세요.");
+            user.AppendLine(invalidJson);
+            user.AppendLine();
+            user.AppendLine("필수 choice id:");
+            foreach (var choice in template.Choices)
+            {
+                user.Append("- ");
+                user.AppendLine(choice.Id);
+            }
+
+            return
+                "<|im_start|>system\n" + SystemPrompt + "\n" + ImEnd + "\n" +
+                "<|im_start|>user\n" + user + ImEnd + "\n" +
+                "<|im_start|>assistant\n";
+        }
     }
 }

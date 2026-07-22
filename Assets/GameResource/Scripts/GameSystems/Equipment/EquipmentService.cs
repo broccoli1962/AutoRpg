@@ -71,6 +71,34 @@ namespace Backend.GameSystems.Equipment
             member.Vit + SumBonus(member, EquipmentSlot.Weapon, d => d.VitBonus) +
             SumBonus(member, EquipmentSlot.Armor, d => d.VitBonus);
 
+        public static string GetLeaderEquipmentSummary(PartyState party)
+        {
+            var leader = party?.Leader;
+            if (leader == null)
+                return "장비 없음";
+
+            var weapon = GetDisplayName(leader.EquippedWeaponId);
+            var armor = GetDisplayName(leader.EquippedArmorId);
+            if (string.IsNullOrEmpty(weapon) && string.IsNullOrEmpty(armor))
+                return "장비 없음";
+
+            if (string.IsNullOrEmpty(armor))
+                return weapon;
+
+            if (string.IsNullOrEmpty(weapon))
+                return armor;
+
+            return $"{weapon}/{armor}";
+        }
+
+        private static string GetDisplayName(string definitionId)
+        {
+            if (string.IsNullOrEmpty(definitionId))
+                return null;
+
+            return EquipmentDefinitions.Get(definitionId)?.DisplayName;
+        }
+
         private static CharacterState SelectRecipient(PartyState party, EquipmentSlot slot)
         {
             CharacterState best = null;

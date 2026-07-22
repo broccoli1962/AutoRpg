@@ -3,6 +3,7 @@ using System.Text;
 using Backend.GameSystems.Exploration.Data;
 using Backend.Util;
 using Backend.Util.Management;
+using ExplorationEventType = Backend.GameSystems.Exploration.Data.EventType;
 using UnityEngine;
 
 namespace Backend.GameSystems.Character
@@ -97,14 +98,14 @@ namespace Backend.GameSystems.Character
 
             switch (explorationEvent.EventType)
             {
-                case EventType.CombatResult when explorationEvent.Combat?.Outcome == CombatOutcome.Victory:
+                case ExplorationEventType.CombatResult when explorationEvent.Combat?.Outcome == CombatOutcome.Victory:
                     AdjustAllPairs(party, explorationEvent.Salience >= SalienceGrade.Significant ? 4 : 2);
                     break;
-                case EventType.Rest:
+                case ExplorationEventType.Rest:
                     AdjustAllPairs(party, 2);
                     break;
-                case EventType.Trap:
-                case EventType.Injury:
+                case ExplorationEventType.Trap:
+                case ExplorationEventType.Injury:
                     AdjustAllPairs(party, 1);
                     break;
             }

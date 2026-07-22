@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using Backend.GameSystems.Character.Data;
 using Backend.GameSystems.DynamicEvent.Data;
