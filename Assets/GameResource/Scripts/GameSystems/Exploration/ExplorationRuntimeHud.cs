@@ -206,7 +206,7 @@ namespace Backend.GameSystems.Exploration
             _statusText.supportRichText = true;
             _statusText.fontSize = 17;
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
-            _helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그  하단탭:탐험·강화·길드·연대기·도감";
+            _helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  I:캐릭터  R:귀환  F:필터  B:북마크  [/]:로그  하단탭";
             _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
             _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -132f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -221,6 +221,7 @@ namespace Backend.GameSystems.Exploration
             guildPanel.Configure(() => RefreshStatus(ExplorationManager.GetCurrentState()));
             canvasGo.AddComponent<PartyRuntimePanel>();
             canvasGo.AddComponent<ExplorationCenterRuntimePanel>();
+            canvasGo.AddComponent<CharacterDetailRuntimePanel>();
 
             var tabController = canvasGo.AddComponent<GuildHudTabController>();
             tabController.Initialize(
