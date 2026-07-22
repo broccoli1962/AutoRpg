@@ -44,7 +44,7 @@ namespace Backend.GameSystems.Exploration.Narration
             var text = entry.Text;
 
             if (entry.IsPending)
-                text = $"<i>{text}...</i>";
+                text = $"<i>{text}<color=#888888>▌</color></i>";
 
             if (entry.Salience >= SalienceGrade.Milestone || entry.Category == LogCategory.Milestone)
                 return $"<color=#{color}><b>{icon}{text}</b></color>";

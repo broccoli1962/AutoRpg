@@ -120,7 +120,8 @@ namespace Backend.GameSystems.Save
                 LegacyPoints = source.LegacyPoints,
                 PrestigeCount = source.PrestigeCount,
                 DeepestFloorReached = source.DeepestFloorReached,
-                ChronicleEntries = new List<string>(source.ChronicleEntries)
+                ChronicleEntries = new List<string>(source.ChronicleEntries),
+                FavoriteMoments = new List<string>(source.FavoriteMoments ?? new List<string>())
             };
         }
     }
