@@ -147,7 +147,22 @@ namespace Backend.Object.UI
                 return;
 
             if (View.ZoneFloorText != null)
+            {
+                View.ZoneFloorText.supportRichText = true;
                 View.ZoneFloorText.text = ExplorationHudStatusFormatter.Build(state);
+            }
+
+            if (View.ProgressSlider != null)
+            {
+                View.ProgressSlider.gameObject.SetActive(state.IsExploring);
+                View.ProgressSlider.value = Mathf.Clamp01(state.FloorProgress / 100f);
+            }
+
+            if (View.ProgressText != null)
+            {
+                View.ProgressText.gameObject.SetActive(state.IsExploring);
+                View.ProgressText.text = $"{state.FloorProgress:0.#}%";
+            }
 
             RefreshControls(state);
         }

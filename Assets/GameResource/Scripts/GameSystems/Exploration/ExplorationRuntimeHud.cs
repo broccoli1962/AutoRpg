@@ -203,6 +203,8 @@ namespace Backend.GameSystems.Exploration
             canvasGo.AddComponent<GraphicRaycaster>();
 
             _statusText = CreateText(canvasGo.transform, "StatusText", new Vector2(20f, -20f), 22, TextAnchor.UpperLeft);
+            _statusText.supportRichText = true;
+            _statusText.fontSize = 17;
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
             _helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
             _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
