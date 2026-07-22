@@ -56,6 +56,7 @@ namespace Backend.Editor
             var centerPanel = CreateRectChild(body, "CenterPanel");
             AnchorCenterColumn(centerPanel, LeftWidth, RightWidth);
             centerPanel.gameObject.AddComponent<Image>().color = new Color(0.07f, 0.09f, 0.12f, 0.82f);
+            CreatePortraitStripPlaceholder(centerPanel, font);
 
             var rightPanel = CreateRectChild(body, "RightPanel");
             AnchorRightColumn(rightPanel, RightWidth);
@@ -128,6 +129,28 @@ namespace Backend.Editor
             AssetDatabase.Refresh();
 
             Debug.Log($"[ExplorationHudPanelPrefabBuilder] Saved {PrefabPath}");
+        }
+
+        private static void CreatePortraitStripPlaceholder(RectTransform centerPanel, Font font)
+        {
+            var strip = CreateRectChild(centerPanel, "PortraitStrip");
+            strip.anchorMin = new Vector2(0f, 0f);
+            strip.anchorMax = new Vector2(1f, 0f);
+            strip.pivot = new Vector2(0.5f, 0f);
+            strip.anchoredPosition = new Vector2(0f, 72f);
+            strip.sizeDelta = new Vector2(-32f, 88f);
+
+            var layout = strip.gameObject.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 12f;
+            layout.childAlignment = TextAnchor.UpperLeft;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+            layout.padding = new RectOffset(16, 16, 0, 0);
+
+            CreateText(strip, "PortraitHint", font, 13, new Vector2(0f, 0f), new Vector2(120f, 20f)).text =
+                "<color=#99a3b3>파티 초상</color>";
         }
 
         private static void CreateBottomTabBarPlaceholder(RectTransform rootRect, Font font)
