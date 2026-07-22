@@ -143,18 +143,21 @@ namespace Backend.GameSystems.Character
 
         private void OnDynamicEventResolved(DynamicEventInstance instance)
         {
-            if (instance == null || string.IsNullOrEmpty(instance.LeaderName))
+            if (instance == null)
                 return;
 
             var state = ExplorationManager.GetCurrentState();
             var party = state?.Party;
-            if (party?.Leader == null)
+            if (party?.Members == null || party.Members.Count == 0)
                 return;
 
             BindPartyInternal(party);
-            var summary = CharacterMemoryRecorder.SummarizeDynamicEvent(instance);
-            if (!string.IsNullOrEmpty(summary))
-                AppendShortTerm(party.Leader.CharacterId, summary, party.Leader.DisplayName);
+            foreach (var member in party.Members)
+            {
+                var summary = CharacterMemoryRecorder.SummarizeDynamicEventForMember(instance, member);
+                if (!string.IsNullOrEmpty(summary))
+                    AppendShortTerm(member.CharacterId, summary, member.DisplayName);
+            }
         }
 
         private void AppendShortTerm(string characterId, string summary, string displayName)
