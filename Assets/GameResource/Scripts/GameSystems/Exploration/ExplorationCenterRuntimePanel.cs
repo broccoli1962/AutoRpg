@@ -19,7 +19,7 @@ namespace Backend.GameSystems.Exploration
         private Slider _progressSlider;
         private Text _progressText;
         private Text _partyStripText;
-        private Text _portraitStripText;
+        private Transform _portraitStripRoot;
         private Text _statusText;
         private CompositeDisposable _disposables;
         private readonly StringBuilder _builder = new();
@@ -87,15 +87,15 @@ namespace Backend.GameSystems.Exploration
                 120f);
             _partyStripText.lineSpacing = 1.15f;
 
-            _portraitStripText = CreateText(root.transform, "PortraitStrip", new Vector2(16f, -248f), 14, string.Empty);
-            _portraitStripText.rectTransform.sizeDelta = new Vector2(
-                container != null ? 360f : ExplorationHudLayoutMetrics.CenterPanelWidth - 32f,
-                28f);
+            var portraitContainer = container != null ? container.Find("PortraitStrip") : null;
+            _portraitStripRoot = portraitContainer != null
+                ? portraitContainer
+                : CreatePortraitStripRoot(root.transform, new Vector2(16f, -228f)).transform;
 
             _statusText = CreateText(
                 root.transform,
                 "Status",
-                new Vector2(16f, -(ExplorationHudLayoutMetrics.CenterPanelWidth > 320f ? 268f : 240f)),
+                new Vector2(16f, -(ExplorationHudLayoutMetrics.CenterPanelWidth > 320f ? 320f : 288f)),
                 13,
                 string.Empty);
             _statusText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelWidth - 32f, 48f);
@@ -118,6 +118,7 @@ namespace Backend.GameSystems.Exploration
                 _zoneTitleText.text = "탐험 대기";
                 _floorText.text = string.Empty;
                 _partyStripText.text = string.Empty;
+                RefreshPortraitStrip(null);
                 _statusText.text = string.Empty;
                 SetProgressVisible(false);
                 return;
@@ -142,8 +143,109 @@ namespace Backend.GameSystems.Exploration
             }
 
             _partyStripText.text = BuildPartyStrip(state);
-            _portraitStripText.text = BuildPortraitStrip(state);
+            RefreshPortraitStrip(state);
             _statusText.text = BuildStatusLine(state);
+        }
+
+        private void RefreshPortraitStrip(ExplorationState state)
+        {
+            if (_portraitStripRoot == null)
+                return;
+
+            for (var i = _portraitStripRoot.childCount - 1; i >= 0; i--)
+                Destroy(_portraitStripRoot.GetChild(i).gameObject);
+
+            var members = state?.Party?.Members;
+            if (members == null || members.Count == 0)
+                return;
+
+            for (var i = 0; i < members.Count; i++)
+                CreatePortraitBadge(_portraitStripRoot, members[i], i == 0);
+        }
+
+        private static GameObject CreatePortraitStripRoot(Transform parent, Vector2 anchoredPos)
+        {
+            var go = new GameObject("PortraitStrip");
+            go.transform.SetParent(parent, false);
+
+            var rect = go.AddComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = anchoredPos;
+            rect.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelWidth - 32f, 88f);
+
+            var layout = go.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 12f;
+            layout.childAlignment = TextAnchor.UpperLeft;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+            return go;
+        }
+
+        private static void CreatePortraitBadge(Transform parent, CharacterState member, bool isLeader)
+        {
+            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            var badgeRoot = new GameObject($"Portrait_{member.DisplayName}");
+            badgeRoot.transform.SetParent(parent, false);
+
+            var rootRect = badgeRoot.AddComponent<RectTransform>();
+            rootRect.sizeDelta = new Vector2(72f, 88f);
+
+            var layout = badgeRoot.AddComponent<VerticalLayoutGroup>();
+            layout.spacing = 4f;
+            layout.childAlignment = TextAnchor.UpperCenter;
+            layout.childControlWidth = true;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = false;
+
+            var portraitGo = new GameObject("Badge");
+            portraitGo.transform.SetParent(badgeRoot.transform, false);
+            var portraitRect = portraitGo.AddComponent<RectTransform>();
+            portraitRect.sizeDelta = new Vector2(64f, 64f);
+
+            var portraitImage = portraitGo.AddComponent<Image>();
+            portraitImage.color = GetRoleTintColor(member.Role);
+
+            if (isLeader)
+            {
+                var leaderMark = new GameObject("LeaderMark");
+                leaderMark.transform.SetParent(portraitGo.transform, false);
+                var leaderRect = leaderMark.AddComponent<RectTransform>();
+                leaderRect.anchorMin = new Vector2(1f, 1f);
+                leaderRect.anchorMax = new Vector2(1f, 1f);
+                leaderRect.pivot = new Vector2(1f, 1f);
+                leaderRect.anchoredPosition = new Vector2(-4f, -4f);
+                leaderRect.sizeDelta = new Vector2(16f, 16f);
+                leaderMark.AddComponent<Image>().color = new Color(1f, 0.84f, 0.2f, 0.95f);
+            }
+
+            var roleGo = new GameObject("Role");
+            roleGo.transform.SetParent(portraitGo.transform, false);
+            var roleRect = roleGo.AddComponent<RectTransform>();
+            StretchFull(roleRect);
+            var roleText = roleGo.AddComponent<Text>();
+            roleText.font = font;
+            roleText.fontSize = 22;
+            roleText.alignment = TextAnchor.MiddleCenter;
+            roleText.color = new Color(0.08f, 0.08f, 0.1f, 0.92f);
+            roleText.text = GetRoleAbbreviation(member.Role);
+
+            var nameGo = new GameObject("Name");
+            nameGo.transform.SetParent(badgeRoot.transform, false);
+            var nameRect = nameGo.AddComponent<RectTransform>();
+            nameRect.sizeDelta = new Vector2(72f, 18f);
+            var nameText = nameGo.AddComponent<Text>();
+            nameText.font = font;
+            nameText.fontSize = 12;
+            nameText.alignment = TextAnchor.UpperCenter;
+            nameText.color = new Color(0.88f, 0.9f, 0.95f);
+            nameText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            nameText.verticalOverflow = VerticalWrapMode.Overflow;
+            nameText.text = member.DisplayName;
         }
 
         private void SetProgressVisible(bool visible)
@@ -182,32 +284,6 @@ namespace Backend.GameSystems.Exploration
             return builder.ToString();
         }
 
-        private static string BuildPortraitStrip(ExplorationState state)
-        {
-            var members = state.Party?.Members;
-            if (members == null || members.Count == 0)
-                return string.Empty;
-
-            var builder = new StringBuilder();
-            builder.Append("<b>초상</b>  ");
-            for (var i = 0; i < members.Count; i++)
-            {
-                if (i > 0)
-                    builder.Append("  ");
-
-                var member = members[i];
-                var color = GetRoleColor(member.Role);
-                builder.Append("<color=");
-                builder.Append(color);
-                builder.Append(">[");
-                builder.Append(GetRoleAbbreviation(member.Role));
-                builder.Append("]</color> ");
-                builder.Append(member.DisplayName);
-            }
-
-            return builder.ToString();
-        }
-
         private static string GetRoleAbbreviation(CharacterRole role) =>
             role switch
             {
@@ -219,15 +295,15 @@ namespace Backend.GameSystems.Exploration
                 _ => "?"
             };
 
-        private static string GetRoleColor(CharacterRole role) =>
+        private static Color GetRoleTintColor(CharacterRole role) =>
             role switch
             {
-                CharacterRole.Warrior => "#e07a7a",
-                CharacterRole.Rogue => "#9fd49f",
-                CharacterRole.Mage => "#6ec5ff",
-                CharacterRole.Bard => "#ffd966",
-                CharacterRole.Cleric => "#c9a0ff",
-                _ => "#cccccc"
+                CharacterRole.Warrior => new Color(0.88f, 0.48f, 0.48f, 1f),
+                CharacterRole.Rogue => new Color(0.62f, 0.83f, 0.62f, 1f),
+                CharacterRole.Mage => new Color(0.43f, 0.77f, 1f, 1f),
+                CharacterRole.Bard => new Color(1f, 0.85f, 0.4f, 1f),
+                CharacterRole.Cleric => new Color(0.79f, 0.63f, 1f, 1f),
+                _ => new Color(0.8f, 0.8f, 0.8f, 1f)
             };
 
         private static string BuildStatusLine(ExplorationState state)
