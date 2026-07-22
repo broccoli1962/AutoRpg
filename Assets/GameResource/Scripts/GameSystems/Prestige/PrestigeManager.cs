@@ -51,6 +51,7 @@ namespace Backend.GameSystems.Prestige
                 return;
 
             Instance._meta.LegacyPoints = meta.LegacyPoints;
+            Instance._meta.ManaShards = meta.ManaShards;
             Instance._meta.PrestigeCount = meta.PrestigeCount;
             Instance._meta.DeepestFloorReached = meta.DeepestFloorReached;
             Instance._meta.ChronicleEntries = meta.ChronicleEntries ?? new System.Collections.Generic.List<string>();
@@ -91,6 +92,7 @@ namespace Backend.GameSystems.Prestige
                 return;
 
             _meta.LegacyPoints += legacyGain;
+            _meta.ManaShards += state.ManaShards;
             _meta.PrestigeCount++;
             _meta.DeepestFloorReached = Mathf.Max(_meta.DeepestFloorReached, state.CurrentFloor);
             _meta.ChronicleEntries.Add(BuildChronicleEntry(state, reason, legacyGain, _meta.PrestigeCount));
@@ -140,7 +142,15 @@ namespace Backend.GameSystems.Prestige
 
             builder.Append(" (+");
             builder.Append(legacyGain);
-            builder.Append(" 유산)");
+            builder.Append(" 유산");
+
+            if (state.ManaShards > 0)
+            {
+                builder.Append(", 마나결정 ");
+                builder.Append(state.ManaShards);
+            }
+
+            builder.Append(')');
             return builder.ToString();
         }
 

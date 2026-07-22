@@ -128,6 +128,7 @@ namespace Backend.GameSystems.Save
             return new MetaProgressionState
             {
                 LegacyPoints = source.LegacyPoints,
+                ManaShards = source.ManaShards,
                 PrestigeCount = source.PrestigeCount,
                 DeepestFloorReached = source.DeepestFloorReached,
                 ChronicleEntries = new List<string>(source.ChronicleEntries),

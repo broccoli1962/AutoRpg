@@ -18,7 +18,7 @@ namespace Backend.GameSystems.Exploration
             var equipment = EquipmentService.GetLeaderEquipmentSummary(state.Party);
             return
                 $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
-                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · {LogFrequencySettings.GetDisplayLabel()} · {OfflineSummaryDetailSettings.GetDisplayLabel()} · {DynamicEventAutoPolicySettings.GetDisplayLabel()} · {GoldenEventSettings.GetDisplayLabel()}\n" +
+                $"골드 {state.Gold} · 마나 {state.ManaShards + (meta?.ManaShards ?? 0)} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · {LogFrequencySettings.GetDisplayLabel()} · {OfflineSummaryDetailSettings.GetDisplayLabel()} · {DynamicEventAutoPolicySettings.GetDisplayLabel()} · {GoldenEventSettings.GetDisplayLabel()}\n" +
                 $"장비 {equipment} · Tick {state.CurrentTick}";
         }
     }

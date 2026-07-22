@@ -109,6 +109,8 @@ namespace Backend.GameSystems.Exploration.Simulation
                 GetRecentRepeatCount(EventType.Discovery));
 
             state.Gold += discovery.GoldValue;
+            var manaGain = ZoneDefinitions.GetDiscoveryManaShards(discovery);
+            state.ManaShards += manaGain;
             TrackEvent(EventType.Discovery);
 
             return new ExplorationEvent
@@ -122,6 +124,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 DiscoveryItemId = discovery.ItemId,
                 DiscoveryDisplayName = discovery.DisplayName,
                 GoldDelta = discovery.GoldValue,
+                ManaShardDelta = manaGain,
                 Actors = GetActorIds(state.Party)
             };
         }
@@ -209,6 +212,12 @@ namespace Backend.GameSystems.Exploration.Simulation
         private static void ApplyCombatOutcome(ExplorationState state, CombatResultPayload combat)
         {
             state.Gold += combat.GoldGained;
+
+            foreach (var loot in combat.Loot)
+            {
+                var manaQuantity = ZoneDefinitions.GetManaShardQuantity(loot.ItemId) * loot.Quantity;
+                state.ManaShards += manaQuantity;
+            }
 
             if (combat.Outcome == CombatOutcome.Defeat)
             {
