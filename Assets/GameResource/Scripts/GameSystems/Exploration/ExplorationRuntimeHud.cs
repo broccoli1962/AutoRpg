@@ -378,18 +378,10 @@ namespace Backend.GameSystems.Exploration
 
         private void RefreshStatus(ExplorationState state)
         {
-            if (state == null)
-            {
-                _statusText.text = "탐험 상태 없음";
+            if (_statusText == null)
                 return;
-            }
 
-            var meta = PrestigeManager.GetMeta();
-            var equipment = EquipmentService.GetLeaderEquipmentSummary(state.Party);
-            _statusText.text =
-                $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
-                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · {DynamicEventAutoPolicySettings.GetDisplayLabel()} · {GoldenEventSettings.GetDisplayLabel()}\n" +
-                $"장비 {equipment} · Tick {state.CurrentTick}";
+            _statusText.text = ExplorationHudStatusFormatter.Build(state);
         }
 
         private sealed class HudLogLine

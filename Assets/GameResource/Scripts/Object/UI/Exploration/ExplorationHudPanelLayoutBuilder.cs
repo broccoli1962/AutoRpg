@@ -1,3 +1,4 @@
+using Backend.GameSystems.Exploration;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,21 +21,29 @@ namespace Backend.Object.UI.Exploration
             StretchFull(rootRect);
 
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            var statusText = CreateText(rootRect, "ZoneFloorText", new Vector2(24f, -20f), new Vector2(420f, 28f), 20, font);
-            var goldText = CreateText(rootRect, "GoldText", new Vector2(24f, -52f), new Vector2(220f, 24f), 18, font);
-            var progressText = CreateText(rootRect, "ProgressText", new Vector2(260f, -52f), new Vector2(120f, 24f), 18, font);
-            var progressSlider = CreateProgressSlider(rootRect, new Vector2(24f, -84f), new Vector2(360f, 18f));
+            var statusText = CreateText(rootRect, "ZoneFloorText", new Vector2(24f, -20f), new Vector2(920f, 48f), 18, font);
+            var goldText = CreateText(rootRect, "GoldText", new Vector2(24f, -72f), new Vector2(220f, 22f), 16, font);
+            goldText.gameObject.SetActive(false);
+            var progressText = CreateText(rootRect, "ProgressText", new Vector2(260f, -72f), new Vector2(120f, 22f), 16, font);
+            progressText.gameObject.SetActive(false);
+            var progressSlider = CreateProgressSlider(rootRect, new Vector2(24f, -96f), new Vector2(360f, 16f));
+            progressSlider.gameObject.SetActive(false);
 
-            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(24f, -112f), "일시정지", font);
-            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(140f, -112f), "재개", font);
-            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(256f, -112f), "귀환", font);
+            var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -72f), new Vector2(920f, 18f), 13, font);
+            helpText.text = "L:LLM  A:이벤트  G:황금정지  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
+            var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -92f), new Vector2(420f, 18f), 13, font);
+            filterText.color = new Color(0.8f, 0.8f, 0.85f);
+
+            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(24f, -116f), "일시정지", font);
+            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(140f, -116f), "재개", font);
+            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(256f, -116f), "귀환", font);
 
             var logFeedGo = new GameObject("LogFeedView");
             logFeedGo.transform.SetParent(rootRect, false);
             var logFeedRect = logFeedGo.AddComponent<RectTransform>();
             StretchFull(logFeedRect);
             logFeedRect.offsetMin = new Vector2(24f, 24f);
-            logFeedRect.offsetMax = new Vector2(-24f, -148f);
+            logFeedRect.offsetMax = new Vector2(-24f, -156f);
 
             var logFeedView = logFeedGo.AddComponent<ExplorationLogFeedView>();
             var scrollRect = logFeedGo.AddComponent<ScrollRect>();
@@ -87,6 +96,11 @@ namespace Backend.Object.UI.Exploration
             itemView.ConfigureRuntime(itemText, null);
 
             logFeedView.ConfigureRuntime(scrollRect, contentRect, itemView);
+
+            var chroniclePanel = panel.gameObject.GetComponent<ChronicleRuntimePanel>();
+            if (chroniclePanel == null)
+                chroniclePanel = panel.gameObject.AddComponent<ChronicleRuntimePanel>();
+
             panel.ConfigureRuntime(
                 statusText,
                 goldText,
@@ -95,7 +109,10 @@ namespace Backend.Object.UI.Exploration
                 pauseButton,
                 resumeButton,
                 returnButton,
-                logFeedView);
+                logFeedView,
+                filterText,
+                helpText,
+                chroniclePanel);
 
             return true;
         }

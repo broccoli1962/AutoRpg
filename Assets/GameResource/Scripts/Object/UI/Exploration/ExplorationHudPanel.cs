@@ -1,5 +1,6 @@
 using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Prestige;
 using Backend.Object.UI.Exploration;
 using R3;
 using UnityEngine;
@@ -24,6 +25,11 @@ namespace Backend.Object.UI
 
         [Header("Views")]
         [SerializeField] private ExplorationLogFeedView _logFeedView;
+        [SerializeField] private Text _filterText;
+        [SerializeField] private Text _helpText;
+
+        private ChronicleRuntimePanel _chroniclePanel;
+        private ExplorationHudShortcuts _shortcuts;
 
         protected override void Awake()
         {
@@ -40,7 +46,10 @@ namespace Backend.Object.UI
             CommonButton pauseButton,
             CommonButton resumeButton,
             CommonButton returnButton,
-            ExplorationLogFeedView logFeedView)
+            ExplorationLogFeedView logFeedView,
+            Text filterText,
+            Text helpText,
+            ChronicleRuntimePanel chroniclePanel)
         {
             _zoneFloorText = zoneFloorText;
             _goldText = goldText;
@@ -50,6 +59,17 @@ namespace Backend.Object.UI
             _resumeButton = resumeButton;
             _returnButton = returnButton;
             _logFeedView = logFeedView;
+            _filterText = filterText;
+            _helpText = helpText;
+            _chroniclePanel = chroniclePanel;
+        }
+
+        internal void BindShortcuts(System.Action refreshStatus)
+        {
+            if (_shortcuts == null)
+                _shortcuts = gameObject.AddComponent<ExplorationHudShortcuts>();
+
+            _shortcuts.Initialize(_logFeedView, _chroniclePanel, _filterText, refreshStatus);
         }
 
         public Text ZoneFloorText => _zoneFloorText;
@@ -71,6 +91,8 @@ namespace Backend.Object.UI
             _disposables?.Dispose();
             _disposables = new CompositeDisposable();
 
+            PrestigeManager.EnsureInitialized();
+            View.BindShortcuts(() => RefreshState(ExplorationManager.GetCurrentState()));
             View.LogFeedView?.Show();
             BindControls();
             RefreshState(ExplorationManager.GetCurrentState());
@@ -121,19 +143,7 @@ namespace Backend.Object.UI
                 return;
 
             if (View.ZoneFloorText != null)
-            {
-                View.ZoneFloorText.text =
-                    $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} · {state.CurrentFloor}층";
-            }
-
-            if (View.GoldText != null)
-                View.GoldText.text = $"골드 {state.Gold}";
-
-            if (View.ProgressSlider != null)
-                View.ProgressSlider.value = state.FloorProgress / 100f;
-
-            if (View.ProgressText != null)
-                View.ProgressText.text = $"{state.FloorProgress:0.#}%";
+                View.ZoneFloorText.text = ExplorationHudStatusFormatter.Build(state);
 
             RefreshControls(state);
         }
