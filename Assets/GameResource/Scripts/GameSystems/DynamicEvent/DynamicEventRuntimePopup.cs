@@ -108,6 +108,8 @@ namespace Backend.GameSystems.DynamicEvent
             if (instance?.LlmNarration == null)
                 return;
 
+            ApplyPresentation(instance.RequiresManualChoice);
+
             _titleText.text = instance.RequiresManualChoice
                 ? $"<color=#ffd966>[★ 황금 이벤트]</color> {instance.TemplateId} · {instance.Floor}층"
                 : $"[이벤트] {instance.TemplateId} · {instance.Floor}층";
@@ -139,6 +141,39 @@ namespace Backend.GameSystems.DynamicEvent
 
             _choicesText.text = builder.ToString();
             _panelRoot.SetActive(true);
+        }
+
+        private void ApplyPresentation(bool isSpecial)
+        {
+            if (_panelRoot == null)
+                return;
+
+            var box = _panelRoot.transform.Find("Box");
+            if (box == null)
+                return;
+
+            var boxRect = box.GetComponent<RectTransform>();
+            var boxImage = box.GetComponent<Image>();
+            if (boxRect == null || boxImage == null)
+                return;
+
+            if (isSpecial)
+            {
+                boxRect.anchorMin = Vector2.zero;
+                boxRect.anchorMax = Vector2.one;
+                boxRect.offsetMin = new Vector2(48f, 48f);
+                boxRect.offsetMax = new Vector2(-48f, -48f);
+                boxImage.color = new Color(0.08f, 0.06f, 0.12f, 0.98f);
+                _panelRoot.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.82f);
+                return;
+            }
+
+            boxRect.anchorMin = new Vector2(0.5f, 0.5f);
+            boxRect.anchorMax = new Vector2(0.5f, 0.5f);
+            boxRect.anchoredPosition = Vector2.zero;
+            boxRect.sizeDelta = new Vector2(720f, 420f);
+            boxImage.color = new Color(0.12f, 0.12f, 0.16f, 0.95f);
+            _panelRoot.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.65f);
         }
 
         private void Hide()

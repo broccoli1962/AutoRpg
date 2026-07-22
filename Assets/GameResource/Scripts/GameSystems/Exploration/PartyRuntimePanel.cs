@@ -2,6 +2,7 @@ using System.Text;
 using Backend.GameSystems.Character;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Equipment;
+using Backend.Object.UI;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,19 +46,27 @@ namespace Backend.GameSystems.Exploration
             if (canvas == null)
                 return;
 
+            var container = FindHudContainer("Body/LeftPanel");
             var root = new GameObject("PartyPanel");
-            root.transform.SetParent(canvas.transform, false);
+            root.transform.SetParent(container != null ? container : canvas.transform, false);
 
             var rect = root.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = new Vector2(
-                ExplorationHudLayoutMetrics.HorizontalPadding,
-                -ExplorationHudLayoutMetrics.TopBarHeight);
-            rect.sizeDelta = new Vector2(
-                PanelWidth,
-                Screen.height - ExplorationHudLayoutMetrics.TopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
+            if (container != null)
+            {
+                StretchFull(rect);
+            }
+            else
+            {
+                rect.anchorMin = new Vector2(0f, 1f);
+                rect.anchorMax = new Vector2(0f, 1f);
+                rect.pivot = new Vector2(0f, 1f);
+                rect.anchoredPosition = new Vector2(
+                    ExplorationHudLayoutMetrics.HorizontalPadding,
+                    -ExplorationHudLayoutMetrics.TopBarHeight);
+                rect.sizeDelta = new Vector2(
+                    PanelWidth,
+                    Screen.height - ExplorationHudLayoutMetrics.TopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
+            }
 
             var image = root.AddComponent<Image>();
             image.color = new Color(0.08f, 0.08f, 0.12f, 0.88f);
@@ -68,6 +77,20 @@ namespace Backend.GameSystems.Exploration
             _contentText = CreateText(root.transform, "PartyContent", new Vector2(12f, -40f), 14, string.Empty);
             _contentText.rectTransform.sizeDelta = new Vector2(PanelWidth - 24f, Screen.height - 200f);
             _contentText.lineSpacing = 1.1f;
+        }
+
+        private Transform FindHudContainer(string relativePath)
+        {
+            var hudPanel = GetComponent<ExplorationHudPanel>() ?? GetComponentInParent<ExplorationHudPanel>();
+            return hudPanel == null ? null : hudPanel.transform.Find(relativePath);
+        }
+
+        private static void StretchFull(RectTransform rect)
+        {
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
         }
 
         private void Refresh(ExplorationState state)
