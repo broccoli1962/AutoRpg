@@ -11,17 +11,23 @@ namespace Backend.Object.Management.Scene
     /// </summary>
     public class GameSceneContext : SceneContext
     {
+        public const string ExplorationHudAddressableKey = "UI/ExplorationHudPanel.prefab";
+
         private ExplorationHudPanel _hudPanel;
+        private ExplorationRuntimeHud _runtimeHudFallback;
 
         protected override async UniTask OnEnterAsync()
         {
             ExplorationManager.ProcessOfflineElapsed();
             ExplorationManager.StartExploration();
 
-            _hudPanel = await UIManager.OpenAsync<ExplorationHudPanel>();
+            _hudPanel = await UIManager.OpenAsync<ExplorationHudPanel>(ExplorationHudAddressableKey);
             if (_hudPanel == null)
             {
-                Debug.LogWarning("[GameSceneContext] ExplorationHudPanel을 열지 못했습니다. Addressable 등록이 필요합니다.");
+                Debug.LogWarning(
+                    "[GameSceneContext] Addressable ExplorationHudPanel 로드 실패. RuntimeHud fallback을 사용합니다.");
+                var fallbackGo = new GameObject("ExplorationRuntimeHudFallback");
+                _runtimeHudFallback = fallbackGo.AddComponent<ExplorationRuntimeHud>();
             }
         }
 
@@ -31,6 +37,12 @@ namespace Backend.Object.Management.Scene
             {
                 UIManager.CloseDynamic(_hudPanel);
                 _hudPanel = null;
+            }
+
+            if (_runtimeHudFallback != null)
+            {
+                Destroy(_runtimeHudFallback.gameObject);
+                _runtimeHudFallback = null;
             }
         }
     }
