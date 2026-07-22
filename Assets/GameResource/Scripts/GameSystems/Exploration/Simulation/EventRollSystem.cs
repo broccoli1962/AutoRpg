@@ -1,5 +1,6 @@
 using Backend.GameSystems.Equipment;
 using System.Collections.Generic;
+using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 
 namespace Backend.GameSystems.Exploration.Simulation
@@ -111,6 +112,7 @@ namespace Backend.GameSystems.Exploration.Simulation
             state.Gold += discovery.GoldValue;
             var manaGain = ZoneDefinitions.GetDiscoveryManaShards(discovery);
             state.ManaShards += manaGain;
+            var relicGain = MetaCurrencyGrants.GrantDiscovery(state, discovery);
             TrackEvent(EventType.Discovery);
 
             return new ExplorationEvent
@@ -125,6 +127,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 DiscoveryDisplayName = discovery.DisplayName,
                 GoldDelta = discovery.GoldValue,
                 ManaShardDelta = manaGain,
+                RelicFragmentDelta = relicGain,
                 Actors = GetActorIds(state.Party)
             };
         }

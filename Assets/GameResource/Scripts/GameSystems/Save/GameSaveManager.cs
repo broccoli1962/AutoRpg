@@ -129,6 +129,8 @@ namespace Backend.GameSystems.Save
             {
                 LegacyPoints = source.LegacyPoints,
                 ManaShards = source.ManaShards,
+                Reputation = source.Reputation,
+                RelicFragments = source.RelicFragments,
                 ScriptoriumLevel = source.ScriptoriumLevel,
                 PrestigeCount = source.PrestigeCount,
                 DeepestFloorReached = source.DeepestFloorReached,

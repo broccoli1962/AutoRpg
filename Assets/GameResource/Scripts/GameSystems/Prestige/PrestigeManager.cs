@@ -52,6 +52,8 @@ namespace Backend.GameSystems.Prestige
 
             Instance._meta.LegacyPoints = meta.LegacyPoints;
             Instance._meta.ManaShards = meta.ManaShards;
+            Instance._meta.Reputation = meta.Reputation;
+            Instance._meta.RelicFragments = meta.RelicFragments;
             Instance._meta.ScriptoriumLevel = meta.ScriptoriumLevel;
             Instance._meta.PrestigeCount = meta.PrestigeCount;
             Instance._meta.DeepestFloorReached = meta.DeepestFloorReached;
@@ -95,6 +97,8 @@ namespace Backend.GameSystems.Prestige
 
             _meta.LegacyPoints += legacyGain;
             _meta.ManaShards += state.ManaShards;
+            _meta.Reputation += state.Reputation;
+            _meta.RelicFragments += state.RelicFragments;
             _meta.PrestigeCount++;
             _meta.DeepestFloorReached = Mathf.Max(_meta.DeepestFloorReached, state.CurrentFloor);
             _meta.ChronicleEntries.Add(BuildChronicleEntry(state, reason, legacyGain, _meta.PrestigeCount));
@@ -150,6 +154,18 @@ namespace Backend.GameSystems.Prestige
             {
                 builder.Append(", 마나결정 ");
                 builder.Append(state.ManaShards);
+            }
+
+            if (state.Reputation > 0)
+            {
+                builder.Append(", 명성 ");
+                builder.Append(state.Reputation);
+            }
+
+            if (state.RelicFragments > 0)
+            {
+                builder.Append(", 유물조각 ");
+                builder.Append(state.RelicFragments);
             }
 
             builder.Append(')');

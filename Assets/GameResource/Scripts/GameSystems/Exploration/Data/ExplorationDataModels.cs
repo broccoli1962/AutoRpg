@@ -77,6 +77,8 @@ namespace Backend.GameSystems.Exploration.Data
         public string DiscoveryDisplayName;
         public int GoldDelta;
         public int ManaShardDelta;
+        public int RelicFragmentDelta;
+        public int ReputationDelta;
         public string MoveDescriptionId;
     }
 
@@ -92,6 +94,8 @@ namespace Backend.GameSystems.Exploration.Data
         public PartyState Party = new();
         public int Gold;
         public int ManaShards;
+        public int Reputation;
+        public int RelicFragments;
         public bool IsExploring;
         public bool IsPaused;
         public DateTime LastOnlineUtc = DateTime.UtcNow;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 
 namespace Backend.GameSystems.Exploration.Simulation
@@ -32,8 +33,9 @@ namespace Backend.GameSystems.Exploration.Simulation
 
                 if (state.CurrentFloor > state.MaxFloor)
                 {
-                    if (ZoneDefinitions.TryAdvanceZone(state))
+                    if (ZoneDefinitions.TryAdvanceZone(state, out var completedZoneId))
                     {
+                        MetaCurrencyGrants.GrantZoneClear(state, completedZoneId);
                         result.Events.Add(CreateZoneTransitionEvent(state));
                     }
                     else
