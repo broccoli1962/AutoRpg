@@ -53,7 +53,8 @@ namespace Backend.GameSystems.Exploration
                         member.EquippedWeaponId = EquipmentDefinitions.RustyBladeId;
                 }
 
-                if (member.Role == CharacterRole.Warrior && string.IsNullOrEmpty(member.EquippedArmorId))
+                if ((member.Role == CharacterRole.Warrior || member.Role == CharacterRole.Cleric) &&
+                    string.IsNullOrEmpty(member.EquippedArmorId))
                     member.EquippedArmorId = EquipmentDefinitions.MossLeatherId;
             }
         }
