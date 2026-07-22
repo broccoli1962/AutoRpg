@@ -32,9 +32,16 @@ namespace Backend.GameSystems.Exploration.Simulation
 
                 if (state.CurrentFloor > state.MaxFloor)
                 {
-                    state.IsExploring = false;
-                    result.ExplorationEnded = true;
-                    result.EndReason = ExplorationEndReason.ZoneComplete;
+                    if (ZoneDefinitions.TryAdvanceZone(state))
+                    {
+                        result.Events.Add(CreateZoneTransitionEvent(state));
+                    }
+                    else
+                    {
+                        state.IsExploring = false;
+                        result.ExplorationEnded = true;
+                        result.EndReason = ExplorationEndReason.ZoneComplete;
+                    }
                 }
             }
 
@@ -128,6 +135,20 @@ namespace Backend.GameSystems.Exploration.Simulation
                 Salience = SalienceGrade.Milestone,
                 ZoneId = state.ZoneId,
                 Floor = state.CurrentFloor - 1,
+                TimestampTick = state.CurrentTick,
+                Actors = GetActorIds(state.Party)
+            };
+        }
+
+        private static ExplorationEvent CreateZoneTransitionEvent(ExplorationState state)
+        {
+            return new ExplorationEvent
+            {
+                EventId = $"evt_zone_enter_{state.ZoneId}",
+                EventType = EventType.ZoneTransition,
+                Salience = SalienceGrade.Milestone,
+                ZoneId = state.ZoneId,
+                Floor = state.CurrentFloor,
                 TimestampTick = state.CurrentTick,
                 Actors = GetActorIds(state.Party)
             };

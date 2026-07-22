@@ -49,6 +49,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 EventType.Injury => 22,
                 EventType.Death => 42,
                 EventType.FloorClear => 35,
+                EventType.ZoneTransition => 38,
                 EventType.OfflineSummary => 30,
                 _ => 5
             };

@@ -16,7 +16,12 @@ namespace Backend.GameSystems.Exploration.Narration
             { "glowing_moss", "벽면의 발광 이끼가 {leader}의 발걸음을 희미하게 비추었다." },
             { "narrow_tunnel", "{leader}는 좁아진 터널 속에서 숨을 고르며 전진했다." },
             { "water_drip", "천장에서 떨어지는 물방울 소리가 동굴을 울렸다. {leader}는 방향을 확인했다." },
-            { "fungal_scent", "곰팡이 냄새가 짙어지자 {leader}는 마스크를 고쳐 썼다." }
+            { "fungal_scent", "곰팡이 냄새가 짙어지자 {leader}는 마스크를 고쳐 썼다." },
+            { "spore_mist", "옅은 포자 안개 속에서 {leader}는 숨을 얕게 쉬며 길을 찾았다." },
+            { "twisted_mycelium", "뒤틀린 균사 벽이 통로를 가로막자 {leader}는 조심스럽게 길을 뚫었다." },
+            { "losing_direction", "모든 갈림길이 비슷해 보여 {leader}는 표식을 새겨 방향을 잃지 않으려 했다." },
+            { "pulsing_fungus", "맥박처럼 부풀었다 가라앉는 균사 덩어리가 발밑을 스쳤다. {leader}는 속도를 늦췄다." },
+            { "whispering_spores", "포자 뭉치에서 속삭이는 소리가 들려 {leader}는 귀를 틀어막고 전진했다." }
         };
 
         public LogEntry Narrate(ExplorationEvent explorationEvent, PartyState party)
@@ -31,6 +36,8 @@ namespace Backend.GameSystems.Exploration.Narration
                 EventType.Rest => $"{leaderName} 일행은 잠시 자리를 잡고 숨을 고르며 상처를 돌보았다.",
                 EventType.Trap => $"{leaderName} 일행은 미끄러운 바닥에 발을 헛디뎌 경미한 부상을 입었다.",
                 EventType.FloorClear => $"{ZoneDefinitions.GetZoneDisplayName(explorationEvent.ZoneId)} {explorationEvent.Floor}층을 돌파했다.",
+                EventType.ZoneTransition =>
+                    $"{leaderName} 일행은 더 깊은 길을 따라 {ZoneDefinitions.GetZoneDisplayName(explorationEvent.ZoneId)}(으)로 발을 옮겼다. 공기의 질감이 달라졌다.",
                 EventType.OfflineSummary => "오프라인 탐험 요약",
                 _ => $"{leaderName} 일행에게 예상치 못한 일이 벌어졌다."
             };
@@ -131,7 +138,7 @@ namespace Backend.GameSystems.Exploration.Narration
                 EventType.CombatResult => LogCategory.Combat,
                 EventType.Discovery => LogCategory.Discovery,
                 EventType.Rest or EventType.Injury or EventType.Trap => LogCategory.Status,
-                EventType.FloorClear or EventType.OfflineSummary or EventType.Death => LogCategory.Milestone,
+                EventType.FloorClear or EventType.ZoneTransition or EventType.OfflineSummary or EventType.Death => LogCategory.Milestone,
                 _ => LogCategory.Move
             };
         }

@@ -36,6 +36,7 @@ namespace Backend.GameSystems.Exploration.Data
         Injury,
         Death,
         FloorClear,
+        ZoneTransition,
         OfflineSummary
     }
 
