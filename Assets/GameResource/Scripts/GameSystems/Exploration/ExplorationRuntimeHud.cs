@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Prestige;
-using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.LLM;
@@ -97,6 +96,21 @@ namespace Backend.GameSystems.Exploration
                 RefreshStatus(ExplorationManager.GetCurrentState());
             }
 
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                GoldenEventSettings.ToggleAutoPause();
+                RefreshStatus(ExplorationManager.GetCurrentState());
+            }
+
+            if (DynamicEventManager.IsAwaitingManualChoice)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+                    DynamicEventManager.TrySubmitManualChoice(0);
+
+                if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+                    DynamicEventManager.TrySubmitManualChoice(1);
+            }
+
             if (Input.GetKeyDown(KeyCode.C))
                 _chroniclePanel?.Toggle();
 
@@ -146,7 +160,7 @@ namespace Backend.GameSystems.Exploration
 
             _statusText = CreateText(canvasGo.transform, "StatusText", new Vector2(20f, -20f), 22, TextAnchor.UpperLeft);
             _helpText = CreateText(canvasGo.transform, "HelpText", new Vector2(20f, -88f), 14, TextAnchor.UpperLeft);
-            _helpText.text = "L:LLM  A:이벤트정책  C:연대기  R:귀환  F:필터  B:북마크";
+            _helpText.text = "L:LLM  A:이벤트  G:황금정지  C:연대기  R:귀환  F:필터  B:북마크";
             _filterText = CreateText(canvasGo.transform, "FilterText", new Vector2(20f, -108f), 14, TextAnchor.UpperLeft);
             _logText = CreateText(canvasGo.transform, "LogText", new Vector2(20f, -132f), 16, TextAnchor.UpperLeft);
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -286,7 +300,7 @@ namespace Backend.GameSystems.Exploration
             var equipment = EquipmentService.GetLeaderEquipmentSummary(state.Party);
             _statusText.text =
                 $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · 진행 {state.FloorProgress:0.#}% · " +
-                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · {DynamicEventAutoPolicySettings.GetDisplayLabel()}\n" +
+                $"골드 {state.Gold} · 유산 {meta?.LegacyPoints ?? 0} · {LlmQualitySettings.GetDisplayLabel()} · {DynamicEventAutoPolicySettings.GetDisplayLabel()} · {GoldenEventSettings.GetDisplayLabel()}\n" +
                 $"장비 {equipment} · Tick {state.CurrentTick}";
         }
 

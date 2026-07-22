@@ -42,6 +42,8 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                     $"{floor}층 바닥에 반쯤 묻힌 석판 조각이 보인다. 고대 문자가 희미하게 새겨져 있다.",
                 DynamicEventDefinitions.HazardQuicksandId =>
                     $"{floor}층 바닥이 갑자기 푹신해지며 발이 가라앉기 시작한다.",
+                DynamicEventDefinitions.GoldenChamberId =>
+                    $"{floor}층 깊숙이 황금빛 섬광이 새어 나오는 봉인된 전실이 나타난다. 공기가 무겁고, 무언가가 깨어나는 기운이 느껴진다.",
                 _ => $"{leaderName}(은)는 {floor}층에서 예상치 못한 상황에 맞닥뜨렸다."
             };
 
@@ -151,6 +153,12 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                             ? "발을 빼내는 과정에서 허리를 삐었다."
                             : "재빨리 빠져나와 안전한 바닥에 섰다."
                         : "천천히 몸을 기울여 가라앉음을 멈췄다.",
+                DynamicEventDefinitions.GoldenChamberId =>
+                    choiceId == "enter_chamber"
+                        ? outcome == DynamicEventOutcomeEffect.GoldBonus
+                            ? "전실 깊숙이 들어가 숨겨진 보물 더미를 발견했다."
+                            : "봉인을 건드리자 고대 수호자가 깨어났다."
+                        : "직감을 믿고 전실 앞에서 물러섰다.",
                 _ => $"선택({choiceId})의 결과: {outcome}"
             };
         }
@@ -204,6 +212,8 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 (DynamicEventDefinitions.ArtifactLoreFragmentId, "leave") => "지나간다",
                 (DynamicEventDefinitions.HazardQuicksandId, "pull_free") => "발을 빼낸다",
                 (DynamicEventDefinitions.HazardQuicksandId, "wait") => "천천히 기다린다",
+                (DynamicEventDefinitions.GoldenChamberId, "enter_chamber") => "전실로 들어간다",
+                (DynamicEventDefinitions.GoldenChamberId, "retreat") => "물러선다",
                 _ => choiceId
             };
         }

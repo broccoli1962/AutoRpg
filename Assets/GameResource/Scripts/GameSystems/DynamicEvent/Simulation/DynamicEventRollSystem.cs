@@ -8,9 +8,27 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
     {
         public static DynamicEventTemplate TryRollFloorEnter(string zoneId, int floor, DeterministicRandom random)
         {
+            var golden = TryRollRareGolden(zoneId, floor, random);
+            if (golden != null)
+                return golden;
+
             foreach (var template in DynamicEventDefinitions.All)
             {
                 if (!IsFloorEnterEligible(template, zoneId, floor))
+                    continue;
+
+                if (random.RollChance(template.Trigger.Probability))
+                    return template;
+            }
+
+            return null;
+        }
+
+        private static DynamicEventTemplate TryRollRareGolden(string zoneId, int floor, DeterministicRandom random)
+        {
+            foreach (var template in DynamicEventDefinitions.All)
+            {
+                if (!IsRareGoldenEligible(template, zoneId, floor))
                     continue;
 
                 if (random.RollChance(template.Trigger.Probability))
@@ -28,8 +46,10 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
             var eligible = new List<DynamicEventTemplate>();
             foreach (var template in DynamicEventDefinitions.All)
             {
-                if (IsFloorEnterEligible(template, zoneId, floor))
-                    eligible.Add(template);
+                if (!IsGuaranteedEligible(template, zoneId, floor))
+                    continue;
+
+                eligible.Add(template);
             }
 
             if (eligible.Count == 0)
@@ -47,6 +67,28 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
                 return false;
 
             return floor >= template.Trigger.MinFloor && floor <= template.Trigger.MaxFloor;
+        }
+
+        private static bool IsRareGoldenEligible(DynamicEventTemplate template, string zoneId, int floor)
+        {
+            if (template.Trigger.Type != DynamicEventTriggerType.RareGolden)
+                return false;
+
+            if (template.Trigger.ZoneIds.Count > 0 && !template.Trigger.ZoneIds.Contains(zoneId))
+                return false;
+
+            return floor >= template.Trigger.MinFloor && floor <= template.Trigger.MaxFloor;
+        }
+
+        private static bool IsGuaranteedEligible(DynamicEventTemplate template, string zoneId, int floor)
+        {
+            if (template.Intensity == DynamicEventIntensity.Golden ||
+                template.Trigger.Type == DynamicEventTriggerType.RareGolden)
+            {
+                return false;
+            }
+
+            return IsFloorEnterEligible(template, zoneId, floor);
         }
     }
 }

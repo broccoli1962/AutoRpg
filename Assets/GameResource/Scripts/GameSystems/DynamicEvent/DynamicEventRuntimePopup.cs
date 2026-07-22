@@ -108,14 +108,29 @@ namespace Backend.GameSystems.DynamicEvent
             if (instance?.LlmNarration == null)
                 return;
 
-            _titleText.text = $"[이벤트] {instance.TemplateId} · {instance.Floor}층";
+            _titleText.text = instance.RequiresManualChoice
+                ? $"<color=#ffd966>[★ 황금 이벤트]</color> {instance.TemplateId} · {instance.Floor}층"
+                : $"[이벤트] {instance.TemplateId} · {instance.Floor}층";
             _narrationText.text = instance.LlmNarration.Narration;
 
             var builder = new System.Text.StringBuilder();
-            builder.AppendLine("<b>선택지 (자동 진행)</b>");
+            builder.AppendLine(instance.RequiresManualChoice
+                ? "<b>선택지 (1/2 키로 직접 선택)</b>"
+                : "<b>선택지 (자동 진행)</b>");
+            var index = 1;
             foreach (var choice in instance.LlmNarration.Choices)
             {
-                builder.Append("• ");
+                if (instance.RequiresManualChoice)
+                {
+                    builder.Append(index);
+                    builder.Append(". ");
+                    index++;
+                }
+                else
+                {
+                    builder.Append("• ");
+                }
+
                 builder.Append(choice.Text);
                 builder.Append(" (");
                 builder.Append(choice.Id);

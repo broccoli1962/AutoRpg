@@ -20,6 +20,7 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public const string EncounterFairyId = "encounter_fairy_01";
         public const string ArtifactLoreFragmentId = "artifact_lore_fragment_01";
         public const string HazardQuicksandId = "hazard_quicksand_01";
+        public const string GoldenChamberId = "golden_chamber_01";
 
         private static readonly DynamicEventTemplate Fork002 = CreateFork002();
         private static readonly DynamicEventTemplate EncounterMerchant = CreateEncounterMerchant();
@@ -36,6 +37,7 @@ namespace Backend.GameSystems.DynamicEvent.Data
         private static readonly DynamicEventTemplate EncounterFairy = CreateEncounterFairy();
         private static readonly DynamicEventTemplate ArtifactLoreFragment = CreateArtifactLoreFragment();
         private static readonly DynamicEventTemplate HazardQuicksand = CreateHazardQuicksand();
+        private static readonly DynamicEventTemplate GoldenChamber = CreateGoldenChamber();
 
         public static IReadOnlyList<DynamicEventTemplate> All { get; } = new List<DynamicEventTemplate>
         {
@@ -53,7 +55,8 @@ namespace Backend.GameSystems.DynamicEvent.Data
             HazardCollapse,
             EncounterFairy,
             ArtifactLoreFragment,
-            HazardQuicksand
+            HazardQuicksand,
+            GoldenChamber
         };
 
         public static DynamicEventTemplate Get(string eventId)
@@ -294,10 +297,35 @@ namespace Backend.GameSystems.DynamicEvent.Data
             }
         };
 
+        private static DynamicEventTemplate CreateGoldenChamber() => new()
+        {
+            EventId = GoldenChamberId,
+            Category = DynamicEventCategory.Artifact,
+            Intensity = DynamicEventIntensity.Golden,
+            Trigger = CreateRareGoldenTrigger(0.04f, 8, 15),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("enter_chamber",
+                    (DynamicEventOutcomeEffect.GoldBonus, 0.5f),
+                    (DynamicEventOutcomeEffect.RareEncounter, 0.5f)),
+                Choice("retreat", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
         private static DynamicEventTrigger CreateFloorEnterTrigger(float probability, int minFloor, int maxFloor) =>
             new()
             {
                 Type = DynamicEventTriggerType.FloorEnter,
+                ZoneIds = new List<string> { ZoneDefinitions.MossyHollowId },
+                Probability = probability,
+                MinFloor = minFloor,
+                MaxFloor = maxFloor
+            };
+
+        private static DynamicEventTrigger CreateRareGoldenTrigger(float probability, int minFloor, int maxFloor) =>
+            new()
+            {
+                Type = DynamicEventTriggerType.RareGolden,
                 ZoneIds = new List<string> { ZoneDefinitions.MossyHollowId },
                 Probability = probability,
                 MinFloor = minFloor,
