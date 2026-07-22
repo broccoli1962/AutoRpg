@@ -102,6 +102,17 @@ namespace Backend.GameSystems.Exploration
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
+
+            if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9))
+            {
+                if (InnManager.TryUpgrade(out var message))
+                    Debug.Log($"[ExplorationSettings] {message}");
+                else
+                    Debug.Log($"[ExplorationSettings] 여관 업그레이드 불가: {message}");
+
+                RefreshContent();
+                _onSettingsChanged?.Invoke();
+            }
         }
 
         public void Toggle()
@@ -134,7 +145,7 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(600f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:LLM  2:이벤트  3:황금  4:로그  5:오프라인  6:서고  7:훈련소  8:대장간  (O:닫기)");
+                "1:LLM  2:이벤트  3:황금  4:로그  5:오프라인  6:서고  7:훈련소  8:대장간  9:여관  (O:닫기)");
             hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
@@ -194,7 +205,8 @@ namespace Backend.GameSystems.Exploration
                 $"<b>5. 오프라인 요약 상세도</b>\n{OfflineSummaryDetailSettings.GetDisplayLabel()}\n\n" +
                 $"<b>6. 필사가의 서고</b>\n{ScriptoriumManager.GetDisplayLabel()}\n{ScriptoriumManager.GetBonusSummary()}\n\n" +
                 $"<b>7. 훈련소</b>\n{TrainingGroundManager.GetDisplayLabel()}\n{TrainingGroundManager.GetBonusSummary()}\n\n" +
-                $"<b>8. 대장간</b>\n{BlacksmithManager.GetDisplayLabel()}\n{BlacksmithManager.GetBonusSummary()}";
+                $"<b>8. 대장간</b>\n{BlacksmithManager.GetDisplayLabel()}\n{BlacksmithManager.GetBonusSummary()}\n\n" +
+                $"<b>9. 여관</b>\n{InnManager.GetDisplayLabel()}\n{InnManager.GetBonusSummary()}";
         }
 
         private static string GetSalienceLabel(SalienceGrade grade)

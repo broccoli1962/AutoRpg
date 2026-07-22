@@ -134,15 +134,7 @@ namespace Backend.GameSystems.Exploration.Simulation
 
         private ExplorationEvent CreateRestEvent(ExplorationState state, float partyHpRatio)
         {
-            foreach (var member in state.Party.Members)
-            {
-                var heal = System.Math.Max(1, member.MaxHp / 8);
-                member.CurrentHp = System.Math.Min(member.MaxHp, member.CurrentHp + heal);
-
-                if (member.Injury == InjurySeverity.Light && member.CurrentHp > member.MaxHp / 2)
-                    member.Injury = InjurySeverity.None;
-            }
-
+            InnManager.ApplyRest(state.Party);
             var salience = SalienceCalculator.Calculate(
                 EventType.Rest,
                 null,
