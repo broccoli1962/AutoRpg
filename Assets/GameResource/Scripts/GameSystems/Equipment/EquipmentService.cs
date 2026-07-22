@@ -136,7 +136,8 @@ namespace Backend.GameSystems.Equipment
                     break;
                 }
 
-                if (slot == EquipmentSlot.Armor && member.Role == CharacterRole.Warrior)
+                if (slot == EquipmentSlot.Armor &&
+                    (member.Role == CharacterRole.Warrior || member.Role == CharacterRole.Cleric))
                 {
                     best = member;
                     break;

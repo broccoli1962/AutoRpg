@@ -483,7 +483,8 @@ namespace Backend.GameSystems.Exploration.Data
                     CreateCharacter("char_lena", "레나", CharacterRole.Warrior, PersonalityTag.Cautious, 14, 10, 8, 12, 6),
                     CreateCharacter("char_marco", "마르코", CharacterRole.Rogue, PersonalityTag.Loyal, 10, 14, 8, 10, 8),
                     CreateCharacter("char_kyle", "카일", CharacterRole.Mage, PersonalityTag.Greedy, 8, 10, 14, 9, 10),
-                    CreateCharacter("char_sora", "소라", CharacterRole.Bard, PersonalityTag.Cheerful, 9, 11, 12, 8, 12)
+                    CreateCharacter("char_sora", "소라", CharacterRole.Bard, PersonalityTag.Cheerful, 9, 11, 12, 8, 12),
+                    CreateCharacter("char_elena", "엘레나", CharacterRole.Cleric, PersonalityTag.Loyal, 10, 9, 13, 11, 7)
                 }
             };
         }

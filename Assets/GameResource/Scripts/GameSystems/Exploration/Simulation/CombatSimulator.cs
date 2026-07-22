@@ -1,5 +1,6 @@
 using Backend.GameSystems.Character;
 using Backend.GameSystems.Equipment;
+using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 
 namespace Backend.GameSystems.Exploration.Simulation
@@ -15,6 +16,9 @@ namespace Backend.GameSystems.Exploration.Simulation
             string zoneId,
             int floor = 0)
         {
+            var retreatThreshold = ExplorationSurvivalBonus.GetRetreatHpThreshold(party, RetreatHpThreshold);
+            var incomingMultiplier = ExplorationSurvivalBonus.GetIncomingDamageMultiplier(party);
+            var injuryChance = ExplorationSurvivalBonus.GetInjuryRollChance(party);
             var enemyHp = monster.Hp;
             var totalDamageDealt = 0;
             var totalDamageTaken = 0;
@@ -58,7 +62,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 if (livingMembers == 0)
                     break;
 
-                if (partyMaxHpSum > 0 && partyHpSum / (float)partyMaxHpSum <= RetreatHpThreshold)
+                if (partyMaxHpSum > 0 && partyHpSum / (float)partyMaxHpSum <= retreatThreshold)
                 {
                     return BuildResult(
                         partyIds,
@@ -80,11 +84,11 @@ namespace Backend.GameSystems.Exploration.Simulation
                 if (target == null)
                     break;
 
-                var incoming = (int)(CalculateIncomingDamage(monster, target, random) * riskMultiplier);
+                var incoming = (int)(CalculateIncomingDamage(monster, target, random) * riskMultiplier * incomingMultiplier);
                 target.CurrentHp = System.Math.Max(0, target.CurrentHp - incoming);
                 totalDamageTaken += incoming;
 
-                if (incoming > 0 && target.CurrentHp > 0 && random.RollChance(0.12f))
+                if (incoming > 0 && target.CurrentHp > 0 && random.RollChance(injuryChance))
                 {
                     target.Injury = InjurySeverity.Light;
                     injuries.Add(new CombatInjuryEntry
@@ -189,6 +193,8 @@ namespace Backend.GameSystems.Exploration.Simulation
                 CharacterRole.Bard => EquipmentService.GetEffectiveInt(attacker) * 1.0f +
                                       EquipmentService.GetEffectiveAgi(attacker) * 0.6f +
                                       attacker.Luk * 0.2f,
+                CharacterRole.Cleric => EquipmentService.GetEffectiveInt(attacker) * 0.9f +
+                                        EquipmentService.GetEffectiveVit(attacker) * 0.7f,
                 _ => EquipmentService.GetEffectiveStr(attacker)
             };
 
@@ -209,6 +215,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 CharacterRole.Rogue => EquipmentService.GetEffectiveAgi(target) * 0.4f + EquipmentService.GetEffectiveVit(target) * 0.3f,
                 CharacterRole.Mage => EquipmentService.GetEffectiveInt(target) * 0.2f + EquipmentService.GetEffectiveVit(target) * 0.2f,
                 CharacterRole.Bard => EquipmentService.GetEffectiveAgi(target) * 0.35f + EquipmentService.GetEffectiveVit(target) * 0.25f,
+                CharacterRole.Cleric => EquipmentService.GetEffectiveVit(target) * 0.65f + EquipmentService.GetEffectiveInt(target) * 0.25f,
                 _ => EquipmentService.GetEffectiveVit(target) * 0.3f
             };
 
