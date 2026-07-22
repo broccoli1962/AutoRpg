@@ -297,6 +297,7 @@ namespace Backend.GameSystems.Character
             var memoryId = zoneId switch
             {
                 ZoneDefinitions.FungalMazeId => "core_enter_fungal_maze",
+                ZoneDefinitions.CrystalCavernId => "core_enter_crystal_cavern",
                 _ => null
             };
 

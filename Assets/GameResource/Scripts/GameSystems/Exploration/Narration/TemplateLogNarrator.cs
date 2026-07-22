@@ -21,7 +21,12 @@ namespace Backend.GameSystems.Exploration.Narration
             { "twisted_mycelium", "뒤틀린 균사 벽이 통로를 가로막자 {leader}는 조심스럽게 길을 뚫었다." },
             { "losing_direction", "모든 갈림길이 비슷해 보여 {leader}는 표식을 새겨 방향을 잃지 않으려 했다." },
             { "pulsing_fungus", "맥박처럼 부풀었다 가라앉는 균사 덩어리가 발밑을 스쳤다. {leader}는 속도를 늦췄다." },
-            { "whispering_spores", "포자 뭉치에서 속삭이는 소리가 들려 {leader}는 귀를 틀어막고 전진했다." }
+            { "whispering_spores", "포자 뭉치에서 속삭이는 소리가 들려 {leader}는 귀를 틀어막고 전진했다." },
+            { "prismatic_glow", "프리즘 빛이 벽면을 가로질러 {leader}의 실루엣을 여러 갈래로 나누었다." },
+            { "mana_surge", "마나의 파동이 공기를 떨리게 했고 {leader}는 손끝의 따끔함을 느꼈다." },
+            { "crystal_echo", "수정 공동의 메아리가 {leader}의 발소리를 되돌려 보냈다." },
+            { "refracted_path", "굴절된 빛 속에서 {leader}는 길의 윤곽을 조심스럽게 짚어 갔다." },
+            { "humming_resonance", "낮은 공명음이 바닥을 울리자 {leader}는 리듬에 맞춰 걸음을 조절했다." }
         };
 
         public LogEntry Narrate(ExplorationEvent explorationEvent, PartyState party)

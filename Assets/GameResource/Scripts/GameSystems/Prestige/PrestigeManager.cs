@@ -108,7 +108,7 @@ namespace Backend.GameSystems.Prestige
             var basePoints = Mathf.Max(1, state.CurrentFloor / 2);
             return reason switch
             {
-                ExplorationEndReason.ZoneComplete => basePoints + (state.ZoneId == ZoneDefinitions.FungalMazeId ? 10 : 6),
+                ExplorationEndReason.ZoneComplete => basePoints + ZoneDefinitions.GetZoneCompleteLegacyBonus(state.ZoneId),
                 ExplorationEndReason.ManualReturn => basePoints + 1,
                 ExplorationEndReason.PartyDefeated => basePoints,
                 _ => 0
