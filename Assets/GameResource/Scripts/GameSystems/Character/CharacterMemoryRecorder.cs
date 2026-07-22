@@ -42,6 +42,19 @@ namespace Backend.GameSystems.Character
             return $"{instance.LeaderName}(은)는 {instance.Floor}층 이벤트({instance.TemplateId})에서 \"{instance.LlmResultNarration}\"";
         }
 
+        public static string SummarizeDynamicEventForMember(DynamicEventInstance instance, CharacterState member)
+        {
+            if (instance == null || member == null || string.IsNullOrEmpty(instance.LlmResultNarration))
+                return null;
+
+            var subject = member.DisplayName ?? member.CharacterId;
+            if (instance.LeaderName == subject)
+                return SummarizeDynamicEvent(instance);
+
+            return
+                $"{subject}(은)는 {instance.Floor}층에서 {instance.LeaderName}(와)과 함께 이벤트({instance.TemplateId})를 경험했다.";
+        }
+
         public static IEnumerable<(string CharacterId, string Summary)> SummarizeCombatParticipants(
             ExplorationEvent explorationEvent,
             PartyState party)
