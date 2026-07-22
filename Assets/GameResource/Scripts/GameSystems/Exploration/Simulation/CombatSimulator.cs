@@ -11,7 +11,8 @@ namespace Backend.GameSystems.Exploration.Simulation
         public static CombatResultPayload Simulate(
             PartyState party,
             ZoneDefinitions.MonsterDefinition monster,
-            DeterministicRandom random)
+            DeterministicRandom random,
+            string zoneId)
         {
             var enemyHp = monster.Hp;
             var totalDamageDealt = 0;
@@ -22,6 +23,8 @@ namespace Backend.GameSystems.Exploration.Simulation
             var expGained = new System.Collections.Generic.Dictionary<string, int>();
             var partyIds = new System.Collections.Generic.List<string>();
             var bondMultiplier = RelationshipManager.GetBondCombatMultiplier(party);
+            var riskMultiplier = ZoneDefinitions.GetRiskMultiplier(zoneId);
+            var rewardMultiplier = ZoneDefinitions.GetRewardMultiplier(zoneId);
 
             foreach (var member in party.Members)
             {
@@ -76,7 +79,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 if (target == null)
                     break;
 
-                var incoming = CalculateIncomingDamage(monster, target, random);
+                var incoming = (int)(CalculateIncomingDamage(monster, target, random) * riskMultiplier);
                 target.CurrentHp = System.Math.Max(0, target.CurrentHp - incoming);
                 totalDamageTaken += incoming;
 
@@ -131,7 +134,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                     0);
             }
 
-            var gold = monster.GoldReward + random.NextInt(6);
+            var gold = (int)((monster.GoldReward + random.NextInt(6)) * rewardMultiplier);
             var expPerMember = 8 + monster.Hp / 4;
 
             foreach (var member in party.Members)

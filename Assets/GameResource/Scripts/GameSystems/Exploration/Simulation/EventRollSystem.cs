@@ -38,7 +38,7 @@ namespace Backend.GameSystems.Exploration.Simulation
             DeterministicRandom random,
             float partyHpRatio)
         {
-            var moveIds = ZoneDefinitions.GetMoveDescriptionIds();
+            var moveIds = ZoneDefinitions.GetMoveDescriptionIds(state.ZoneId);
             var moveId = moveIds[random.NextInt(moveIds.Count)];
             var salience = SalienceCalculator.Calculate(
                 EventType.Move,
@@ -68,7 +68,7 @@ namespace Backend.GameSystems.Exploration.Simulation
             float partyHpRatio)
         {
             var monster = RollMonster(state, random);
-            var combat = CombatSimulator.Simulate(state.Party, monster, random);
+            var combat = CombatSimulator.Simulate(state.Party, monster, random, state.ZoneId);
             var salience = SalienceCalculator.Calculate(
                 EventType.CombatResult,
                 monster.Rarity,
@@ -99,7 +99,7 @@ namespace Backend.GameSystems.Exploration.Simulation
             DeterministicRandom random,
             float partyHpRatio)
         {
-            var discoveries = ZoneDefinitions.GetDiscoveries();
+            var discoveries = ZoneDefinitions.GetDiscoveries(state.ZoneId);
             var discovery = discoveries[random.NextInt(discoveries.Count)];
             var salience = SalienceCalculator.Calculate(
                 EventType.Discovery,
@@ -193,7 +193,7 @@ namespace Backend.GameSystems.Exploration.Simulation
         {
             var monsters = ZoneDefinitions.GetMonsters(state.ZoneId);
             var roll = random.NextFloat();
-            var index = state.CurrentFloor >= ZoneDefinitions.MossyHollowMaxFloor && roll < 0.08f
+            var index = state.CurrentFloor >= state.MaxFloor && roll < 0.08f
                 ? monsters.Count - 1
                 : roll switch
                 {

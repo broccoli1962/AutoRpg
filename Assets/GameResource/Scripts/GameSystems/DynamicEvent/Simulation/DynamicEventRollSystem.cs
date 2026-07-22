@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Backend.GameSystems.DynamicEvent.Data;
+using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Simulation;
 
 namespace Backend.GameSystems.DynamicEvent.Simulation
@@ -66,7 +67,8 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
             if (template.Trigger.ZoneIds.Count > 0 && !template.Trigger.ZoneIds.Contains(zoneId))
                 return false;
 
-            return floor >= template.Trigger.MinFloor && floor <= template.Trigger.MaxFloor;
+            var relativeFloor = ZoneDefinitions.GetZoneRelativeFloor(zoneId, floor);
+            return relativeFloor >= template.Trigger.MinFloor && relativeFloor <= template.Trigger.MaxFloor;
         }
 
         private static bool IsRareGoldenEligible(DynamicEventTemplate template, string zoneId, int floor)
@@ -77,7 +79,8 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
             if (template.Trigger.ZoneIds.Count > 0 && !template.Trigger.ZoneIds.Contains(zoneId))
                 return false;
 
-            return floor >= template.Trigger.MinFloor && floor <= template.Trigger.MaxFloor;
+            var relativeFloor = ZoneDefinitions.GetZoneRelativeFloor(zoneId, floor);
+            return relativeFloor >= template.Trigger.MinFloor && relativeFloor <= template.Trigger.MaxFloor;
         }
 
         private static bool IsGuaranteedEligible(DynamicEventTemplate template, string zoneId, int floor)
