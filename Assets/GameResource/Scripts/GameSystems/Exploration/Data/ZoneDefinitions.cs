@@ -38,7 +38,7 @@ namespace Backend.GameSystems.Exploration.Data
         public const float EndlessSegmentRiskBoost = 0.18f;
         public const float EndlessMonsterStatBoostPerSegment = 0.12f;
 
-        public const float BaseProgressPerTick = 4.5f;
+        public const float BaseProgressPerTick = 4.8f;
         public const float FloorDifficultyStep = 0.07f;
         public const float BaseEventRollChance = 0.35f;
 
