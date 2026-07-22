@@ -144,6 +144,11 @@ namespace Backend.GameSystems.Exploration.Narration
         private static string FormatDiscovery(ExplorationEvent explorationEvent, string leaderName)
         {
             var itemName = explorationEvent.DiscoveryDisplayName ?? "보물";
+            if (explorationEvent.ManaShardDelta > 0)
+            {
+                return $"{leaderName}는 바위틈에서 {itemName}을(를) 발견했다. (+{explorationEvent.GoldDelta}G, +{explorationEvent.ManaShardDelta} 마나)";
+            }
+
             return $"{leaderName}는 바위틈에서 {itemName}을(를) 발견했다. (+{explorationEvent.GoldDelta}G)";
         }
 

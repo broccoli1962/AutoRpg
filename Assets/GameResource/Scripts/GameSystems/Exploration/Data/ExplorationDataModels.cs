@@ -76,6 +76,7 @@ namespace Backend.GameSystems.Exploration.Data
         public string DiscoveryItemId;
         public string DiscoveryDisplayName;
         public int GoldDelta;
+        public int ManaShardDelta;
         public string MoveDescriptionId;
     }
 
@@ -90,6 +91,7 @@ namespace Backend.GameSystems.Exploration.Data
         public int MaxFloor = ZoneDefinitions.MossyHollowMaxFloor;
         public PartyState Party = new();
         public int Gold;
+        public int ManaShards;
         public bool IsExploring;
         public bool IsPaused;
         public DateTime LastOnlineUtc = DateTime.UtcNow;

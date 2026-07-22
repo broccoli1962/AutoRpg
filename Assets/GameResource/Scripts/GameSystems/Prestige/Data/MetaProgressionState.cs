@@ -7,6 +7,7 @@ namespace Backend.GameSystems.Prestige.Data
     public sealed class MetaProgressionState
     {
         public int LegacyPoints;
+        public int ManaShards;
         public int PrestigeCount;
         public int DeepestFloorReached;
         public List<string> ChronicleEntries = new();

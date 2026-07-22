@@ -190,6 +190,25 @@ namespace Backend.GameSystems.Exploration.Data
             return 6 + GetZoneIndex(zoneId) * 4;
         }
 
+        public static int GetManaShardQuantity(string itemId)
+        {
+            if (string.IsNullOrEmpty(itemId))
+                return 0;
+
+            return itemId.Contains("mana_shard") ? 1 : 0;
+        }
+
+        public static int GetDiscoveryManaShards(DiscoveryDefinition discovery)
+        {
+            if (string.IsNullOrEmpty(discovery.ItemId))
+                return 0;
+
+            if (!discovery.ItemId.Contains("mana_shard"))
+                return 0;
+
+            return discovery.Quantity > 0 ? discovery.Quantity : 1;
+        }
+
         public static float GetFloorDifficulty(string zoneId, int floor)
         {
             var relativeFloor = GetZoneRelativeFloor(zoneId, floor);
