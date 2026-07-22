@@ -3,6 +3,7 @@ using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Prestige;
 using UnityEngine;
+using Backend.Util;
 using UnityEngine.UI;
 
 namespace Backend.GameSystems.Exploration
@@ -44,35 +45,35 @@ namespace Backend.GameSystems.Exploration
             if (!_isVisible)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha1, KeyCode.Keypad1))
             {
                 _tab = ChronicleTab.Runs;
                 _pageFromEnd = 0;
                 RefreshContent();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha2, KeyCode.Keypad2))
             {
                 _tab = ChronicleTab.Favorites;
                 _pageFromEnd = 0;
                 RefreshContent();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha3, KeyCode.Keypad3))
             {
                 _tab = ChronicleTab.CharacterJournal;
                 _pageFromEnd = 0;
                 RefreshContent();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha4, KeyCode.Keypad4))
             {
                 _tab = ChronicleTab.LoreCompendium;
                 _pageFromEnd = 0;
                 RefreshContent();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha5, KeyCode.Keypad5))
             {
                 _tab = ChronicleTab.MonsterCompendium;
                 _pageFromEnd = 0;
@@ -80,21 +81,21 @@ namespace Backend.GameSystems.Exploration
             }
 
             if (_tab == ChronicleTab.CharacterJournal &&
-                (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Comma)))
+                (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Q, KeyCode.Comma)))
             {
                 CycleCharacter(-1);
             }
 
             if (_tab == ChronicleTab.CharacterJournal &&
-                (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Period)))
+                (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.E, KeyCode.Period)))
             {
                 CycleCharacter(1);
             }
 
-            if (Input.GetKeyDown(KeyCode.PageUp) || Input.GetKeyDown(KeyCode.LeftBracket))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.PageUp, KeyCode.LeftBracket))
                 MovePage(older: true);
 
-            if (Input.GetKeyDown(KeyCode.PageDown) || Input.GetKeyDown(KeyCode.RightBracket))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.PageDown, KeyCode.RightBracket))
                 MovePage(older: false);
         }
 

@@ -3,6 +3,7 @@ using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.LLM;
 using UnityEngine;
+using Backend.Util;
 using UnityEngine.UI;
 
 namespace Backend.GameSystems.Exploration
@@ -35,42 +36,42 @@ namespace Backend.GameSystems.Exploration
             if (!_isVisible)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha1, KeyCode.Keypad1))
             {
                 LlmQualitySettings.CycleMode();
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha2, KeyCode.Keypad2))
             {
                 DynamicEventAutoPolicySettings.CyclePolicy();
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha3, KeyCode.Keypad3))
             {
                 GoldenEventSettings.ToggleAutoPause();
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha4, KeyCode.Keypad4))
             {
                 LogFrequencySettings.CycleMode();
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha5, KeyCode.Keypad5))
             {
                 OfflineSummaryDetailSettings.ToggleMode();
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha6, KeyCode.Keypad6))
             {
                 if (ScriptoriumManager.TryUpgrade(out var message))
                     Debug.Log($"[ExplorationSettings] {message}");
@@ -81,7 +82,7 @@ namespace Backend.GameSystems.Exploration
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha7, KeyCode.Keypad7))
             {
                 if (TrainingGroundManager.TryUpgrade(out var message))
                     Debug.Log($"[ExplorationSettings] {message}");
@@ -92,7 +93,7 @@ namespace Backend.GameSystems.Exploration
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha8, KeyCode.Keypad8))
             {
                 if (BlacksmithManager.TryUpgrade(out var message))
                     Debug.Log($"[ExplorationSettings] {message}");
@@ -103,7 +104,7 @@ namespace Backend.GameSystems.Exploration
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha9, KeyCode.Keypad9))
             {
                 if (InnManager.TryUpgrade(out var message))
                     Debug.Log($"[ExplorationSettings] {message}");
@@ -114,7 +115,7 @@ namespace Backend.GameSystems.Exploration
                 _onSettingsChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Minus, KeyCode.KeypadMinus))
             {
                 if (SkillTreeManager.TryUpgradeLeaderRole(out var message))
                     Debug.Log($"[ExplorationSettings] {message}");
