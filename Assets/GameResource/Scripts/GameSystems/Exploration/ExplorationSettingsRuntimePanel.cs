@@ -63,6 +63,13 @@ namespace Backend.GameSystems.Exploration
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
             }
+
+            if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5))
+            {
+                OfflineSummaryDetailSettings.ToggleMode();
+                RefreshContent();
+                _onSettingsChanged?.Invoke();
+            }
         }
 
         public void Toggle()
@@ -85,7 +92,7 @@ namespace Backend.GameSystems.Exploration
             var panelRect = _panelRoot.AddComponent<RectTransform>();
             panelRect.anchorMin = new Vector2(0.5f, 0.5f);
             panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(640f, 320f);
+            panelRect.sizeDelta = new Vector2(640f, 360f);
 
             var panelImage = _panelRoot.AddComponent<Image>();
             panelImage.color = new Color(0.08f, 0.1f, 0.14f, 0.96f);
@@ -95,7 +102,7 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(600f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:LLM 품질  2:이벤트 정책  3:황금 자동정지  4:로그 빈도  (O:닫기)");
+                "1:LLM 품질  2:이벤트 정책  3:황금 자동정지  4:로그 빈도  5:오프라인 요약  (O:닫기)");
             hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
@@ -151,7 +158,8 @@ namespace Backend.GameSystems.Exploration
                 $"<b>1. LLM 텍스트 품질</b>\n{LlmQualitySettings.GetDisplayLabel()}\n\n" +
                 $"<b>2. 자동 이벤트 선택 정책</b>\n{DynamicEventAutoPolicySettings.GetDisplayLabel()}\n\n" +
                 $"<b>3. 황금 이벤트 자동정지</b>\n{GoldenEventSettings.GetDisplayLabel()}\n\n" +
-                $"<b>4. 로그 생성 빈도</b>\n{LogFrequencySettings.GetDisplayLabel()} · 최소 {GetSalienceLabel(LogFrequencySettings.GetMinimumSalience())}";
+                $"<b>4. 로그 생성 빈도</b>\n{LogFrequencySettings.GetDisplayLabel()} · 최소 {GetSalienceLabel(LogFrequencySettings.GetMinimumSalience())}\n\n" +
+                $"<b>5. 오프라인 요약 상세도</b>\n{OfflineSummaryDetailSettings.GetDisplayLabel()}";
         }
 
         private static string GetSalienceLabel(SalienceGrade grade)

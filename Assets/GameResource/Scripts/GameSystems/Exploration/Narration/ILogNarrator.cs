@@ -16,5 +16,8 @@ namespace Backend.GameSystems.Exploration.Narration
         public int StartFloor;
         public int EndFloor;
         public string ZoneDisplayName;
+        public int CombatCount;
+        public int DiscoveryCount;
+        public int MilestoneCount;
     }
 }
