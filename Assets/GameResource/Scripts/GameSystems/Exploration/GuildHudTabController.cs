@@ -70,6 +70,14 @@ namespace Backend.GameSystems.Exploration
             var existingBar = transform.Find("BottomTabBar");
             if (existingBar != null)
             {
+                var existingRect = existingBar.GetComponent<RectTransform>();
+                if (existingRect != null)
+                {
+                    existingRect.anchoredPosition = new Vector2(
+                        0f,
+                        ExplorationHudLayoutMetrics.SafeAreaBottomInset);
+                }
+
                 WireExistingTabButtons(existingBar);
                 return;
             }
@@ -81,6 +89,7 @@ namespace Backend.GameSystems.Exploration
             barRect.anchorMin = new Vector2(0f, 0f);
             barRect.anchorMax = new Vector2(1f, 0f);
             barRect.pivot = new Vector2(0.5f, 0f);
+            barRect.anchoredPosition = new Vector2(0f, ExplorationHudLayoutMetrics.SafeAreaBottomInset);
             barRect.sizeDelta = new Vector2(0f, TabBarHeight);
 
             var barImage = barRoot.AddComponent<Image>();

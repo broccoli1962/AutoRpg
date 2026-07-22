@@ -161,7 +161,6 @@ namespace Backend.GameSystems.Prestige
                 $"(total={_meta.LegacyPoints}, floor={state.CurrentFloor}, reason={reason})");
 
             GameSaveManager.Save();
-            ScheduleAutoRestart().Forget();
         }
 
         private static int CalculateLegacyGain(ExplorationState state, ExplorationEndReason reason)
@@ -224,15 +223,6 @@ namespace Backend.GameSystems.Prestige
 
             builder.Append(')');
             return builder.ToString();
-        }
-
-        private async Cysharp.Threading.Tasks.UniTaskVoid ScheduleAutoRestart()
-        {
-            await Cysharp.Threading.Tasks.UniTask.Delay(System.TimeSpan.FromSeconds(1.5f));
-            if (GameStateUtil.IsQuitting)
-                return;
-
-            ExplorationManager.StartExploration();
         }
     }
 }

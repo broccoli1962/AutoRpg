@@ -215,6 +215,8 @@ namespace Backend.Editor
                 root.AddComponent<GuildFacilityRuntimePanel>();
             if (root.GetComponent<GuildHudTabController>() == null)
                 root.AddComponent<GuildHudTabController>();
+            if (root.GetComponent<ExplorationStartRuntimePanel>() == null)
+                root.AddComponent<ExplorationStartRuntimePanel>();
         }
 
         private static void WireHudPanel(

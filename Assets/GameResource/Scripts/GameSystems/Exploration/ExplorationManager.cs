@@ -159,6 +159,18 @@ namespace Backend.GameSystems.Exploration
         }
 
         /// <summary>
+        /// 플레이어 입력으로 탐험을 시작한다. 오프라인 경과 처리 후 새 탐험을 연다.
+        /// </summary>
+        public static void BeginExplorationFromPlayer(int seed = 0)
+        {
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            ProcessOfflineElapsed();
+            StartExploration(seed);
+        }
+
+        /// <summary>
         /// 마지막 접속 이후 경과 시간을 오프라인 시뮬레이션으로 처리한다.
         /// </summary>
         public static void ProcessOfflineElapsed()

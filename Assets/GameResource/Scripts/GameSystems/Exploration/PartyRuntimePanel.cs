@@ -62,10 +62,10 @@ namespace Backend.GameSystems.Exploration
                 rect.pivot = new Vector2(0f, 1f);
                 rect.anchoredPosition = new Vector2(
                     ExplorationHudLayoutMetrics.HorizontalPadding,
-                    -ExplorationHudLayoutMetrics.TopBarHeight);
+                    -ExplorationHudLayoutMetrics.EffectiveTopBarHeight);
                 rect.sizeDelta = new Vector2(
                     PanelWidth,
-                    Screen.height - ExplorationHudLayoutMetrics.TopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
+                    UnityEngine.Screen.height - ExplorationHudLayoutMetrics.EffectiveTopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
             }
 
             var image = root.AddComponent<Image>();

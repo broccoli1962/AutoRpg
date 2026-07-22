@@ -23,7 +23,7 @@ namespace Backend.GameSystems.Exploration
         private const int MaxLogLines = 500;
         private const int LogLinesPerPage = 36;
 
-        [SerializeField] private bool _autoStartOnAwake = true;
+        [SerializeField] private bool _autoStartOnAwake;
 
         private Text _statusText;
         private Text _helpText;
@@ -77,8 +77,7 @@ namespace Backend.GameSystems.Exploration
 
             if (_autoStartOnAwake)
             {
-                ExplorationManager.ProcessOfflineElapsed();
-                ExplorationManager.StartExploration();
+                ExplorationManager.BeginExplorationFromPlayer();
             }
 
             RefreshStatus(ExplorationManager.GetCurrentState());
