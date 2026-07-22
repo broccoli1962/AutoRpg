@@ -3,6 +3,7 @@ using Backend.GameSystems.Equipment.Data;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Prestige;
 using UnityEngine;
+using Backend.Util;
 using UnityEngine.UI;
 
 namespace Backend.GameSystems.Exploration
@@ -29,21 +30,21 @@ namespace Backend.GameSystems.Exploration
             if (!_isVisible)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha1, KeyCode.Keypad1))
             {
                 CharacterTierManager.TryPromoteLeader(out var message);
                 Debug.Log($"[EnhancePanel] {message}");
                 RefreshContent();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha2, KeyCode.Keypad2))
             {
                 EquipmentEnhanceManager.TryEnhanceLeaderWeapon(out var message);
                 Debug.Log($"[EnhancePanel] {message}");
                 RefreshContent();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha3, KeyCode.Keypad3))
             {
                 EquipmentEnhanceManager.TryEnhanceLeaderArmor(out var message);
                 Debug.Log($"[EnhancePanel] {message}");

@@ -313,28 +313,33 @@ namespace Backend.Object.Management
 
         private void ApplyBgmMixerVolume(bool enabled)
         {
-            if (_mixer == null) return;
-            _mixer.SetFloat(MIXER_BGM_PARAM, enabled ? 0f : -80f);
+            SetMixerFloat(MIXER_BGM_PARAM, enabled ? 0f : -80f);
         }
 
         private void ApplySfxMixerVolume(bool enabled)
         {
-            if (_mixer == null) return;
-            _mixer.SetFloat(MIXER_SFX_PARAM, enabled ? 0f : -80f);
+            SetMixerFloat(MIXER_SFX_PARAM, enabled ? 0f : -80f);
         }
 
         private void SetBgmVolume_Internal(float linear)
         {
-            if (_mixer == null) return;
             float db = Mathf.Log10(Mathf.Max(linear, 0.0001f)) * 20f;
-            _mixer.SetFloat(MIXER_BGM_PARAM, db);
+            SetMixerFloat(MIXER_BGM_PARAM, db);
         }
 
         private void SetSfxVolume_Internal(float linear)
         {
-            if (_mixer == null) return;
             float db = Mathf.Log10(Mathf.Max(linear, 0.0001f)) * 20f;
-            _mixer.SetFloat(MIXER_SFX_PARAM, db);
+            SetMixerFloat(MIXER_SFX_PARAM, db);
+        }
+
+        private void SetMixerFloat(string paramName, float value)
+        {
+            if (_mixer == null)
+                return;
+
+            if (!_mixer.SetFloat(paramName, value))
+                Debug.LogWarning($"[AudioManager] Mixer parameter '{paramName}' not found.");
         }
 
         #endregion

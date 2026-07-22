@@ -1,4 +1,5 @@
 using Backend.GameSystems.DynamicEvent.Data;
+using Backend.Util;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,9 @@ namespace Backend.GameSystems.DynamicEvent
 
         private void Start()
         {
-            BuildUi();
+            if (!TryEnsureUiBuilt())
+                return;
+
             Hide();
 
             _disposables = new CompositeDisposable();
@@ -32,6 +35,21 @@ namespace Backend.GameSystems.DynamicEvent
             DynamicEventChannels.OnEventResolved
                 .Subscribe(_ => Hide())
                 .AddTo(_disposables);
+        }
+
+        private void Update()
+        {
+            if (_panelRoot == null)
+                TryEnsureUiBuilt();
+        }
+
+        private bool TryEnsureUiBuilt()
+        {
+            if (_panelRoot != null)
+                return true;
+
+            BuildUi();
+            return _panelRoot != null;
         }
 
         private void OnDestroy()
@@ -107,12 +125,14 @@ namespace Backend.GameSystems.DynamicEvent
                 new Vector2(24f, 132f),
                 new Vector2(220f, 36f),
                 "일시정지하고 직접 선택");
-            _pauseForManualButton.onClick.AddListener(OnPauseForManualClicked);
+
+            if (_pauseForManualButton != null)
+                _pauseForManualButton.onClick.AddListener(OnPauseForManualClicked);
         }
 
         private void ShowScene(DynamicEventInstance instance)
         {
-            if (instance?.LlmNarration == null)
+            if (instance?.LlmNarration == null || _panelRoot == null || _titleText == null)
                 return;
 
             _currentInstance = instance;
@@ -128,7 +148,8 @@ namespace Backend.GameSystems.DynamicEvent
                 : "<b>자동 진행 중 · 원하면 직접 선택</b>";
 
             RebuildChoiceButtons(instance);
-            _pauseForManualButton.gameObject.SetActive(!instance.RequiresManualChoice);
+            if (_pauseForManualButton != null)
+                _pauseForManualButton.gameObject.SetActive(!instance.RequiresManualChoice);
             _panelRoot.SetActive(true);
         }
 
@@ -164,7 +185,7 @@ namespace Backend.GameSystems.DynamicEvent
 
         private Button CreateChoiceButton(int number, string label)
         {
-            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            var font = RuntimeUiFont.Get();
             var go = new GameObject($"Choice_{number}", typeof(RectTransform), typeof(Image), typeof(Button));
             go.transform.SetParent(_choiceButtonRoot, false);
 
@@ -179,7 +200,7 @@ namespace Backend.GameSystems.DynamicEvent
 
             var labelGo = new GameObject("Label", typeof(RectTransform));
             labelGo.transform.SetParent(go.transform, false);
-            var labelRect = labelGo.AddComponent<RectTransform>();
+            var labelRect = labelGo.GetComponent<RectTransform>();
             labelRect.anchorMin = Vector2.zero;
             labelRect.anchorMax = Vector2.one;
             labelRect.offsetMin = new Vector2(8f, 8f);
@@ -204,7 +225,7 @@ namespace Backend.GameSystems.DynamicEvent
             Vector2 size,
             string label)
         {
-            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            var font = RuntimeUiFont.Get();
             var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
             go.transform.SetParent(parent, false);
 
@@ -223,7 +244,7 @@ namespace Backend.GameSystems.DynamicEvent
 
             var labelGo = new GameObject("Label", typeof(RectTransform));
             labelGo.transform.SetParent(go.transform, false);
-            var labelRect = labelGo.AddComponent<RectTransform>();
+            var labelRect = labelGo.GetComponent<RectTransform>();
             labelRect.anchorMin = Vector2.zero;
             labelRect.anchorMax = Vector2.one;
             labelRect.offsetMin = Vector2.zero;
@@ -251,7 +272,7 @@ namespace Backend.GameSystems.DynamicEvent
             rect.sizeDelta = new Vector2(672f, 40f);
 
             var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = RuntimeUiFont.Get();
             text.fontSize = fontSize;
             text.alignment = TextAnchor.UpperLeft;
             text.color = Color.white;

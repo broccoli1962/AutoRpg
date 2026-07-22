@@ -98,19 +98,19 @@ namespace Backend.GameSystems.Exploration
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.L))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.L))
             {
                 LlmQualitySettings.CycleMode();
                 RefreshStatus(ExplorationManager.GetCurrentState());
             }
 
-            if (Input.GetKeyDown(KeyCode.A))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.A))
             {
                 DynamicEventAutoPolicySettings.CyclePolicy();
                 RefreshStatus(ExplorationManager.GetCurrentState());
             }
 
-            if (Input.GetKeyDown(KeyCode.G))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.G))
             {
                 GoldenEventSettings.ToggleAutoPause();
                 RefreshStatus(ExplorationManager.GetCurrentState());
@@ -118,27 +118,27 @@ namespace Backend.GameSystems.Exploration
 
             if (DynamicEventManager.IsAwaitingManualChoice)
             {
-                if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+                if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha1, KeyCode.Keypad1))
                     DynamicEventManager.TrySubmitManualChoice(0);
 
-                if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+                if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha2, KeyCode.Keypad2))
                     DynamicEventManager.TrySubmitManualChoice(1);
             }
 
-            if (Input.GetKeyDown(KeyCode.O))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.O))
                 _settingsPanel?.Toggle();
 
-            if (Input.GetKeyDown(KeyCode.C))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.C))
                 _chroniclePanel?.Toggle();
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.R))
             {
                 var state = ExplorationManager.GetCurrentState();
                 if (state != null && state.IsExploring)
                     ExplorationManager.ReturnToGuild();
             }
 
-            if (Input.GetKeyDown(KeyCode.F))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.F))
             {
                 _filter = LogFeedFilterUtil.Cycle(_filter);
                 _logPageFromEnd = 0;
@@ -146,17 +146,17 @@ namespace Backend.GameSystems.Exploration
                 RebuildLogText();
             }
 
-            if (Input.GetKeyDown(KeyCode.B))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.B))
                 ToggleLastLogBookmark();
 
             if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) &&
                 (_settingsPanel == null || !_settingsPanel.IsVisible) &&
-                Input.GetKeyDown(KeyCode.LeftBracket))
+                KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.LeftBracket))
                 MoveLogPage(older: true);
 
             if ((_chroniclePanel == null || !_chroniclePanel.IsVisible) &&
                 (_settingsPanel == null || !_settingsPanel.IsVisible) &&
-                Input.GetKeyDown(KeyCode.RightBracket))
+                KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.RightBracket))
                 MoveLogPage(older: false);
         }
 

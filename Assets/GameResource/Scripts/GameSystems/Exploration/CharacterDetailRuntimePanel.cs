@@ -4,6 +4,7 @@ using Backend.GameSystems.Equipment;
 using Backend.GameSystems.Exploration.Data;
 using R3;
 using UnityEngine;
+using Backend.Util;
 using UnityEngine.UI;
 
 namespace Backend.GameSystems.Exploration
@@ -44,7 +45,7 @@ namespace Backend.GameSystems.Exploration
             if (IsOtherPanelVisible())
                 return;
 
-            if (Input.GetKeyDown(KeyCode.I))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.I))
             {
                 if (_isVisible)
                     Hide();
@@ -55,16 +56,16 @@ namespace Backend.GameSystems.Exploration
             if (!_isVisible)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.Escape))
             {
                 Hide();
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Comma))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Q, KeyCode.Comma))
                 CycleMember(-1);
 
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Period))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.E, KeyCode.Period))
                 CycleMember(1);
         }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Backend.Util;
 using UnityEngine.UI;
 
 namespace Backend.GameSystems.Exploration
@@ -31,7 +32,7 @@ namespace Backend.GameSystems.Exploration
             if (!_isVisible)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha6, KeyCode.Keypad6))
             {
                 ScriptoriumManager.TryUpgrade(out var message);
                 Debug.Log($"[GuildPanel] {message}");
@@ -39,7 +40,7 @@ namespace Backend.GameSystems.Exploration
                 _onChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha7, KeyCode.Keypad7))
             {
                 TrainingGroundManager.TryUpgrade(out var message);
                 Debug.Log($"[GuildPanel] {message}");
@@ -47,7 +48,7 @@ namespace Backend.GameSystems.Exploration
                 _onChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha8, KeyCode.Keypad8))
             {
                 BlacksmithManager.TryUpgrade(out var message);
                 Debug.Log($"[GuildPanel] {message}");
@@ -55,7 +56,7 @@ namespace Backend.GameSystems.Exploration
                 _onChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha9, KeyCode.Keypad9))
             {
                 InnManager.TryUpgrade(out var message);
                 Debug.Log($"[GuildPanel] {message}");
@@ -63,7 +64,7 @@ namespace Backend.GameSystems.Exploration
                 _onChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha0, KeyCode.Keypad0))
             {
                 BookshopManager.TryUpgrade(out var message);
                 Debug.Log($"[GuildPanel] {message}");
@@ -71,7 +72,7 @@ namespace Backend.GameSystems.Exploration
                 _onChanged?.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+            if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Minus, KeyCode.KeypadMinus))
             {
                 SkillTreeManager.TryUpgradeLeaderRole(out var message);
                 Debug.Log($"[GuildPanel] {message}");
