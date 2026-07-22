@@ -15,15 +15,17 @@ namespace Backend.GameSystems.Exploration.Simulation
             float partyHpRatio)
         {
             var categoryRoll = random.NextFloat();
-            var restCutoff = partyHpRatio < 0.55f ? 0.86f : 0.88f;
-            var eventType = categoryRoll switch
-            {
-                < 0.28f => EventType.Move,
-                < 0.62f => EventType.CombatResult,
-                < 0.78f => EventType.Discovery,
-                < restCutoff => EventType.Rest,
-                _ => EventType.Trap
-            };
+            EventType eventType;
+            if (categoryRoll < 0.28f)
+                eventType = EventType.Move;
+            else if (categoryRoll < 0.62f)
+                eventType = EventType.CombatResult;
+            else if (categoryRoll < 0.78f)
+                eventType = EventType.Discovery;
+            else if (categoryRoll < (partyHpRatio < 0.55f ? 0.86f : 0.88f))
+                eventType = EventType.Rest;
+            else
+                eventType = EventType.Trap;
 
             return eventType switch
             {

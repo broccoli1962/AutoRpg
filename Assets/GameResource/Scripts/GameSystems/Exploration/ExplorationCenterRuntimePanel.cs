@@ -1,6 +1,7 @@
 using System.Text;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration.Data;
+using Backend.Object.UI;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace Backend.GameSystems.Exploration
         private Slider _progressSlider;
         private Text _progressText;
         private Text _partyStripText;
+        private Text _portraitStripText;
         private Text _statusText;
         private CompositeDisposable _disposables;
         private readonly StringBuilder _builder = new();
@@ -45,17 +47,25 @@ namespace Backend.GameSystems.Exploration
             if (canvas == null)
                 return;
 
+            var container = FindHudContainer("Body/CenterPanel");
             var root = new GameObject("CenterPanel");
-            root.transform.SetParent(canvas.transform, false);
+            root.transform.SetParent(container != null ? container : canvas.transform, false);
 
             var rect = root.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 0f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 0.5f);
-            rect.anchoredPosition = new Vector2(ExplorationHudLayoutMetrics.CenterPanelLeft, 0f);
-            rect.sizeDelta = new Vector2(
-                ExplorationHudLayoutMetrics.CenterPanelWidth,
-                -(ExplorationHudLayoutMetrics.TopBarHeight + ExplorationHudLayoutMetrics.BottomInsetPx));
+            if (container != null)
+            {
+                StretchFull(rect);
+            }
+            else
+            {
+                rect.anchorMin = new Vector2(0f, 0f);
+                rect.anchorMax = new Vector2(0f, 1f);
+                rect.pivot = new Vector2(0f, 0.5f);
+                rect.anchoredPosition = new Vector2(ExplorationHudLayoutMetrics.CenterPanelLeft, 0f);
+                rect.sizeDelta = new Vector2(
+                    ExplorationHudLayoutMetrics.CenterPanelWidth,
+                    -(ExplorationHudLayoutMetrics.TopBarHeight + ExplorationHudLayoutMetrics.BottomInsetPx));
+            }
 
             var image = root.AddComponent<Image>();
             image.color = new Color(0.07f, 0.09f, 0.12f, 0.82f);
@@ -77,6 +87,11 @@ namespace Backend.GameSystems.Exploration
                 120f);
             _partyStripText.lineSpacing = 1.15f;
 
+            _portraitStripText = CreateText(root.transform, "PortraitStrip", new Vector2(16f, -248f), 14, string.Empty);
+            _portraitStripText.rectTransform.sizeDelta = new Vector2(
+                container != null ? 360f : ExplorationHudLayoutMetrics.CenterPanelWidth - 32f,
+                28f);
+
             _statusText = CreateText(
                 root.transform,
                 "Status",
@@ -85,6 +100,12 @@ namespace Backend.GameSystems.Exploration
                 string.Empty);
             _statusText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelWidth - 32f, 48f);
             _statusText.color = new Color(0.7f, 0.75f, 0.82f);
+        }
+
+        private Transform FindHudContainer(string relativePath)
+        {
+            var hudPanel = GetComponent<ExplorationHudPanel>() ?? GetComponentInParent<ExplorationHudPanel>();
+            return hudPanel == null ? null : hudPanel.transform.Find(relativePath);
         }
 
         private void Refresh(ExplorationState state)
@@ -121,6 +142,7 @@ namespace Backend.GameSystems.Exploration
             }
 
             _partyStripText.text = BuildPartyStrip(state);
+            _portraitStripText.text = BuildPortraitStrip(state);
             _statusText.text = BuildStatusLine(state);
         }
 
@@ -159,6 +181,54 @@ namespace Backend.GameSystems.Exploration
 
             return builder.ToString();
         }
+
+        private static string BuildPortraitStrip(ExplorationState state)
+        {
+            var members = state.Party?.Members;
+            if (members == null || members.Count == 0)
+                return string.Empty;
+
+            var builder = new StringBuilder();
+            builder.Append("<b>초상</b>  ");
+            for (var i = 0; i < members.Count; i++)
+            {
+                if (i > 0)
+                    builder.Append("  ");
+
+                var member = members[i];
+                var color = GetRoleColor(member.Role);
+                builder.Append("<color=");
+                builder.Append(color);
+                builder.Append(">[");
+                builder.Append(GetRoleAbbreviation(member.Role));
+                builder.Append("]</color> ");
+                builder.Append(member.DisplayName);
+            }
+
+            return builder.ToString();
+        }
+
+        private static string GetRoleAbbreviation(CharacterRole role) =>
+            role switch
+            {
+                CharacterRole.Warrior => "전",
+                CharacterRole.Rogue => "도",
+                CharacterRole.Mage => "마",
+                CharacterRole.Bard => "음",
+                CharacterRole.Cleric => "성",
+                _ => "?"
+            };
+
+        private static string GetRoleColor(CharacterRole role) =>
+            role switch
+            {
+                CharacterRole.Warrior => "#e07a7a",
+                CharacterRole.Rogue => "#9fd49f",
+                CharacterRole.Mage => "#6ec5ff",
+                CharacterRole.Bard => "#ffd966",
+                CharacterRole.Cleric => "#c9a0ff",
+                _ => "#cccccc"
+            };
 
         private static string BuildStatusLine(ExplorationState state)
         {
