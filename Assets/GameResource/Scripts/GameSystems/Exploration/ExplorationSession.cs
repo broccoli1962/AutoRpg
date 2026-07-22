@@ -215,6 +215,10 @@ namespace Backend.GameSystems.Exploration
                     CurrentHp = member.CurrentHp,
                     MaxHp = member.MaxHp,
                     Injury = member.Injury,
+                    EquippedWeaponId = member.EquippedWeaponId,
+                    EquippedArmorId = member.EquippedArmorId,
+                    WeaponEnhanceLevel = member.WeaponEnhanceLevel,
+                    ArmorEnhanceLevel = member.ArmorEnhanceLevel,
                     PersonalityTags = new List<PersonalityTag>(member.PersonalityTags)
                 });
             }

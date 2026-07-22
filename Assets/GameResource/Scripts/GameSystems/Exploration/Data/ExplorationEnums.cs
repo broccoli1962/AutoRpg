@@ -9,6 +9,15 @@ namespace Backend.GameSystems.Exploration.Data
         Cleric
     }
 
+    public enum CharacterTier
+    {
+        Apprentice,
+        Adept,
+        Artisan,
+        Hero,
+        Legend
+    }
+
     public enum PersonalityTag
     {
         Cautious,

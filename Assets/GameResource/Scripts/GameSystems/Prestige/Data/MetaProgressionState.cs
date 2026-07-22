@@ -22,5 +22,7 @@ namespace Backend.GameSystems.Prestige.Data
         public List<string> LoreEntries = new();
         public List<string> MonsterEntries = new();
         public List<string> UnlockedSkillIds = new();
+        public List<CharacterTierRecord> CharacterTiers = new();
+        public List<EquipmentEnhanceRecord> EquipmentEnhances = new();
     }
 }

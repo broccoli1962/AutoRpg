@@ -58,19 +58,19 @@ namespace Backend.GameSystems.Equipment
 
         public static int GetEffectiveStr(CharacterState member) =>
             member.Str + SumBonus(member, EquipmentSlot.Weapon, d => d.StrBonus) +
-            SumBonus(member, EquipmentSlot.Armor, d => d.StrBonus);
+            SumBonus(member, EquipmentSlot.Armor, d => d.StrBonus) + GetSetStrBonus(member);
 
         public static int GetEffectiveAgi(CharacterState member) =>
             member.Agi + SumBonus(member, EquipmentSlot.Weapon, d => d.AgiBonus) +
-            SumBonus(member, EquipmentSlot.Armor, d => d.AgiBonus);
+            SumBonus(member, EquipmentSlot.Armor, d => d.AgiBonus) + GetSetAgiBonus(member);
 
         public static int GetEffectiveInt(CharacterState member) =>
             member.Int + SumBonus(member, EquipmentSlot.Weapon, d => d.IntBonus) +
-            SumBonus(member, EquipmentSlot.Armor, d => d.IntBonus);
+            SumBonus(member, EquipmentSlot.Armor, d => d.IntBonus) + GetSetIntBonus(member);
 
         public static int GetEffectiveVit(CharacterState member) =>
             member.Vit + SumBonus(member, EquipmentSlot.Weapon, d => d.VitBonus) +
-            SumBonus(member, EquipmentSlot.Armor, d => d.VitBonus);
+            SumBonus(member, EquipmentSlot.Armor, d => d.VitBonus) + GetSetVitBonus(member);
 
         public static string GetLeaderEquipmentSummary(PartyState party)
         {
@@ -102,13 +102,30 @@ namespace Backend.GameSystems.Equipment
             if (string.IsNullOrEmpty(weapon) && string.IsNullOrEmpty(armor))
                 return null;
 
+            string summary;
             if (string.IsNullOrEmpty(armor))
-                return weapon;
+                summary = weapon;
+            else if (string.IsNullOrEmpty(weapon))
+                summary = armor;
+            else
+                summary = $"{weapon} · {armor}";
 
-            if (string.IsNullOrEmpty(weapon))
-                return armor;
+            var setLabel = GetSetBonusLabel(member);
+            return string.IsNullOrEmpty(setLabel) ? summary : $"{summary} · {setLabel}";
+        }
 
-            return $"{weapon} · {armor}";
+        public static string GetSetBonusLabel(CharacterState member)
+        {
+            if (!TryGetActiveSetId(member, out var setId))
+                return null;
+
+            return setId switch
+            {
+                EquipmentDefinitions.GuardianSetId => "수호 세트(2)",
+                EquipmentDefinitions.AbyssSetId => "심연 세트(2)",
+                EquipmentDefinitions.PrismSetId => "프리즘 세트(2)",
+                _ => "세트(2)"
+            };
         }
 
         private static string GetDisplayName(string definitionId)
@@ -179,7 +196,80 @@ namespace Backend.GameSystems.Equipment
                 return 0;
 
             var definition = EquipmentDefinitions.Get(id);
-            return definition == null ? 0 : selector(definition);
+            if (definition == null)
+                return 0;
+
+            var bonus = selector(definition);
+            if (bonus <= 0)
+                return 0;
+
+            var enhanceLevel = slot == EquipmentSlot.Weapon
+                ? member.WeaponEnhanceLevel
+                : member.ArmorEnhanceLevel;
+
+            return bonus + enhanceLevel;
+        }
+
+        private static bool TryGetActiveSetId(CharacterState member, out string setId)
+        {
+            setId = null;
+            if (member == null)
+                return false;
+
+            var weapon = string.IsNullOrEmpty(member.EquippedWeaponId)
+                ? null
+                : EquipmentDefinitions.Get(member.EquippedWeaponId);
+            var armor = string.IsNullOrEmpty(member.EquippedArmorId)
+                ? null
+                : EquipmentDefinitions.Get(member.EquippedArmorId);
+
+            if (weapon == null || armor == null ||
+                string.IsNullOrEmpty(weapon.SetId) ||
+                weapon.SetId != armor.SetId)
+            {
+                return false;
+            }
+
+            setId = weapon.SetId;
+            return true;
+        }
+
+        private static int GetSetStrBonus(CharacterState member)
+        {
+            if (!TryGetActiveSetId(member, out var setId))
+                return 0;
+
+            return setId switch
+            {
+                EquipmentDefinitions.GuardianSetId => 1,
+                EquipmentDefinitions.AbyssSetId => 4,
+                EquipmentDefinitions.PrismSetId => 2,
+                _ => 0
+            };
+        }
+
+        private static int GetSetAgiBonus(CharacterState member)
+        {
+            if (!TryGetActiveSetId(member, out var setId))
+                return 0;
+
+            return setId == EquipmentDefinitions.AbyssSetId ? 2 : 0;
+        }
+
+        private static int GetSetIntBonus(CharacterState member)
+        {
+            if (!TryGetActiveSetId(member, out var setId))
+                return 0;
+
+            return setId == EquipmentDefinitions.PrismSetId ? 4 : 0;
+        }
+
+        private static int GetSetVitBonus(CharacterState member)
+        {
+            if (!TryGetActiveSetId(member, out var setId))
+                return 0;
+
+            return setId == EquipmentDefinitions.GuardianSetId ? 4 : 0;
         }
     }
 }

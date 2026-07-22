@@ -29,7 +29,7 @@ namespace Backend.Object.UI.Exploration
             var progressSlider = CreateProgressSlider(rootRect, new Vector2(24f, -88f), new Vector2(360f, 16f));
 
             var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -112f), new Vector2(920f, 18f), 13, font);
-            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그";
+            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그  하단탭";
             var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -132f), new Vector2(420f, 18f), 13, font);
             filterText.color = new Color(0.8f, 0.8f, 0.85f);
 
@@ -41,7 +41,7 @@ namespace Backend.Object.UI.Exploration
             logFeedGo.transform.SetParent(rootRect, false);
             var logFeedRect = logFeedGo.AddComponent<RectTransform>();
             StretchFull(logFeedRect);
-            logFeedRect.offsetMin = new Vector2(PartyRuntimePanel.PanelWidthPx + 24f, 24f);
+            logFeedRect.offsetMin = new Vector2(PartyRuntimePanel.PanelWidthPx + 24f, GuildHudTabController.BottomInsetPx);
             logFeedRect.offsetMax = new Vector2(-24f, -196f);
 
             var logFeedView = logFeedGo.AddComponent<ExplorationLogFeedView>();
@@ -109,6 +109,18 @@ namespace Backend.Object.UI.Exploration
 
             if (panel.gameObject.GetComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>() == null)
                 panel.gameObject.AddComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>();
+
+            var enhancePanel = panel.gameObject.GetComponent<EnhanceRuntimePanel>();
+            if (enhancePanel == null)
+                enhancePanel = panel.gameObject.AddComponent<EnhanceRuntimePanel>();
+
+            var guildPanel = panel.gameObject.GetComponent<GuildFacilityRuntimePanel>();
+            if (guildPanel == null)
+                guildPanel = panel.gameObject.AddComponent<GuildFacilityRuntimePanel>();
+
+            var tabController = panel.gameObject.GetComponent<GuildHudTabController>();
+            if (tabController == null)
+                tabController = panel.gameObject.AddComponent<GuildHudTabController>();
 
             panel.ConfigureRuntime(
                 statusText,

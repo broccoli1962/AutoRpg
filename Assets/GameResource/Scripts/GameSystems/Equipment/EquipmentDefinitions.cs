@@ -21,6 +21,10 @@ namespace Backend.GameSystems.Equipment
         public const string ThresholdCleaverId = "threshold_cleaver";
         public const string VoidMantleId = "void_mantle";
 
+        public const string GuardianSetId = "guardian";
+        public const string AbyssSetId = "abyss";
+        public const string PrismSetId = "prism";
+
         private static readonly EquipmentDefinition RustyBlade = new()
         {
             Id = RustyBladeId,
@@ -36,7 +40,8 @@ namespace Backend.GameSystems.Equipment
             DisplayName = "이끼 가죽 갑옷",
             Grade = EquipmentGrade.Common,
             Slot = EquipmentSlot.Armor,
-            VitBonus = 2
+            VitBonus = 2,
+            SetId = GuardianSetId
         };
 
         private static readonly EquipmentDefinition SporeKnife = new()
@@ -65,7 +70,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Rare,
             Slot = EquipmentSlot.Weapon,
             AgiBonus = 4,
-            StrBonus = 1
+            StrBonus = 1,
+            SetId = AbyssSetId
         };
 
         private static readonly EquipmentDefinition SilverGuard = new()
@@ -75,7 +81,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Rare,
             Slot = EquipmentSlot.Armor,
             VitBonus = 4,
-            StrBonus = 1
+            StrBonus = 1,
+            SetId = GuardianSetId
         };
 
         private static readonly EquipmentDefinition PrismBlade = new()
@@ -85,7 +92,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Epic,
             Slot = EquipmentSlot.Weapon,
             IntBonus = 3,
-            StrBonus = 2
+            StrBonus = 2,
+            SetId = PrismSetId
         };
 
         private static readonly EquipmentDefinition ObsidianPlate = new()
@@ -95,7 +103,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Epic,
             Slot = EquipmentSlot.Armor,
             VitBonus = 6,
-            StrBonus = 2
+            StrBonus = 2,
+            SetId = PrismSetId
         };
 
         private static readonly EquipmentDefinition WardenGavel = new()
@@ -105,7 +114,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Legendary,
             Slot = EquipmentSlot.Weapon,
             IntBonus = 4,
-            VitBonus = 2
+            VitBonus = 2,
+            SetId = GuardianSetId
         };
 
         private static readonly EquipmentDefinition SilentAegis = new()
@@ -115,7 +125,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Legendary,
             Slot = EquipmentSlot.Armor,
             VitBonus = 8,
-            StrBonus = 1
+            StrBonus = 1,
+            SetId = GuardianSetId
         };
 
         private static readonly EquipmentDefinition AbyssFang = new()
@@ -125,7 +136,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Legendary,
             Slot = EquipmentSlot.Weapon,
             AgiBonus = 5,
-            StrBonus = 3
+            StrBonus = 3,
+            SetId = AbyssSetId
         };
 
         private static readonly EquipmentDefinition ThresholdCleaver = new()
@@ -135,7 +147,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Mythic,
             Slot = EquipmentSlot.Weapon,
             StrBonus = 6,
-            VitBonus = 3
+            VitBonus = 3,
+            SetId = AbyssSetId
         };
 
         private static readonly EquipmentDefinition VoidMantle = new()
@@ -145,7 +158,8 @@ namespace Backend.GameSystems.Equipment
             Grade = EquipmentGrade.Mythic,
             Slot = EquipmentSlot.Armor,
             VitBonus = 10,
-            IntBonus = 3
+            IntBonus = 3,
+            SetId = AbyssSetId
         };
 
         public static IReadOnlyList<EquipmentDefinition> All { get; } = new List<EquipmentDefinition>

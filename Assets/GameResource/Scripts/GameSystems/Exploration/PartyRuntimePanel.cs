@@ -114,6 +114,30 @@ namespace Backend.GameSystems.Exploration
             _builder.Append(GetRoleLabel(member.Role));
             _builder.AppendLine();
 
+            var tierTitle = CharacterTierManager.GetTierTitle(member.CharacterId);
+            if (!string.IsNullOrEmpty(tierTitle) && tierTitle != "견습")
+            {
+                _builder.Append("<color=#c8b878>");
+                _builder.Append(tierTitle);
+                if (member.WeaponEnhanceLevel > 0 || member.ArmorEnhanceLevel > 0)
+                {
+                    _builder.Append(" · +");
+                    _builder.Append(member.WeaponEnhanceLevel);
+                    _builder.Append('/');
+                    _builder.Append(member.ArmorEnhanceLevel);
+                }
+
+                _builder.AppendLine("</color>");
+            }
+            else if (member.WeaponEnhanceLevel > 0 || member.ArmorEnhanceLevel > 0)
+            {
+                _builder.Append("<color=#c8b878>강화 +");
+                _builder.Append(member.WeaponEnhanceLevel);
+                _builder.Append('/');
+                _builder.Append(member.ArmorEnhanceLevel);
+                _builder.AppendLine("</color>");
+            }
+
             _builder.Append("<color=");
             _builder.Append(hpColor);
             _builder.Append(">HP ");

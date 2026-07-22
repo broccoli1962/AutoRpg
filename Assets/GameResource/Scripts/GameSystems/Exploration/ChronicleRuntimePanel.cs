@@ -132,6 +132,27 @@ namespace Backend.GameSystems.Exploration
                 Show();
         }
 
+        public void OpenTab(ChroniclePanelTab tab)
+        {
+            _tab = (ChronicleTab)tab;
+            _pageFromEnd = 0;
+            Show();
+        }
+
+        public void ClosePanel()
+        {
+            Hide();
+        }
+
+        public enum ChroniclePanelTab
+        {
+            Runs = ChronicleTab.Runs,
+            Favorites = ChronicleTab.Favorites,
+            CharacterJournal = ChronicleTab.CharacterJournal,
+            LoreCompendium = ChronicleTab.LoreCompendium,
+            MonsterCompendium = ChronicleTab.MonsterCompendium
+        }
+
         private void BuildUi()
         {
             var canvas = GetComponentInParent<Canvas>();

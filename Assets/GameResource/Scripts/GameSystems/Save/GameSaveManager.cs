@@ -142,8 +142,53 @@ namespace Backend.GameSystems.Save
                 FavoriteMoments = new List<string>(source.FavoriteMoments ?? new List<string>()),
                 LoreEntries = new List<string>(source.LoreEntries ?? new List<string>()),
                 MonsterEntries = new List<string>(source.MonsterEntries ?? new List<string>()),
-                UnlockedSkillIds = new List<string>(source.UnlockedSkillIds ?? new List<string>())
+                UnlockedSkillIds = new List<string>(source.UnlockedSkillIds ?? new List<string>()),
+                CharacterTiers = CloneTierRecords(source.CharacterTiers),
+                EquipmentEnhances = CloneEnhanceRecords(source.EquipmentEnhances)
             };
+        }
+
+        private static List<CharacterTierRecord> CloneTierRecords(List<CharacterTierRecord> source)
+        {
+            var clone = new List<CharacterTierRecord>();
+            if (source == null)
+                return clone;
+
+            foreach (var record in source)
+            {
+                if (record == null)
+                    continue;
+
+                clone.Add(new CharacterTierRecord
+                {
+                    CharacterId = record.CharacterId,
+                    TierIndex = record.TierIndex
+                });
+            }
+
+            return clone;
+        }
+
+        private static List<EquipmentEnhanceRecord> CloneEnhanceRecords(List<EquipmentEnhanceRecord> source)
+        {
+            var clone = new List<EquipmentEnhanceRecord>();
+            if (source == null)
+                return clone;
+
+            foreach (var record in source)
+            {
+                if (record == null)
+                    continue;
+
+                clone.Add(new EquipmentEnhanceRecord
+                {
+                    CharacterId = record.CharacterId,
+                    Slot = record.Slot,
+                    Level = record.Level
+                });
+            }
+
+            return clone;
         }
     }
 }
