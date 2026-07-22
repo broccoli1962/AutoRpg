@@ -31,7 +31,7 @@ namespace Backend.GameSystems.Equipment
             if (!random.RollChance(dropChance * BlacksmithManager.GetDropChanceMultiplier()))
                 return;
 
-            var definition = EquipmentDefinitions.RollDrop(monsterRarity, random);
+            var definition = EquipmentDefinitions.RollDrop(monsterRarity, random, state.ZoneId, state.CurrentFloor);
             if (definition == null)
                 return;
 
@@ -116,7 +116,11 @@ namespace Backend.GameSystems.Equipment
             if (string.IsNullOrEmpty(definitionId))
                 return null;
 
-            return EquipmentDefinitions.Get(definitionId)?.DisplayName;
+            var definition = EquipmentDefinitions.Get(definitionId);
+            if (definition == null)
+                return null;
+
+            return $"{definition.DisplayName}[{EquipmentGradeUtil.GetLabel(definition.Grade)}]";
         }
 
         private static CharacterState SelectRecipient(PartyState party, EquipmentSlot slot)
@@ -130,7 +134,9 @@ namespace Backend.GameSystems.Equipment
                 if (slot == EquipmentSlot.Weapon &&
                     (member.Role == CharacterRole.Warrior ||
                      member.Role == CharacterRole.Rogue ||
-                     member.Role == CharacterRole.Bard))
+                     member.Role == CharacterRole.Bard ||
+                     member.Role == CharacterRole.Mage ||
+                     member.Role == CharacterRole.Cleric))
                 {
                     best = member;
                     break;
