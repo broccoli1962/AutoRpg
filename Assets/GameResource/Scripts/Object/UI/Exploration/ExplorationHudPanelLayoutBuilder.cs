@@ -25,24 +25,26 @@ namespace Backend.Object.UI.Exploration
             statusText.supportRichText = true;
             var goldText = CreateText(rootRect, "GoldText", new Vector2(24f, -72f), new Vector2(220f, 22f), 16, font);
             goldText.gameObject.SetActive(false);
-            var progressText = CreateText(rootRect, "ProgressText", new Vector2(400f, -88f), new Vector2(120f, 22f), 14, font);
-            var progressSlider = CreateProgressSlider(rootRect, new Vector2(24f, -88f), new Vector2(360f, 16f));
 
-            var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -112f), new Vector2(920f, 18f), 13, font);
+            var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -88f), new Vector2(920f, 18f), 13, font);
             helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그  하단탭";
-            var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -132f), new Vector2(420f, 18f), 13, font);
+            var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -108f), new Vector2(420f, 18f), 13, font);
             filterText.color = new Color(0.8f, 0.8f, 0.85f);
 
-            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(24f, -156f), "일시정지", font);
-            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(140f, -156f), "재개", font);
-            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(256f, -156f), "귀환", font);
+            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(24f, -132f), "일시정지", font);
+            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(140f, -132f), "재개", font);
+            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(256f, -132f), "귀환", font);
 
             var logFeedGo = new GameObject("LogFeedView");
             logFeedGo.transform.SetParent(rootRect, false);
             var logFeedRect = logFeedGo.AddComponent<RectTransform>();
             StretchFull(logFeedRect);
-            logFeedRect.offsetMin = new Vector2(PartyRuntimePanel.PanelWidthPx + 24f, GuildHudTabController.BottomInsetPx);
-            logFeedRect.offsetMax = new Vector2(-24f, -196f);
+            logFeedRect.offsetMin = new Vector2(
+                ExplorationHudLayoutMetrics.RightPanelLeft,
+                GuildHudTabController.BottomInsetPx);
+            logFeedRect.offsetMax = new Vector2(
+                -ExplorationHudLayoutMetrics.HorizontalPadding,
+                -ExplorationHudLayoutMetrics.TopBarHeight);
 
             var logFeedView = logFeedGo.AddComponent<ExplorationLogFeedView>();
             var scrollRect = logFeedGo.AddComponent<ScrollRect>();
@@ -96,6 +98,14 @@ namespace Backend.Object.UI.Exploration
 
             logFeedView.ConfigureRuntime(scrollRect, contentRect, itemView);
 
+            CreateText(
+                rootRect,
+                "LogHeader",
+                new Vector2(ExplorationHudLayoutMetrics.RightPanelLeft, -ExplorationHudLayoutMetrics.TopBarHeight + 8f),
+                new Vector2(ExplorationHudLayoutMetrics.RightPanelWidth - 16f, 20f),
+                14,
+                font).text = "[ 로그 ]";
+
             var chroniclePanel = panel.gameObject.GetComponent<ChronicleRuntimePanel>();
             if (chroniclePanel == null)
                 chroniclePanel = panel.gameObject.AddComponent<ChronicleRuntimePanel>();
@@ -106,6 +116,9 @@ namespace Backend.Object.UI.Exploration
 
             if (panel.gameObject.GetComponent<PartyRuntimePanel>() == null)
                 panel.gameObject.AddComponent<PartyRuntimePanel>();
+
+            if (panel.gameObject.GetComponent<ExplorationCenterRuntimePanel>() == null)
+                panel.gameObject.AddComponent<ExplorationCenterRuntimePanel>();
 
             if (panel.gameObject.GetComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>() == null)
                 panel.gameObject.AddComponent<Backend.GameSystems.DynamicEvent.DynamicEventRuntimePopup>();
@@ -125,8 +138,8 @@ namespace Backend.Object.UI.Exploration
             panel.ConfigureRuntime(
                 statusText,
                 goldText,
-                progressSlider,
-                progressText,
+                null,
+                null,
                 pauseButton,
                 resumeButton,
                 returnButton,
@@ -171,46 +184,6 @@ namespace Backend.Object.UI.Exploration
             text.color = Color.white;
             text.supportRichText = true;
             return text;
-        }
-
-        private static Slider CreateProgressSlider(RectTransform parent, Vector2 anchoredPos, Vector2 size)
-        {
-            var go = new GameObject("ProgressSlider");
-            go.transform.SetParent(parent, false);
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = anchoredPos;
-            rect.sizeDelta = size;
-
-            var background = new GameObject("Background");
-            background.transform.SetParent(go.transform, false);
-            var bgRect = background.AddComponent<RectTransform>();
-            StretchFull(bgRect);
-            background.AddComponent<Image>().color = new Color(0.2f, 0.2f, 0.25f, 0.9f);
-
-            var fillArea = new GameObject("Fill Area");
-            fillArea.transform.SetParent(go.transform, false);
-            var fillAreaRect = fillArea.AddComponent<RectTransform>();
-            StretchFull(fillAreaRect);
-            fillAreaRect.offsetMin = new Vector2(4f, 4f);
-            fillAreaRect.offsetMax = new Vector2(-4f, -4f);
-
-            var fill = new GameObject("Fill");
-            fill.transform.SetParent(fillArea.transform, false);
-            var fillRect = fill.AddComponent<RectTransform>();
-            StretchFull(fillRect);
-            fill.AddComponent<Image>().color = new Color(0.35f, 0.65f, 0.95f, 1f);
-
-            var slider = go.AddComponent<Slider>();
-            slider.fillRect = fillRect;
-            slider.targetGraphic = fill.GetComponent<Image>();
-            slider.direction = Slider.Direction.LeftToRight;
-            slider.minValue = 0f;
-            slider.maxValue = 1f;
-            slider.value = 0f;
-            return slider;
         }
 
         private static CommonButton CreateButton(

@@ -52,8 +52,12 @@ namespace Backend.GameSystems.Exploration
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(0f, 1f);
             rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = new Vector2(12f, -136f);
-            rect.sizeDelta = new Vector2(PanelWidth, Screen.height - 152f);
+            rect.anchoredPosition = new Vector2(
+                ExplorationHudLayoutMetrics.HorizontalPadding,
+                -ExplorationHudLayoutMetrics.TopBarHeight);
+            rect.sizeDelta = new Vector2(
+                PanelWidth,
+                Screen.height - ExplorationHudLayoutMetrics.TopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
 
             var image = root.AddComponent<Image>();
             image.color = new Color(0.08f, 0.08f, 0.12f, 0.88f);
