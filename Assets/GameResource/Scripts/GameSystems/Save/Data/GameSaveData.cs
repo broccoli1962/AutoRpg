@@ -14,5 +14,6 @@ namespace Backend.GameSystems.Save.Data
         public Dictionary<string, int> Affinities = new();
         public int LlmQualityMode;
         public int DynamicEventAutoPolicy;
+        public int GoldenEventAutoPause = 1;
     }
 }

@@ -58,5 +58,6 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public string LlmResultNarration;
         public bool IsSceneReady;
         public bool IsResolved;
+        public bool RequiresManualChoice;
     }
 }

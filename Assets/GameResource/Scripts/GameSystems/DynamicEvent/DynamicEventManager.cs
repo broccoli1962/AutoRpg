@@ -22,11 +22,34 @@ namespace Backend.GameSystems.DynamicEvent
         private DeterministicRandom _pendingRandom;
         private ExplorationState _pendingState;
         private bool _isRunningEventFlow;
+        private UniTaskCompletionSource<string> _manualChoiceTcs;
 
         public DynamicEventInstance ActiveEvent { get; private set; }
 
         public static bool HasActiveUnresolvedEvent =>
             !GameStateUtil.IsQuitting && Instance.ActiveEvent != null && !Instance.ActiveEvent.IsResolved;
+
+        public static bool IsAwaitingManualChoice =>
+            !GameStateUtil.IsQuitting && Instance._manualChoiceTcs != null;
+
+        /// <summary>
+        /// 황금 이벤트 수동 선택 (0-based choice index).
+        /// </summary>
+        public static bool TrySubmitManualChoice(int choiceIndex)
+        {
+            if (GameStateUtil.IsQuitting ||
+                Instance._pendingTemplate == null ||
+                Instance._manualChoiceTcs == null)
+            {
+                return false;
+            }
+
+            if (choiceIndex < 0 || choiceIndex >= Instance._pendingTemplate.Choices.Count)
+                return false;
+
+            var choiceId = Instance._pendingTemplate.Choices[choiceIndex].Id;
+            return Instance._manualChoiceTcs.TrySetResult(choiceId);
+        }
 
         public static void EnsureInitialized()
         {
@@ -120,11 +143,24 @@ namespace Backend.GameSystems.DynamicEvent
 
                 ActiveEvent.LlmNarration = sceneNarration;
                 ActiveEvent.IsSceneReady = true;
+                ActiveEvent.RequiresManualChoice = ShouldAwaitManualChoice(_pendingTemplate);
                 DynamicEventChannels.PublishEventSceneReady(ActiveEvent);
 
-                await UniTask.Delay(System.TimeSpan.FromSeconds(SceneDisplaySeconds), cancellationToken: destroyCancellationToken);
+                string choiceId;
+                if (ActiveEvent.RequiresManualChoice)
+                {
+                    _manualChoiceTcs = new UniTaskCompletionSource<string>();
+                    choiceId = await _manualChoiceTcs.Task.AttachExternalCancellation(destroyCancellationToken);
+                    _manualChoiceTcs = null;
+                }
+                else
+                {
+                    await UniTask.Delay(
+                        System.TimeSpan.FromSeconds(SceneDisplaySeconds),
+                        cancellationToken: destroyCancellationToken);
+                    choiceId = ResolveAutoChoice(_pendingTemplate, _pendingState);
+                }
 
-                var choiceId = ResolveAutoChoice(_pendingTemplate, _pendingState);
                 var outcome = DynamicEventResolver.ResolveChoice(_pendingTemplate, choiceId, _pendingRandom);
 
                 ActiveEvent.PlayerChoiceId = choiceId;
@@ -152,6 +188,8 @@ namespace Backend.GameSystems.DynamicEvent
             }
             finally
             {
+                _manualChoiceTcs = null;
+
                 if (_pendingState != null)
                 {
                     _pendingState.IsPaused = false;
@@ -165,6 +203,9 @@ namespace Backend.GameSystems.DynamicEvent
                 _isRunningEventFlow = false;
             }
         }
+
+        private static bool ShouldAwaitManualChoice(DynamicEventTemplate template) =>
+            template.Intensity == DynamicEventIntensity.Golden && GoldenEventSettings.AutoPauseOnGolden;
 
         private static string ResolveAutoChoice(DynamicEventTemplate template, ExplorationState state)
         {
@@ -250,6 +291,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.ArtifactMuralId => "study",
                 DynamicEventDefinitions.EncounterScholarId => "talk",
                 DynamicEventDefinitions.EncounterWandererId => "help",
+                DynamicEventDefinitions.GoldenChamberId => "enter_chamber",
                 _ => GetFirstChoiceId(template)
             };
 
@@ -267,6 +309,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.TrapPitId => "climb",
                 DynamicEventDefinitions.HazardCollapseId => "cover",
                 DynamicEventDefinitions.HazardQuicksandId => "wait",
+                DynamicEventDefinitions.GoldenChamberId => "retreat",
                 _ => GetSecondChoiceId(template)
             };
 
