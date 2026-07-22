@@ -1,4 +1,5 @@
 using Backend.GameSystems.Equipment.Data;
+using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Simulation;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace Backend.GameSystems.Equipment
                 _ => 0.12f
             };
 
-            if (!random.RollChance(dropChance))
+            if (!random.RollChance(dropChance * BlacksmithManager.GetDropChanceMultiplier()))
                 return;
 
             var definition = EquipmentDefinitions.RollDrop(monsterRarity, random);

@@ -60,6 +60,7 @@ namespace Backend.GameSystems.Exploration
             var party = ZoneDefinitions.CreateDefaultParty();
             TrainingGroundManager.ApplyPartyBonuses(party);
             EquipmentService.ClearPartyEquipment(party);
+            BlacksmithManager.ApplyStartingEquipment(party);
             _session.StartNew(seed, party);
             _session.State.Gold = PrestigeManager.GetStartingGoldBonus();
             ExplorationSessionLogArchive.Clear();
