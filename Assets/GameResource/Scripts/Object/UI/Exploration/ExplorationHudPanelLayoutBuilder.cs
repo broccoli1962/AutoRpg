@@ -21,19 +21,19 @@ namespace Backend.Object.UI.Exploration
             StretchFull(rootRect);
 
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            var statusText = CreateText(rootRect, "ZoneFloorText", new Vector2(24f, -20f), new Vector2(920f, 56f), 17, font);
+            var statusText = CreateText(rootRect, "ZoneFloorText", new Vector2(20f, -12f), new Vector2(1180f, 28f), 17, font);
             statusText.supportRichText = true;
             var goldText = CreateText(rootRect, "GoldText", new Vector2(24f, -72f), new Vector2(220f, 22f), 16, font);
             goldText.gameObject.SetActive(false);
 
-            var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -88f), new Vector2(920f, 18f), 13, font);
-            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  I:캐릭터  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그  하단탭";
-            var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -108f), new Vector2(420f, 18f), 13, font);
+            var helpText = CreateText(rootRect, "HelpText", new Vector2(400f, -68f), new Vector2(800f, 18f), 12, font);
+            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  I:캐릭터  R:귀환  F:필터  B:북마크  [/]:로그";
+            var filterText = CreateText(rootRect, "FilterText", new Vector2(20f, -68f), new Vector2(360f, 18f), 13, font);
             filterText.color = new Color(0.8f, 0.8f, 0.85f);
 
-            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(24f, -132f), "일시정지", font);
-            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(140f, -132f), "재개", font);
-            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(256f, -132f), "귀환", font);
+            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(20f, -92f), "일시정지", font);
+            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(132f, -92f), "재개", font);
+            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(244f, -92f), "귀환", font);
 
             var logFeedGo = new GameObject("LogFeedView");
             logFeedGo.transform.SetParent(rootRect, false);
@@ -41,7 +41,7 @@ namespace Backend.Object.UI.Exploration
             StretchFull(logFeedRect);
             logFeedRect.offsetMin = new Vector2(
                 ExplorationHudLayoutMetrics.RightPanelLeft,
-                GuildHudTabController.BottomInsetPx);
+                ExplorationHudLayoutMetrics.BottomInsetPx);
             logFeedRect.offsetMax = new Vector2(
                 -ExplorationHudLayoutMetrics.HorizontalPadding,
                 -ExplorationHudLayoutMetrics.TopBarHeight);
@@ -102,7 +102,7 @@ namespace Backend.Object.UI.Exploration
                 rootRect,
                 "LogHeader",
                 new Vector2(ExplorationHudLayoutMetrics.RightPanelLeft, -ExplorationHudLayoutMetrics.TopBarHeight + 8f),
-                new Vector2(ExplorationHudLayoutMetrics.RightPanelWidth - 16f, 20f),
+                new Vector2(ExplorationHudLayoutMetrics.RightPanelContentWidth, 20f),
                 14,
                 font).text = "[ 로그 ]";
 

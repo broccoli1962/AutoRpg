@@ -10,9 +10,9 @@ namespace Backend.GameSystems.Exploration
     /// </summary>
     public sealed class GuildHudTabController : MonoBehaviour
     {
-        private const float TabBarHeight = 52f;
+        private const float TabBarHeight = ExplorationHudLayoutMetrics.TabBarHeight;
 
-        public static float BottomInsetPx => TabBarHeight + 8f;
+        public static float BottomInsetPx => ExplorationHudLayoutMetrics.BottomInsetPx;
 
         private enum HudBottomTab
         {
@@ -74,9 +74,8 @@ namespace Backend.GameSystems.Exploration
                 var existingRect = existingBar.GetComponent<RectTransform>();
                 if (existingRect != null)
                 {
-                    existingRect.anchoredPosition = new Vector2(
-                        0f,
-                        ExplorationHudLayoutMetrics.SafeAreaBottomInset);
+                    existingRect.anchoredPosition = Vector2.zero;
+                    existingRect.sizeDelta = new Vector2(0f, TabBarHeight);
                 }
 
                 WireExistingTabButtons(existingBar);
@@ -90,7 +89,7 @@ namespace Backend.GameSystems.Exploration
             barRect.anchorMin = new Vector2(0f, 0f);
             barRect.anchorMax = new Vector2(1f, 0f);
             barRect.pivot = new Vector2(0.5f, 0f);
-            barRect.anchoredPosition = new Vector2(0f, ExplorationHudLayoutMetrics.SafeAreaBottomInset);
+            barRect.anchoredPosition = Vector2.zero;
             barRect.sizeDelta = new Vector2(0f, TabBarHeight);
 
             var barImage = barRoot.AddComponent<Image>();

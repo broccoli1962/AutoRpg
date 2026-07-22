@@ -14,13 +14,11 @@ namespace Backend.GameSystems.Exploration
     /// </summary>
     public sealed class PartyRuntimePanel : MonoBehaviour
     {
-        private const float PanelWidth = 280f;
-
         private Text _contentText;
         private CompositeDisposable _disposables;
         private readonly StringBuilder _builder = new();
 
-        public static float PanelWidthPx => PanelWidth;
+        public static float PanelWidthPx => ExplorationHudLayoutMetrics.LeftPanelWidth;
 
         private void Start()
         {
@@ -47,36 +45,43 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             var container = FindHudContainer("Body/LeftPanel");
-            var root = new GameObject("PartyPanel");
-            root.transform.SetParent(container != null ? container : canvas.transform, false);
+            var contentRoot = EnsureContentRoot(container, canvas.transform, "PartyContent");
 
-            var rect = root.AddComponent<RectTransform>();
+            var title = CreateText(contentRoot, "PartyTitle", new Vector2(12f, -8f), 18, "[ 파티 ]");
+            title.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.LeftPanelContentWidth, 28f);
+
+            _contentText = CreateText(contentRoot, "PartyContentText", new Vector2(12f, -40f), 14, string.Empty);
+            var contentRect = _contentText.rectTransform;
+            contentRect.anchorMin = new Vector2(0f, 0f);
+            contentRect.anchorMax = new Vector2(1f, 1f);
+            contentRect.offsetMin = new Vector2(12f, 12f);
+            contentRect.offsetMax = new Vector2(-12f, -40f);
+            _contentText.lineSpacing = 1.1f;
+        }
+
+        private static Transform EnsureContentRoot(Transform container, Transform canvasRoot, string name)
+        {
             if (container != null)
             {
-                StretchFull(rect);
-            }
-            else
-            {
-                rect.anchorMin = new Vector2(0f, 1f);
-                rect.anchorMax = new Vector2(0f, 1f);
-                rect.pivot = new Vector2(0f, 1f);
-                rect.anchoredPosition = new Vector2(
-                    ExplorationHudLayoutMetrics.HorizontalPadding,
-                    -ExplorationHudLayoutMetrics.EffectiveTopBarHeight);
-                rect.sizeDelta = new Vector2(
-                    PanelWidth,
-                    UnityEngine.Screen.height - ExplorationHudLayoutMetrics.EffectiveTopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
+                var existing = container.Find(name);
+                if (existing != null)
+                    return existing;
+
+                var go = new GameObject(name, typeof(RectTransform));
+                go.transform.SetParent(container, false);
+                StretchFull(go.GetComponent<RectTransform>());
+                return go.transform;
             }
 
-            var image = root.AddComponent<Image>();
-            image.color = new Color(0.08f, 0.08f, 0.12f, 0.88f);
-
-            var title = CreateText(root.transform, "PartyTitle", new Vector2(12f, -8f), 18, "[ 파티 ]");
-            title.rectTransform.sizeDelta = new Vector2(PanelWidth - 24f, 28f);
-
-            _contentText = CreateText(root.transform, "PartyContent", new Vector2(12f, -40f), 14, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(PanelWidth - 24f, Screen.height - 200f);
-            _contentText.lineSpacing = 1.1f;
+            var fallback = new GameObject(name, typeof(RectTransform));
+            fallback.transform.SetParent(canvasRoot, false);
+            var rect = fallback.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 0.5f);
+            rect.anchoredPosition = new Vector2(ExplorationHudLayoutMetrics.HorizontalPadding, 0f);
+            rect.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.LeftPanelWidth, -ExplorationHudLayoutMetrics.TopBarHeight - ExplorationHudLayoutMetrics.BottomInsetPx);
+            return fallback.transform;
         }
 
         private Transform FindHudContainer(string relativePath)

@@ -79,13 +79,13 @@ namespace Backend.GameSystems.Exploration
             var panelRect = _panelRoot.AddComponent<RectTransform>();
             panelRect.anchorMin = new Vector2(0.5f, 0.5f);
             panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(640f, 420f);
+            panelRect.sizeDelta = new Vector2(960f, 480f);
 
             var panelImage = _panelRoot.AddComponent<Image>();
             panelImage.color = new Color(0.1f, 0.09f, 0.12f, 0.96f);
 
             var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22, "[ 강화 / 장비 ]");
-            title.rectTransform.sizeDelta = new Vector2(600f, 32f);
+            title.rectTransform.sizeDelta = new Vector2(920f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
                 "1:전직  2:무기 강화  3:방어구 강화  (리더 기준 · 대장간 Lv.1+)");
