@@ -33,7 +33,7 @@ namespace Backend.GameSystems.Exploration.Narration
             if (explorationEvent == null)
                 return false;
 
-            if (explorationEvent.EventType == EventType.OfflineSummary)
+            if (explorationEvent.EventType == Backend.GameSystems.Exploration.Data.EventType.OfflineSummary)
                 return true;
 
             return explorationEvent.Salience >= GetMinimumSalience(party);

@@ -314,7 +314,7 @@ namespace Backend.GameSystems.Exploration.Data
 
         public static int GetRelicFragmentQuantity(DiscoveryDefinition discovery)
         {
-            if (discovery == null || !IsRelicFragmentItem(discovery.ItemId))
+            if (string.IsNullOrEmpty(discovery.ItemId) || !IsRelicFragmentItem(discovery.ItemId))
                 return 0;
 
             return discovery.Quantity > 0 ? discovery.Quantity : 1;

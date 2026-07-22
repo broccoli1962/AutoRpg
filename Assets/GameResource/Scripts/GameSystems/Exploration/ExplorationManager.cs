@@ -58,6 +58,7 @@ namespace Backend.GameSystems.Exploration
         private void StartExploration_Internal(int seed)
         {
             var party = ZoneDefinitions.CreateDefaultParty();
+            TrainingGroundManager.ApplyPartyBonuses(party);
             EquipmentService.ClearPartyEquipment(party);
             _session.StartNew(seed, party);
             _session.State.Gold = PrestigeManager.GetStartingGoldBonus();
