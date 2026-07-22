@@ -158,6 +158,8 @@ namespace Backend.GameSystems.Character
                 if (!string.IsNullOrEmpty(summary))
                     AppendShortTerm(member.CharacterId, summary, member.DisplayName);
             }
+
+            TryAddDynamicEventCoreMemories(instance, party);
         }
 
         private void AppendShortTerm(string characterId, string summary, string displayName)
@@ -183,7 +185,16 @@ namespace Backend.GameSystems.Character
 
         private void TryAddCoreMemories(ExplorationEvent explorationEvent, PartyState party)
         {
-            if (explorationEvent.EventType != ExplorationEventType.CombatResult || party?.Leader == null)
+            if (party?.Leader == null)
+                return;
+
+            if (explorationEvent.EventType == ExplorationEventType.ZoneTransition)
+            {
+                TryAddZoneEnterCoreMemory(party.Leader, explorationEvent.ZoneId);
+                return;
+            }
+
+            if (explorationEvent.EventType != ExplorationEventType.CombatResult)
                 return;
 
             var leader = party.Leader;
@@ -225,6 +236,81 @@ namespace Backend.GameSystems.Character
                     Weight = "high"
                 });
             }
+        }
+
+        private void TryAddDynamicEventCoreMemories(DynamicEventInstance instance, PartyState party)
+        {
+            var leader = party?.Leader;
+            if (leader == null || instance == null)
+                return;
+
+            if (!_memories.TryGetValue(leader.CharacterId, out var memory))
+                return;
+
+            if (instance.TemplateId == DynamicEventDefinitions.GoldenChamberId &&
+                !HasCoreMemory(memory, "core_golden_chamber"))
+            {
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_golden_chamber",
+                    Description = "황금의 전실을 마주한 순간",
+                    Tags = { "golden", "milestone" },
+                    Weight = "high"
+                });
+                Debug.Log($"[CharacterMemoryManager] Core memory unlocked: golden chamber ({leader.DisplayName})");
+            }
+
+            if (instance.TemplateId == DynamicEventDefinitions.NarrativeRivalMemoryId &&
+                !HasCoreMemory(memory, "core_rival_memory"))
+            {
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_rival_memory",
+                    Description = "라이벌 탐험가와 마주친 기억",
+                    Tags = { "personal", "rival" },
+                    Weight = "high"
+                });
+                Debug.Log($"[CharacterMemoryManager] Core memory unlocked: rival memory ({leader.DisplayName})");
+            }
+
+            if (instance.TemplateId == DynamicEventDefinitions.EncounterHermitId &&
+                !HasCoreMemory(memory, "core_hermit_encounter"))
+            {
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_hermit_encounter",
+                    Description = "은둔자와 조우한 날",
+                    Tags = { "encounter", "personal" },
+                    Weight = "medium"
+                });
+            }
+        }
+
+        private void TryAddZoneEnterCoreMemory(CharacterState leader, string zoneId)
+        {
+            if (leader == null || string.IsNullOrEmpty(zoneId))
+                return;
+
+            if (!_memories.TryGetValue(leader.CharacterId, out var memory))
+                return;
+
+            var memoryId = zoneId switch
+            {
+                ZoneDefinitions.FungalMazeId => "core_enter_fungal_maze",
+                _ => null
+            };
+
+            if (string.IsNullOrEmpty(memoryId) || HasCoreMemory(memory, memoryId))
+                return;
+
+            memory.CoreMemories.Add(new CoreMemoryEntry
+            {
+                MemoryId = memoryId,
+                Description = $"{ZoneDefinitions.GetZoneDisplayName(zoneId)}(으)로 처음 발을 디딘 날",
+                Tags = { "zone", zoneId },
+                Weight = "high"
+            });
+            Debug.Log($"[CharacterMemoryManager] Core memory unlocked: zone enter {zoneId} ({leader.DisplayName})");
         }
 
         private static bool HasCoreMemory(CharacterMemory memory, string memoryId)
