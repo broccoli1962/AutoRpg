@@ -8,6 +8,7 @@ using Backend.GameSystems.Exploration.Simulation;
 using Backend.Util;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 
 namespace Backend.GameSystems.DynamicEvent
@@ -24,6 +25,7 @@ namespace Backend.GameSystems.DynamicEvent
         private ExplorationState _pendingState;
         private bool _isRunningEventFlow;
         private UniTaskCompletionSource<string> _manualChoiceTcs;
+        private CancellationTokenSource _autoFallbackCts;
 
         public DynamicEventInstance ActiveEvent { get; private set; }
 
@@ -50,6 +52,27 @@ namespace Backend.GameSystems.DynamicEvent
 
             var choiceId = Instance._pendingTemplate.Choices[choiceIndex].Id;
             return Instance._manualChoiceTcs.TrySetResult(choiceId);
+        }
+
+        /// <summary>
+        /// 자동 진행 중 팝업에서 수동 선택 모드로 전환한다.
+        /// </summary>
+        public static bool TryEnterManualChoiceMode()
+        {
+            if (GameStateUtil.IsQuitting ||
+                Instance.ActiveEvent == null ||
+                Instance._manualChoiceTcs == null)
+            {
+                return false;
+            }
+
+            if (Instance.ActiveEvent.RequiresManualChoice)
+                return true;
+
+            Instance.ActiveEvent.RequiresManualChoice = true;
+            Instance._autoFallbackCts?.Cancel();
+            DynamicEventChannels.PublishEventSceneReady(Instance.ActiveEvent);
+            return true;
         }
 
         public static void EnsureInitialized()
@@ -107,7 +130,8 @@ namespace Backend.GameSystems.DynamicEvent
                 TemplateId = template.EventId,
                 ZoneId = state.ZoneId,
                 Floor = floor,
-                LeaderName = leader?.DisplayName ?? "탐험대"
+                LeaderName = leader?.DisplayName ?? "탐험대",
+                Intensity = template.Intensity
             };
 
             state.IsPaused = true;
@@ -148,20 +172,12 @@ namespace Backend.GameSystems.DynamicEvent
                 ActiveEvent.RequiresManualChoice = ShouldAwaitManualChoice(_pendingTemplate);
                 DynamicEventChannels.PublishEventSceneReady(ActiveEvent);
 
-                string choiceId;
-                if (ActiveEvent.RequiresManualChoice)
-                {
-                    _manualChoiceTcs = new UniTaskCompletionSource<string>();
-                    choiceId = await _manualChoiceTcs.Task.AttachExternalCancellation(destroyCancellationToken);
-                    _manualChoiceTcs = null;
-                }
-                else
-                {
-                    await UniTask.Delay(
-                        System.TimeSpan.FromSeconds(SceneDisplaySeconds),
-                        cancellationToken: destroyCancellationToken);
-                    choiceId = ResolveAutoChoice(_pendingTemplate, _pendingState);
-                }
+                _manualChoiceTcs = new UniTaskCompletionSource<string>();
+                if (!ActiveEvent.RequiresManualChoice)
+                    RunAutoFallbackAfterDelayAsync(_pendingTemplate, _pendingState).Forget();
+
+                var choiceId = await _manualChoiceTcs.Task.AttachExternalCancellation(destroyCancellationToken);
+                _manualChoiceTcs = null;
 
                 var outcome = DynamicEventResolver.ResolveChoice(_pendingTemplate, choiceId, _pendingRandom);
 
@@ -191,6 +207,9 @@ namespace Backend.GameSystems.DynamicEvent
             finally
             {
                 _manualChoiceTcs = null;
+                _autoFallbackCts?.Cancel();
+                _autoFallbackCts?.Dispose();
+                _autoFallbackCts = null;
 
                 if (_pendingState != null)
                 {
@@ -208,6 +227,30 @@ namespace Backend.GameSystems.DynamicEvent
 
         private static bool ShouldAwaitManualChoice(DynamicEventTemplate template) =>
             template.Intensity == DynamicEventIntensity.Golden && GoldenEventSettings.AutoPauseOnGolden;
+
+        private async UniTaskVoid RunAutoFallbackAfterDelayAsync(
+            DynamicEventTemplate template,
+            ExplorationState state)
+        {
+            _autoFallbackCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+            try
+            {
+                await UniTask.Delay(
+                    System.TimeSpan.FromSeconds(SceneDisplaySeconds),
+                    cancellationToken: _autoFallbackCts.Token);
+
+                if (_manualChoiceTcs != null && _manualChoiceTcs.Task.Status == UniTaskStatus.Pending)
+                    _manualChoiceTcs.TrySetResult(ResolveAutoChoice(template, state));
+            }
+            catch (System.OperationCanceledException)
+            {
+            }
+            finally
+            {
+                _autoFallbackCts?.Dispose();
+                _autoFallbackCts = null;
+            }
+        }
 
         private static string ResolveAutoChoice(DynamicEventTemplate template, ExplorationState state)
         {
