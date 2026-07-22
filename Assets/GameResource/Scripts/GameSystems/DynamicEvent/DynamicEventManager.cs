@@ -169,16 +169,24 @@ namespace Backend.GameSystems.DynamicEvent
                             if (tag == PersonalityTag.Cautious)
                                 return "ignore";
                             break;
+                        case DynamicEventDefinitions.EncounterFairyId:
+                            if (tag == PersonalityTag.Greedy || tag == PersonalityTag.Cheerful)
+                                return "accept_gift";
+                            if (tag == PersonalityTag.Cautious || tag == PersonalityTag.Cynical)
+                                return "decline";
+                            break;
                         case DynamicEventDefinitions.TrapPressurePlateId:
                         case DynamicEventDefinitions.TrapPitId:
                         case DynamicEventDefinitions.HazardGasId:
                         case DynamicEventDefinitions.HazardCollapseId:
+                        case DynamicEventDefinitions.HazardQuicksandId:
                             if (tag == PersonalityTag.Cautious)
                                 return GetSafeChoiceId(template);
                             if (tag == PersonalityTag.Reckless)
                                 return GetRiskyChoiceId(template);
                             break;
                         case DynamicEventDefinitions.ArtifactMuralId:
+                        case DynamicEventDefinitions.ArtifactLoreFragmentId:
                         case DynamicEventDefinitions.EncounterScholarId:
                         case DynamicEventDefinitions.EncounterWandererId:
                             if (tag == PersonalityTag.Greedy || tag == PersonalityTag.Cheerful)
@@ -214,6 +222,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.HazardGasId => "retreat",
                 DynamicEventDefinitions.TrapPitId => "climb",
                 DynamicEventDefinitions.HazardCollapseId => "cover",
+                DynamicEventDefinitions.HazardQuicksandId => "wait",
                 _ => GetSecondChoiceId(template)
             };
 
@@ -224,6 +233,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.HazardGasId => "hold_breath",
                 DynamicEventDefinitions.TrapPitId => "jump",
                 DynamicEventDefinitions.HazardCollapseId => "dash",
+                DynamicEventDefinitions.HazardQuicksandId => "pull_free",
                 _ => GetFirstChoiceId(template)
             };
 

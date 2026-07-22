@@ -36,6 +36,12 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                     $"{floor}층 바닥에 희미한 룬 문양이 두 갈래로 갈라진다. 한쪽은 은은한 빛, 다른 쪽은 침묵이다.",
                 DynamicEventDefinitions.HazardCollapseId =>
                     $"{floor}층 천장에서 먼지와 돌조각이 떨어지기 시작한다. 앞으로 돌파할지, 엄폐할지 결정해야 한다.",
+                DynamicEventDefinitions.EncounterFairyId =>
+                    $"{floor}층 이끼 사이에서 작은 빛의 정령이 나타나 작은 선물을 내민다.",
+                DynamicEventDefinitions.ArtifactLoreFragmentId =>
+                    $"{floor}층 바닥에 반쯤 묻힌 석판 조각이 보인다. 고대 문자가 희미하게 새겨져 있다.",
+                DynamicEventDefinitions.HazardQuicksandId =>
+                    $"{floor}층 바닥이 갑자기 푹신해지며 발이 가라앉기 시작한다.",
                 _ => $"{leaderName}(은)는 {floor}층에서 예상치 못한 상황에 맞닥뜨렸다."
             };
 
@@ -127,6 +133,24 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                             ? "돌파하며 낙석에 스침을 입었다."
                             : "재빨리 통과해 붕괴를 피했다."
                         : "엄폐하며 붕괴가 잦아들 때까지 기다렸다.",
+                DynamicEventDefinitions.EncounterFairyId =>
+                    choiceId == "accept_gift"
+                        ? outcome == DynamicEventOutcomeEffect.MinorResource
+                            ? "정령의 선물에서 작은 보석 조각을 얻었다."
+                            : "선물을 받자 주변에 수상한 기운이 감돌았다."
+                        : "정중히 거절하고 길을 재개했다.",
+                DynamicEventDefinitions.ArtifactLoreFragmentId =>
+                    choiceId == "read"
+                        ? outcome == DynamicEventOutcomeEffect.GoldBonus
+                            ? "석판에서 숨겨진 보물 위치 단서를 해독했다."
+                            : "석판을 건드리자 마법 함정이 발동해 다쳤다."
+                        : "석판을 그대로 두고 지나갔다.",
+                DynamicEventDefinitions.HazardQuicksandId =>
+                    choiceId == "pull_free"
+                        ? outcome == DynamicEventOutcomeEffect.InjuryLight
+                            ? "발을 빼내는 과정에서 허리를 삐었다."
+                            : "재빨리 빠져나와 안전한 바닥에 섰다."
+                        : "천천히 몸을 기울여 가라앉음을 멈췄다.",
                 _ => $"선택({choiceId})의 결과: {outcome}"
             };
         }
@@ -174,6 +198,12 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 (DynamicEventDefinitions.ForkRuneMarkId, "ignore_runes") => "룬을 무시한다",
                 (DynamicEventDefinitions.HazardCollapseId, "dash") => "앞으로 돌파한다",
                 (DynamicEventDefinitions.HazardCollapseId, "cover") => "엄폐한다",
+                (DynamicEventDefinitions.EncounterFairyId, "accept_gift") => "선물을 받는다",
+                (DynamicEventDefinitions.EncounterFairyId, "decline") => "거절한다",
+                (DynamicEventDefinitions.ArtifactLoreFragmentId, "read") => "석판을 읽는다",
+                (DynamicEventDefinitions.ArtifactLoreFragmentId, "leave") => "지나간다",
+                (DynamicEventDefinitions.HazardQuicksandId, "pull_free") => "발을 빼낸다",
+                (DynamicEventDefinitions.HazardQuicksandId, "wait") => "천천히 기다린다",
                 _ => choiceId
             };
         }
