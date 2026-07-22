@@ -11,7 +11,7 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// v2 길드 대기 StartCard — 프리팹 바인딩·탐험 시작 CTA.
     /// </summary>
-    public sealed class ExplorationStartRuntimePanel : MonoBehaviour
+    public sealed class ExplorationStartRuntimePanel : ExplorationOverlayView
     {
         private GameObject _startCardRoot;
         private Text _titleText;

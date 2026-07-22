@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ecbddaf87957b34c800ce881fa01c7b, type: 3}
+  m_Name: ZoneTable
+  m_EditorClassIdentifier: Assembly-CSharp::ZoneTable
+  dataList:
+  - _id: mossy_hollow
+    _displayName: "\uC774\uB07C \uB3D9\uAD74"
+    _minFloor: 1
+    _maxFloor: 15
+    _rewardMultiplier: 1
+    _riskMultiplier: 1
+  - _id: fungal_maze
+    _displayName: "\uADE0\uC0AC \uBBF8\uAD81"
+    _minFloor: 16
+    _maxFloor: 30
+    _rewardMultiplier: 1.3
+    _riskMultiplier: 1.4
+  - _id: crystal_cavern
+    _displayName: "\uC218\uC815 \uACF5\uB3D9"
+    _minFloor: 31
+    _maxFloor: 45
+    _rewardMultiplier: 1.8
+    _riskMultiplier: 1.9
+  - _id: molten_depths
+    _displayName: "\uC6A9\uC554 \uC9C0\uB300"
+    _minFloor: 46
+    _maxFloor: 60
+    _rewardMultiplier: 2.5
+    _riskMultiplier: 2.8
+  - _id: silent_ruins
+    _displayName: "\uCE68\uBB35\uC758 \uD3D0\uD5C8"
+    _minFloor: 61
+    _maxFloor: 75
+    _rewardMultiplier: 3.5
+    _riskMultiplier: 3.8
+  - _id: abyssal_threshold
+    _displayName: "\uC2EC\uC5F0\uC758 \uBB38\uD131"
+    _minFloor: 76
+    _maxFloor: 90
+    _rewardMultiplier: 4.5
+    _riskMultiplier: 5

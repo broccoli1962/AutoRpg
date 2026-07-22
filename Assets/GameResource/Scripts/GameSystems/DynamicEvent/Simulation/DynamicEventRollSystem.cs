@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using Backend.GameSystems.DynamicEvent.Data;
+using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.DynamicEvent.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
 
@@ -18,7 +19,7 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
             if (golden != null)
                 return golden;
 
-            foreach (var template in DynamicEventDefinitions.All)
+            foreach (var template in GameTableCatalog.GetDynamicEventTemplates())
             {
                 if (!IsFloorEnterEligible(template, zoneId, floor))
                     continue;
@@ -36,7 +37,7 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
             DeterministicRandom random,
             float rateMultiplier = 1f)
         {
-            foreach (var template in DynamicEventDefinitions.All)
+            foreach (var template in GameTableCatalog.GetDynamicEventTemplates())
             {
                 if (!IsRareGoldenEligible(template, zoneId, floor))
                     continue;
@@ -62,7 +63,7 @@ namespace Backend.GameSystems.DynamicEvent.Simulation
         public static DynamicEventTemplate RollGuaranteed(string zoneId, int floor, DeterministicRandom random)
         {
             var eligible = new List<DynamicEventTemplate>();
-            foreach (var template in DynamicEventDefinitions.All)
+            foreach (var template in GameTableCatalog.GetDynamicEventTemplates())
             {
                 if (!IsGuaranteedEligible(template, zoneId, floor))
                     continue;

@@ -1,9 +1,7 @@
 ---
-description: Unity C# 네이밍, 코드 스타일, GetComponent/TryGetComponent 컨벤션
 globs: "**/*.cs"
 alwaysApply: false
 ---
-
 # Unity C# Conventions
 
 ## 네이밍 규칙

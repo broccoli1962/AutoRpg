@@ -1,0 +1,51 @@
+[
+  [
+    "itemId-string",
+    "zoneId-string",
+    "displayName-string",
+    "quantity-int",
+    "goldValue-int"
+  ],
+  [
+    "mana_shard",
+    "mossy_hollow",
+    "마나결정",
+    "1",
+    "12"
+  ],
+  [
+    "old_coin_pouch",
+    "mossy_hollow",
+    "낡은 은화 주머니",
+    "1",
+    "25"
+  ],
+  [
+    "healing_herb",
+    "mossy_hollow",
+    "치유 이끼",
+    "1",
+    "8"
+  ],
+  [
+    "rusty_ring",
+    "mossy_hollow",
+    "낡은 반지",
+    "1",
+    "15"
+  ],
+  [
+    "spore_vial",
+    "fungal_maze",
+    "포자 시약",
+    "1",
+    "18"
+  ],
+  [
+    "fungal_cap",
+    "fungal_maze",
+    "발광 버섯갓",
+    "1",
+    "14"
+  ]
+]

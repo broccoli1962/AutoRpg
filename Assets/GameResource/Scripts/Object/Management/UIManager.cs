@@ -63,20 +63,28 @@ namespace Backend.Object.Management
 
         private async UniTaskVoid InitRegistryAsync()
         {
-            var prefab = await ResourceManager.LoadResourceAsync<GameObject>(AddressableKeys.UI.Get("UIRoot"));
-            if (prefab == null)
+            var key = AddressableKeys.UI.Get("UIRoot");
+            GameObject prefab = null;
+
+            if (!string.IsNullOrEmpty(key))
+                prefab = await ResourceManager.LoadResourceAsync<GameObject>(key);
+
+            if (prefab != null)
             {
-                Debug.LogError("[UIManager] UIRoot 프리팹 로드 실패. _registry 없이 동작합니다.");
-                _registryReady.TrySetResult();
-                return;
+                var go = Instantiate(prefab);
+                DontDestroyOnLoad(go);
+                _registry = go.GetComponent<UIRegistry>();
+
+                if (_registry == null)
+                    Debug.LogError("[UIManager] UIRoot 프리팹에 UIRegistry 컴포넌트가 없습니다.");
             }
-
-            var go = Instantiate(prefab);
-            DontDestroyOnLoad(go);
-            _registry = go.GetComponent<UIRegistry>();
-
-            if (_registry == null)
-                Debug.LogError("[UIManager] UIRoot 프리팹에 UIRegistry 컴포넌트가 없습니다.");
+            else
+            {
+                Debug.LogWarning(
+                    "[UIManager] UIRoot Addressable 로드 실패. 런타임 UIRegistry 를 생성합니다. " +
+                    "에디터에서 Tools/Addressables/Build And Register UI Root 를 실행하세요.");
+                _registry = UIRegistry.CreateStandardRoot();
+            }
 
             _registryReady.TrySetResult();
         }
@@ -403,6 +411,32 @@ namespace Backend.Object.Management
         /// </summary>
         public static void CloseAllUI()
             => Instance.CloseAllUI_Internal();
+
+        /// <summary>UIRoot / UIRegistry 초기화 완료까지 대기한다.</summary>
+        public static UniTask EnsureReadyAsync()
+            => Instance._registryReady.Task;
+
+        /// <summary>Addressable UI 풀을 미리 생성해 첫 오픈 지연을 줄인다.</summary>
+        public static async UniTask PreWarmAsync<T>() where T : UIBase
+        {
+            await Instance._registryReady.Task;
+
+            if (ObjectPoolManager.HasPool<T>())
+                return;
+
+            var key = AddressableKeys.UI.Get<T>();
+            if (string.IsNullOrEmpty(key))
+            {
+                Debug.LogError($"[UIManager] PreWarm failed: empty key for {typeof(T).Name}");
+                return;
+            }
+
+            await ObjectPoolManager.GetOrCreatePoolAsync<T>(
+                addressableKey: key,
+                parent: null,
+                onGet: instance => Instance.Reparent(instance),
+                onRelease: null);
+        }
 
         #endregion
     }

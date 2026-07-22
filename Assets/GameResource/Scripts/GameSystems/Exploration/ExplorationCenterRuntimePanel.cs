@@ -11,7 +11,7 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// v2 중앙 패널 — 프리팹 ExploreContent 바인딩·상태 갱신.
     /// </summary>
-    public sealed class ExplorationCenterRuntimePanel : MonoBehaviour
+    public sealed class ExplorationCenterRuntimePanel : ExplorationOverlayView
     {
         private GameObject _exploreRoot;
         private Image _zoneBanner;

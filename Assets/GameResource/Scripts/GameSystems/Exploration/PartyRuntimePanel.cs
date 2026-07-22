@@ -9,12 +9,12 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// v2 좌측 파티 카드 4장 갱신. UI 구조는 프리팹에 고정.
     /// </summary>
-    public sealed class PartyRuntimePanel : MonoBehaviour
+    public sealed class PartyRuntimePanel : ExplorationOverlayView
     {
         private PartyMemberCardView[] _cards;
         private CompositeDisposable _disposables;
 
-        public static float PanelWidthPx => ExplorationHudLayoutMetrics.LeftPanelWidth;
+        public static float PanelWidthPx => ExplorationHudLayoutMetrics.PartyMemberCardWidth;
 
         private void Start()
         {
@@ -36,7 +36,7 @@ namespace Backend.GameSystems.Exploration
 
         private void BindCards()
         {
-            var content = FindHudTransform("Body/LeftPanel/PartyScroll/Viewport/Content");
+            var content = FindHudTransform("Body/PartyRow/PartyScroll/Viewport/Content");
             if (content == null)
             {
                 _cards = GetComponentsInChildren<PartyMemberCardView>(true);

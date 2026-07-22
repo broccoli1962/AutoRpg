@@ -434,5 +434,130 @@ namespace Backend.GameSystems.DynamicEvent.Data
 
             return choice;
         }
+
+        internal static DynamicEventTemplate ApplyTableRow(
+            DynamicEventTemplate source,
+            DynamicEventData row,
+            IReadOnlyList<string> allZoneIds)
+        {
+            return new DynamicEventTemplate
+            {
+                EventId = source.EventId,
+                Category = ParseCategory(row.category, source.Category),
+                Intensity = ParseIntensity(row.intensity, source.Intensity),
+                Trigger = new DynamicEventTrigger
+                {
+                    Type = ParseTriggerType(row.triggerType, row.intensity, source.Trigger.Type),
+                    ZoneIds = BuildZoneIdRange(row.zoneMin, row.zoneMax, allZoneIds, source.Trigger.ZoneIds),
+                    Probability = row.probability > 0f ? row.probability : source.Trigger.Probability,
+                    MinFloor = source.Trigger.MinFloor,
+                    MaxFloor = source.Trigger.MaxFloor,
+                },
+                Choices = source.Choices,
+            };
+        }
+
+        internal static IReadOnlyList<DynamicEventTemplate> MergeTableRows(
+            IReadOnlyList<DynamicEventData> rows,
+            IReadOnlyList<string> allZoneIds)
+        {
+            if (rows == null || rows.Count == 0)
+                return All;
+
+            var merged = new Dictionary<string, DynamicEventTemplate>();
+            foreach (var template in All)
+                merged[template.EventId] = template;
+
+            foreach (var row in rows)
+            {
+                if (string.IsNullOrEmpty(row.id) || !merged.TryGetValue(row.id, out var baseline))
+                    continue;
+
+                merged[row.id] = ApplyTableRow(baseline, row, allZoneIds);
+            }
+
+            return new List<DynamicEventTemplate>(merged.Values);
+        }
+
+        private static DynamicEventCategory ParseCategory(string value, DynamicEventCategory fallback)
+        {
+            if (string.IsNullOrEmpty(value))
+                return fallback;
+
+            return value switch
+            {
+                "fork_choice" => DynamicEventCategory.ForkChoice,
+                "encounter" => DynamicEventCategory.Encounter,
+                "trap" or "hazard" => DynamicEventCategory.Hazard,
+                "artifact" or "golden" => DynamicEventCategory.Artifact,
+                "faction" => DynamicEventCategory.Faction,
+                "personal_story" or "narrative" => DynamicEventCategory.PersonalStory,
+                _ => fallback,
+            };
+        }
+
+        private static DynamicEventIntensity ParseIntensity(string value, DynamicEventIntensity fallback)
+        {
+            if (string.IsNullOrEmpty(value))
+                return fallback;
+
+            return value switch
+            {
+                "golden" => DynamicEventIntensity.Golden,
+                "standard" => DynamicEventIntensity.Standard,
+                _ => fallback,
+            };
+        }
+
+        private static DynamicEventTriggerType ParseTriggerType(
+            string value,
+            string intensity,
+            DynamicEventTriggerType fallback)
+        {
+            if (ParseIntensity(intensity, DynamicEventIntensity.Standard) == DynamicEventIntensity.Golden)
+                return DynamicEventTriggerType.RareGolden;
+
+            if (string.IsNullOrEmpty(value))
+                return fallback;
+
+            return value switch
+            {
+                "rare_golden" => DynamicEventTriggerType.RareGolden,
+                "floor_enter" or "random" => DynamicEventTriggerType.FloorEnter,
+                _ => fallback,
+            };
+        }
+
+        private static List<string> BuildZoneIdRange(
+            string zoneMin,
+            string zoneMax,
+            IReadOnlyList<string> allZoneIds,
+            IReadOnlyList<string> fallback)
+        {
+            if (allZoneIds == null || allZoneIds.Count == 0 || string.IsNullOrEmpty(zoneMin) || string.IsNullOrEmpty(zoneMax))
+                return fallback != null ? new List<string>(fallback) : new List<string>();
+
+            var minIndex = -1;
+            var maxIndex = -1;
+            for (var i = 0; i < allZoneIds.Count; i++)
+            {
+                if (allZoneIds[i] == zoneMin)
+                    minIndex = i;
+                if (allZoneIds[i] == zoneMax)
+                    maxIndex = i;
+            }
+
+            if (minIndex < 0 || maxIndex < 0)
+                return fallback != null ? new List<string>(fallback) : new List<string>();
+
+            if (minIndex > maxIndex)
+                (minIndex, maxIndex) = (maxIndex, minIndex);
+
+            var range = new List<string>(maxIndex - minIndex + 1);
+            for (var i = minIndex; i <= maxIndex; i++)
+                range.Add(allZoneIds[i]);
+
+            return range;
+        }
     }
 }

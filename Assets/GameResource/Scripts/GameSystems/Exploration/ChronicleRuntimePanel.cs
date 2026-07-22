@@ -11,7 +11,7 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// Phase 6 프로토타입 연대기(회차 회고록 + 즐겨찾기 순간 + 캐릭터별 일지) 런타임 패널.
     /// </summary>
-    public sealed class ChronicleRuntimePanel : MonoBehaviour
+    public sealed class ChronicleRuntimePanel : ExplorationOverlayView
     {
         private const int EntriesPerPage = 4;
 
@@ -24,25 +24,20 @@ namespace Backend.GameSystems.Exploration
             MonsterCompendium
         }
 
-        private GameObject _panelRoot;
-        private Text _contentText;
-        private Text _pageText;
-        private bool _isVisible;
+        [SerializeField] private Text _contentText;
+        [SerializeField] private Text _pageText;
         private ChronicleTab _tab = ChronicleTab.Runs;
         private int _pageFromEnd;
         private int _characterIndex;
 
-        public bool IsVisible => _isVisible;
-
-        private void Start()
+        private void Awake()
         {
-            BuildUi();
             Hide();
         }
 
         private void Update()
         {
-            if (!_isVisible)
+            if (!IsVisible)
                 return;
 
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha1, KeyCode.Keypad1))
@@ -127,7 +122,7 @@ namespace Backend.GameSystems.Exploration
 
         public void Toggle()
         {
-            if (_isVisible)
+            if (IsVisible)
                 Hide();
             else
                 Show();
@@ -154,77 +149,10 @@ namespace Backend.GameSystems.Exploration
             MonsterCompendium = ChronicleTab.MonsterCompendium
         }
 
-        private void BuildUi()
-        {
-            var canvas = GetComponentInParent<Canvas>();
-            if (canvas == null)
-                return;
-
-            _panelRoot = new GameObject("ChroniclePanel");
-            _panelRoot.transform.SetParent(canvas.transform, false);
-
-            var panelRect = _panelRoot.AddComponent<RectTransform>();
-            panelRect.anchorMin = new Vector2(0.5f, 0.5f);
-            panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(960f, 520f);
-
-            var panelImage = _panelRoot.AddComponent<Image>();
-            panelImage.color = new Color(0.1f, 0.1f, 0.14f, 0.96f);
-
-            var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22, "[ 연대기 ]");
-            title.rectTransform.sizeDelta = new Vector2(920f, 32f);
-
-            var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:회차  2:즐겨찾기  3:캐릭터 일지  4:로어 도감  5:몬스터 도감  Q/E:캐릭터  PgUp/PgDn 또는 [/]:페이지");
-            hint.rectTransform.sizeDelta = new Vector2(920f, 20f);
-            hint.color = new Color(0.75f, 0.75f, 0.8f);
-
-            _pageText = CreateText(_panelRoot.transform, "Page", new Vector2(20f, -58f), 12, string.Empty);
-            _pageText.rectTransform.sizeDelta = new Vector2(920f, 18f);
-            _pageText.color = new Color(0.65f, 0.65f, 0.72f);
-
-            _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -78f), 16, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(920f, 418f);
-            _contentText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            _contentText.verticalOverflow = VerticalWrapMode.Overflow;
-        }
-
-        private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, string initial)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = anchoredPos;
-            rect.sizeDelta = new Vector2(920f, 40f);
-
-            var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = fontSize;
-            text.alignment = TextAnchor.UpperLeft;
-            text.color = Color.white;
-            text.supportRichText = true;
-            text.text = initial;
-            return text;
-        }
-
-        private void Show()
+        protected override void OnBeforeShow()
         {
             _pageFromEnd = 0;
             RefreshContent();
-            _panelRoot.SetActive(true);
-            _isVisible = true;
-        }
-
-        private void Hide()
-        {
-            if (_panelRoot != null)
-                _panelRoot.SetActive(false);
-
-            _isVisible = false;
         }
 
         private void RefreshContent()
@@ -487,3 +415,4 @@ namespace Backend.GameSystems.Exploration
         }
     }
 }
+

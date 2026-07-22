@@ -6,7 +6,7 @@ using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.Util;
 using Backend.Util.Management;
-using ExplorationEventType = Backend.GameSystems.Exploration.Data.EventType;
+using ExplorationEventType = global::EventType;
 using R3;
 using UnityEngine;
 

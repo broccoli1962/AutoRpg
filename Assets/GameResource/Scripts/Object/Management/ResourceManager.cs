@@ -53,6 +53,12 @@ namespace Backend.Object.Management
         #region #Internal Method
         private T LoadResource_Internal<T>(string key) where T : UnityEngine.Object
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                Debug.LogError("[ResourceManager] LoadResource called with null or empty key.");
+                return null;
+            }
+
             if (_resourceCache.TryGetValue(key, out AsyncOperationHandle cachedHandle))
             {
                 return cachedHandle.Result as T;
@@ -68,7 +74,7 @@ namespace Backend.Object.Management
             }
             else
             {
-                Debug.LogError($"Asset Load Fail! Key : {key}");
+                Debug.LogError($"[ResourceManager] Asset Load Fail! Key : {key}");
                 Addressables.Release(handle);
                 return null;
             }
@@ -89,6 +95,12 @@ namespace Backend.Object.Management
 
         private async UniTask<T> LoadResourceAsync_Internal<T>(string key) where T : UnityEngine.Object
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                Debug.LogError("[ResourceManager] LoadResourceAsync called with null or empty key.");
+                return null;
+            }
+
             if (_resourceCache.TryGetValue(key, out AsyncOperationHandle cachedHandle))
             {
                 if (!cachedHandle.IsDone)
@@ -110,7 +122,7 @@ namespace Backend.Object.Management
             }
             else
             {
-                Debug.LogError($"Asset Load Fail! Key : {key}");
+                Debug.LogError($"[ResourceManager] Asset Load Fail! Key : {key}");
                 _resourceCache.Remove(key);
                 Addressables.Release(handle);
                 return null;

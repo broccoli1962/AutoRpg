@@ -12,22 +12,20 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// 12_UIUX 캐릭터 카드 클릭 대응 — 스탯·장비·스킬·관계·기억 상세 패널.
     /// </summary>
-    public sealed class CharacterDetailRuntimePanel : MonoBehaviour
+    public sealed class CharacterDetailRuntimePanel : ExplorationOverlayView
     {
-        private GameObject _panelRoot;
-        private Text _contentText;
-        private Text _hintText;
-        private bool _isVisible;
+        [SerializeField] private Text _contentText;
+        [SerializeField] private Text _hintText;
         private int _memberIndex;
         private CompositeDisposable _disposables;
 
-        public bool IsVisible => _isVisible;
+        private void Awake()
+        {
+            Hide();
+        }
 
         private void Start()
         {
-            BuildUi();
-            Hide();
-
             CharacterMemoryManager.EnsureInitialized();
             _disposables = new CompositeDisposable();
             ExplorationChannels.OnStateChanged
@@ -47,13 +45,13 @@ namespace Backend.GameSystems.Exploration
 
             if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.I))
             {
-                if (_isVisible)
+                if (IsVisible)
                     Hide();
                 else
                     ShowMember(0);
             }
 
-            if (!_isVisible)
+            if (!IsVisible)
                 return;
 
             if (KeyboardInputUtil.WasKeyPressedThisFrame(KeyCode.Escape))
@@ -76,22 +74,22 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             _memberIndex = Mathf.Clamp(index, 0, members.Count - 1);
-            RefreshContent(members[_memberIndex]);
-            _panelRoot.SetActive(true);
-            _isVisible = true;
+            Show();
         }
 
-        public void Hide()
+        protected override void OnBeforeShow()
         {
-            if (_panelRoot != null)
-                _panelRoot.SetActive(false);
+            var members = ExplorationManager.GetCurrentState()?.Party?.Members;
+            if (members == null || members.Count == 0)
+                return;
 
-            _isVisible = false;
+            _memberIndex = Mathf.Clamp(_memberIndex, 0, members.Count - 1);
+            RefreshContent(members[_memberIndex]);
         }
 
         private void RefreshIfVisible()
         {
-            if (!_isVisible)
+            if (!IsVisible)
                 return;
 
             var members = ExplorationManager.GetCurrentState()?.Party?.Members;
@@ -228,58 +226,6 @@ namespace Backend.GameSystems.Exploration
             return GetComponent<GuildFacilityRuntimePanel>()?.IsVisible == true;
         }
 
-        private void BuildUi()
-        {
-            var canvas = GetComponentInParent<Canvas>();
-            if (canvas == null)
-                return;
-
-            _panelRoot = new GameObject("CharacterDetailPanel");
-            _panelRoot.transform.SetParent(canvas.transform, false);
-
-            var panelRect = _panelRoot.AddComponent<RectTransform>();
-            panelRect.anchorMin = new Vector2(0.5f, 0.5f);
-            panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(520f, 460f);
-
-            var panelImage = _panelRoot.AddComponent<Image>();
-            panelImage.color = new Color(0.09f, 0.1f, 0.14f, 0.97f);
-
-            var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22, "[ 캐릭터 상세 ]");
-            title.rectTransform.sizeDelta = new Vector2(480f, 28f);
-
-            _hintText = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13, "I:열기/닫기  Q/E:캐릭터");
-            _hintText.rectTransform.sizeDelta = new Vector2(480f, 20f);
-            _hintText.color = new Color(0.72f, 0.74f, 0.8f);
-
-            _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -68f), 15, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(480f, 340f);
-            _contentText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            _contentText.verticalOverflow = VerticalWrapMode.Overflow;
-        }
-
-        private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, string text)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = anchoredPos;
-            rect.sizeDelta = new Vector2(480f, 40f);
-
-            var label = go.AddComponent<Text>();
-            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            label.fontSize = fontSize;
-            label.alignment = TextAnchor.UpperLeft;
-            label.color = Color.white;
-            label.supportRichText = true;
-            label.text = text;
-            return label;
-        }
-
         private static string GetRoleLabel(CharacterRole role) =>
             role switch
             {
@@ -302,3 +248,4 @@ namespace Backend.GameSystems.Exploration
             };
     }
 }
+

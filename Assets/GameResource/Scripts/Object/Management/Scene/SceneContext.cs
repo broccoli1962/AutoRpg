@@ -18,8 +18,15 @@ namespace Backend.Object.Management
 
         private async UniTaskVoid EnterAsync()
         {
-            await Boot.WaitUntilReadyAsync();
-            await OnEnterAsync();
+            try
+            {
+                await Boot.WaitUntilReadyAsync();
+                await OnEnterAsync();
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"[{GetType().Name}] Scene enter failed: {e}");
+            }
         }
 
         private void OnDestroy()

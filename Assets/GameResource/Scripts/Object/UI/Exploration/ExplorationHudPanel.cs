@@ -28,58 +28,23 @@ namespace Backend.Object.UI
         [SerializeField] private Text _filterText;
         [SerializeField] private Text _helpText;
 
-        private ChronicleRuntimePanel _chroniclePanel;
-        private ExplorationSettingsRuntimePanel _settingsPanel;
         private ExplorationHudShortcuts _shortcuts;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            if (_logFeedView == null)
-                ExplorationHudPanelLayoutBuilder.TryBuild(this);
-        }
-
-        internal void ConfigureRuntime(
-            Text zoneFloorText,
-            Text goldText,
-            Slider progressSlider,
-            Text progressText,
-            CommonButton pauseButton,
-            CommonButton resumeButton,
-            CommonButton returnButton,
-            ExplorationLogFeedView logFeedView,
-            Text filterText,
-            Text helpText,
-            ChronicleRuntimePanel chroniclePanel,
-            ExplorationSettingsRuntimePanel settingsPanel)
-        {
-            _zoneFloorText = zoneFloorText;
-            _goldText = goldText;
-            _progressSlider = progressSlider;
-            _progressText = progressText;
-            _pauseButton = pauseButton;
-            _resumeButton = resumeButton;
-            _returnButton = returnButton;
-            _logFeedView = logFeedView;
-            _filterText = filterText;
-            _helpText = helpText;
-            _chroniclePanel = chroniclePanel;
-            _settingsPanel = settingsPanel;
-        }
 
         internal void BindShortcuts(System.Action refreshStatus)
         {
             if (_shortcuts == null)
                 _shortcuts = gameObject.AddComponent<ExplorationHudShortcuts>();
 
-            _settingsPanel?.Configure(refreshStatus);
-            _shortcuts.Initialize(_logFeedView, _chroniclePanel, _settingsPanel, _filterText, refreshStatus);
+            var chroniclePanel = GetComponent<ChronicleRuntimePanel>();
+            var settingsPanel = GetComponent<ExplorationSettingsRuntimePanel>();
+            settingsPanel?.Configure(refreshStatus);
+            _shortcuts.Initialize(_logFeedView, chroniclePanel, settingsPanel, _filterText, refreshStatus);
 
             var enhancePanel = gameObject.GetComponent<EnhanceRuntimePanel>();
             var guildPanel = gameObject.GetComponent<GuildFacilityRuntimePanel>();
             var tabController = gameObject.GetComponent<GuildHudTabController>();
             guildPanel?.Configure(refreshStatus);
-            tabController?.Initialize(_chroniclePanel, enhancePanel, guildPanel, refreshStatus);
+            tabController?.Initialize(chroniclePanel, enhancePanel, guildPanel, refreshStatus);
         }
 
         public Text ZoneFloorText => _zoneFloorText;
@@ -103,7 +68,6 @@ namespace Backend.Object.UI
 
             PrestigeManager.EnsureInitialized();
             View.BindShortcuts(() => RefreshState(ExplorationManager.GetCurrentState()));
-            View.LogFeedView?.Show();
             BindControls();
             RefreshState(ExplorationManager.GetCurrentState());
 
@@ -149,25 +113,39 @@ namespace Backend.Object.UI
 
         private void RefreshState(ExplorationState state)
         {
-            if (state == null)
-                return;
+            var isWaiting = state == null || !state.IsExploring;
 
             if (View.ZoneFloorText != null)
             {
                 View.ZoneFloorText.supportRichText = true;
-                View.ZoneFloorText.text = ExplorationHudStatusFormatter.Build(state);
+                View.ZoneFloorText.text = isWaiting
+                    ? "<color=#F5D673>길드 대기</color>  <size=14><color=#9AA8BC>하단 탭에서 시설·강화·연대기를 확인하세요</color></size>"
+                    : ExplorationHudStatusFormatter.Build(state);
             }
+
+            if (View.GoldText != null)
+                View.GoldText.gameObject.SetActive(!isWaiting);
 
             if (View.ProgressSlider != null)
             {
-                View.ProgressSlider.gameObject.SetActive(state.IsExploring);
-                View.ProgressSlider.value = Mathf.Clamp01(state.FloorProgress / 100f);
+                View.ProgressSlider.gameObject.SetActive(!isWaiting);
+                if (!isWaiting)
+                    View.ProgressSlider.value = Mathf.Clamp01(state.FloorProgress / 100f);
             }
 
             if (View.ProgressText != null)
             {
-                View.ProgressText.gameObject.SetActive(state.IsExploring);
-                View.ProgressText.text = $"{state.FloorProgress:0.#}%";
+                View.ProgressText.gameObject.SetActive(!isWaiting);
+                if (!isWaiting)
+                    View.ProgressText.text = $"{state.FloorProgress:0.#}%";
+            }
+
+            if (View.LogFeedView != null)
+            {
+                if (isWaiting)
+                    View.LogFeedView.ShowIdlePlaceholder();
+                else
+                    View.LogFeedView.Show();
             }
 
             RefreshControls(state);

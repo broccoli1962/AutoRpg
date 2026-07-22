@@ -11,94 +11,45 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// 하단 탭 '강화/장비' — 전직·장비 강화 (09_성장과경제.md).
     /// </summary>
-    public sealed class EnhanceRuntimePanel : MonoBehaviour
+    public sealed class EnhanceRuntimePanel : ExplorationOverlayView
     {
-        private GameObject _panelRoot;
-        private Text _contentText;
-        private bool _isVisible;
+        [SerializeField] private Text _contentText;
 
-        public bool IsVisible => _isVisible;
-
-        private void Start()
+        private void Awake()
         {
-            BuildUi();
             Hide();
         }
 
         private void Update()
         {
-            if (!_isVisible)
+            if (!IsVisible)
                 return;
 
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha1, KeyCode.Keypad1))
             {
                 CharacterTierManager.TryPromoteLeader(out var message);
-                Debug.Log($"[EnhancePanel] {message}");
+                Debug.Log($"[EnhanceRuntimePanel] {message}");
                 RefreshContent();
             }
 
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha2, KeyCode.Keypad2))
             {
                 EquipmentEnhanceManager.TryEnhanceLeaderWeapon(out var message);
-                Debug.Log($"[EnhancePanel] {message}");
+                Debug.Log($"[EnhanceRuntimePanel] {message}");
                 RefreshContent();
             }
 
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha3, KeyCode.Keypad3))
             {
                 EquipmentEnhanceManager.TryEnhanceLeaderArmor(out var message);
-                Debug.Log($"[EnhancePanel] {message}");
+                Debug.Log($"[EnhanceRuntimePanel] {message}");
                 RefreshContent();
             }
         }
 
-        public void Show()
+        protected override void OnBeforeShow()
         {
             RefreshContent();
-            _panelRoot.SetActive(true);
-            _isVisible = true;
-        }
-
-        public void Hide()
-        {
-            if (_panelRoot != null)
-                _panelRoot.SetActive(false);
-
-            _isVisible = false;
-        }
-
-        private void BuildUi()
-        {
-            var canvas = GetComponentInParent<Canvas>();
-            if (canvas == null)
-                return;
-
-            _panelRoot = new GameObject("EnhancePanel");
-            _panelRoot.transform.SetParent(canvas.transform, false);
-
-            var panelRect = _panelRoot.AddComponent<RectTransform>();
-            panelRect.anchorMin = new Vector2(0.5f, 0.5f);
-            panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(960f, 480f);
-
-            var panelImage = _panelRoot.AddComponent<Image>();
-            RuntimeUiSprites.ApplyPanelLarge(panelImage);
-            if (panelImage.sprite == null)
-                panelImage.color = new Color(0.1f, 0.09f, 0.12f, 0.96f);
-
-            var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22, "강화 / 장비");
-            ModernUiStyle.ApplySectionHeader(title, "강화 / 장비");
-            title.rectTransform.sizeDelta = new Vector2(920f, 32f);
-
-            var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:전직  2:무기 강화  3:방어구 강화  (리더 기준 · 대장간 Lv.1+)");
-            hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
-            ModernUiStyle.ApplyMuted(hint, 13);
-
-            _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -68f), 16, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(600f, 300f);
-            _contentText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            _contentText.verticalOverflow = VerticalWrapMode.Overflow;
         }
 
         private void RefreshContent()
@@ -132,27 +83,6 @@ namespace Backend.GameSystems.Exploration
                 $"마나 {meta?.ManaShards ?? 0} · 유물 {meta?.RelicFragments ?? 0}\n" +
                 $"대장간 {BlacksmithManager.GetDisplayLabel()}";
         }
-
-        private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, string initial)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = anchoredPos;
-            rect.sizeDelta = new Vector2(600f, 40f);
-
-            var text = go.AddComponent<Text>();
-            text.font = RuntimeUiFont.Get();
-            text.fontSize = fontSize;
-            text.alignment = TextAnchor.UpperLeft;
-            text.color = ModernUiStyle.BodyText;
-            text.supportRichText = true;
-            text.text = initial;
-            return text;
-        }
     }
 }
+

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78bbbf590a43147c5bc0c0f4e7243700, type: 3}
   m_Name: SettingData
   m_EditorClassIdentifier: Assembly-CSharp::GoogleSpreadSheetLoader.SettingData
-  apiKey: AIzaSyDM9Ql_edm34bIYxy256SS4A-YMURdI050
+  serviceAccountJsonPath: C:/Users/aq001/Downloads/ai-autorpg-304e705b3c26.json
   listSpreadSheetInfo:
-  - spreadSheetName: CrashPanel
-    spreadSheetId: 1-OFTpupKiYlj5HPV0VXeZRfxoUcRQr3VIl4hbu4bXY8
+  - spreadSheetName: AutoRpg
+    spreadSheetId: 1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4
   sheetTarget: 1
   sheetTargetStr: '#'
   sheet_enumTypeStr: Enum

@@ -66,13 +66,13 @@ namespace Backend.Object.Management.Pool
 
             if (prefabGameObject == null)
             {
-                Debug.LogError($"Failed to load addressable: {addressableKey}");
+                Debug.LogError($"[Pooling] Failed to load addressable: {addressableKey}");
                 return null;
             }
 
             if (!prefabGameObject.TryGetComponent<T>(out var prefabComponent))
             {
-                Debug.LogError($"Component {typeof(T).Name} not found on addressable: {addressableKey}");
+                Debug.LogError($"[Pooling] Component {typeof(T).Name} not found on addressable: {addressableKey}");
                 Addressables.Release(handle);
                 return null;
             }

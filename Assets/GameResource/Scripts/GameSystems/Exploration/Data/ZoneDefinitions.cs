@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.GameSystems.Exploration;
 
 namespace Backend.GameSystems.Exploration.Data
 {
@@ -244,7 +245,9 @@ namespace Backend.GameSystems.Exploration.Data
             new("abyss_lore_fragment", "심연 로어 조각", 1, 35)
         };
 
-        public static List<string> CreateAllZoneIdList()
+        public static List<string> CreateAllZoneIdList() => GameTableCatalog.CreateAllZoneIdList();
+
+        internal static List<string> CreateAllZoneIdListFallback()
         {
             var list = new List<string>(AllZones.Length);
             foreach (var zone in AllZones)
@@ -253,20 +256,11 @@ namespace Backend.GameSystems.Exploration.Data
             return list;
         }
 
-        public static string GetZoneDisplayName(string zoneId)
-        {
-            return TryFindZone(zoneId, out var zone) ? zone.DisplayName : zoneId;
-        }
+        public static string GetZoneDisplayName(string zoneId) => GameTableCatalog.GetZoneDisplayName(zoneId);
 
-        public static int GetMinFloor(string zoneId)
-        {
-            return TryFindZone(zoneId, out var zone) ? zone.MinFloor : 1;
-        }
+        public static int GetMinFloor(string zoneId) => GameTableCatalog.GetMinFloor(zoneId);
 
-        public static int GetMaxFloor(string zoneId)
-        {
-            return TryFindZone(zoneId, out var zone) ? zone.MaxFloor : MossyHollowMaxFloor;
-        }
+        public static int GetMaxFloor(string zoneId) => GameTableCatalog.GetMaxFloor(zoneId);
 
         public static int GetZoneRelativeFloor(string zoneId, int absoluteFloor)
         {
@@ -303,29 +297,11 @@ namespace Backend.GameSystems.Exploration.Data
             return 1f + segmentIndex * perSegmentBoost;
         }
 
-        public static float GetRewardMultiplier(string zoneId, int floor = 0)
-        {
-            var multiplier = TryFindZone(zoneId, out var zone) ? zone.RewardMultiplier : 1f;
-            if (floor > 0 && IsEndlessZone(zoneId))
-            {
-                var segment = GetEndlessSegmentIndex(floor);
-                multiplier *= GetEndlessScaleMultiplier(segment, EndlessSegmentRewardBoost);
-            }
+        public static float GetRewardMultiplier(string zoneId, int floor = 0) =>
+            GameTableCatalog.GetRewardMultiplier(zoneId, floor);
 
-            return multiplier;
-        }
-
-        public static float GetRiskMultiplier(string zoneId, int floor = 0)
-        {
-            var multiplier = TryFindZone(zoneId, out var zone) ? zone.RiskMultiplier : 1f;
-            if (floor > 0 && IsEndlessZone(zoneId))
-            {
-                var segment = GetEndlessSegmentIndex(floor);
-                multiplier *= GetEndlessScaleMultiplier(segment, EndlessSegmentRiskBoost);
-            }
-
-            return multiplier;
-        }
+        public static float GetRiskMultiplier(string zoneId, int floor = 0) =>
+            GameTableCatalog.GetRiskMultiplier(zoneId, floor);
 
         public static MonsterDefinition ScaleMonsterForFloor(MonsterDefinition monster, string zoneId, int floor)
         {
@@ -431,7 +407,10 @@ namespace Backend.GameSystems.Exploration.Data
             return (1f + (relativeFloor - 1) * FloorDifficultyStep) * risk;
         }
 
-        public static IReadOnlyList<MonsterDefinition> GetMonsters(string zoneId)
+        public static IReadOnlyList<MonsterDefinition> GetMonsters(string zoneId) =>
+            GameTableCatalog.GetMonsters(zoneId);
+
+        internal static IReadOnlyList<MonsterDefinition> GetMonstersFallback(string zoneId)
         {
             return zoneId switch
             {
@@ -459,7 +438,10 @@ namespace Backend.GameSystems.Exploration.Data
 
         public static IReadOnlyList<string> GetMoveDescriptionIds() => GetMoveDescriptionIds(MossyHollowId);
 
-        public static IReadOnlyList<DiscoveryDefinition> GetDiscoveries(string zoneId)
+        public static IReadOnlyList<DiscoveryDefinition> GetDiscoveries(string zoneId) =>
+            GameTableCatalog.GetDiscoveries(zoneId);
+
+        internal static IReadOnlyList<DiscoveryDefinition> GetDiscoveriesFallback(string zoneId)
         {
             return zoneId switch
             {
@@ -474,7 +456,9 @@ namespace Backend.GameSystems.Exploration.Data
 
         public static IReadOnlyList<DiscoveryDefinition> GetDiscoveries() => GetDiscoveries(MossyHollowId);
 
-        public static PartyState CreateDefaultParty()
+        public static PartyState CreateDefaultParty() => GameTableCatalog.CreateDefaultParty();
+
+        internal static PartyState CreateDefaultPartyFallback()
         {
             return new PartyState
             {

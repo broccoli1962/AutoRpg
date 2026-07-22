@@ -17,13 +17,13 @@ namespace Backend.Object.Management
         {
             if (_isInitialized) return;
 
-            //_tableLinker = Resources.Load<TableLinker>("TableLinker");
+            _tableLinker = Resources.Load<TableLinker>("TableLinker");
 
-            //if (_tableLinker == null)
-            //{
-                //Debug.LogError("[TableManager] TableLinker를 Resources에서 찾을 수 없습니다.");
-                //return;
-            //}
+            if (_tableLinker == null)
+            {
+                Debug.LogError("[TableManager] TableLinker를 Resources에서 찾을 수 없습니다.");
+                return;
+            }
 
             _isInitialized = true;
         }

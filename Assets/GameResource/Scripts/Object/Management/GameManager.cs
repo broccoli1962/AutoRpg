@@ -1,3 +1,4 @@
+using Backend.Object.UI;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -18,6 +19,8 @@ namespace Backend.Object.Management
         {
             await AudioManager.InitMixer();
             TableManager.Init();
+            await UIManager.EnsureReadyAsync();
+            await UIManager.PreWarmAsync<ExplorationHudPanel>();
         }
 
         private void StartGameplay_Internal()
