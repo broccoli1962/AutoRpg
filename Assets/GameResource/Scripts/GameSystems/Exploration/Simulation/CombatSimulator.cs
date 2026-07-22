@@ -12,7 +12,8 @@ namespace Backend.GameSystems.Exploration.Simulation
             PartyState party,
             ZoneDefinitions.MonsterDefinition monster,
             DeterministicRandom random,
-            string zoneId)
+            string zoneId,
+            int floor = 0)
         {
             var enemyHp = monster.Hp;
             var totalDamageDealt = 0;
@@ -23,8 +24,8 @@ namespace Backend.GameSystems.Exploration.Simulation
             var expGained = new System.Collections.Generic.Dictionary<string, int>();
             var partyIds = new System.Collections.Generic.List<string>();
             var bondMultiplier = RelationshipManager.GetBondCombatMultiplier(party);
-            var riskMultiplier = ZoneDefinitions.GetRiskMultiplier(zoneId);
-            var rewardMultiplier = ZoneDefinitions.GetRewardMultiplier(zoneId);
+            var riskMultiplier = ZoneDefinitions.GetRiskMultiplier(zoneId, floor);
+            var rewardMultiplier = ZoneDefinitions.GetRewardMultiplier(zoneId, floor);
 
             foreach (var member in party.Members)
             {

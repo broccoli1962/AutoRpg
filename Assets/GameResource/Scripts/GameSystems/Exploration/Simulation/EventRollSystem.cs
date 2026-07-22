@@ -69,7 +69,7 @@ namespace Backend.GameSystems.Exploration.Simulation
             float partyHpRatio)
         {
             var monster = RollMonster(state, random);
-            var combat = CombatSimulator.Simulate(state.Party, monster, random, state.ZoneId);
+            var combat = CombatSimulator.Simulate(state.Party, monster, random, state.ZoneId, state.CurrentFloor);
             var salience = SalienceCalculator.Calculate(
                 EventType.CombatResult,
                 monster.Rarity,
@@ -201,7 +201,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                     _ => 3
                 };
 
-            return monsters[index];
+            return ZoneDefinitions.ScaleMonsterForFloor(monsters[index], state.ZoneId, state.CurrentFloor);
         }
 
         private static void ApplyCombatOutcome(ExplorationState state, CombatResultPayload combat)

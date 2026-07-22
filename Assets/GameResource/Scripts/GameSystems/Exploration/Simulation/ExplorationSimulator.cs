@@ -38,6 +38,12 @@ namespace Backend.GameSystems.Exploration.Simulation
                         MetaCurrencyGrants.GrantZoneClear(state, completedZoneId);
                         result.Events.Add(CreateZoneTransitionEvent(state));
                     }
+                    else if (ZoneDefinitions.TryExtendEndlessZone(state))
+                    {
+                        var segment = ZoneDefinitions.GetEndlessSegmentIndex(state.CurrentFloor);
+                        MetaCurrencyGrants.GrantFactionReputation(state, segment);
+                        result.Events.Add(CreateEndlessSegmentEvent(state, segment));
+                    }
                     else
                     {
                         state.IsExploring = false;
@@ -147,6 +153,20 @@ namespace Backend.GameSystems.Exploration.Simulation
             return new ExplorationEvent
             {
                 EventId = $"evt_zone_enter_{state.ZoneId}",
+                EventType = EventType.ZoneTransition,
+                Salience = SalienceGrade.Milestone,
+                ZoneId = state.ZoneId,
+                Floor = state.CurrentFloor,
+                TimestampTick = state.CurrentTick,
+                Actors = GetActorIds(state.Party)
+            };
+        }
+
+        private static ExplorationEvent CreateEndlessSegmentEvent(ExplorationState state, int segmentIndex)
+        {
+            return new ExplorationEvent
+            {
+                EventId = $"evt_endless_segment_{segmentIndex}",
                 EventType = EventType.ZoneTransition,
                 Salience = SalienceGrade.Milestone,
                 ZoneId = state.ZoneId,

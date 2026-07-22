@@ -33,6 +33,11 @@ namespace Backend.GameSystems.Exploration.Data
         public const int AbyssalThresholdMinFloor = 76;
         public const int AbyssalThresholdMaxFloor = 90;
 
+        public const int EndlessSegmentFloorCount = 15;
+        public const float EndlessSegmentRewardBoost = 0.15f;
+        public const float EndlessSegmentRiskBoost = 0.18f;
+        public const float EndlessMonsterStatBoostPerSegment = 0.12f;
+
         public const float BaseProgressPerTick = 4.5f;
         public const float FloorDifficultyStep = 0.08f;
         public const float BaseEventRollChance = 0.35f;
@@ -268,14 +273,75 @@ namespace Backend.GameSystems.Exploration.Data
             return absoluteFloor - GetMinFloor(zoneId) + 1;
         }
 
-        public static float GetRewardMultiplier(string zoneId)
+        public static bool IsEndlessZone(string zoneId) => zoneId == AbyssalThresholdId;
+
+        public static int GetEndlessSegmentIndex(int absoluteFloor)
         {
-            return TryFindZone(zoneId, out var zone) ? zone.RewardMultiplier : 1f;
+            if (absoluteFloor <= AbyssalThresholdMaxFloor)
+                return 0;
+
+            return (absoluteFloor - AbyssalThresholdMaxFloor - 1) / EndlessSegmentFloorCount + 1;
         }
 
-        public static float GetRiskMultiplier(string zoneId)
+        public static bool TryExtendEndlessZone(ExplorationState state)
         {
-            return TryFindZone(zoneId, out var zone) ? zone.RiskMultiplier : 1f;
+            if (state == null || !IsEndlessZone(state.ZoneId))
+                return false;
+
+            if (state.CurrentFloor <= state.MaxFloor)
+                return false;
+
+            state.MaxFloor += EndlessSegmentFloorCount;
+            return true;
+        }
+
+        public static float GetEndlessScaleMultiplier(int segmentIndex, float perSegmentBoost)
+        {
+            if (segmentIndex <= 0)
+                return 1f;
+
+            return 1f + segmentIndex * perSegmentBoost;
+        }
+
+        public static float GetRewardMultiplier(string zoneId, int floor = 0)
+        {
+            var multiplier = TryFindZone(zoneId, out var zone) ? zone.RewardMultiplier : 1f;
+            if (floor > 0 && IsEndlessZone(zoneId))
+            {
+                var segment = GetEndlessSegmentIndex(floor);
+                multiplier *= GetEndlessScaleMultiplier(segment, EndlessSegmentRewardBoost);
+            }
+
+            return multiplier;
+        }
+
+        public static float GetRiskMultiplier(string zoneId, int floor = 0)
+        {
+            var multiplier = TryFindZone(zoneId, out var zone) ? zone.RiskMultiplier : 1f;
+            if (floor > 0 && IsEndlessZone(zoneId))
+            {
+                var segment = GetEndlessSegmentIndex(floor);
+                multiplier *= GetEndlessScaleMultiplier(segment, EndlessSegmentRiskBoost);
+            }
+
+            return multiplier;
+        }
+
+        public static MonsterDefinition ScaleMonsterForFloor(MonsterDefinition monster, string zoneId, int floor)
+        {
+            var segment = GetEndlessSegmentIndex(floor);
+            if (segment <= 0 || !IsEndlessZone(zoneId))
+                return monster;
+
+            var scale = GetEndlessScaleMultiplier(segment, EndlessMonsterStatBoostPerSegment);
+            return new MonsterDefinition(
+                monster.Id,
+                monster.DisplayName,
+                monster.Rarity,
+                System.Math.Max(1, (int)(monster.Hp * scale)),
+                System.Math.Max(1, (int)(monster.Attack * scale)),
+                System.Math.Max(1, (int)(monster.Defense * scale)),
+                System.Math.Max(1, (int)(monster.GoldReward * scale)));
         }
 
         public static bool TryAdvanceZone(ExplorationState state, out string completedZoneId)
@@ -361,7 +427,7 @@ namespace Backend.GameSystems.Exploration.Data
         public static float GetFloorDifficulty(string zoneId, int floor)
         {
             var relativeFloor = GetZoneRelativeFloor(zoneId, floor);
-            var risk = GetRiskMultiplier(zoneId);
+            var risk = GetRiskMultiplier(zoneId, floor);
             return (1f + (relativeFloor - 1) * FloorDifficultyStep) * risk;
         }
 
