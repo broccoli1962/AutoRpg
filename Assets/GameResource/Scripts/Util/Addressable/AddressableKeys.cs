@@ -13,6 +13,7 @@ namespace Backend.AddressableKey
                 { "SegmentedGaugeBar", "UI/Common/SegmentedGaugeBar.prefab" },
                 { "SingleGaugeBar", "UI/Common/SingleGaugeBar.prefab" },
                 { "DifficultyButton", "UI/DifficultyButton.prefab" },
+                { "ExplorationHudPanel", "UI/ExplorationHudPanel.prefab" },
                 { "Icon", "UI/Icon.prefab" },
                 { "InGameBottomHud", "UI/InGameBottomHud.prefab" },
                 { "InGameTopHud", "UI/InGameTopHud.prefab" },

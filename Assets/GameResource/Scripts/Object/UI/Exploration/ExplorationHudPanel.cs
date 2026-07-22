@@ -25,6 +25,33 @@ namespace Backend.Object.UI
         [Header("Views")]
         [SerializeField] private ExplorationLogFeedView _logFeedView;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            if (_logFeedView == null)
+                ExplorationHudPanelLayoutBuilder.TryBuild(this);
+        }
+
+        internal void ConfigureRuntime(
+            Text zoneFloorText,
+            Text goldText,
+            Slider progressSlider,
+            Text progressText,
+            CommonButton pauseButton,
+            CommonButton resumeButton,
+            CommonButton returnButton,
+            ExplorationLogFeedView logFeedView)
+        {
+            _zoneFloorText = zoneFloorText;
+            _goldText = goldText;
+            _progressSlider = progressSlider;
+            _progressText = progressText;
+            _pauseButton = pauseButton;
+            _resumeButton = resumeButton;
+            _returnButton = returnButton;
+            _logFeedView = logFeedView;
+        }
+
         public Text ZoneFloorText => _zoneFloorText;
         public Text GoldText => _goldText;
         public Slider ProgressSlider => _progressSlider;

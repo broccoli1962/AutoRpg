@@ -13,6 +13,12 @@ namespace Backend.Object.UI.Exploration
 
         public string EventId { get; private set; }
 
+        internal void ConfigureRuntime(Text messageText, Image categoryIcon)
+        {
+            _messageText = messageText;
+            _categoryIcon = categoryIcon;
+        }
+
         public void Bind(LogEntry entry)
         {
             EventId = entry.EventId;

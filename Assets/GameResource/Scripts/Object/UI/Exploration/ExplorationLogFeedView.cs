@@ -20,6 +20,16 @@ namespace Backend.Object.UI.Exploration
         private readonly Dictionary<string, ExplorationLogItemView> _itemsByEventId = new();
         private CompositeDisposable _disposables;
 
+        internal void ConfigureRuntime(
+            ScrollRect scrollRect,
+            RectTransform contentRoot,
+            ExplorationLogItemView itemPrefab)
+        {
+            _scrollRect = scrollRect;
+            _contentRoot = contentRoot;
+            _itemPrefab = itemPrefab;
+        }
+
         protected override void OnShow()
         {
             base.OnShow();
