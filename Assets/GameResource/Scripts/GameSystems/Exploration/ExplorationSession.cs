@@ -10,10 +10,13 @@ namespace Backend.GameSystems.Exploration
 {
     public sealed class ExplorationSession
     {
+        private const int GuaranteedEventTickInterval = 90;
+
         private readonly ExplorationSimulator _simulator = new();
         private readonly ILogNarrator _narrator;
         private DeterministicRandom _random;
         private int _lastFloor = 1;
+        private int _ticksSinceLastDynamicEvent;
 
         public ExplorationState State { get; private set; }
 
@@ -26,6 +29,7 @@ namespace Backend.GameSystems.Exploration
         {
             _random = new DeterministicRandom(seed);
             _lastFloor = 1;
+            _ticksSinceLastDynamicEvent = 0;
             State = new ExplorationState
             {
                 Seed = seed,
@@ -50,11 +54,23 @@ namespace Backend.GameSystems.Exploration
             var tickResult = _simulator.Tick(State, _random);
             PublishTickEvents(tickResult);
 
+            var eventTriggered = false;
             if (State.CurrentFloor > _lastFloor)
             {
-                DynamicEventManager.TryTriggerOnFloorEnter(State, _random, State.CurrentFloor);
+                eventTriggered = DynamicEventManager.TryTriggerOnFloorEnter(State, _random, State.CurrentFloor);
                 _lastFloor = State.CurrentFloor;
             }
+
+            _ticksSinceLastDynamicEvent++;
+            if (!eventTriggered &&
+                !DynamicEventManager.HasActiveUnresolvedEvent &&
+                _ticksSinceLastDynamicEvent >= GuaranteedEventTickInterval)
+            {
+                eventTriggered = DynamicEventManager.TryTriggerGuaranteed(State, _random);
+            }
+
+            if (eventTriggered)
+                _ticksSinceLastDynamicEvent = 0;
 
             if (tickResult.ExplorationEnded)
                 ExplorationChannels.PublishExplorationEnded(tickResult.EndReason);

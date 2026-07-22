@@ -36,22 +36,40 @@ namespace Backend.GameSystems.DynamicEvent
             _ = Instance;
         }
 
-        public static void TryTriggerOnFloorEnter(ExplorationState state, DeterministicRandom random, int enteredFloor)
+        public static bool TryTriggerOnFloorEnter(ExplorationState state, DeterministicRandom random, int enteredFloor)
         {
             if (GameStateUtil.IsQuitting || state == null)
-                return;
+                return false;
 
-            Instance.TryTriggerOnFloorEnterInternal(state, random, enteredFloor);
+            return Instance.TryStartEvent(state, random, enteredFloor, useProbabilityRoll: true);
         }
 
-        private void TryTriggerOnFloorEnterInternal(ExplorationState state, DeterministicRandom random, int enteredFloor)
+        /// <summary>
+        /// Tick 간격 보장용 — 확률 없이 현재 층에서 발생 가능한 이벤트를 강제 롤한다.
+        /// </summary>
+        public static bool TryTriggerGuaranteed(ExplorationState state, DeterministicRandom random)
+        {
+            if (GameStateUtil.IsQuitting || state == null)
+                return false;
+
+            return Instance.TryStartEvent(state, random, state.CurrentFloor, useProbabilityRoll: false);
+        }
+
+        private bool TryStartEvent(
+            ExplorationState state,
+            DeterministicRandom random,
+            int floor,
+            bool useProbabilityRoll)
         {
             if (GameStateUtil.IsQuitting || state == null || ActiveEvent != null || _isRunningEventFlow)
-                return;
+                return false;
 
-            var template = DynamicEventRollSystem.TryRollFloorEnter(state.ZoneId, enteredFloor, random);
+            var template = useProbabilityRoll
+                ? DynamicEventRollSystem.TryRollFloorEnter(state.ZoneId, floor, random)
+                : DynamicEventRollSystem.RollGuaranteed(state.ZoneId, floor, random);
+
             if (template == null)
-                return;
+                return false;
 
             var leader = state.Party?.Leader;
             _pendingTemplate = template;
@@ -63,16 +81,18 @@ namespace Backend.GameSystems.DynamicEvent
                 InstanceId = $"{template.EventId}_{state.CurrentTick}",
                 TemplateId = template.EventId,
                 ZoneId = state.ZoneId,
-                Floor = enteredFloor,
+                Floor = floor,
                 LeaderName = leader?.DisplayName ?? "탐험대"
             };
 
             state.IsPaused = true;
             ExplorationChannels.PublishStateChanged(state);
             DynamicEventChannels.PublishEventStarted(ActiveEvent);
-            Debug.Log($"[DynamicEventManager] Started {template.EventId} at floor {enteredFloor}");
+            Debug.Log(
+                $"[DynamicEventManager] Started {template.EventId} at floor {floor} (guaranteed={!useProbabilityRoll})");
 
             RunEventFlowAsync().Forget();
+            return true;
         }
 
         private async UniTaskVoid RunEventFlowAsync()
