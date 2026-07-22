@@ -18,9 +18,6 @@ namespace Backend.Object.Management.Scene
 
         protected override async UniTask OnEnterAsync()
         {
-            ExplorationManager.ProcessOfflineElapsed();
-            ExplorationManager.StartExploration();
-
             _hudPanel = await UIManager.OpenAsync<ExplorationHudPanel>(ExplorationHudAddressableKey);
             if (_hudPanel == null)
             {
@@ -28,6 +25,7 @@ namespace Backend.Object.Management.Scene
                     "[GameSceneContext] Addressable ExplorationHudPanel 로드 실패. RuntimeHud fallback을 사용합니다.");
                 var fallbackGo = new GameObject("ExplorationRuntimeHudFallback");
                 _runtimeHudFallback = fallbackGo.AddComponent<ExplorationRuntimeHud>();
+                fallbackGo.AddComponent<ExplorationStartRuntimePanel>();
             }
         }
 
