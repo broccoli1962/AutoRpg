@@ -18,7 +18,8 @@ namespace Backend.GameSystems.Exploration
         {
             Runs,
             Favorites,
-            CharacterJournal
+            CharacterJournal,
+            LoreCompendium
         }
 
         private GameObject _panelRoot;
@@ -59,6 +60,13 @@ namespace Backend.GameSystems.Exploration
             if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
             {
                 _tab = ChronicleTab.CharacterJournal;
+                _pageFromEnd = 0;
+                RefreshContent();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
+            {
+                _tab = ChronicleTab.LoreCompendium;
                 _pageFromEnd = 0;
                 RefreshContent();
             }
@@ -137,7 +145,7 @@ namespace Backend.GameSystems.Exploration
             title.rectTransform.sizeDelta = new Vector2(720f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:회차  2:즐겨찾기  3:캐릭터 일지  Q/E:캐릭터 전환  PgUp/PgDn 또는 [/]:페이지");
+                "1:회차  2:즐겨찾기  3:캐릭터 일지  4:로어 도감  Q/E:캐릭터  PgUp/PgDn 또는 [/]:페이지");
             hint.rectTransform.sizeDelta = new Vector2(720f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
@@ -201,6 +209,9 @@ namespace Backend.GameSystems.Exploration
                     break;
                 case ChronicleTab.CharacterJournal:
                     RefreshCharacterJournalTab();
+                    break;
+                case ChronicleTab.LoreCompendium:
+                    RefreshLoreCompendiumTab();
                     break;
             }
         }
@@ -297,6 +308,24 @@ namespace Backend.GameSystems.Exploration
                 bulletPrefix: "• ");
         }
 
+        private void RefreshLoreCompendiumTab()
+        {
+            var entries = LoreCompendiumManager.GetEntries();
+            if (entries == null || entries.Count == 0)
+            {
+                _contentText.text = "아직 수집한 로어 조각이 없습니다.\n탐험 중 발견·유물 이벤트로 도감이 채워집니다.";
+                _pageText.text = string.Empty;
+                return;
+            }
+
+            var list = new System.Collections.Generic.List<string>(entries);
+            RenderPagedEntries(
+                list,
+                "<b>[ 로어 도감 ]</b>",
+                entry => entry,
+                bulletPrefix: "◆ ");
+        }
+
         private static string StripRichText(string richText)
         {
             if (string.IsNullOrEmpty(richText))
@@ -351,6 +380,9 @@ namespace Backend.GameSystems.Exploration
 
         private int GetEntryCount()
         {
+            if (_tab == ChronicleTab.LoreCompendium)
+                return LoreCompendiumManager.GetEntries().Count;
+
             if (_tab == ChronicleTab.CharacterJournal)
             {
                 var member = GetSelectedMember();

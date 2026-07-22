@@ -12,5 +12,6 @@ namespace Backend.GameSystems.Prestige.Data
         public int DeepestFloorReached;
         public List<string> ChronicleEntries = new();
         public List<string> FavoriteMoments = new();
+        public List<string> LoreEntries = new();
     }
 }

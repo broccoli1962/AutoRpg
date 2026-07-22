@@ -160,6 +160,7 @@ namespace Backend.GameSystems.Character
             }
 
             TryAddDynamicEventCoreMemories(instance, party);
+            LoreCompendiumManager.RecordDynamicEvent(instance);
         }
 
         private void AppendShortTerm(string characterId, string summary, string displayName)
