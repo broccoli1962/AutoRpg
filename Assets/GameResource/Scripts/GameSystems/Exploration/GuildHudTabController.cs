@@ -67,6 +67,13 @@ namespace Backend.GameSystems.Exploration
             if (GetComponentInParent<Canvas>() == null)
                 return;
 
+            var existingBar = transform.Find("BottomTabBar");
+            if (existingBar != null)
+            {
+                WireExistingTabButtons(existingBar);
+                return;
+            }
+
             var barRoot = new GameObject("BottomTabBar");
             barRoot.transform.SetParent(transform, false);
 
@@ -88,6 +95,24 @@ namespace Backend.GameSystems.Exploration
                 var tabIndex = i;
                 _tabButtons[i] = CreateTabButton(barRoot.transform, labels[i], i, labels.Length, font);
                 _tabButtons[i].onClick.AddListener(() => SelectTab((HudBottomTab)tabIndex));
+            }
+        }
+
+        private void WireExistingTabButtons(Transform barRoot)
+        {
+            var labels = new[] { "탐험", "강화/장비", "길드시설", "연대기", "도감" };
+            _tabButtons = new Button[labels.Length];
+
+            for (var i = 0; i < labels.Length; i++)
+            {
+                var tabTransform = barRoot.Find($"Tab_{labels[i]}");
+                if (tabTransform == null)
+                    continue;
+
+                var tabIndex = i;
+                _tabButtons[i] = tabTransform.GetComponent<Button>();
+                if (_tabButtons[i] != null)
+                    _tabButtons[i].onClick.AddListener(() => SelectTab((HudBottomTab)tabIndex));
             }
         }
 
