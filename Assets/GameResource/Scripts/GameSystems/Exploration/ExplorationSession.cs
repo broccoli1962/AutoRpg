@@ -30,6 +30,7 @@ namespace Backend.GameSystems.Exploration
             _random = new DeterministicRandom(seed);
             _lastFloor = 1;
             _ticksSinceLastDynamicEvent = 0;
+            ExplorationRollingSummary.Clear();
             State = new ExplorationState
             {
                 Seed = seed,
@@ -148,6 +149,7 @@ namespace Backend.GameSystems.Exploration
         {
             foreach (var explorationEvent in tickResult.Events)
             {
+                ExplorationRollingSummary.Record(explorationEvent, State.Party);
                 var log = _narrator.Narrate(explorationEvent, State.Party);
                 CharacterMemoryManager.RecordExplorationEvent(explorationEvent, State.Party);
                 RelationshipManager.RecordExplorationEvent(explorationEvent, State.Party);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using Backend.GameSystems.Character;
 using Backend.GameSystems.Exploration.Data;
+using Backend.GameSystems.Exploration.Narration;
 
 namespace Backend.GameSystems.LLM
 {
@@ -127,6 +128,13 @@ namespace Backend.GameSystems.LLM
                 {
                     userContext.AppendLine();
                     userContext.Append(relationshipContext);
+                }
+
+                var rollingSummary = ExplorationRollingSummary.BuildPromptContext();
+                if (!string.IsNullOrEmpty(rollingSummary))
+                {
+                    userContext.AppendLine();
+                    userContext.Append(rollingSummary);
                 }
             }
             else
