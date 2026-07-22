@@ -32,6 +32,7 @@ namespace Backend.GameSystems.Exploration
             DynamicEventManager.EnsureInitialized();
             CharacterMemoryManager.EnsureInitialized();
             RelationshipManager.EnsureInitialized();
+            ExplorationSessionLogArchive.EnsureInitialized();
             PrestigeManager.EnsureInitialized();
             GameSaveManager.EnsureInitialized();
             GameSaveManager.Load();
@@ -60,6 +61,7 @@ namespace Backend.GameSystems.Exploration
             EquipmentService.ClearPartyEquipment(party);
             _session.StartNew(seed, party);
             _session.State.Gold = PrestigeManager.GetStartingGoldBonus();
+            ExplorationSessionLogArchive.Clear();
             CharacterMemoryManager.BindParty(party);
             RelationshipManager.BindParty(party);
             _tickAccumulator = 0f;

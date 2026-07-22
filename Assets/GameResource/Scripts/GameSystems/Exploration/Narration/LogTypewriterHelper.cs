@@ -25,7 +25,8 @@ namespace Backend.GameSystems.Exploration.Narration
                 Floor = source.Floor,
                 IsBookmarked = source.IsBookmarked,
                 IsPending = isPending,
-                UsedLlm = source.UsedLlm
+                UsedLlm = source.UsedLlm,
+                PerspectiveCharacterId = source.PerspectiveCharacterId
             };
         }
     }

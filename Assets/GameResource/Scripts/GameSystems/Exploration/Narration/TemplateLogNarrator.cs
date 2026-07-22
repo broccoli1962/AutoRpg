@@ -43,7 +43,8 @@ namespace Backend.GameSystems.Exploration.Narration
                 Category = MapCategory(explorationEvent.EventType),
                 Text = text,
                 TimestampTick = explorationEvent.TimestampTick,
-                Floor = explorationEvent.Floor
+                Floor = explorationEvent.Floor,
+                PerspectiveCharacterId = leader?.CharacterId
             };
         }
 
