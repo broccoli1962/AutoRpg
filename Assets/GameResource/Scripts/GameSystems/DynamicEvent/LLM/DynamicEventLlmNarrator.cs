@@ -32,10 +32,16 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 return null;
 
             var prompt = DynamicEventPromptBuilder.BuildScenePrompt(template, party, floor);
+            var grammar = DynamicEventSceneGrammarBuilder.Build(template);
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(externalCt);
             cts.CancelAfterSlim(System.TimeSpan.FromSeconds(LlmQualitySettings.InferenceTimeoutSeconds));
 
-            var raw = await LlmNarrationManager.GenerateTextAsync(prompt, sceneMaxTokens, Temperature, cts.Token);
+            var raw = await LlmNarrationManager.GenerateTextAsync(
+                prompt,
+                sceneMaxTokens,
+                Temperature,
+                grammar,
+                cts.Token);
             if (TryParseScene(raw, template, out var narration))
             {
                 Debug.Log($"[DynamicEventLlmNarrator] Scene LLM ok for {template.EventId}");
@@ -51,6 +57,7 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 repairPrompt,
                 sceneMaxTokens,
                 0.5f,
+                grammar,
                 cts.Token);
 
             if (TryParseScene(repaired, template, out narration))
