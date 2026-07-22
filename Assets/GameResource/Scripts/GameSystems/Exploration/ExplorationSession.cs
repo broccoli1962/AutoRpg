@@ -163,6 +163,7 @@ namespace Backend.GameSystems.Exploration
                 CharacterMemoryManager.RecordExplorationEvent(explorationEvent, State.Party);
                 RelationshipManager.RecordExplorationEvent(explorationEvent, State.Party);
                 LoreCompendiumManager.RecordDiscovery(explorationEvent);
+                MonsterCompendiumManager.RecordCombat(explorationEvent);
                 ExplorationChannels.PublishLogAdded(log);
             }
         }
