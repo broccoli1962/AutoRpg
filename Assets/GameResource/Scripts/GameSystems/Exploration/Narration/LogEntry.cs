@@ -14,5 +14,6 @@ namespace Backend.GameSystems.Exploration.Narration
         public bool IsBookmarked;
         public bool IsPending;
         public bool UsedLlm;
+        public string PerspectiveCharacterId;
     }
 }
