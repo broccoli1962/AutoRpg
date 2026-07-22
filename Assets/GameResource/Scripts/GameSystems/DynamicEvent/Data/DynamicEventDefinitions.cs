@@ -15,6 +15,8 @@ namespace Backend.GameSystems.DynamicEvent.Data
         public const string TrapPitId = "trap_pit_01";
         public const string EncounterWandererId = "encounter_wanderer_01";
         public const string ArtifactCrystalId = "artifact_crystal_01";
+        public const string ForkRuneMarkId = "fork_rune_mark_01";
+        public const string HazardCollapseId = "hazard_collapse_01";
 
         private static readonly DynamicEventTemplate Fork002 = CreateFork002();
         private static readonly DynamicEventTemplate EncounterMerchant = CreateEncounterMerchant();
@@ -26,6 +28,8 @@ namespace Backend.GameSystems.DynamicEvent.Data
         private static readonly DynamicEventTemplate TrapPit = CreateTrapPit();
         private static readonly DynamicEventTemplate EncounterWanderer = CreateEncounterWanderer();
         private static readonly DynamicEventTemplate ArtifactCrystal = CreateArtifactCrystal();
+        private static readonly DynamicEventTemplate ForkRuneMark = CreateForkRuneMark();
+        private static readonly DynamicEventTemplate HazardCollapse = CreateHazardCollapse();
 
         public static IReadOnlyList<DynamicEventTemplate> All { get; } = new List<DynamicEventTemplate>
         {
@@ -38,7 +42,9 @@ namespace Backend.GameSystems.DynamicEvent.Data
             EncounterScholar,
             TrapPit,
             EncounterWanderer,
-            ArtifactCrystal
+            ArtifactCrystal,
+            ForkRuneMark,
+            HazardCollapse
         };
 
         public static DynamicEventTemplate Get(string eventId)
@@ -201,6 +207,36 @@ namespace Backend.GameSystems.DynamicEvent.Data
                     (DynamicEventOutcomeEffect.GoldBonus, 0.45f),
                     (DynamicEventOutcomeEffect.RareEncounter, 0.55f)),
                 Choice("leave", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateForkRuneMark() => new()
+        {
+            EventId = ForkRuneMarkId,
+            Category = DynamicEventCategory.ForkChoice,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.1f, 3, 18),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("follow_glow",
+                    (DynamicEventOutcomeEffect.MinorResource, 0.55f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.45f)),
+                Choice("ignore_runes", (DynamicEventOutcomeEffect.SafePass, 1f))
+            }
+        };
+
+        private static DynamicEventTemplate CreateHazardCollapse() => new()
+        {
+            EventId = HazardCollapseId,
+            Category = DynamicEventCategory.Hazard,
+            Intensity = DynamicEventIntensity.Standard,
+            Trigger = CreateFloorEnterTrigger(0.07f, 5, 24),
+            Choices = new List<DynamicEventChoice>
+            {
+                Choice("dash",
+                    (DynamicEventOutcomeEffect.SafePass, 0.5f),
+                    (DynamicEventOutcomeEffect.InjuryLight, 0.5f)),
+                Choice("cover", (DynamicEventOutcomeEffect.SafePass, 1f))
             }
         };
 
