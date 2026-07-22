@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aa8e70b7786dd74ea3a81c43db73ef0, type: 3}
+  m_Name: DynamicEventTable
+  m_EditorClassIdentifier: Assembly-CSharp::DynamicEventTable
+  dataList:
+  - _id: fork_002
+    _category: fork_choice
+    _triggerType: floor_enter
+    _zoneMin: mossy_hollow
+    _zoneMax: fungal_maze
+    _probability: 0.12
+    _intensity: standard
+  - _id: encounter_merchant_01
+    _category: encounter
+    _triggerType: random
+    _zoneMin: mossy_hollow
+    _zoneMax: fungal_maze
+    _probability: 0.08
+    _intensity: standard
+  - _id: trap_pressure_01
+    _category: trap
+    _triggerType: random
+    _zoneMin: mossy_hollow
+    _zoneMax: fungal_maze
+    _probability: 0.1
+    _intensity: standard
+  - _id: artifact_mural_01
+    _category: artifact
+    _triggerType: random
+    _zoneMin: mossy_hollow
+    _zoneMax: crystal_cavern
+    _probability: 0.06
+    _intensity: standard
+  - _id: golden_chamber_01
+    _category: golden
+    _triggerType: random
+    _zoneMin: mossy_hollow
+    _zoneMax: abyssal_threshold
+    _probability: 0.02
+    _intensity: golden

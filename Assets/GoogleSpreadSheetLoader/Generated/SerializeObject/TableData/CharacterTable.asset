@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deead4cbbabbaf24f93172845a2db1de, type: 3}
+  m_Name: CharacterTable
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterTable
+  dataList:
+  - _id: char_lena
+    _displayName: "\uB808\uB098"
+    _role: Warrior
+    _personality: Cautious
+    _str: 14
+    _agi: 10
+    _intel: 8
+    _vit: 12
+    _luk: 6
+  - _id: char_marco
+    _displayName: "\uB9C8\uB974\uCF54"
+    _role: Rogue
+    _personality: Loyal
+    _str: 10
+    _agi: 14
+    _intel: 8
+    _vit: 10
+    _luk: 8
+  - _id: char_kyle
+    _displayName: "\uCE74\uC77C"
+    _role: Mage
+    _personality: Greedy
+    _str: 8
+    _agi: 10
+    _intel: 14
+    _vit: 9
+    _luk: 10
+  - _id: char_sora
+    _displayName: "\uC18C\uB77C"
+    _role: Bard
+    _personality: Cheerful
+    _str: 9
+    _agi: 11
+    _intel: 12
+    _vit: 8
+    _luk: 12
+  - _id: char_elena
+    _displayName: "\uC5D8\uB808\uB098"
+    _role: Cleric
+    _personality: Loyal
+    _str: 10
+    _agi: 9
+    _intel: 13
+    _vit: 11
+    _luk: 7

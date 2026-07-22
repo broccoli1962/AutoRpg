@@ -11,29 +11,24 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// Phase 6 탐험 설정 런타임 패널 (12_UIUX.md LLM/이벤트 옵션).
     /// </summary>
-    public sealed class ExplorationSettingsRuntimePanel : MonoBehaviour
+    public sealed class ExplorationSettingsRuntimePanel : ExplorationOverlayView
     {
-        private GameObject _panelRoot;
-        private Text _contentText;
-        private bool _isVisible;
+        [SerializeField] private Text _contentText;
         private System.Action _onSettingsChanged;
-
-        public bool IsVisible => _isVisible;
 
         public void Configure(System.Action onSettingsChanged)
         {
             _onSettingsChanged = onSettingsChanged;
         }
 
-        private void Start()
+        private void Awake()
         {
-            BuildUi();
             Hide();
         }
 
         private void Update()
         {
-            if (!_isVisible)
+            if (!IsVisible)
                 return;
 
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha1, KeyCode.Keypad1))
@@ -74,9 +69,9 @@ namespace Backend.GameSystems.Exploration
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha6, KeyCode.Keypad6))
             {
                 if (ScriptoriumManager.TryUpgrade(out var message))
-                    Debug.Log($"[ExplorationSettings] {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] {message}");
                 else
-                    Debug.Log($"[ExplorationSettings] 서고 업그레이드 불가: {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] 서고 업그레이드 불가: {message}");
 
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
@@ -85,9 +80,9 @@ namespace Backend.GameSystems.Exploration
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha7, KeyCode.Keypad7))
             {
                 if (TrainingGroundManager.TryUpgrade(out var message))
-                    Debug.Log($"[ExplorationSettings] {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] {message}");
                 else
-                    Debug.Log($"[ExplorationSettings] 훈련소 업그레이드 불가: {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] 훈련소 업그레이드 불가: {message}");
 
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
@@ -96,9 +91,9 @@ namespace Backend.GameSystems.Exploration
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha8, KeyCode.Keypad8))
             {
                 if (BlacksmithManager.TryUpgrade(out var message))
-                    Debug.Log($"[ExplorationSettings] {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] {message}");
                 else
-                    Debug.Log($"[ExplorationSettings] 대장간 업그레이드 불가: {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] 대장간 업그레이드 불가: {message}");
 
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
@@ -107,9 +102,9 @@ namespace Backend.GameSystems.Exploration
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Alpha9, KeyCode.Keypad9))
             {
                 if (InnManager.TryUpgrade(out var message))
-                    Debug.Log($"[ExplorationSettings] {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] {message}");
                 else
-                    Debug.Log($"[ExplorationSettings] 여관 업그레이드 불가: {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] 여관 업그레이드 불가: {message}");
 
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
@@ -118,9 +113,9 @@ namespace Backend.GameSystems.Exploration
             if (KeyboardInputUtil.WasAnyKeyPressedThisFrame(KeyCode.Minus, KeyCode.KeypadMinus))
             {
                 if (SkillTreeManager.TryUpgradeLeaderRole(out var message))
-                    Debug.Log($"[ExplorationSettings] {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] {message}");
                 else
-                    Debug.Log($"[ExplorationSettings] 스킬 해금 불가: {message}");
+                    Debug.Log($"[ExplorationSettingsRuntimePanel] 스킬 해금 불가: {message}");
 
                 RefreshContent();
                 _onSettingsChanged?.Invoke();
@@ -129,79 +124,15 @@ namespace Backend.GameSystems.Exploration
 
         public void Toggle()
         {
-            if (_isVisible)
+            if (IsVisible)
                 Hide();
             else
                 Show();
         }
 
-        private void BuildUi()
-        {
-            var canvas = GetComponentInParent<Canvas>();
-            if (canvas == null)
-                return;
-
-            _panelRoot = new GameObject("SettingsPanel");
-            _panelRoot.transform.SetParent(canvas.transform, false);
-
-            var panelRect = _panelRoot.AddComponent<RectTransform>();
-            panelRect.anchorMin = new Vector2(0.5f, 0.5f);
-            panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(640f, 440f);
-
-            var panelImage = _panelRoot.AddComponent<Image>();
-            panelImage.color = new Color(0.08f, 0.1f, 0.14f, 0.96f);
-
-            var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22,
-                "[ 탐험 설정 ]");
-            title.rectTransform.sizeDelta = new Vector2(600f, 32f);
-
-            var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
-                "1:LLM  2:이벤트  3:황금  4:로그  5:오프라인  6:서고  7:훈련  8:대장  9:여관  0:서점  -:스킬  (O:닫기)");
-            hint.rectTransform.sizeDelta = new Vector2(600f, 20f);
-            hint.color = new Color(0.75f, 0.75f, 0.8f);
-
-            _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -68f), 16, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(600f, 308f);
-            _contentText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            _contentText.verticalOverflow = VerticalWrapMode.Overflow;
-        }
-
-        private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, string initial)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = anchoredPos;
-            rect.sizeDelta = new Vector2(600f, 40f);
-
-            var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = fontSize;
-            text.alignment = TextAnchor.UpperLeft;
-            text.color = Color.white;
-            text.supportRichText = true;
-            text.text = initial;
-            return text;
-        }
-
-        private void Show()
+        protected override void OnBeforeShow()
         {
             RefreshContent();
-            _panelRoot.SetActive(true);
-            _isVisible = true;
-        }
-
-        private void Hide()
-        {
-            if (_panelRoot != null)
-                _panelRoot.SetActive(false);
-
-            _isVisible = false;
         }
 
         private void RefreshContent()
@@ -235,3 +166,4 @@ namespace Backend.GameSystems.Exploration
         }
     }
 }
+

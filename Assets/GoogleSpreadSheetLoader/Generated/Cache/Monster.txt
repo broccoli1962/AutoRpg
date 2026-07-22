@@ -1,0 +1,112 @@
+[
+  [
+    "id-string",
+    "zoneId-string",
+    "displayName-string",
+    "rarity-string",
+    "hp-int",
+    "attack-int",
+    "defense-int",
+    "goldReward-int"
+  ],
+  [
+    "fungus_slime",
+    "mossy_hollow",
+    "곰팡이 슬라임",
+    "Common",
+    "12",
+    "4",
+    "6",
+    "8"
+  ],
+  [
+    "cave_rat",
+    "mossy_hollow",
+    "동굴 쥐",
+    "Common",
+    "10",
+    "3",
+    "5",
+    "6"
+  ],
+  [
+    "silver_bat_swarm",
+    "mossy_hollow",
+    "은빛 박쥐떼",
+    "Notable",
+    "22",
+    "8",
+    "14",
+    "18"
+  ],
+  [
+    "moss_guardian",
+    "mossy_hollow",
+    "이끼 수호자",
+    "Rare",
+    "40",
+    "14",
+    "24",
+    "35"
+  ],
+  [
+    "hollow_boss",
+    "mossy_hollow",
+    "심연의 이끼 군주",
+    "Boss",
+    "80",
+    "20",
+    "40",
+    "60"
+  ],
+  [
+    "spore_wisp",
+    "fungal_maze",
+    "포자 정령",
+    "Common",
+    "16",
+    "5",
+    "7",
+    "10"
+  ],
+  [
+    "mycelium_tendril",
+    "fungal_maze",
+    "균사 촉수",
+    "Notable",
+    "28",
+    "10",
+    "12",
+    "22"
+  ],
+  [
+    "infected_cave_bear",
+    "fungal_maze",
+    "감염된 동굴 곰",
+    "Rare",
+    "48",
+    "16",
+    "18",
+    "40"
+  ],
+  [
+    "spore_matriarch",
+    "fungal_maze",
+    "포자 여왕",
+    "Rare",
+    "55",
+    "18",
+    "20",
+    "45"
+  ],
+  [
+    "mycelial_overmind",
+    "fungal_maze",
+    "균사체 군주",
+    "Boss",
+    "95",
+    "24",
+    "26",
+    "75"
+  ]
+]

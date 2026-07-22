@@ -41,7 +41,7 @@ public class InputActionHandler : MonoBehaviour
     {
         if (_inputActions == null)
         {
-            Debug.LogError("InputActionAsset이 할당되지 않았습니다.");
+            Debug.LogError("[InputActionHandler] InputActionAsset이 할당되지 않았습니다.");
             return;
         }
 
@@ -57,14 +57,14 @@ public class InputActionHandler : MonoBehaviour
         var actionMap = _inputActions.FindActionMap(actionMapName);
         if (actionMap == null)
         {
-            Debug.LogError($"액션 맵 '{actionMapName}'을 찾을 수 없습니다.");
+            Debug.LogError($"[InputActionHandler] 액션 맵 '{actionMapName}'을 찾을 수 없습니다.");
             return;
         }
 
         var action = actionMap.FindAction(actionName);
         if (action == null)
         {
-            Debug.LogError($"액션 '{actionName}'을 '{actionMapName}' 맵에서 찾을 수 없습니다.");
+            Debug.LogError($"[InputActionHandler] 액션 '{actionName}'을 '{actionMapName}' 맵에서 찾을 수 없습니다.");
             return;
         }
 

@@ -1,0 +1,53 @@
+{
+    "cacheInfos": [
+        {
+            "spreadSheetId": "1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4",
+            "spreadSheetName": "AutoRpg",
+            "sheetName": "Zone",
+            "fileName": "Zone.txt",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4",
+            "spreadSheetName": "AutoRpg",
+            "sheetName": "Monster",
+            "fileName": "Monster.txt",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4",
+            "spreadSheetName": "AutoRpg",
+            "sheetName": "Discovery",
+            "fileName": "Discovery.txt",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4",
+            "spreadSheetName": "AutoRpg",
+            "sheetName": "DynamicEvent",
+            "fileName": "DynamicEvent.txt",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4",
+            "spreadSheetName": "AutoRpg",
+            "sheetName": "Localization",
+            "fileName": "Localization.txt",
+            "tableStyle": 2
+        },
+        {
+            "spreadSheetId": "1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4",
+            "spreadSheetName": "AutoRpg",
+            "sheetName": "Character",
+            "fileName": "Character.txt",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1XuJHq_MKPIKwSYJL0PsQMfd8KLmfiI2iCJIMvHfWaS4",
+            "spreadSheetName": "AutoRpg",
+            "sheetName": "EnumDef",
+            "fileName": "EnumDef.txt",
+            "tableStyle": 1
+        }
+    ]
+}

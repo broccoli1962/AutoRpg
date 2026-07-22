@@ -1,0 +1,27 @@
+[
+  [
+    "key-string",
+    "ko-string",
+    "en-string"
+  ],
+  [
+    "zone.mossy_hollow",
+    "이끼 동굴",
+    "Mossy Hollow"
+  ],
+  [
+    "zone.fungal_maze",
+    "균사 미궁",
+    "Fungal Maze"
+  ],
+  [
+    "ui.guild_waiting",
+    "길드 대기",
+    "Guild Standby"
+  ],
+  [
+    "ui.exploration_log",
+    "탐험 로그",
+    "Exploration Log"
+  ]
+]

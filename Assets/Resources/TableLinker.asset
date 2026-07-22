@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f7a6cd79de68348a690e1a0299b564, type: 3}
+  m_Name: TableLinker
+  m_EditorClassIdentifier: Assembly-CSharp::TableData.TableLinker
+  CharacterTable: {fileID: 11400000, guid: 7629fdf50dbe33644b1101f14e53dbf5, type: 2}
+  ZoneTable: {fileID: 11400000, guid: ed9ae0ac6bd42bc41b72be963ffb545d, type: 2}
+  MonsterTable: {fileID: 11400000, guid: 3d3583c5c1be66b4381f7a47ea096a36, type: 2}
+  DiscoveryTable: {fileID: 11400000, guid: e1f45d240cf1f6842868aaa66cac2aad, type: 2}
+  DynamicEventTable: {fileID: 11400000, guid: f720e616a0ef3dd4f80a5e37b0e6dac8, type: 2}

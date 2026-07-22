@@ -63,8 +63,6 @@ namespace Backend.Editor
 
             StretchFull(rootRect);
 
-            rootRect.offsetMin = new Vector2(0f, ExplorationHudLayoutMetrics.SafeAreaBottomInset);
-
 
 
             var hudPanel = root.AddComponent<ExplorationHudPanel>();
@@ -90,8 +88,7 @@ namespace Backend.Editor
             var body = CreateBody(rootRect, font, out var logFeedView, out var logEmptyStateText);
 
             CreateBottomTabBar(rootRect, font);
-
-
+            CreateOverlays(root, rootRect, font);
 
             WireHudPanel(hudPanel, statusText, goldText, pauseButton, resumeButton, returnButton, logFeedView, filterText, helpText);
 
@@ -237,7 +234,7 @@ namespace Backend.Editor
 
 
 
-            var bodyLayout = body.gameObject.AddComponent<HorizontalLayoutGroup>();
+            var bodyLayout = body.gameObject.AddComponent<VerticalLayoutGroup>();
 
             bodyLayout.padding = new RectOffset(
 
@@ -249,21 +246,25 @@ namespace Backend.Editor
 
                 0);
 
-            bodyLayout.spacing = ExplorationHudLayoutMetrics.ColumnGap;
+            bodyLayout.spacing = ExplorationHudLayoutMetrics.SectionGap;
 
             bodyLayout.childAlignment = TextAnchor.UpperLeft;
 
             bodyLayout.childControlHeight = true;
 
-            bodyLayout.childForceExpandHeight = true;
+            bodyLayout.childForceExpandHeight = false;
+
+            bodyLayout.childControlWidth = true;
+
+            bodyLayout.childForceExpandWidth = true;
 
 
-
-            CreateLeftPanel(body, font);
 
             CreateCenterPanel(body, font);
 
-            logFeedView = CreateRightPanel(body, font, out logEmptyStateText);
+            CreatePartyRow(body, font);
+
+            logFeedView = CreateLogPanel(body, font, out logEmptyStateText);
 
             return body;
 
@@ -271,25 +272,33 @@ namespace Backend.Editor
 
 
 
-        private static void CreateLeftPanel(RectTransform body, Font font)
+        private static void CreatePartyRow(RectTransform body, Font font)
 
         {
 
-            var leftPanel = CreatePanelColumn(body, "LeftPanel", ExplorationHudLayoutMetrics.LeftPanelWidth);
+            var partyRow = CreateRectChild(body, "PartyRow");
 
-            CreatePartyScroll(leftPanel, font);
+            var rowLayout = partyRow.gameObject.AddComponent<LayoutElement>();
+
+            rowLayout.preferredHeight = ExplorationHudLayoutMetrics.PartyRowHeight;
+
+            rowLayout.minHeight = ExplorationHudLayoutMetrics.PartyRowHeight;
+
+            ApplyV2Sliced(partyRow.gameObject.AddComponent<Image>(), "ui_panel_s");
+
+            CreatePartyScroll(partyRow, font);
 
         }
 
 
 
-        private static void CreatePartyScroll(RectTransform leftPanel, Font font)
+        private static void CreatePartyScroll(RectTransform partyRow, Font font)
 
         {
 
             var scrollGo = new GameObject("PartyScroll", typeof(RectTransform));
 
-            scrollGo.transform.SetParent(leftPanel, false);
+            scrollGo.transform.SetParent(partyRow, false);
 
             StretchFull(scrollGo.GetComponent<RectTransform>());
 
@@ -297,7 +306,9 @@ namespace Backend.Editor
 
             var scrollRect = scrollGo.AddComponent<ScrollRect>();
 
-            scrollRect.horizontal = false;
+            scrollRect.horizontal = true;
+
+            scrollRect.vertical = false;
 
             scrollRect.movementType = ScrollRect.MovementType.Clamped;
 
@@ -319,11 +330,11 @@ namespace Backend.Editor
 
             var contentRect = content;
 
-            contentRect.anchorMin = new Vector2(0f, 1f);
+            contentRect.anchorMin = new Vector2(0f, 0f);
 
-            contentRect.anchorMax = new Vector2(1f, 1f);
+            contentRect.anchorMax = new Vector2(0f, 1f);
 
-            contentRect.pivot = new Vector2(0.5f, 1f);
+            contentRect.pivot = new Vector2(0f, 0.5f);
 
             contentRect.anchoredPosition = Vector2.zero;
 
@@ -331,17 +342,19 @@ namespace Backend.Editor
 
 
 
-            var layout = content.gameObject.AddComponent<VerticalLayoutGroup>();
+            var layout = content.gameObject.AddComponent<HorizontalLayoutGroup>();
 
-            layout.padding = new RectOffset(16, 16, 16, 16);
+            layout.padding = new RectOffset(12, 12, 8, 8);
 
             layout.spacing = 12f;
 
+            layout.childControlWidth = false;
+
             layout.childControlHeight = true;
 
-            layout.childForceExpandHeight = false;
+            layout.childForceExpandHeight = true;
 
-            content.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            content.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             scrollRect.content = contentRect;
 
@@ -365,11 +378,15 @@ namespace Backend.Editor
 
             var cardRect = cardGo.GetComponent<RectTransform>();
 
-            cardRect.sizeDelta = new Vector2(0f, ExplorationHudLayoutMetrics.PartyMemberCardHeight);
+            cardRect.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.PartyMemberCardWidth, ExplorationHudLayoutMetrics.PartyMemberCardHeight);
 
 
 
             var cardLayout = cardGo.AddComponent<LayoutElement>();
+
+            cardLayout.preferredWidth = ExplorationHudLayoutMetrics.PartyMemberCardWidth;
+
+            cardLayout.minWidth = ExplorationHudLayoutMetrics.PartyMemberCardWidth;
 
             cardLayout.preferredHeight = ExplorationHudLayoutMetrics.PartyMemberCardHeight;
 
@@ -517,7 +534,15 @@ namespace Backend.Editor
 
         {
 
-            var centerPanel = CreatePanelColumn(body, "CenterPanel", ExplorationHudLayoutMetrics.CenterPanelWidth, flexible: true);
+            var centerPanel = CreateRectChild(body, "CenterPanel");
+
+            var centerLayout = centerPanel.gameObject.AddComponent<LayoutElement>();
+
+            centerLayout.flexibleHeight = 1f;
+
+            centerLayout.minHeight = 640f;
+
+            ApplyV2Sliced(centerPanel.gameObject.AddComponent<Image>(), "ui_panel_l");
 
             CreateStartCard(centerPanel, font);
 
@@ -719,13 +744,21 @@ namespace Backend.Editor
 
 
 
-        private static ExplorationLogFeedView CreateRightPanel(RectTransform body, Font font, out Text emptyStateText)
+        private static ExplorationLogFeedView CreateLogPanel(RectTransform body, Font font, out Text emptyStateText)
 
         {
 
-            var rightPanel = CreatePanelColumn(body, "RightPanel", ExplorationHudLayoutMetrics.RightPanelWidth);
+            var logPanel = CreateRectChild(body, "LogPanel");
 
-            var header = CreateRectChild(rightPanel, "LogHeader");
+            var logLayout = logPanel.gameObject.AddComponent<LayoutElement>();
+
+            logLayout.preferredHeight = ExplorationHudLayoutMetrics.LogPanelHeight;
+
+            logLayout.minHeight = ExplorationHudLayoutMetrics.LogPanelHeight;
+
+            ApplyV2Sliced(logPanel.gameObject.AddComponent<Image>(), "ui_panel_l");
+
+            var header = CreateRectChild(logPanel, "LogHeader");
 
             header.sizeDelta = new Vector2(0f, 40f);
 
@@ -745,7 +778,7 @@ namespace Backend.Editor
 
             var logFeedGo = new GameObject("LogFeedView", typeof(RectTransform));
 
-            logFeedGo.transform.SetParent(rightPanel, false);
+            logFeedGo.transform.SetParent(logPanel, false);
 
             var logFeedRect = logFeedGo.GetComponent<RectTransform>();
 
@@ -922,6 +955,446 @@ namespace Backend.Editor
             for (var i = 0; i < labels.Length; i++)
 
                 CreateTabItem(tabs, labels[i], iconNames[i], font, i == 0);
+
+        }
+
+
+
+        private static void CreateOverlays(GameObject root, RectTransform rootRect, Font font)
+
+        {
+
+            var overlays = CreateRectChild(rootRect, "Overlays");
+
+            StretchFull(overlays);
+
+
+
+            CreateEnhanceOverlay(root, overlays, font);
+
+            CreateChronicleOverlay(root, overlays, font);
+
+            CreateSettingsOverlay(root, overlays, font);
+
+            CreateCharacterDetailOverlay(root, overlays, font);
+
+            CreateGuildFacilityOverlay(root, overlays, font);
+
+            CreateDynamicEventOverlay(root, overlays, font);
+
+        }
+
+
+
+        private static GameObject CreateCenteredOverlayPanel(
+
+            RectTransform parent,
+
+            string name,
+
+            Vector2 size,
+
+            Font font)
+
+        {
+
+            var panelGo = new GameObject(name, typeof(RectTransform), typeof(Image));
+
+            panelGo.transform.SetParent(parent, false);
+
+            var panelRect = panelGo.GetComponent<RectTransform>();
+
+            panelRect.anchorMin = new Vector2(0.5f, 0.5f);
+
+            panelRect.anchorMax = new Vector2(0.5f, 0.5f);
+
+            panelRect.sizeDelta = size;
+
+            ApplyV2Sliced(panelGo.GetComponent<Image>(), "ui_panel_l");
+
+            return panelGo;
+
+        }
+
+
+
+        private static Text CreateAnchoredText(
+
+            Transform parent,
+
+            string name,
+
+            Vector2 anchoredPos,
+
+            Vector2 size,
+
+            int fontSize,
+
+            string text,
+
+            Font font,
+
+            Color? color = null)
+
+        {
+
+            var go = new GameObject(name, typeof(RectTransform));
+
+            go.transform.SetParent(parent, false);
+
+            var rect = go.GetComponent<RectTransform>();
+
+            rect.anchorMin = new Vector2(0f, 1f);
+
+            rect.anchorMax = new Vector2(0f, 1f);
+
+            rect.pivot = new Vector2(0f, 1f);
+
+            rect.anchoredPosition = anchoredPos;
+
+            rect.sizeDelta = size;
+
+
+
+            var label = go.AddComponent<Text>();
+
+            label.font = font;
+
+            label.fontSize = fontSize;
+
+            label.alignment = TextAnchor.UpperLeft;
+
+            label.color = color ?? Color.white;
+
+            label.supportRichText = true;
+
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+
+            label.verticalOverflow = VerticalWrapMode.Overflow;
+
+            label.text = text;
+
+            return label;
+
+        }
+
+
+
+        private static Button CreateAnchoredActionButton(
+
+            Transform parent,
+
+            string name,
+
+            Vector2 anchoredPos,
+
+            Vector2 size,
+
+            string labelText,
+
+            Font font)
+
+        {
+
+            var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
+
+            go.transform.SetParent(parent, false);
+
+            var rect = go.GetComponent<RectTransform>();
+
+            rect.anchorMin = new Vector2(0f, 0f);
+
+            rect.anchorMax = new Vector2(0f, 0f);
+
+            rect.pivot = new Vector2(0f, 0f);
+
+            rect.anchoredPosition = anchoredPos;
+
+            rect.sizeDelta = size;
+
+
+
+            var image = go.GetComponent<Image>();
+
+            image.color = new Color(0.24f, 0.18f, 0.12f, 0.95f);
+
+
+
+            var button = go.GetComponent<Button>();
+
+            button.targetGraphic = image;
+
+
+
+            var labelGo = new GameObject("Label", typeof(RectTransform));
+
+            labelGo.transform.SetParent(go.transform, false);
+
+            StretchFull(labelGo.GetComponent<RectTransform>());
+
+            var text = labelGo.AddComponent<Text>();
+
+            text.font = font;
+
+            text.fontSize = 13;
+
+            text.alignment = TextAnchor.MiddleCenter;
+
+            text.color = new Color(1f, 0.92f, 0.75f);
+
+            text.text = labelText;
+
+            return button;
+
+        }
+
+
+
+        private static void WireOverlayView(
+
+            ExplorationOverlayView view,
+
+            GameObject overlayRoot,
+
+            Text contentText,
+
+            Text pageText = null,
+
+            Text hintText = null)
+
+        {
+
+            var so = new SerializedObject(view);
+
+            so.FindProperty("_overlayRoot").objectReferenceValue = overlayRoot;
+
+            so.FindProperty("_contentText").objectReferenceValue = contentText;
+
+            if (pageText != null && so.FindProperty("_pageText") != null)
+
+                so.FindProperty("_pageText").objectReferenceValue = pageText;
+
+            if (hintText != null && so.FindProperty("_hintText") != null)
+
+                so.FindProperty("_hintText").objectReferenceValue = hintText;
+
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            overlayRoot.SetActive(false);
+
+        }
+
+
+
+        private static void CreateEnhanceOverlay(GameObject root, RectTransform overlays, Font font)
+
+        {
+
+            var panelGo = CreateCenteredOverlayPanel(overlays, "EnhancePanel", new Vector2(960f, 480f), font);
+
+            CreateAnchoredText(panelGo.transform, "Title", new Vector2(20f, -16f), new Vector2(920f, 32f), 22, "강화 / 장비", font);
+
+            CreateAnchoredText(panelGo.transform, "Hint", new Vector2(20f, -44f), new Vector2(600f, 20f), 13,
+
+                "1:전직  2:무기 강화  3:방어구 강화  (리더 기준 · 대장간 Lv.1+)", font, new Color(0.75f, 0.75f, 0.8f));
+
+            var contentText = CreateAnchoredText(panelGo.transform, "Content", new Vector2(20f, -68f), new Vector2(600f, 300f), 16, string.Empty, font);
+
+            WireOverlayView(root.GetComponent<EnhanceRuntimePanel>(), panelGo, contentText);
+
+        }
+
+
+
+        private static void CreateChronicleOverlay(GameObject root, RectTransform overlays, Font font)
+
+        {
+
+            var panelGo = CreateCenteredOverlayPanel(overlays, "ChroniclePanel", new Vector2(960f, 520f), font);
+
+            CreateAnchoredText(panelGo.transform, "Title", new Vector2(20f, -16f), new Vector2(920f, 32f), 22, "[ 연대기 ]", font);
+
+            CreateAnchoredText(panelGo.transform, "Hint", new Vector2(20f, -44f), new Vector2(920f, 20f), 13,
+
+                "1:회차  2:즐겨찾기  3:캐릭터 일지  4:로어 도감  5:몬스터 도감  Q/E:캐릭터  PgUp/PgDn 또는 [/]:페이지", font, new Color(0.75f, 0.75f, 0.8f));
+
+            var pageText = CreateAnchoredText(panelGo.transform, "Page", new Vector2(20f, -58f), new Vector2(920f, 18f), 12, string.Empty, font, new Color(0.65f, 0.65f, 0.72f));
+
+            var contentText = CreateAnchoredText(panelGo.transform, "Content", new Vector2(20f, -78f), new Vector2(920f, 418f), 16, string.Empty, font);
+
+            WireOverlayView(root.GetComponent<ChronicleRuntimePanel>(), panelGo, contentText, pageText);
+
+        }
+
+
+
+        private static void CreateSettingsOverlay(GameObject root, RectTransform overlays, Font font)
+
+        {
+
+            var panelGo = CreateCenteredOverlayPanel(overlays, "SettingsPanel", new Vector2(640f, 440f), font);
+
+            CreateAnchoredText(panelGo.transform, "Title", new Vector2(20f, -16f), new Vector2(600f, 32f), 22, "[ 탐험 설정 ]", font);
+
+            CreateAnchoredText(panelGo.transform, "Hint", new Vector2(20f, -44f), new Vector2(600f, 20f), 13,
+
+                "1:LLM  2:이벤트  3:황금  4:로그  5:오프라인  6:서고  7:훈련  8:대장  9:여관  0:서점  -:스킬  (O:닫기)", font, new Color(0.75f, 0.75f, 0.8f));
+
+            var contentText = CreateAnchoredText(panelGo.transform, "Content", new Vector2(20f, -68f), new Vector2(600f, 308f), 16, string.Empty, font);
+
+            WireOverlayView(root.GetComponent<ExplorationSettingsRuntimePanel>(), panelGo, contentText);
+
+        }
+
+
+
+        private static void CreateCharacterDetailOverlay(GameObject root, RectTransform overlays, Font font)
+
+        {
+
+            var panelGo = CreateCenteredOverlayPanel(overlays, "CharacterDetailPanel", new Vector2(520f, 460f), font);
+
+            CreateAnchoredText(panelGo.transform, "Title", new Vector2(20f, -16f), new Vector2(480f, 28f), 22, "[ 캐릭터 상세 ]", font);
+
+            var hintText = CreateAnchoredText(panelGo.transform, "Hint", new Vector2(20f, -44f), new Vector2(480f, 20f), 13, "I:열기/닫기  Q/E:캐릭터", font, new Color(0.72f, 0.74f, 0.8f));
+
+            var contentText = CreateAnchoredText(panelGo.transform, "Content", new Vector2(20f, -68f), new Vector2(480f, 340f), 15, string.Empty, font);
+
+            WireOverlayView(root.GetComponent<CharacterDetailRuntimePanel>(), panelGo, contentText, hintText: hintText);
+
+        }
+
+
+
+        private static void CreateGuildFacilityOverlay(GameObject root, RectTransform overlays, Font font)
+
+        {
+
+            var panelGo = CreateCenteredOverlayPanel(overlays, "GuildFacilityPanel", new Vector2(640f, 440f), font);
+
+            CreateAnchoredText(panelGo.transform, "Title", new Vector2(20f, -16f), new Vector2(600f, 32f), 22, "[ 길드 시설 ]", font);
+
+            CreateAnchoredText(panelGo.transform, "Hint", new Vector2(20f, -44f), new Vector2(600f, 20f), 13,
+
+                "6:서고  7:훈련  8:대장  9:여관  0:서점  -:스킬", font, new Color(0.75f, 0.75f, 0.8f));
+
+            var contentText = CreateAnchoredText(panelGo.transform, "Content", new Vector2(20f, -68f), new Vector2(600f, 308f), 16, string.Empty, font);
+
+            WireOverlayView(root.GetComponent<GuildFacilityRuntimePanel>(), panelGo, contentText);
+
+        }
+
+
+
+        private static void CreateDynamicEventOverlay(GameObject root, RectTransform overlays, Font font)
+
+        {
+
+            var panelGo = new GameObject("DynamicEventPopup", typeof(RectTransform), typeof(Image));
+
+            panelGo.transform.SetParent(overlays, false);
+
+            StretchFull(panelGo.GetComponent<RectTransform>());
+
+            var dim = panelGo.GetComponent<Image>();
+
+            dim.color = new Color(0f, 0f, 0f, 0.65f);
+
+            dim.raycastTarget = true;
+
+
+
+            var box = CreateRectChild(panelGo.GetComponent<RectTransform>(), "Box");
+
+            box.anchorMin = new Vector2(0.5f, 0.5f);
+
+            box.anchorMax = new Vector2(0.5f, 0.5f);
+
+            box.sizeDelta = new Vector2(720f, 420f);
+
+            var boxImage = box.gameObject.AddComponent<Image>();
+
+            boxImage.color = new Color(0.12f, 0.12f, 0.16f, 0.95f);
+
+
+
+            var titleText = CreateAnchoredText(box, "Title", new Vector2(24f, -20f), new Vector2(672f, 32f), 24, "[이벤트]", font);
+
+            var narrationText = CreateAnchoredText(box, "Narration", new Vector2(24f, -60f), new Vector2(672f, 160f), 18, string.Empty, font);
+
+            var choicesText = CreateAnchoredText(box, "Choices", new Vector2(24f, -240f), new Vector2(672f, 48f), 16, string.Empty, font, new Color(0.85f, 0.9f, 1f));
+
+
+
+            var choiceRootGo = new GameObject("ChoiceButtons", typeof(RectTransform));
+
+            choiceRootGo.transform.SetParent(box, false);
+
+            var choiceButtonRoot = choiceRootGo.GetComponent<RectTransform>();
+
+            choiceButtonRoot.anchorMin = new Vector2(0f, 0f);
+
+            choiceButtonRoot.anchorMax = new Vector2(1f, 0f);
+
+            choiceButtonRoot.pivot = new Vector2(0.5f, 0f);
+
+            choiceButtonRoot.anchoredPosition = new Vector2(0f, 24f);
+
+            choiceButtonRoot.sizeDelta = new Vector2(-48f, 96f);
+
+            var layout = choiceRootGo.AddComponent<HorizontalLayoutGroup>();
+
+            layout.spacing = 12f;
+
+            layout.childAlignment = TextAnchor.MiddleCenter;
+
+            layout.childControlWidth = true;
+
+            layout.childControlHeight = true;
+
+            layout.childForceExpandWidth = true;
+
+            layout.childForceExpandHeight = true;
+
+            layout.padding = new RectOffset(24, 24, 0, 0);
+
+
+
+            var pauseButton = CreateAnchoredActionButton(
+
+                box,
+
+                "PauseForManualButton",
+
+                new Vector2(24f, 132f),
+
+                new Vector2(220f, 36f),
+
+                "일시정지하고 직접 선택",
+
+                font);
+
+
+
+            var popup = root.GetComponent<DynamicEventRuntimePopup>();
+
+            var so = new SerializedObject(popup);
+
+            so.FindProperty("_panelRoot").objectReferenceValue = panelGo;
+
+            so.FindProperty("_titleText").objectReferenceValue = titleText;
+
+            so.FindProperty("_narrationText").objectReferenceValue = narrationText;
+
+            so.FindProperty("_choicesText").objectReferenceValue = choicesText;
+
+            so.FindProperty("_choiceButtonRoot").objectReferenceValue = choiceButtonRoot;
+
+            so.FindProperty("_pauseForManualButton").objectReferenceValue = pauseButton;
+
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            panelGo.SetActive(false);
 
         }
 

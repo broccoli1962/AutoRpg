@@ -152,7 +152,7 @@ namespace GoogleSpreadSheetLoader.Setting
             // 개별 액션 버튼들
             if (GUILayout.Button("열기", GUILayout.Width(50)))
             {
-                Application.OpenURL(string.Format(GSSL_URL.SpreadSheetOpenUrl, cacheInfo.spreadSheetId, "0"));
+                Application.OpenURL(string.Format(GSSL_URL.SpreadSheetOpenUrl, cacheInfo.spreadSheetId));
             }
             
             if (GUILayout.Button("삭제", GUILayout.Width(50)))
