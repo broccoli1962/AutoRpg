@@ -15,12 +15,13 @@ namespace Backend.GameSystems.Exploration.Simulation
             float partyHpRatio)
         {
             var categoryRoll = random.NextFloat();
+            var restCutoff = partyHpRatio < 0.55f ? 0.86f : 0.88f;
             var eventType = categoryRoll switch
             {
                 < 0.28f => EventType.Move,
                 < 0.62f => EventType.CombatResult,
                 < 0.78f => EventType.Discovery,
-                < 0.88f => EventType.Rest,
+                < restCutoff => EventType.Rest,
                 _ => EventType.Trap
             };
 

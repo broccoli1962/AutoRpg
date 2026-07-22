@@ -42,7 +42,7 @@ namespace Backend.GameSystems.Prestige
             if (GameStateUtil.IsQuitting)
                 return 0;
 
-            return Instance._meta.LegacyPoints * 8;
+            return Instance._meta.LegacyPoints * 10;
         }
 
         public static void ImportMeta(MetaProgressionState meta)

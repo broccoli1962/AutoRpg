@@ -139,7 +139,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                     0);
             }
 
-            var gold = (int)((monster.GoldReward + random.NextInt(6)) * rewardMultiplier);
+            var gold = (int)((monster.GoldReward + random.NextInt(6) + floor * 0.25f) * rewardMultiplier);
             var expPerMember = 8 + monster.Hp / 4;
 
             foreach (var member in party.Members)
