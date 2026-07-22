@@ -43,9 +43,10 @@ namespace Backend.GameSystems.Exploration
         public static string BuildExplorationLine(ExplorationState state)
         {
             var equipment = EquipmentService.GetLeaderEquipmentSummary(state.Party);
+            var status = state.IsPaused ? "일시정지" : state.IsExploring ? "탐험 중" : "대기";
             return
                 $"{ZoneDefinitions.GetZoneDisplayName(state.ZoneId)} {state.CurrentFloor}층 · " +
-                $"진행 {state.FloorProgress:0.#}% · 장비 {equipment} · Tick {state.CurrentTick}";
+                $"{status} · 장비 {equipment}";
         }
 
         public static string BuildSettingsSummary()

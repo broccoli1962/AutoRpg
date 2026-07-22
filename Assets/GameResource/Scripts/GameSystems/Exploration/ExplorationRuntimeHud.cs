@@ -212,9 +212,6 @@ namespace Backend.GameSystems.Exploration
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
             _logText.verticalOverflow = VerticalWrapMode.Overflow;
 
-            var rect = _logText.rectTransform;
-            rect.sizeDelta = new Vector2(Screen.width - 40f, Screen.height - 172f);
-
             canvasGo.AddComponent<DynamicEventRuntimePopup>();
             _chroniclePanel = canvasGo.AddComponent<ChronicleRuntimePanel>();
             _settingsPanel = canvasGo.AddComponent<ExplorationSettingsRuntimePanel>();
@@ -223,6 +220,7 @@ namespace Backend.GameSystems.Exploration
             var guildPanel = canvasGo.AddComponent<GuildFacilityRuntimePanel>();
             guildPanel.Configure(() => RefreshStatus(ExplorationManager.GetCurrentState()));
             canvasGo.AddComponent<PartyRuntimePanel>();
+            canvasGo.AddComponent<ExplorationCenterRuntimePanel>();
 
             var tabController = canvasGo.AddComponent<GuildHudTabController>();
             tabController.Initialize(
@@ -231,12 +229,17 @@ namespace Backend.GameSystems.Exploration
                 guildPanel,
                 () => RefreshStatus(ExplorationManager.GetCurrentState()));
 
-            var logLeft = PartyRuntimePanel.PanelWidthPx + 24f;
             var logRect = _logText.rectTransform;
-            logRect.anchoredPosition = new Vector2(logLeft, logRect.anchoredPosition.y);
-            logRect.sizeDelta = new Vector2(
-                Screen.width - logLeft - 20f,
-                Screen.height - 172f - GuildHudTabController.BottomInsetPx);
+            logRect.anchorMin = new Vector2(0f, 0f);
+            logRect.anchorMax = new Vector2(1f, 1f);
+            logRect.pivot = new Vector2(0.5f, 0.5f);
+            logRect.anchoredPosition = Vector2.zero;
+            logRect.offsetMin = new Vector2(
+                ExplorationHudLayoutMetrics.RightPanelLeft,
+                GuildHudTabController.BottomInsetPx);
+            logRect.offsetMax = new Vector2(
+                -ExplorationHudLayoutMetrics.HorizontalPadding,
+                -ExplorationHudLayoutMetrics.TopBarHeight);
         }
 
         private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, TextAnchor anchor)
