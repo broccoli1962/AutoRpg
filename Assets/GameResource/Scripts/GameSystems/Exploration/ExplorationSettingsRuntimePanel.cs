@@ -219,7 +219,8 @@ namespace Backend.GameSystems.Exploration
                 $"<b>8. 대장간</b>\n{BlacksmithManager.GetDisplayLabel()}\n{BlacksmithManager.GetBonusSummary()}\n\n" +
                 $"<b>9. 여관</b>\n{InnManager.GetDisplayLabel()}\n{InnManager.GetBonusSummary()}\n\n" +
                 $"<b>0. 서점</b>\n{BookshopManager.GetDisplayLabel()}\n{BookshopManager.GetBonusSummary()}\n\n" +
-                $"<b>-. 스킬 트리 (리더)</b>\n{SkillTreeManager.GetLeaderDisplayLabel()}";
+                $"<b>-. 스킬 트리 (리더)</b>\n{SkillTreeManager.GetLeaderDisplayLabel()}\n\n" +
+                $"<b>설정 요약</b>\n{ExplorationHudStatusFormatter.BuildSettingsSummary()}";
         }
 
         private static string GetSalienceLabel(SalienceGrade grade)

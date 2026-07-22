@@ -21,29 +21,28 @@ namespace Backend.Object.UI.Exploration
             StretchFull(rootRect);
 
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            var statusText = CreateText(rootRect, "ZoneFloorText", new Vector2(24f, -20f), new Vector2(920f, 48f), 18, font);
+            var statusText = CreateText(rootRect, "ZoneFloorText", new Vector2(24f, -20f), new Vector2(920f, 56f), 17, font);
+            statusText.supportRichText = true;
             var goldText = CreateText(rootRect, "GoldText", new Vector2(24f, -72f), new Vector2(220f, 22f), 16, font);
             goldText.gameObject.SetActive(false);
-            var progressText = CreateText(rootRect, "ProgressText", new Vector2(260f, -72f), new Vector2(120f, 22f), 16, font);
-            progressText.gameObject.SetActive(false);
-            var progressSlider = CreateProgressSlider(rootRect, new Vector2(24f, -96f), new Vector2(360f, 16f));
-            progressSlider.gameObject.SetActive(false);
+            var progressText = CreateText(rootRect, "ProgressText", new Vector2(400f, -88f), new Vector2(120f, 22f), 14, font);
+            var progressSlider = CreateProgressSlider(rootRect, new Vector2(24f, -88f), new Vector2(360f, 16f));
 
-            var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -72f), new Vector2(920f, 18f), 13, font);
-            helpText.text = "L:LLM  A:이벤트  G:황금정지  O:설정  C:연대기  R:귀환  F:필터  B:북마크  [/]:로그페이지";
-            var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -92f), new Vector2(420f, 18f), 13, font);
+            var helpText = CreateText(rootRect, "HelpText", new Vector2(24f, -112f), new Vector2(920f, 18f), 13, font);
+            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그";
+            var filterText = CreateText(rootRect, "FilterText", new Vector2(24f, -132f), new Vector2(420f, 18f), 13, font);
             filterText.color = new Color(0.8f, 0.8f, 0.85f);
 
-            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(24f, -116f), "일시정지", font);
-            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(140f, -116f), "재개", font);
-            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(256f, -116f), "귀환", font);
+            var pauseButton = CreateButton(rootRect, "PauseButton", new Vector2(24f, -156f), "일시정지", font);
+            var resumeButton = CreateButton(rootRect, "ResumeButton", new Vector2(140f, -156f), "재개", font);
+            var returnButton = CreateButton(rootRect, "ReturnButton", new Vector2(256f, -156f), "귀환", font);
 
             var logFeedGo = new GameObject("LogFeedView");
             logFeedGo.transform.SetParent(rootRect, false);
             var logFeedRect = logFeedGo.AddComponent<RectTransform>();
             StretchFull(logFeedRect);
             logFeedRect.offsetMin = new Vector2(PartyRuntimePanel.PanelWidthPx + 24f, 24f);
-            logFeedRect.offsetMax = new Vector2(-24f, -156f);
+            logFeedRect.offsetMax = new Vector2(-24f, -196f);
 
             var logFeedView = logFeedGo.AddComponent<ExplorationLogFeedView>();
             var scrollRect = logFeedGo.AddComponent<ScrollRect>();
