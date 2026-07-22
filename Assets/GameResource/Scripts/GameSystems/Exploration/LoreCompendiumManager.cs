@@ -53,6 +53,8 @@ namespace Backend.GameSystems.Exploration
                 "resonance_stone" => "공명석 표면에 짧은 각인: \"빛은 거짓말을 하지 않는다.\"",
                 "crystal_lens" => "수정 렌즈를 통해 본 동굴 벽 — 평소와 다른 층이 겹쳐 보인다.",
                 "artifact_lore_fragment" => "유물 조각에 새겨진 파편 문장: \"아래로 갈수록 이름을 잃는다.\"",
+                ZoneDefinitions.RelicFragmentItemId =>
+                    "유물조각 표면의 문양 — 등불 수호단이 심연 유물을 수집하던 흔적이다.",
                 _ when itemId.Contains("lore") =>
                     $"{displayName ?? "로어 조각"}에서 세계관 단서를 발견했다.",
                 _ => null

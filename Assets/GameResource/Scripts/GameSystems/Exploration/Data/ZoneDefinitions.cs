@@ -278,8 +278,9 @@ namespace Backend.GameSystems.Exploration.Data
             return TryFindZone(zoneId, out var zone) ? zone.RiskMultiplier : 1f;
         }
 
-        public static bool TryAdvanceZone(ExplorationState state)
+        public static bool TryAdvanceZone(ExplorationState state, out string completedZoneId)
         {
+            completedZoneId = null;
             if (state == null)
                 return false;
 
@@ -288,6 +289,7 @@ namespace Backend.GameSystems.Exploration.Data
                 if (AllZones[i].Id != state.ZoneId)
                     continue;
 
+                completedZoneId = AllZones[i].Id;
                 var next = AllZones[i + 1];
                 state.ZoneId = next.Id;
                 state.MaxFloor = next.MaxFloor;
@@ -296,6 +298,30 @@ namespace Backend.GameSystems.Exploration.Data
 
             return false;
         }
+
+        public static bool TryAdvanceZone(ExplorationState state) =>
+            TryAdvanceZone(state, out _);
+
+        public const string RelicFragmentItemId = "relic_fragment";
+
+        public static bool IsRelicFragmentItem(string itemId)
+        {
+            if (string.IsNullOrEmpty(itemId))
+                return false;
+
+            return itemId == RelicFragmentItemId || itemId.StartsWith("relic_");
+        }
+
+        public static int GetRelicFragmentQuantity(DiscoveryDefinition discovery)
+        {
+            if (discovery == null || !IsRelicFragmentItem(discovery.ItemId))
+                return 0;
+
+            return discovery.Quantity > 0 ? discovery.Quantity : 1;
+        }
+
+        public static int GetZoneClearReputationBonus(string zoneId) =>
+            2 + GetZoneIndex(zoneId) * 2;
 
         public static int GetZoneIndex(string zoneId)
         {
