@@ -48,58 +48,86 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             var container = FindHudContainer("Body/CenterPanel");
-            var root = new GameObject("CenterPanel");
-            root.transform.SetParent(container != null ? container : canvas.transform, false);
+            var contentRoot = EnsureCenterContentRoot(container, canvas.transform);
 
-            var rect = root.AddComponent<RectTransform>();
-            if (container != null)
-            {
-                StretchFull(rect);
-            }
-            else
-            {
-                rect.anchorMin = new Vector2(0f, 0f);
-                rect.anchorMax = new Vector2(0f, 1f);
-                rect.pivot = new Vector2(0f, 0.5f);
-                rect.anchoredPosition = new Vector2(ExplorationHudLayoutMetrics.CenterPanelLeft, 0f);
-                rect.sizeDelta = new Vector2(
-                    ExplorationHudLayoutMetrics.CenterPanelWidth,
-                    -(ExplorationHudLayoutMetrics.TopBarHeight + ExplorationHudLayoutMetrics.BottomInsetPx));
-            }
+            _zoneBackdrop = CreateBackdrop(contentRoot);
+            _zoneTitleText = CreateText(contentRoot, "ZoneTitle", new Vector2(16f, -12f), 24, "[ 탐험 진행 ]");
+            _zoneTitleText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelContentWidth, 28f);
 
-            var image = root.AddComponent<Image>();
-            image.color = new Color(0.07f, 0.09f, 0.12f, 0.82f);
+            _floorText = CreateText(contentRoot, "Floor", new Vector2(16f, -44f), 17, string.Empty);
+            _floorText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelContentWidth, 22f);
 
-            _zoneBackdrop = CreateBackdrop(root.transform);
-            _zoneTitleText = CreateText(root.transform, "ZoneTitle", new Vector2(16f, -16f), 24, "[ 탐험 진행 ]");
-            _zoneTitleText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelWidth - 32f, 32f);
-
-            _floorText = CreateText(root.transform, "Floor", new Vector2(16f, -52f), 18, string.Empty);
-            _floorText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelWidth - 32f, 24f);
-
-            _progressSlider = CreateProgressSlider(root.transform, new Vector2(16f, -84f));
-            _progressText = CreateText(root.transform, "ProgressLabel", new Vector2(16f, -108f), 14, string.Empty);
+            _progressSlider = CreateProgressSlider(contentRoot, new Vector2(16f, -72f));
+            _progressText = CreateText(contentRoot, "ProgressLabel", new Vector2(16f, -96f), 14, string.Empty);
+            _progressText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelContentWidth, 18f);
             _progressText.color = new Color(0.75f, 0.82f, 0.95f);
 
-            _partyStripText = CreateText(root.transform, "PartyStrip", new Vector2(16f, -136f), 15, string.Empty);
-            _partyStripText.rectTransform.sizeDelta = new Vector2(
-                ExplorationHudLayoutMetrics.CenterPanelWidth - 32f,
-                120f);
+            _partyStripText = CreateText(contentRoot, "PartyStrip", Vector2.zero, 15, string.Empty);
+            var partyRect = _partyStripText.rectTransform;
+            partyRect.anchorMin = new Vector2(0f, 0f);
+            partyRect.anchorMax = new Vector2(1f, 1f);
+            partyRect.offsetMin = new Vector2(16f, ExplorationHudLayoutMetrics.CenterFooterHeight);
+            partyRect.offsetMax = new Vector2(-16f, -ExplorationHudLayoutMetrics.CenterHeaderHeight);
             _partyStripText.lineSpacing = 1.15f;
 
-            var portraitContainer = container != null ? container.Find("PortraitStrip") : null;
-            _portraitStripRoot = portraitContainer != null
-                ? portraitContainer
-                : CreatePortraitStripRoot(root.transform, new Vector2(16f, -228f)).transform;
+            _portraitStripRoot = EnsurePortraitStrip(contentRoot, container);
 
-            _statusText = CreateText(
-                root.transform,
-                "Status",
-                new Vector2(16f, -(ExplorationHudLayoutMetrics.CenterPanelWidth > 320f ? 320f : 288f)),
-                13,
-                string.Empty);
-            _statusText.rectTransform.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelWidth - 32f, 48f);
+            _statusText = CreateText(contentRoot, "Status", Vector2.zero, 13, string.Empty);
+            var statusRect = _statusText.rectTransform;
+            statusRect.anchorMin = new Vector2(0f, 0f);
+            statusRect.anchorMax = new Vector2(1f, 0f);
+            statusRect.pivot = new Vector2(0.5f, 0f);
+            statusRect.anchoredPosition = new Vector2(0f, 96f);
+            statusRect.sizeDelta = new Vector2(-32f, 36f);
             _statusText.color = new Color(0.7f, 0.75f, 0.82f);
+        }
+
+        private static Transform EnsureCenterContentRoot(Transform container, Transform canvasRoot)
+        {
+            if (container != null)
+            {
+                var existing = container.Find("CenterContent");
+                if (existing != null)
+                    return existing;
+
+                var go = new GameObject("CenterContent", typeof(RectTransform));
+                go.transform.SetParent(container, false);
+                StretchFull(go.GetComponent<RectTransform>());
+                return go.transform;
+            }
+
+            var fallback = new GameObject("CenterContent", typeof(RectTransform));
+            fallback.transform.SetParent(canvasRoot, false);
+            var rect = fallback.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 0.5f);
+            rect.anchoredPosition = new Vector2(ExplorationHudLayoutMetrics.CenterPanelLeft, 0f);
+            rect.sizeDelta = new Vector2(
+                ExplorationHudLayoutMetrics.CenterPanelWidth,
+                -(ExplorationHudLayoutMetrics.TopBarHeight + ExplorationHudLayoutMetrics.BottomInsetPx));
+            return fallback.transform;
+        }
+
+        private static Transform EnsurePortraitStrip(Transform contentRoot, Transform container)
+        {
+            var portraitContainer = container != null ? container.Find("PortraitStrip") : null;
+            if (portraitContainer != null)
+            {
+                var stripRect = portraitContainer.GetComponent<RectTransform>();
+                if (stripRect != null)
+                {
+                    stripRect.anchorMin = new Vector2(0f, 0f);
+                    stripRect.anchorMax = new Vector2(1f, 0f);
+                    stripRect.pivot = new Vector2(0.5f, 0f);
+                    stripRect.anchoredPosition = new Vector2(0f, 12f);
+                    stripRect.sizeDelta = new Vector2(-32f, 80f);
+                }
+
+                return portraitContainer;
+            }
+
+            return CreatePortraitStripRoot(contentRoot).transform;
         }
 
         private Transform FindHudContainer(string relativePath)
@@ -163,17 +191,17 @@ namespace Backend.GameSystems.Exploration
                 CreatePortraitBadge(_portraitStripRoot, members[i], i == 0);
         }
 
-        private static GameObject CreatePortraitStripRoot(Transform parent, Vector2 anchoredPos)
+        private static GameObject CreatePortraitStripRoot(Transform parent)
         {
-            var go = new GameObject("PortraitStrip");
+            var go = new GameObject("PortraitStrip", typeof(RectTransform));
             go.transform.SetParent(parent, false);
 
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = anchoredPos;
-            rect.sizeDelta = new Vector2(ExplorationHudLayoutMetrics.CenterPanelWidth - 32f, 88f);
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            rect.anchoredPosition = new Vector2(0f, 12f);
+            rect.sizeDelta = new Vector2(-32f, 80f);
 
             var layout = go.AddComponent<HorizontalLayoutGroup>();
             layout.spacing = 12f;
@@ -351,7 +379,7 @@ namespace Backend.GameSystems.Exploration
 
         private static Slider CreateProgressSlider(Transform parent, Vector2 anchoredPos)
         {
-            var width = ExplorationHudLayoutMetrics.CenterPanelWidth - 32f;
+            var width = ExplorationHudLayoutMetrics.CenterPanelContentWidth;
             var go = new GameObject("CenterProgressSlider");
             go.transform.SetParent(parent, false);
 

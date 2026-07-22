@@ -166,25 +166,25 @@ namespace Backend.GameSystems.Exploration
             var panelRect = _panelRoot.AddComponent<RectTransform>();
             panelRect.anchorMin = new Vector2(0.5f, 0.5f);
             panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-            panelRect.sizeDelta = new Vector2(760f, 480f);
+            panelRect.sizeDelta = new Vector2(960f, 520f);
 
             var panelImage = _panelRoot.AddComponent<Image>();
             panelImage.color = new Color(0.1f, 0.1f, 0.14f, 0.96f);
 
             var title = CreateText(_panelRoot.transform, "Title", new Vector2(20f, -16f), 22, "[ 연대기 ]");
-            title.rectTransform.sizeDelta = new Vector2(720f, 32f);
+            title.rectTransform.sizeDelta = new Vector2(920f, 32f);
 
             var hint = CreateText(_panelRoot.transform, "Hint", new Vector2(20f, -44f), 13,
                 "1:회차  2:즐겨찾기  3:캐릭터 일지  4:로어 도감  5:몬스터 도감  Q/E:캐릭터  PgUp/PgDn 또는 [/]:페이지");
-            hint.rectTransform.sizeDelta = new Vector2(720f, 20f);
+            hint.rectTransform.sizeDelta = new Vector2(920f, 20f);
             hint.color = new Color(0.75f, 0.75f, 0.8f);
 
             _pageText = CreateText(_panelRoot.transform, "Page", new Vector2(20f, -58f), 12, string.Empty);
-            _pageText.rectTransform.sizeDelta = new Vector2(720f, 18f);
+            _pageText.rectTransform.sizeDelta = new Vector2(920f, 18f);
             _pageText.color = new Color(0.65f, 0.65f, 0.72f);
 
             _contentText = CreateText(_panelRoot.transform, "Content", new Vector2(20f, -78f), 16, string.Empty);
-            _contentText.rectTransform.sizeDelta = new Vector2(720f, 378f);
+            _contentText.rectTransform.sizeDelta = new Vector2(920f, 418f);
             _contentText.horizontalOverflow = HorizontalWrapMode.Wrap;
             _contentText.verticalOverflow = VerticalWrapMode.Overflow;
         }
@@ -199,7 +199,7 @@ namespace Backend.GameSystems.Exploration
             rect.anchorMax = new Vector2(0f, 1f);
             rect.pivot = new Vector2(0f, 1f);
             rect.anchoredPosition = anchoredPos;
-            rect.sizeDelta = new Vector2(720f, 40f);
+            rect.sizeDelta = new Vector2(920f, 40f);
 
             var text = go.AddComponent<Text>();
             text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");

@@ -51,7 +51,6 @@ namespace Backend.GameSystems.Exploration
 
             var overlayRect = _overlayRoot.AddComponent<RectTransform>();
             StretchFull(overlayRect);
-            ApplySafeArea(overlayRect);
 
             var backdrop = _overlayRoot.AddComponent<Image>();
             backdrop.color = new Color(0.04f, 0.05f, 0.08f, 0.96f);
@@ -62,9 +61,7 @@ namespace Backend.GameSystems.Exploration
             var contentRect = content.AddComponent<RectTransform>();
             contentRect.anchorMin = new Vector2(0.5f, 0.5f);
             contentRect.anchorMax = new Vector2(0.5f, 0.5f);
-            contentRect.sizeDelta = new Vector2(
-                Mathf.Min(560f, ExplorationHudLayoutMetrics.ContentWidth - 48f),
-                420f);
+            contentRect.sizeDelta = new Vector2(560f, 420f);
 
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
@@ -175,15 +172,6 @@ namespace Backend.GameSystems.Exploration
             text.verticalOverflow = VerticalWrapMode.Overflow;
             text.text = initial;
             return text;
-        }
-
-        private static void ApplySafeArea(RectTransform rect)
-        {
-            var safe = Screen.safeArea;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(safe.xMin, safe.yMin);
-            rect.offsetMax = new Vector2(safe.xMax - Screen.width, safe.yMax - Screen.height);
         }
 
         private static void StretchFull(RectTransform rect)

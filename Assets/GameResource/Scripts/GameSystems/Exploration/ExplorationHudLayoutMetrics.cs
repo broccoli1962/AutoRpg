@@ -1,46 +1,44 @@
 namespace Backend.GameSystems.Exploration
 {
     /// <summary>
-    /// 12_UIUX 3-panel HUD 공통 레이아웃 수치. 모바일 safe area·컴팩트 폭을 반영한다.
+    /// 12_UIUX 3-panel HUD 레이아웃. 1920x1080 기준 좌표계.
     /// </summary>
     public static class ExplorationHudLayoutMetrics
     {
-        public const float TopBarHeight = 168f;
-        public const float HorizontalPadding = 12f;
-        public const float ColumnGap = 8f;
+        public const float ReferenceWidth = 1920f;
+        public const float ReferenceHeight = 1080f;
 
-        public static float SafeAreaTopInset =>
-            UnityEngine.Screen.height - UnityEngine.Screen.safeArea.yMax;
+        public const float TopBarHeight = 120f;
+        public const float HorizontalPadding = 16f;
+        public const float ColumnGap = 12f;
+        public const float LeftPanelWidth = 300f;
+        public const float RightPanelWidth = 420f;
+        public const float TabBarHeight = 56f;
+        public const float TabBarPadding = 8f;
 
-        public static float SafeAreaBottomInset =>
-            UnityEngine.Screen.safeArea.yMin;
+        public static float BottomInsetPx => TabBarHeight + TabBarPadding;
 
-        public static bool IsCompactLayout =>
-            UnityEngine.Screen.width < 900f;
-
-        public static float LeftPanelWidth =>
-            IsCompactLayout ? 220f : 280f;
-
-        public static float RightPanelWidth =>
-            IsCompactLayout ? 280f : 400f;
-
-        public static float ContentWidth => UnityEngine.Screen.width;
-
-        public static float EffectiveTopBarHeight =>
-            TopBarHeight + SafeAreaTopInset;
-
-        public static float BottomInsetPx =>
-            GuildHudTabController.BottomInsetPx + SafeAreaBottomInset;
+        public static float BodyHeight => ReferenceHeight - TopBarHeight - BottomInsetPx;
 
         public static float CenterPanelLeft =>
             HorizontalPadding + LeftPanelWidth + ColumnGap;
 
         public static float CenterPanelWidth =>
-            UnityEngine.Mathf.Max(
-                200f,
-                UnityEngine.Screen.width - CenterPanelLeft - RightPanelWidth - HorizontalPadding * 2f - ColumnGap);
+            ReferenceWidth - CenterPanelLeft - RightPanelWidth - HorizontalPadding - ColumnGap;
 
         public static float RightPanelLeft =>
-            UnityEngine.Screen.width - RightPanelWidth - HorizontalPadding;
+            ReferenceWidth - RightPanelWidth - HorizontalPadding;
+
+        public static float LeftPanelContentWidth => LeftPanelWidth - 24f;
+
+        public static float CenterPanelContentWidth => CenterPanelWidth - 32f;
+
+        public static float RightPanelContentWidth => RightPanelWidth - 24f;
+
+        /// <summary>중앙 패널 하단 초상/상태 영역 예약 높이.</summary>
+        public const float CenterFooterHeight = 148f;
+
+        /// <summary>중앙 패널 상단 헤더(구역/진행바) 높이.</summary>
+        public const float CenterHeaderHeight = 112f;
     }
 }

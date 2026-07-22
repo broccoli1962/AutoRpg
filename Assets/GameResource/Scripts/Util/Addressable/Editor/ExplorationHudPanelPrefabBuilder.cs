@@ -15,10 +15,10 @@ namespace Backend.Editor
     public static class ExplorationHudPanelPrefabBuilder
     {
         private const string PrefabPath = "Assets/GameResource/Prefabs/UI/ExplorationHudPanel.prefab";
-        private const float TopBarHeight = 168f;
-        private const float BottomInset = 60f;
-        private const float LeftWidth = 280f;
-        private const float RightWidth = 400f;
+        private const float TopBarHeight = ExplorationHudLayoutMetrics.TopBarHeight;
+        private const float BottomInset = ExplorationHudLayoutMetrics.TabBarHeight + ExplorationHudLayoutMetrics.TabBarPadding;
+        private const float LeftWidth = ExplorationHudLayoutMetrics.LeftPanelWidth;
+        private const float RightWidth = ExplorationHudLayoutMetrics.RightPanelWidth;
 
         [MenuItem("Tools/Addressables/Build Exploration HUD Panel Prefab")]
         public static void BuildPrefab()
@@ -34,17 +34,18 @@ namespace Backend.Editor
             var topBar = CreateRectChild(rootRect, "TopBar");
             StretchHorizontal(topBar, TopBarHeight, 0f);
 
-            var statusText = CreateText(topBar, "ZoneFloorText", font, 17, new Vector2(24f, -20f), new Vector2(920f, 56f));
+            var statusText = CreateText(topBar, "ZoneFloorText", font, 17, new Vector2(20f, -12f), new Vector2(1180f, 28f));
             statusText.supportRichText = true;
-            var goldText = CreateText(topBar, "GoldText", font, 16, new Vector2(24f, -72f), new Vector2(220f, 22f));
+            var goldText = CreateText(topBar, "GoldText", font, 16, new Vector2(20f, -44f), new Vector2(220f, 20f));
             goldText.gameObject.SetActive(false);
-            var helpText = CreateText(topBar, "HelpText", font, 13, new Vector2(24f, -88f), new Vector2(920f, 18f));
-            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  I:캐릭터  R:귀환  F:필터  B:북마크  -:스킬  [/]:로그  하단탭";
-            var filterText = CreateText(topBar, "FilterText", font, 13, new Vector2(24f, -108f), new Vector2(420f, 18f));
+            var filterText = CreateText(topBar, "FilterText", font, 13, new Vector2(20f, -68f), new Vector2(360f, 18f));
             filterText.color = new Color(0.8f, 0.8f, 0.85f);
-            var pauseButton = CreateButton(topBar, "PauseButton", font, "일시정지", new Vector2(24f, -132f));
-            var resumeButton = CreateButton(topBar, "ResumeButton", font, "재개", new Vector2(140f, -132f));
-            var returnButton = CreateButton(topBar, "ReturnButton", font, "귀환", new Vector2(256f, -132f));
+            var helpText = CreateText(topBar, "HelpText", font, 12, new Vector2(400f, -68f), new Vector2(800f, 18f));
+            helpText.alignment = TextAnchor.UpperLeft;
+            helpText.text = "L:LLM  A:이벤트  G:황금  O:설정  C:연대기  I:캐릭터  R:귀환  F:필터  B:북마크  [/]:로그";
+            var pauseButton = CreateButton(topBar, "PauseButton", font, "일시정지", new Vector2(20f, -92f));
+            var resumeButton = CreateButton(topBar, "ResumeButton", font, "재개", new Vector2(132f, -92f));
+            var returnButton = CreateButton(topBar, "ReturnButton", font, "귀환", new Vector2(244f, -92f));
 
             var body = CreateRectChild(rootRect, "Body");
             StretchWithInsets(body, TopBarHeight, BottomInset, 0f, 0f);
@@ -52,16 +53,18 @@ namespace Backend.Editor
             var leftPanel = CreateRectChild(body, "LeftPanel");
             AnchorLeftColumn(leftPanel, LeftWidth);
             leftPanel.gameObject.AddComponent<Image>().color = new Color(0.08f, 0.08f, 0.12f, 0.88f);
+            CreateStretchChild(leftPanel, "PartyContent");
 
             var centerPanel = CreateRectChild(body, "CenterPanel");
             AnchorCenterColumn(centerPanel, LeftWidth, RightWidth);
             centerPanel.gameObject.AddComponent<Image>().color = new Color(0.07f, 0.09f, 0.12f, 0.82f);
-            CreatePortraitStripPlaceholder(centerPanel, font);
+            CreateStretchChild(centerPanel, "CenterContent");
+            CreatePortraitStripPlaceholder(centerPanel);
 
             var rightPanel = CreateRectChild(body, "RightPanel");
             AnchorRightColumn(rightPanel, RightWidth);
             rightPanel.gameObject.AddComponent<Image>().color = new Color(0.06f, 0.07f, 0.1f, 0.75f);
-            CreateText(rightPanel, "LogHeader", font, 14, new Vector2(12f, -8f), new Vector2(360f, 20f)).text = "[ 로그 ]";
+            CreateText(rightPanel, "LogHeader", font, 14, new Vector2(12f, -8f), new Vector2(ExplorationHudLayoutMetrics.RightPanelContentWidth, 20f)).text = "[ 로그 ]";
 
             var logFeedGo = new GameObject("LogFeedView", typeof(RectTransform));
             logFeedGo.transform.SetParent(rightPanel, false);
@@ -103,7 +106,7 @@ namespace Backend.Editor
             var itemLayout = itemTemplateGo.AddComponent<LayoutElement>();
             itemLayout.minHeight = 28f;
             itemLayout.preferredHeight = 28f;
-            var itemText = CreateText(itemTemplateGo.transform, "Message", font, 15, Vector2.zero, new Vector2(360f, 28f));
+            var itemText = CreateText(itemTemplateGo.transform, "Message", font, 15, Vector2.zero, new Vector2(ExplorationHudLayoutMetrics.RightPanelContentWidth, 28f));
             StretchFull(itemText.rectTransform);
             itemText.horizontalOverflow = HorizontalWrapMode.Wrap;
             itemText.verticalOverflow = VerticalWrapMode.Overflow;
@@ -131,31 +134,34 @@ namespace Backend.Editor
             Debug.Log($"[ExplorationHudPanelPrefabBuilder] Saved {PrefabPath}");
         }
 
-        private static void CreatePortraitStripPlaceholder(RectTransform centerPanel, Font font)
+        private static void CreatePortraitStripPlaceholder(RectTransform centerPanel)
         {
             var strip = CreateRectChild(centerPanel, "PortraitStrip");
             strip.anchorMin = new Vector2(0f, 0f);
             strip.anchorMax = new Vector2(1f, 0f);
             strip.pivot = new Vector2(0.5f, 0f);
-            strip.anchoredPosition = new Vector2(0f, 72f);
-            strip.sizeDelta = new Vector2(-32f, 88f);
+            strip.anchoredPosition = new Vector2(0f, 12f);
+            strip.sizeDelta = new Vector2(-32f, 80f);
 
             var layout = strip.gameObject.AddComponent<HorizontalLayoutGroup>();
             layout.spacing = 12f;
-            layout.childAlignment = TextAnchor.UpperLeft;
+            layout.childAlignment = TextAnchor.MiddleLeft;
             layout.childControlWidth = false;
             layout.childControlHeight = false;
             layout.childForceExpandWidth = false;
             layout.childForceExpandHeight = false;
             layout.padding = new RectOffset(16, 16, 0, 0);
+        }
 
-            CreateText(strip, "PortraitHint", font, 13, new Vector2(0f, 0f), new Vector2(120f, 20f)).text =
-                "<color=#99a3b3>파티 초상</color>";
+        private static void CreateStretchChild(RectTransform parent, string name)
+        {
+            var child = CreateRectChild(parent, name);
+            StretchFull(child);
         }
 
         private static void CreateBottomTabBarPlaceholder(RectTransform rootRect, Font font)
         {
-            const float tabBarHeight = 52f;
+            var tabBarHeight = ExplorationHudLayoutMetrics.TabBarHeight;
             var barRoot = CreateRectChild(rootRect, "BottomTabBar");
             barRoot.anchorMin = new Vector2(0f, 0f);
             barRoot.anchorMax = new Vector2(1f, 0f);
@@ -300,7 +306,7 @@ namespace Backend.Editor
             rect.anchorMin = new Vector2(0f, 0f);
             rect.anchorMax = new Vector2(0f, 1f);
             rect.pivot = new Vector2(0f, 0.5f);
-            rect.anchoredPosition = new Vector2(12f, 0f);
+            rect.anchoredPosition = new Vector2(ExplorationHudLayoutMetrics.HorizontalPadding, 0f);
             rect.sizeDelta = new Vector2(width, 0f);
         }
 
@@ -309,16 +315,18 @@ namespace Backend.Editor
             rect.anchorMin = new Vector2(1f, 0f);
             rect.anchorMax = new Vector2(1f, 1f);
             rect.pivot = new Vector2(1f, 0.5f);
-            rect.anchoredPosition = new Vector2(-12f, 0f);
+            rect.anchoredPosition = new Vector2(-ExplorationHudLayoutMetrics.HorizontalPadding, 0f);
             rect.sizeDelta = new Vector2(width, 0f);
         }
 
         private static void AnchorCenterColumn(RectTransform rect, float leftWidth, float rightWidth)
         {
-            rect.anchorMin = new Vector2(0f, 0f);
-            rect.anchorMax = new Vector2(1f, 1f);
-            rect.offsetMin = new Vector2(leftWidth + 20f, 0f);
-            rect.offsetMax = new Vector2(-(rightWidth + 20f), 0f);
+            var leftInset = ExplorationHudLayoutMetrics.HorizontalPadding + leftWidth + ExplorationHudLayoutMetrics.ColumnGap;
+            var rightInset = ExplorationHudLayoutMetrics.HorizontalPadding + rightWidth + ExplorationHudLayoutMetrics.ColumnGap;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = new Vector2(leftInset, 0f);
+            rect.offsetMax = new Vector2(-rightInset, 0f);
         }
 
         private static Text CreateText(
