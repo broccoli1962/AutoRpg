@@ -151,6 +151,8 @@ namespace Backend.Object.UI.Exploration
             if (_itemsByEventId.TryGetValue(entry.EventId, out var item) && item != null)
             {
                 item.Bind(entry);
+                if (_pageFromEnd == 0)
+                    ScrollToLatest();
                 RefreshVisibility();
             }
         }

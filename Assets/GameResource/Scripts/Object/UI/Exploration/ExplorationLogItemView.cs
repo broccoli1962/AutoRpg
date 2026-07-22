@@ -1,6 +1,8 @@
+using System.Threading;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.Util;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,11 +23,18 @@ namespace Backend.Object.UI.Exploration
         public bool IsBookmarked { get; private set; }
 
         private string _baseRichText;
+        private CancellationTokenSource _typewriterCts;
+        private int _revealedLength;
 
         internal void ConfigureRuntime(Text messageText, Image categoryIcon)
         {
             _messageText = messageText;
             _categoryIcon = categoryIcon;
+        }
+
+        private void OnDestroy()
+        {
+            CancelTypewriter();
         }
 
         public void Bind(LogEntry entry)
@@ -40,12 +49,22 @@ namespace Backend.Object.UI.Exploration
                 || entry.Salience >= SalienceGrade.Significant
                 || entry.Category == LogCategory.Milestone;
             IsBookmarked = LogBookmarkManager.IsBookmarked(PlainText, Floor);
+
+            if (entry.UsedLlm && entry.IsPending)
+            {
+                RunTypewriterAsync(entry).Forget();
+                return;
+            }
+
+            CancelTypewriter();
+            _revealedLength = PlainText?.Length ?? 0;
             _baseRichText = LogDisplayUtil.FormatRichText(entry);
             ApplyDisplay(entry.IsPending ? FontStyle.Italic : FontStyle.Normal, entry.Category);
         }
 
         public void BindTagged(string plainText, int floor, string tag, LogCategory category, bool isDynamicEvent, bool isNarrative)
         {
+            CancelTypewriter();
             EventId = null;
             PlainText = plainText;
             Floor = floor;
@@ -82,6 +101,52 @@ namespace Backend.Object.UI.Exploration
                 return;
 
             _messageText.text = LogBookmarkManager.ApplyBookmarkPrefix(_baseRichText, IsBookmarked);
+        }
+
+        private async UniTaskVoid RunTypewriterAsync(LogEntry entry)
+        {
+            CancelTypewriter();
+            _typewriterCts = new CancellationTokenSource();
+            var token = _typewriterCts.Token;
+            var targetText = entry.Text ?? string.Empty;
+
+            if (targetText.Length < _revealedLength)
+                _revealedLength = 0;
+
+            try
+            {
+                while (_revealedLength < targetText.Length)
+                {
+                    _revealedLength++;
+                    var partial = targetText.Substring(0, _revealedLength);
+                    var partialEntry = LogTypewriterHelper.WithPartialText(entry, partial, isPending: true);
+                    _baseRichText = LogDisplayUtil.FormatRichText(partialEntry);
+                    ApplyDisplay(FontStyle.Italic, entry.Category);
+                    await UniTask.Delay(LogTypewriterHelper.CharDelayMs, cancellationToken: token);
+                }
+
+                if (!entry.IsPending)
+                {
+                    _baseRichText = LogDisplayUtil.FormatRichText(entry);
+                    ApplyDisplay(FontStyle.Normal, entry.Category);
+                }
+                else
+                {
+                    var partialEntry = LogTypewriterHelper.WithPartialText(entry, targetText, isPending: true);
+                    _baseRichText = LogDisplayUtil.FormatRichText(partialEntry);
+                    ApplyDisplay(FontStyle.Italic, entry.Category);
+                }
+            }
+            catch (System.OperationCanceledException)
+            {
+            }
+        }
+
+        private void CancelTypewriter()
+        {
+            _typewriterCts?.Cancel();
+            _typewriterCts?.Dispose();
+            _typewriterCts = null;
         }
 
         private void ApplyDisplay(FontStyle fontStyle, LogCategory category)
