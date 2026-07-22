@@ -131,6 +131,12 @@ namespace Backend.GameSystems.Exploration
 
             canvasGo.AddComponent<DynamicEventRuntimePopup>();
             _chroniclePanel = canvasGo.AddComponent<ChronicleRuntimePanel>();
+            canvasGo.AddComponent<PartyRuntimePanel>();
+
+            var logLeft = PartyRuntimePanel.PanelWidthPx + 24f;
+            var logRect = _logText.rectTransform;
+            logRect.anchoredPosition = new Vector2(logLeft, logRect.anchoredPosition.y);
+            logRect.sizeDelta = new Vector2(Screen.width - logLeft - 20f, Screen.height - 172f);
         }
 
         private static Text CreateText(Transform parent, string name, Vector2 anchoredPos, int fontSize, TextAnchor anchor)

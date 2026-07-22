@@ -91,6 +91,25 @@ namespace Backend.GameSystems.Equipment
             return $"{weapon}/{armor}";
         }
 
+        public static string GetMemberEquipmentSummary(CharacterState member)
+        {
+            if (member == null)
+                return null;
+
+            var weapon = GetDisplayName(member.EquippedWeaponId);
+            var armor = GetDisplayName(member.EquippedArmorId);
+            if (string.IsNullOrEmpty(weapon) && string.IsNullOrEmpty(armor))
+                return null;
+
+            if (string.IsNullOrEmpty(armor))
+                return weapon;
+
+            if (string.IsNullOrEmpty(weapon))
+                return armor;
+
+            return $"{weapon} · {armor}";
+        }
+
         private static string GetDisplayName(string definitionId)
         {
             if (string.IsNullOrEmpty(definitionId))
