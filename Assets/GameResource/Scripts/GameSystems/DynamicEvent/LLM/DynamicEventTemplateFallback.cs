@@ -44,6 +44,12 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                     $"{floor}층 바닥이 갑자기 푹신해지며 발이 가라앉기 시작한다.",
                 DynamicEventDefinitions.GoldenChamberId =>
                     $"{floor}층 깊숙이 황금빛 섬광이 새어 나오는 봉인된 전실이 나타난다. 공기가 무겁고, 무언가가 깨어나는 기운이 느껴진다.",
+                DynamicEventDefinitions.ForkEchoPassageId =>
+                    $"{floor}층 좁은 통로에서 자신의 발소리와 다른 리듬의 메아리가 겹친다.",
+                DynamicEventDefinitions.HazardSporeBloomId =>
+                    $"{floor}층 천장에서 포자 구름이 피어나며 기침을 유발한다.",
+                DynamicEventDefinitions.EncounterHermitId =>
+                    $"{floor}층 구석에서 오래된 담요를 두른 은둔자가 조용히 손짓한다.",
                 _ => $"{leaderName}(은)는 {floor}층에서 예상치 못한 상황에 맞닥뜨렸다."
             };
 
@@ -159,6 +165,24 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                             ? "전실 깊숙이 들어가 숨겨진 보물 더미를 발견했다."
                             : "봉인을 건드리자 고대 수호자가 깨어났다."
                         : "직감을 믿고 전실 앞에서 물러섰다.",
+                DynamicEventDefinitions.ForkEchoPassageId =>
+                    choiceId == "follow_echo"
+                        ? outcome == DynamicEventOutcomeEffect.MinorResource
+                            ? "메아리를 따라가 숨겨진 틈에서 보상을 찾았다."
+                            : "메아리 속 함정에 발을 헛디뎌 다쳤다."
+                        : "메아리를 무시하고 안전한 길을 택했다.",
+                DynamicEventDefinitions.HazardSporeBloomId =>
+                    choiceId == "burn_spores"
+                        ? outcome == DynamicEventOutcomeEffect.InjuryLight
+                            ? "포자를 태우다 연기에 목을 졸렸다."
+                            : "불로 포자 구름을 제압하고 통과했다."
+                        : "천천히 후퇴하며 포자가 가라앉길 기다렸다.",
+                DynamicEventDefinitions.EncounterHermitId =>
+                    choiceId == "share_food"
+                        ? outcome == DynamicEventOutcomeEffect.MinorResource
+                            ? "은둔자와 나눈 이야기 끝에 작은 보답을 받았다."
+                            : "음식을 나누다 은둔자의 함정에 걸렸다."
+                        : "조용히 지나쳤다.",
                 _ => $"선택({choiceId})의 결과: {outcome}"
             };
         }
@@ -214,6 +238,12 @@ namespace Backend.GameSystems.DynamicEvent.LLM
                 (DynamicEventDefinitions.HazardQuicksandId, "wait") => "천천히 기다린다",
                 (DynamicEventDefinitions.GoldenChamberId, "enter_chamber") => "전실로 들어간다",
                 (DynamicEventDefinitions.GoldenChamberId, "retreat") => "물러선다",
+                (DynamicEventDefinitions.ForkEchoPassageId, "follow_echo") => "메아리를 따라간다",
+                (DynamicEventDefinitions.ForkEchoPassageId, "ignore_echo") => "메아리를 무시한다",
+                (DynamicEventDefinitions.HazardSporeBloomId, "burn_spores") => "포자를 태운다",
+                (DynamicEventDefinitions.HazardSporeBloomId, "retreat_slow") => "천천히 후퇴한다",
+                (DynamicEventDefinitions.EncounterHermitId, "share_food") => "음식을 나눈다",
+                (DynamicEventDefinitions.EncounterHermitId, "pass_by") => "지나친다",
                 _ => choiceId
             };
         }

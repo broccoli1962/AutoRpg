@@ -230,6 +230,7 @@ namespace Backend.GameSystems.DynamicEvent
                         case DynamicEventDefinitions.Fork002Id:
                         case DynamicEventDefinitions.ForkWaterSoundId:
                         case DynamicEventDefinitions.ForkRuneMarkId:
+                        case DynamicEventDefinitions.ForkEchoPassageId:
                             if (tag == PersonalityTag.Cautious)
                                 return GetSecondChoiceId(template);
                             if (tag == PersonalityTag.Reckless)
@@ -252,6 +253,7 @@ namespace Backend.GameSystems.DynamicEvent
                         case DynamicEventDefinitions.HazardGasId:
                         case DynamicEventDefinitions.HazardCollapseId:
                         case DynamicEventDefinitions.HazardQuicksandId:
+                        case DynamicEventDefinitions.HazardSporeBloomId:
                             if (tag == PersonalityTag.Cautious)
                                 return GetSafeChoiceId(template);
                             if (tag == PersonalityTag.Reckless)
@@ -261,12 +263,15 @@ namespace Backend.GameSystems.DynamicEvent
                         case DynamicEventDefinitions.ArtifactLoreFragmentId:
                         case DynamicEventDefinitions.EncounterScholarId:
                         case DynamicEventDefinitions.EncounterWandererId:
+                        case DynamicEventDefinitions.EncounterHermitId:
                             if (tag == PersonalityTag.Greedy || tag == PersonalityTag.Cheerful)
                                 return GetFirstChoiceId(template);
                             if (tag == PersonalityTag.Cynical)
                                 return GetSecondChoiceId(template);
                             if (tag == PersonalityTag.Loyal && template.EventId == DynamicEventDefinitions.EncounterWandererId)
                                 return "help";
+                            if (tag == PersonalityTag.Loyal && template.EventId == DynamicEventDefinitions.EncounterHermitId)
+                                return "share_food";
                             break;
                         case DynamicEventDefinitions.ArtifactCrystalId:
                             if (tag == PersonalityTag.Greedy)
@@ -291,6 +296,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.ArtifactMuralId => "study",
                 DynamicEventDefinitions.EncounterScholarId => "talk",
                 DynamicEventDefinitions.EncounterWandererId => "help",
+                DynamicEventDefinitions.EncounterHermitId => "share_food",
                 DynamicEventDefinitions.GoldenChamberId => "enter_chamber",
                 _ => GetFirstChoiceId(template)
             };
@@ -309,6 +315,7 @@ namespace Backend.GameSystems.DynamicEvent
                 DynamicEventDefinitions.TrapPitId => "climb",
                 DynamicEventDefinitions.HazardCollapseId => "cover",
                 DynamicEventDefinitions.HazardQuicksandId => "wait",
+                DynamicEventDefinitions.HazardSporeBloomId => "retreat_slow",
                 DynamicEventDefinitions.GoldenChamberId => "retreat",
                 _ => GetSecondChoiceId(template)
             };
