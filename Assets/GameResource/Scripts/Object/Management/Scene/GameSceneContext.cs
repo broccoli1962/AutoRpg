@@ -3,6 +3,7 @@ using Backend.Object.Management;
 using Backend.Object.UI;
 using Backend.AddressableKey;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Backend.Object.Management.Scene
 {

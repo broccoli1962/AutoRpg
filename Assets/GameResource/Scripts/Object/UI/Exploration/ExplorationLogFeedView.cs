@@ -6,8 +6,11 @@ using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
 using Backend.GameSystems.Prestige;
+using Backend.Object.Management;
+using Backend.Object.Management.Pool;
 using Backend.Util;
 using R3;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,12 +20,13 @@ namespace Backend.Object.UI.Exploration
     {
         private const int MaxLogLines = 500;
         private const int LogLinesPerPage = 36;
+        private bool _stripMode;
 
         [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private RectTransform _contentRoot;
         [SerializeField] private ExplorationLogItemView _itemPrefab;
         [SerializeField] private GameObject _idlePlaceholderRoot;
-        [SerializeField] private Text _idlePlaceholderText;
+        [SerializeField] private TextMeshProUGUI _idlePlaceholderText;
 
         private readonly List<ExplorationLogItemView> _items = new();
         private readonly Dictionary<string, ExplorationLogItemView> _itemsByEventId = new();
@@ -30,8 +34,34 @@ namespace Backend.Object.UI.Exploration
         private GameObject _idlePlaceholder;
         private LogFeedFilter _filter = LogFeedFilter.All;
         private int _pageFromEnd;
+        private Pooling<ExplorationLogItemView> _itemPool;
 
         public LogFeedFilter CurrentFilter => _filter;
+
+        /// <summary>스테이지 우선 HUD — 로그를 하단 스트립으로 축소.</summary>
+        public void ApplyStripMode()
+        {
+            _stripMode = true;
+
+            if (_scrollRect != null)
+            {
+                _scrollRect.movementType = ScrollRect.MovementType.Clamped;
+                _scrollRect.scrollSensitivity = 18f;
+            }
+
+            RefreshStripItemTypography();
+        }
+
+        private void RefreshStripItemTypography()
+        {
+            foreach (var item in _items)
+            {
+                if (item == null)
+                    continue;
+
+                item.ApplyStripTypography(ExplorationHudLayoutMetrics.LogStripBodyFontSize);
+            }
+        }
 
         internal void ConfigureRuntime(
             ScrollRect scrollRect,
@@ -124,11 +154,8 @@ namespace Backend.Object.UI.Exploration
             textRect.offsetMin = Vector2.zero;
             textRect.offsetMax = Vector2.zero;
 
-            _idlePlaceholderText = textGo.AddComponent<Text>();
-            _idlePlaceholderText.font = RuntimeUiFont.Get();
-            _idlePlaceholderText.fontSize = 15;
-            _idlePlaceholderText.alignment = TextAnchor.UpperLeft;
-            _idlePlaceholderText.color = ModernUiStyle.MutedText;
+            _idlePlaceholderText = textGo.AddComponent<TextMeshProUGUI>();
+            UiTmpUtil.ApplyLayoutCell(_idlePlaceholderText, RuntimeUiTmpFont.Get(), ExplorationHudLayoutMetrics.LogBodyFontSize, TextAnchor.UpperLeft, lineCount: 4, color: ModernUiStyle.MutedText);
             _idlePlaceholderText.text = "탐험 시작 전입니다.\n\n중앙 「탐험 시작」 버튼을 누르면\n실시간 탐험 로그가 표시됩니다.";
             _idlePlaceholderRoot = _idlePlaceholder;
         }
@@ -164,31 +191,73 @@ namespace Backend.Object.UI.Exploration
             if (string.IsNullOrWhiteSpace(item.PlainText))
                 return;
 
-            var bookmarked = LogBookmarkManager.Toggle(item.PlainText, item.Floor);
+            var bookmarked = LogBookmarkSystem.Toggle(item.PlainText, item.Floor);
             item.SetBookmarked(bookmarked);
         }
 
         public void ClearLogs()
         {
             foreach (var item in _items)
-            {
-                if (item != null)
-                    Destroy(item.CachedGameObject);
-            }
+                ReleaseLogItem(item);
 
             _items.Clear();
             _itemsByEventId.Clear();
             _pageFromEnd = 0;
         }
 
-        private void AddLog(LogEntry entry)
+        private void EnsureItemPool()
         {
-            if (_itemPrefab == null || _contentRoot == null)
+            if (_itemPool != null || _itemPrefab == null)
                 return;
 
-            var item = Instantiate(_itemPrefab, _contentRoot);
+            _itemPool = ObjectPoolManager.GetOrCreatePool(
+                _itemPrefab,
+                _contentRoot,
+                defaultCapacity: 32,
+                maxSize: MaxLogLines + 8,
+                onRelease: item =>
+                {
+                    if (item != null)
+                        item.CachedGameObject.SetActive(false);
+                });
+        }
+
+        private ExplorationLogItemView RentLogItem()
+        {
+            if (_itemPrefab == null || _contentRoot == null)
+                return null;
+
+            EnsureItemPool();
+            var item = _itemPool?.Get();
+            if (item == null)
+                return null;
+
+            item.transform.SetParent(_contentRoot, false);
+            UiTmpUtil.EnsureLogItemStretch(item.transform as RectTransform);
             item.CachedGameObject.SetActive(true);
+            return item;
+        }
+
+        private void ReleaseLogItem(ExplorationLogItemView item)
+        {
+            if (item == null)
+                return;
+
+            if (_itemPool != null)
+                ObjectPoolManager.Release(item);
+            else
+                Destroy(item.CachedGameObject);
+        }
+
+        private void AddLog(LogEntry entry)
+        {
+            var item = RentLogItem();
+            if (item == null)
+                return;
+
             item.Bind(entry);
+            if (_stripMode)
+                item.ApplyStripTypography(ExplorationHudLayoutMetrics.LogStripBodyFontSize);
             _items.Add(item);
 
             if (!string.IsNullOrEmpty(entry.EventId))
@@ -219,7 +288,7 @@ namespace Backend.Object.UI.Exploration
             if (instance == null || string.IsNullOrEmpty(instance.LlmResultNarration))
                 return;
 
-            var state = ExplorationManager.GetCurrentState();
+            var state = ExplorationSystem.GetCurrentState();
             var floor = state?.CurrentFloor ?? 0;
             AddTaggedLog(instance.LlmResultNarration, floor, "이벤트", LogCategory.Milestone, isDynamicEvent: true, isNarrative: true);
         }
@@ -231,7 +300,7 @@ namespace Backend.Object.UI.Exploration
                 return;
 
             var latest = meta.ChronicleEntries[meta.ChronicleEntries.Count - 1];
-            var state = ExplorationManager.GetCurrentState();
+            var state = ExplorationSystem.GetCurrentState();
             var floor = state?.CurrentFloor ?? 0;
             AddTaggedLog(latest, floor, "연대기", LogCategory.Milestone, isDynamicEvent: false, isNarrative: true);
         }
@@ -244,11 +313,10 @@ namespace Backend.Object.UI.Exploration
             bool isDynamicEvent,
             bool isNarrative)
         {
-            if (_itemPrefab == null || _contentRoot == null)
+            var item = RentLogItem();
+            if (item == null)
                 return;
 
-            var item = Instantiate(_itemPrefab, _contentRoot);
-            item.CachedGameObject.SetActive(true);
             item.BindTagged(text, floor, tag, category, isDynamicEvent, isNarrative);
             _items.Add(item);
             TrimIfNeeded();
@@ -259,15 +327,25 @@ namespace Backend.Object.UI.Exploration
 
         private void TrimIfNeeded()
         {
-            while (_items.Count > MaxLogLines)
+            var maxLines = _stripMode
+                ? Mathf.Min(MaxLogLines, ExplorationHudLayoutMetrics.LogStripMaxVisibleLines * 8)
+                : MaxLogLines;
+
+            while (_items.Count > maxLines)
             {
                 var oldest = _items[0];
                 _items.RemoveAt(0);
-                if (oldest != null)
+                if (oldest == null)
+                    continue;
+
+                if (!string.IsNullOrEmpty(oldest.EventId) &&
+                    _itemsByEventId.TryGetValue(oldest.EventId, out var mapped) &&
+                    mapped == oldest)
                 {
-                    RemoveFromLookup(oldest);
-                    Destroy(oldest.CachedGameObject);
+                    _itemsByEventId.Remove(oldest.EventId);
                 }
+
+                ReleaseLogItem(oldest);
             }
 
             _itemsByEventId.Clear();
@@ -336,17 +414,11 @@ namespace Backend.Object.UI.Exploration
             if (_scrollRect == null)
                 return;
 
+            if (_contentRoot != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_contentRoot);
+
             Canvas.ForceUpdateCanvases();
             _scrollRect.verticalNormalizedPosition = 0f;
-        }
-
-        private void RemoveFromLookup(ExplorationLogItemView item)
-        {
-            if (item == null || string.IsNullOrEmpty(item.EventId))
-                return;
-
-            if (_itemsByEventId.TryGetValue(item.EventId, out var mapped) && mapped == item)
-                _itemsByEventId.Remove(item.EventId);
         }
     }
 }

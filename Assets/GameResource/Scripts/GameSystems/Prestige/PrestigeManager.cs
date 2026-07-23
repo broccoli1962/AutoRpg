@@ -132,7 +132,7 @@ namespace Backend.GameSystems.Prestige
 
         private void OnExplorationEnded(ExplorationEndReason reason)
         {
-            var state = ExplorationManager.GetCurrentState();
+            var state = ExplorationSystem.GetCurrentState();
             if (state == null)
                 return;
 

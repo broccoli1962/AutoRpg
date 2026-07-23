@@ -20,6 +20,10 @@ namespace Backend.Util
         public const string UiTabOff = "ui_tab_off";
         public const string UiProgressTrack = "ui_progress_track";
         public const string UiProgressFill = "ui_progress_fill";
+        public const string UiHpTrack = "ui_hp_track";
+        public const string UiHpFill = "ui_hp_fill";
+        public const string UiOverlayDim = "ui_overlay_dim";
+        public const string UiLogCard = "ui_log_card";
         public const string PortraitFrame = "portrait_frame";
         public const string IllustZoneBanner = "illust_zone_banner";
         public const string IllustGuildStart = "illust_guild_start";
@@ -68,8 +72,14 @@ namespace Backend.Util
         public static void ApplyTabBackground(Image image, bool active) =>
             ApplySlicedSprite(image, Get(active ? UiTabOn : UiTabOff), Color.white);
 
-        public static void ApplyLogCard(Image image) =>
-            ApplyPanelSmall(image);
+        public static void ApplyLogCard(Image image)
+        {
+            var sprite = Get(UiLogCard);
+            if (sprite != null)
+                ApplySlicedSprite(image, sprite, Color.white);
+            else
+                ApplyPanelSmall(image);
+        }
 
         public static void ApplyPortraitFrame(Image image) =>
             ApplySimpleImage(image, PortraitFrame, Color.white);
@@ -83,6 +93,19 @@ namespace Backend.Util
             image.type = Image.Type.Filled;
             image.fillMethod = Image.FillMethod.Horizontal;
         }
+
+        public static void ApplyHpTrack(Image image) =>
+            ApplySlicedSprite(image, Get(UiHpTrack), Color.white);
+
+        public static void ApplyHpFill(Image image)
+        {
+            ApplySlicedSprite(image, Get(UiHpFill), Color.white);
+            image.type = Image.Type.Filled;
+            image.fillMethod = Image.FillMethod.Horizontal;
+        }
+
+        public static void ApplyOverlayDim(Image image) =>
+            ApplySlicedSprite(image, Get(UiOverlayDim), Color.white);
 
         public static void ApplySimpleImage(Image image, string keyName, Color color)
         {

@@ -1,0 +1,433 @@
+using System.Collections.Generic;
+using System.Text;
+using Backend.GameSystems.Character.Data;
+using Backend.GameSystems.DynamicEvent;
+using Backend.GameSystems.DynamicEvent.Data;
+using Backend.GameSystems.Exploration;
+using Backend.GameSystems.Exploration.Data;
+using Backend.Util;
+using Backend.Util.Management;
+using ExplorationEventType = global::EventType;
+using R3;
+using UnityEngine;
+
+namespace Backend.GameSystems.Character
+{
+    /// <summary>
+    /// 캐릭터별 단기/장기/핵심 기억을 관리하고 LLM 프롬프트용 컨텍스트를 제공한다.
+    /// </summary>
+    public sealed class CharacterMemorySystem : SingletonGameObject<CharacterMemorySystem>
+    {
+        private const int ShortTermCapacity = 8;
+        private const int LongTermCompressThreshold = 6;
+
+        private readonly Dictionary<string, CharacterMemory> _memories = new();
+        private CompositeDisposable _disposables;
+
+        public static void EnsureInitialized()
+        {
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            _ = Instance;
+        }
+
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+            _disposables = new CompositeDisposable();
+
+            DynamicEventChannels.OnEventResolved
+                .Subscribe(OnDynamicEventResolved)
+                .AddTo(_disposables);
+        }
+
+        private void OnDestroy()
+        {
+            _disposables?.Dispose();
+        }
+
+        /// <summary>
+        /// 탐험 시작 시 파티 캐릭터의 기억 슬롯을 준비한다.
+        /// </summary>
+        public static void BindParty(PartyState party)
+        {
+            if (GameStateUtil.IsQuitting || party?.Members == null)
+                return;
+
+            Instance.BindPartyInternal(party);
+        }
+
+        /// <summary>
+        /// LLM 프롬프트에 주입할 캐릭터 기억 블록을 반환한다.
+        /// </summary>
+        public static string BuildPromptContext(string characterId)
+        {
+            if (GameStateUtil.IsQuitting || string.IsNullOrEmpty(characterId))
+                return string.Empty;
+
+            return Instance.BuildPromptContextInternal(characterId);
+        }
+
+        /// <summary>
+        /// 파티 패널 카드에 표시할 최근 기억 미리보기(1~2줄).
+        /// </summary>
+        public static string BuildHudPreview(string characterId)
+        {
+            if (GameStateUtil.IsQuitting || string.IsNullOrEmpty(characterId))
+                return string.Empty;
+
+            return Instance.BuildHudPreviewInternal(characterId);
+        }
+
+        /// <summary>
+        /// Significant+ 탐험 이벤트를 캐릭터 기억에 기록한다.
+        /// </summary>
+        public static void RecordExplorationEvent(ExplorationEvent explorationEvent, PartyState party)
+        {
+            if (GameStateUtil.IsQuitting || explorationEvent == null || party == null)
+                return;
+
+            if (explorationEvent.Salience < SalienceGrade.Significant)
+                return;
+
+            Instance.RecordExplorationEventInternal(explorationEvent, party);
+        }
+
+        public static List<CharacterMemory> ExportMemories()
+        {
+            if (GameStateUtil.IsQuitting)
+                return new List<CharacterMemory>();
+
+            return Instance.ExportMemoriesInternal();
+        }
+
+        public static void ImportMemories(List<CharacterMemory> memories)
+        {
+            if (GameStateUtil.IsQuitting)
+                return;
+
+            Instance.ImportMemoriesInternal(memories);
+        }
+
+        private void BindPartyInternal(PartyState party)
+        {
+            foreach (var member in party.Members)
+            {
+                if (!_memories.ContainsKey(member.CharacterId))
+                {
+                    _memories[member.CharacterId] = new CharacterMemory
+                    {
+                        CharacterId = member.CharacterId
+                    };
+                }
+            }
+        }
+
+        private void RecordExplorationEventInternal(ExplorationEvent explorationEvent, PartyState party)
+        {
+            BindPartyInternal(party);
+
+            var leaderSummary = CharacterMemoryRecorder.SummarizeExplorationEvent(explorationEvent, party);
+            if (!string.IsNullOrEmpty(leaderSummary) && party.Leader != null)
+                AppendShortTerm(party.Leader.CharacterId, leaderSummary, party.Leader.DisplayName);
+
+            foreach (var (characterId, summary) in CharacterMemoryRecorder.SummarizeCombatParticipants(explorationEvent, party))
+            {
+                var member = FindMember(party, characterId);
+                AppendShortTerm(characterId, summary, member?.DisplayName);
+            }
+
+            TryAddCoreMemories(explorationEvent, party);
+        }
+
+        private void OnDynamicEventResolved(DynamicEventInstance instance)
+        {
+            if (instance == null)
+                return;
+
+            var state = ExplorationSystem.GetCurrentState();
+            var party = state?.Party;
+            if (party?.Members == null || party.Members.Count == 0)
+                return;
+
+            BindPartyInternal(party);
+            foreach (var member in party.Members)
+            {
+                var summary = CharacterMemoryRecorder.SummarizeDynamicEventForMember(instance, member);
+                if (!string.IsNullOrEmpty(summary))
+                    AppendShortTerm(member.CharacterId, summary, member.DisplayName);
+            }
+
+            TryAddDynamicEventCoreMemories(instance, party);
+            LoreCompendiumSystem.RecordDynamicEvent(instance);
+        }
+
+        private void AppendShortTerm(string characterId, string summary, string displayName)
+        {
+            if (string.IsNullOrEmpty(characterId) || string.IsNullOrEmpty(summary))
+                return;
+
+            if (!_memories.TryGetValue(characterId, out var memory))
+            {
+                memory = new CharacterMemory { CharacterId = characterId };
+                _memories[characterId] = memory;
+            }
+
+            memory.ShortTermBuffer.Add(summary);
+            while (memory.ShortTermBuffer.Count > ShortTermCapacity)
+                memory.ShortTermBuffer.RemoveAt(0);
+
+            if (memory.ShortTermBuffer.Count >= LongTermCompressThreshold)
+                memory.LongTermSummary = CharacterMemoryRecorder.BuildLongTermSummary(memory, displayName ?? characterId);
+
+            Debug.Log($"[CharacterMemorySystem] Recorded for {characterId}: {summary}");
+        }
+
+        private void TryAddCoreMemories(ExplorationEvent explorationEvent, PartyState party)
+        {
+            if (party?.Leader == null)
+                return;
+
+            if (explorationEvent.EventType == ExplorationEventType.ZoneTransition)
+            {
+                TryAddZoneEnterCoreMemory(party.Leader, explorationEvent.ZoneId);
+                return;
+            }
+
+            if (explorationEvent.EventType != ExplorationEventType.CombatResult)
+                return;
+
+            var leader = party.Leader;
+            if (!_memories.TryGetValue(leader.CharacterId, out var memory))
+                return;
+
+            var combat = explorationEvent.Combat;
+            if (combat == null)
+                return;
+
+            if (HasCoreMemory(memory, "core_first_injury"))
+                return;
+
+            foreach (var injury in combat.Injuries)
+            {
+                if (injury.CharacterId != leader.CharacterId || injury.Severity == InjurySeverity.None)
+                    continue;
+
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_first_injury",
+                    Description = "첫 부상을 입은 순간",
+                    Tags = { "injury", "first_time" },
+                    Weight = "high"
+                });
+                Debug.Log($"[CharacterMemorySystem] Core memory unlocked: first injury ({leader.DisplayName})");
+                break;
+            }
+
+            if (combat.Outcome == CombatOutcome.Victory &&
+                explorationEvent.Salience >= SalienceGrade.Milestone &&
+                !HasCoreMemory(memory, "core_boss_victory"))
+            {
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_boss_victory",
+                    Description = $"{combat.MonsterDisplayName ?? "강적"}을(를) 쓰러뜨린 전투",
+                    Tags = { "victory", "milestone" },
+                    Weight = "high"
+                });
+            }
+        }
+
+        private void TryAddDynamicEventCoreMemories(DynamicEventInstance instance, PartyState party)
+        {
+            var leader = party?.Leader;
+            if (leader == null || instance == null)
+                return;
+
+            if (!_memories.TryGetValue(leader.CharacterId, out var memory))
+                return;
+
+            if (instance.TemplateId == DynamicEventDefinitions.GoldenChamberId &&
+                !HasCoreMemory(memory, "core_golden_chamber"))
+            {
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_golden_chamber",
+                    Description = "황금의 전실을 마주한 순간",
+                    Tags = { "golden", "milestone" },
+                    Weight = "high"
+                });
+                Debug.Log($"[CharacterMemorySystem] Core memory unlocked: golden chamber ({leader.DisplayName})");
+            }
+
+            if (instance.TemplateId == DynamicEventDefinitions.NarrativeRivalMemoryId &&
+                !HasCoreMemory(memory, "core_rival_memory"))
+            {
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_rival_memory",
+                    Description = "라이벌 탐험가와 마주친 기억",
+                    Tags = { "personal", "rival" },
+                    Weight = "high"
+                });
+                Debug.Log($"[CharacterMemorySystem] Core memory unlocked: rival memory ({leader.DisplayName})");
+            }
+
+            if (instance.TemplateId == DynamicEventDefinitions.EncounterHermitId &&
+                !HasCoreMemory(memory, "core_hermit_encounter"))
+            {
+                memory.CoreMemories.Add(new CoreMemoryEntry
+                {
+                    MemoryId = "core_hermit_encounter",
+                    Description = "은둔자와 조우한 날",
+                    Tags = { "encounter", "personal" },
+                    Weight = "medium"
+                });
+            }
+        }
+
+        private void TryAddZoneEnterCoreMemory(CharacterState leader, string zoneId)
+        {
+            if (leader == null || string.IsNullOrEmpty(zoneId))
+                return;
+
+            if (!_memories.TryGetValue(leader.CharacterId, out var memory))
+                return;
+
+            var memoryId = zoneId switch
+            {
+                ZoneDefinitions.FungalMazeId => "core_enter_fungal_maze",
+                ZoneDefinitions.CrystalCavernId => "core_enter_crystal_cavern",
+                ZoneDefinitions.MoltenDepthsId => "core_enter_molten_depths",
+                ZoneDefinitions.SilentRuinsId => "core_enter_silent_ruins",
+                ZoneDefinitions.AbyssalThresholdId => "core_enter_abyssal_threshold",
+                _ => null
+            };
+
+            if (string.IsNullOrEmpty(memoryId) || HasCoreMemory(memory, memoryId))
+                return;
+
+            memory.CoreMemories.Add(new CoreMemoryEntry
+            {
+                MemoryId = memoryId,
+                Description = $"{ZoneDefinitions.GetZoneDisplayName(zoneId)}(으)로 처음 발을 디딘 날",
+                Tags = { "zone", zoneId },
+                Weight = "high"
+            });
+            Debug.Log($"[CharacterMemorySystem] Core memory unlocked: zone enter {zoneId} ({leader.DisplayName})");
+        }
+
+        private static bool HasCoreMemory(CharacterMemory memory, string memoryId)
+        {
+            foreach (var core in memory.CoreMemories)
+            {
+                if (core.MemoryId == memoryId)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private string BuildPromptContextInternal(string characterId)
+        {
+            if (!_memories.TryGetValue(characterId, out var memory))
+                return string.Empty;
+
+            var builder = new StringBuilder();
+            builder.AppendLine("[캐릭터 기억]");
+
+            if (!string.IsNullOrEmpty(memory.LongTermSummary))
+            {
+                builder.Append("장기: ");
+                builder.AppendLine(memory.LongTermSummary);
+            }
+
+            if (memory.CoreMemories.Count > 0)
+            {
+                builder.Append("핵심: ");
+                for (var i = 0; i < memory.CoreMemories.Count; i++)
+                {
+                    if (i > 0)
+                        builder.Append("; ");
+
+                    builder.Append(memory.CoreMemories[i].Description);
+                }
+
+                builder.AppendLine();
+            }
+
+            if (memory.ShortTermBuffer.Count > 0)
+            {
+                builder.AppendLine("최근:");
+                var start = Mathf.Max(0, memory.ShortTermBuffer.Count - 3);
+                for (var i = start; i < memory.ShortTermBuffer.Count; i++)
+                {
+                    builder.Append("- ");
+                    builder.AppendLine(memory.ShortTermBuffer[i]);
+                }
+            }
+
+            return builder.Length > 0 ? builder.ToString() : string.Empty;
+        }
+
+        private string BuildHudPreviewInternal(string characterId)
+        {
+            if (!_memories.TryGetValue(characterId, out var memory) || memory.ShortTermBuffer.Count == 0)
+                return string.Empty;
+
+            var builder = new StringBuilder();
+            builder.Append("<color=#8a9ab8>기억: ");
+            var start = Mathf.Max(0, memory.ShortTermBuffer.Count - 2);
+            for (var i = start; i < memory.ShortTermBuffer.Count; i++)
+            {
+                if (i > start)
+                    builder.Append(" / ");
+
+                var line = memory.ShortTermBuffer[i];
+                if (line.Length > 28)
+                    line = line.Substring(0, 28) + "…";
+
+                builder.Append(line);
+            }
+
+            builder.Append("</color>");
+            return builder.ToString();
+        }
+
+        private List<CharacterMemory> ExportMemoriesInternal()
+        {
+            var list = new List<CharacterMemory>(_memories.Count);
+            foreach (var pair in _memories)
+                list.Add(pair.Value);
+
+            return list;
+        }
+
+        private void ImportMemoriesInternal(List<CharacterMemory> memories)
+        {
+            _memories.Clear();
+            if (memories == null)
+                return;
+
+            foreach (var memory in memories)
+            {
+                if (memory == null || string.IsNullOrEmpty(memory.CharacterId))
+                    continue;
+
+                _memories[memory.CharacterId] = memory;
+            }
+        }
+
+        private static CharacterState FindMember(PartyState party, string characterId)
+        {
+            foreach (var member in party.Members)
+            {
+                if (member.CharacterId == characterId)
+                    return member;
+            }
+
+            return null;
+        }
+    }
+}

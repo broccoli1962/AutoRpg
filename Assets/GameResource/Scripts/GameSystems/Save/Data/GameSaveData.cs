@@ -17,5 +17,6 @@ namespace Backend.GameSystems.Save.Data
         public int GoldenEventAutoPause = 1;
         public int LogFrequencyMode;
         public int OfflineSummaryDetailMode;
+        public int StageVfxDensityMode;
     }
 }

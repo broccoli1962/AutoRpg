@@ -10,8 +10,8 @@ namespace Backend.Object.Management
 {
     public class AudioManager : SingletonGameObject<AudioManager>
     {
-        private static readonly string _audioSourcePoolKey = "AudioSource";
-        private readonly List<string> _preloadAudioClipKeys = new() { "popSound" };
+        private static readonly string _audioSourcePoolKey = SoundKeyRegistry.AudioSourcePool;
+        private readonly List<string> _preloadAudioClipKeys = new() { SoundKeyRegistry.Pop };
 
         // PlayerPrefs 키
         private const string PREF_BGM_ENABLED = "AudioManager_BgmEnabled";

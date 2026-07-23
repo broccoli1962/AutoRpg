@@ -116,14 +116,14 @@ namespace Backend.GameSystems.LLM
                 userContext.Append(" / 성격: ");
                 userContext.AppendLine(FormatPersonalities(leader.PersonalityTags));
 
-                var memoryContext = CharacterMemoryManager.BuildPromptContext(leader.CharacterId);
+                var memoryContext = CharacterMemorySystem.BuildPromptContext(leader.CharacterId);
                 if (!string.IsNullOrEmpty(memoryContext))
                 {
                     userContext.AppendLine();
                     userContext.Append(memoryContext);
                 }
 
-                var relationshipContext = RelationshipManager.BuildPartyPromptContext(party);
+                var relationshipContext = RelationshipSystem.BuildPartyPromptContext(party);
                 if (!string.IsNullOrEmpty(relationshipContext))
                 {
                     userContext.AppendLine();

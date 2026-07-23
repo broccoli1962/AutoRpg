@@ -1,6 +1,6 @@
 using Backend.GameSystems.Exploration.Data;
-using ScriptoriumManager = Backend.GameSystems.Exploration.ScriptoriumManager;
-using SkillTreeManager = Backend.GameSystems.Exploration.SkillTreeManager;
+using ScriptoriumSystem = Backend.GameSystems.Exploration.ScriptoriumSystem;
+using SkillTreeSystem = Backend.GameSystems.Exploration.SkillTreeSystem;
 
 namespace Backend.GameSystems.Exploration.Narration
 {
@@ -30,22 +30,22 @@ namespace Backend.GameSystems.Exploration.Narration
         public static int GetExtraLogMaxTokens(PartyState party)
         {
             var bonus = PartyHasBard(party) ? BardTokenBonus : 0;
-            bonus += ScriptoriumManager.GetTokenBonus();
-            bonus += SkillTreeManager.GetBardTokenBonus(party);
+            bonus += ScriptoriumSystem.GetTokenBonus();
+            bonus += SkillTreeSystem.GetBardTokenBonus(party);
             return bonus;
         }
 
         public static int GetSalienceGradeReduction(PartyState party)
         {
             var reduction = PartyHasBard(party) ? BardSalienceReduction : 0;
-            reduction += ScriptoriumManager.GetSalienceGradeReduction();
+            reduction += ScriptoriumSystem.GetSalienceGradeReduction();
             return reduction;
         }
 
         public static float GetDynamicEventRateMultiplier(PartyState party)
         {
             var multiplier = PartyHasBard(party) ? BardEventRateMultiplier : 1f;
-            multiplier *= ScriptoriumManager.GetEventRateMultiplier();
+            multiplier *= ScriptoriumSystem.GetEventRateMultiplier();
             return multiplier;
         }
 

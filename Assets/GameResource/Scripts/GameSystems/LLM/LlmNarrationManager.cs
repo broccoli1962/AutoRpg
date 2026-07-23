@@ -197,13 +197,14 @@ namespace Backend.GameSystems.LLM
                 if (!GameStateUtil.IsQuitting)
                     ExplorationChannels.PublishLogUpdated(job.PendingEntry);
 
+                LlmNarrationBenchmark.RecordSuccess(0);
                 Debug.Log($"[LlmNarrationManager] Cache hit for {job.Event.EventId}");
                 return;
             }
 
             if (!_isModelReady || _service == null)
             {
-                await PublishFallbackAsync(job);
+                await PublishFallbackAsync(job, 0);
                 return;
             }
 
@@ -251,7 +252,7 @@ namespace Backend.GameSystems.LLM
                 Debug.LogWarning(
                     $"[LlmNarrationManager] Fallback for {job.Event.EventId} " +
                     $"(timedOut={timedOut}, elapsedMs={sw.ElapsedMilliseconds})");
-                await PublishFallbackAsync(job);
+                await PublishFallbackAsync(job, sw.ElapsedMilliseconds);
                 return;
             }
 
@@ -265,6 +266,8 @@ namespace Backend.GameSystems.LLM
             job.PendingEntry.Text = trimmed;
             job.PendingEntry.IsPending = false;
             job.PendingEntry.UsedLlm = true;
+
+            LlmNarrationBenchmark.RecordSuccess(sw.ElapsedMilliseconds);
 
             await UniTask.SwitchToMainThread();
             if (!GameStateUtil.IsQuitting)
@@ -288,11 +291,13 @@ namespace Backend.GameSystems.LLM
             ExplorationChannels.PublishLogStreaming(job.PendingEntry);
         }
 
-        private static async UniTask PublishFallbackAsync(LlmNarrationJob job)
+        private static async UniTask PublishFallbackAsync(LlmNarrationJob job, long elapsedMs)
         {
             job.PendingEntry.Text = job.FallbackEntry.Text;
             job.PendingEntry.IsPending = false;
             job.PendingEntry.UsedLlm = false;
+
+            LlmNarrationBenchmark.RecordFallback(elapsedMs);
 
             await UniTask.SwitchToMainThread();
             if (!GameStateUtil.IsQuitting)

@@ -28,7 +28,7 @@ namespace Backend.GameSystems.Equipment
                 _ => 0.12f
             };
 
-            if (!random.RollChance(dropChance * BlacksmithManager.GetDropChanceMultiplier()))
+            if (!random.RollChance(dropChance * BlacksmithSystem.GetDropChanceMultiplier()))
                 return;
 
             var definition = EquipmentDefinitions.RollDrop(monsterRarity, random, state.ZoneId, state.CurrentFloor);

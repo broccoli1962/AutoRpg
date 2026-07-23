@@ -1,8 +1,10 @@
 using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Prestige;
+using Backend.Object.Controller;
 using Backend.Object.UI.Exploration;
 using R3;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,10 +15,10 @@ namespace Backend.Object.UI
         public override UILayer Layer => UILayer.HUD;
 
         [Header("Status")]
-        [SerializeField] private Text _zoneFloorText;
-        [SerializeField] private Text _goldText;
+        [SerializeField] private TextMeshProUGUI _zoneFloorText;
+        [SerializeField] private TextMeshProUGUI _goldText;
         [SerializeField] private Slider _progressSlider;
-        [SerializeField] private Text _progressText;
+        [SerializeField] private TextMeshProUGUI _progressText;
 
         [Header("Controls")]
         [SerializeField] private CommonButton _pauseButton;
@@ -25,36 +27,71 @@ namespace Backend.Object.UI
 
         [Header("Views")]
         [SerializeField] private ExplorationLogFeedView _logFeedView;
-        [SerializeField] private Text _filterText;
-        [SerializeField] private Text _helpText;
+        [SerializeField] private TextMeshProUGUI _filterText;
+        [SerializeField] private TextMeshProUGUI _helpText;
 
-        private ExplorationHudShortcuts _shortcuts;
-
-        internal void BindShortcuts(System.Action refreshStatus)
+        internal void BindControllers(System.Action refreshStatus)
         {
-            if (_shortcuts == null)
-                _shortcuts = gameObject.AddComponent<ExplorationHudShortcuts>();
+            var chroniclePanel = GetComponentInChildren<ChronicleRuntimePanel>(true);
+            var settingsPanel = GetComponentInChildren<ExplorationSettingsRuntimePanel>(true);
+            var enhancePanel = GetComponentInChildren<EnhanceRuntimePanel>(true);
+            var guildPanel = GetComponentInChildren<GuildFacilityRuntimePanel>(true);
+            var characterDetailPanel = GetComponentInChildren<CharacterDetailRuntimePanel>(true);
+            var startPanel = GetComponentInChildren<ExplorationStartRuntimePanel>(true);
+            var centerPanel = GetComponentInChildren<ExplorationCenterRuntimePanel>(true);
+            var stagePanel = EnsureStagePanel();
+            var partyPanel = GetComponentInChildren<PartyRuntimePanel>(true);
 
-            var chroniclePanel = GetComponent<ChronicleRuntimePanel>();
-            var settingsPanel = GetComponent<ExplorationSettingsRuntimePanel>();
+            chroniclePanel?.EnsurePresenterReady();
+            settingsPanel?.EnsurePresenterReady();
+            enhancePanel?.EnsurePresenterReady();
+            guildPanel?.EnsurePresenterReady();
+            characterDetailPanel?.EnsurePresenterReady();
+            startPanel?.EnsurePresenterReady();
+            centerPanel?.EnsurePresenterReady();
+            stagePanel?.EnsurePresenterReady();
+            partyPanel?.EnsurePresenterReady();
+
             settingsPanel?.Configure(refreshStatus);
-            _shortcuts.Initialize(_logFeedView, chroniclePanel, settingsPanel, _filterText, refreshStatus);
-
-            var enhancePanel = gameObject.GetComponent<EnhanceRuntimePanel>();
-            var guildPanel = gameObject.GetComponent<GuildFacilityRuntimePanel>();
-            var tabController = gameObject.GetComponent<GuildHudTabController>();
             guildPanel?.Configure(refreshStatus);
-            tabController?.Initialize(chroniclePanel, enhancePanel, guildPanel, refreshStatus);
+
+            EnsureComponent<ExplorationHudInputController>()
+                .Initialize(_logFeedView, chroniclePanel, settingsPanel, enhancePanel, guildPanel, characterDetailPanel, _filterText, refreshStatus);
+
+            EnsureComponent<GuildHudTabController>()
+                .Initialize(chroniclePanel, enhancePanel, guildPanel, refreshStatus);
         }
 
-        public Text ZoneFloorText => _zoneFloorText;
-        public Text GoldText => _goldText;
+        private ExplorationStageRuntimePanel EnsureStagePanel()
+        {
+            var existing = GetComponentInChildren<ExplorationStageRuntimePanel>(true);
+            if (existing != null)
+                return existing;
+
+            var exploreContent = transform.Find("Body/CenterPanel/ExploreContent");
+            if (exploreContent == null)
+                return null;
+
+            return exploreContent.gameObject.AddComponent<ExplorationStageRuntimePanel>();
+        }
+
+        private T EnsureComponent<T>() where T : Component
+        {
+            if (!TryGetComponent<T>(out var component))
+                component = gameObject.AddComponent<T>();
+
+            return component;
+        }
+
+        public TextMeshProUGUI ZoneFloorText => _zoneFloorText;
+        public TextMeshProUGUI GoldText => _goldText;
         public Slider ProgressSlider => _progressSlider;
-        public Text ProgressText => _progressText;
+        public TextMeshProUGUI ProgressText => _progressText;
         public CommonButton PauseButton => _pauseButton;
         public CommonButton ResumeButton => _resumeButton;
         public CommonButton ReturnButton => _returnButton;
         public ExplorationLogFeedView LogFeedView => _logFeedView;
+        public TextMeshProUGUI FilterText => _filterText;
     }
 
     public class ExplorationHudPresenter : UIPresenter<ExplorationHudPanel>
@@ -67,9 +104,11 @@ namespace Backend.Object.UI
             _disposables = new CompositeDisposable();
 
             PrestigeManager.EnsureInitialized();
-            View.BindShortcuts(() => RefreshState(ExplorationManager.GetCurrentState()));
+            ExplorationSystem.EnsureRuntime();
+            View.BindControllers(() => RefreshState(ExplorationSystem.GetCurrentState()));
+            ExplorationHudLayoutApplier.ApplyStageFirstLayout(View.transform, ExplorationSystem.GetCurrentState()?.IsExploring == true);
             BindControls();
-            RefreshState(ExplorationManager.GetCurrentState());
+            RefreshState(ExplorationSystem.GetCurrentState());
 
             ExplorationChannels.OnStateChanged
                 .Subscribe(RefreshState)
@@ -92,21 +131,21 @@ namespace Backend.Object.UI
             if (View.PauseButton != null)
             {
                 View.PauseButton.OnClickAsObservable()
-                    .Subscribe(_ => ExplorationManager.PauseExploration())
+                    .Subscribe(_ => ExplorationSystem.PauseExploration())
                     .AddTo(_disposables);
             }
 
             if (View.ResumeButton != null)
             {
                 View.ResumeButton.OnClickAsObservable()
-                    .Subscribe(_ => ExplorationManager.ResumeExploration())
+                    .Subscribe(_ => ExplorationSystem.ResumeExploration())
                     .AddTo(_disposables);
             }
 
             if (View.ReturnButton != null)
             {
                 View.ReturnButton.OnClickAsObservable()
-                    .Subscribe(_ => ExplorationManager.ReturnToGuild())
+                    .Subscribe(_ => ExplorationSystem.ReturnToGuild())
                     .AddTo(_disposables);
             }
         }
@@ -114,17 +153,31 @@ namespace Backend.Object.UI
         private void RefreshState(ExplorationState state)
         {
             var isWaiting = state == null || !state.IsExploring;
+            ExplorationHudLayoutApplier.ApplyStageFirstLayout(View.transform, !isWaiting);
 
             if (View.ZoneFloorText != null)
             {
-                View.ZoneFloorText.supportRichText = true;
-                View.ZoneFloorText.text = isWaiting
-                    ? "<color=#F5D673>길드 대기</color>  <size=14><color=#9AA8BC>하단 탭에서 시설·강화·연대기를 확인하세요</color></size>"
-                    : ExplorationHudStatusFormatter.Build(state);
+                View.ZoneFloorText.richText = true;
+                if (isWaiting)
+                {
+                    View.ZoneFloorText.text =
+                        "<color=#F5D673>길드 대기</color>\n<size=20><color=#9AA8BC>하단 탭에서 시설·강화·연대기를 확인하세요</color></size>";
+                }
+                else
+                {
+                    View.ZoneFloorText.text = ExplorationHudStatusFormatter.BuildTopResourceBar(state);
+                }
             }
 
             if (View.GoldText != null)
+            {
                 View.GoldText.gameObject.SetActive(!isWaiting);
+                if (!isWaiting)
+                {
+                    View.GoldText.richText = true;
+                    View.GoldText.text = ExplorationHudStatusFormatter.BuildExplorationLine(state);
+                }
+            }
 
             if (View.ProgressSlider != null)
             {
@@ -153,7 +206,7 @@ namespace Backend.Object.UI
 
         private void RefreshControls(ExplorationState state = null)
         {
-            state ??= ExplorationManager.GetCurrentState();
+            state ??= ExplorationSystem.GetCurrentState();
             var isRunning = state?.IsExploring == true;
             var isPaused = state?.IsPaused == true;
 

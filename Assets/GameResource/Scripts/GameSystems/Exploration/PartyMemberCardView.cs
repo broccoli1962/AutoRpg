@@ -1,7 +1,7 @@
 using Backend.GameSystems.Character;
 using Backend.GameSystems.Exploration.Data;
-using Backend.GameSystems.Equipment;
 using Backend.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,40 +10,35 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// 좌측 파티 멤버 카드 1장. 프리팹에서 4개 고정 배치.
     /// </summary>
-    public sealed class PartyMemberCardView : MonoBehaviour
+    public sealed class PartyMemberCardView : CachedMonobehaviour
     {
-        [SerializeField] private Text _nameText;
-        [SerializeField] private Text _roleText;
-        [SerializeField] private Text _detailText;
+        [SerializeField] private TextMeshProUGUI _nameText;
+        [SerializeField] private TextMeshProUGUI _roleText;
+        [SerializeField] private TextMeshProUGUI _detailText;
         [SerializeField] private Image _portraitFrame;
         [SerializeField] private Image _portraitTint;
         [SerializeField] private Image _hpTrack;
         [SerializeField] private Image _hpFill;
 
+        /// <summary>캐릭터 상태를 카드에 바인딩한다.</summary>
         public void Bind(CharacterState member, bool isLeader)
         {
             if (member == null)
             {
-                gameObject.SetActive(false);
+                CachedGameObject.SetActive(false);
                 return;
             }
 
-            gameObject.SetActive(true);
+            CachedGameObject.SetActive(true);
 
             if (_nameText != null)
-            {
                 _nameText.text = isLeader ? $"★ {member.DisplayName}" : member.DisplayName;
-                ModernUiStyle.ApplyTitleMedium(_nameText);
-            }
 
             if (_roleText != null)
-            {
-                _roleText.text = $"Lv.{member.Level} {GetRoleLabel(member.Role)}";
-                ModernUiStyle.ApplyMuted(_roleText, 12);
-            }
+                _roleText.text = ExplorationHudStatusFormatter.BuildCardRoleLine(member);
 
             if (_portraitTint != null)
-                _portraitTint.color = Color.Lerp(GetRoleTintColor(member.Role), Color.white, 0.25f);
+                _portraitTint.color = Color.Lerp(ExplorationHudStatusFormatter.GetRoleTintColor(member.Role), Color.white, 0.25f);
 
             if (_portraitFrame != null)
                 RuntimeUiSprites.ApplyPortraitFrame(_portraitFrame);
@@ -58,49 +53,22 @@ namespace Backend.GameSystems.Exploration
             }
 
             if (_detailText != null)
-                _detailText.text = BuildDetailLine(member);
+                _detailText.text = ExplorationHudStatusFormatter.BuildCardDetailLine(member);
+
+            ApplyTextLayout();
+            UiTmpUtil.RebuildLogItemLayout(transform as RectTransform, _detailText);
         }
 
-        private static string BuildDetailLine(CharacterState member)
+        private void ApplyTextLayout()
         {
-            var equipment = EquipmentService.GetMemberEquipmentSummary(member);
-            var injury = member.Injury != InjurySeverity.None ? GetInjuryLabel(member.Injury) : string.Empty;
-            if (!string.IsNullOrEmpty(equipment) && !string.IsNullOrEmpty(injury))
-                return $"{equipment} · {injury}";
+            if (_nameText != null)
+                UiTmpUtil.ApplyLayoutCell(_nameText, RuntimeUiTmpFont.Get(), ExplorationHudLayoutMetrics.PartyNameFontSize, TextAnchor.UpperLeft, lineCount: 1);
 
-            return !string.IsNullOrEmpty(equipment) ? equipment : injury;
+            if (_roleText != null)
+                UiTmpUtil.ApplyLayoutCell(_roleText, RuntimeUiTmpFont.Get(), ExplorationHudLayoutMetrics.PartyRoleFontSize, TextAnchor.UpperLeft, lineCount: 1, color: ModernUiStyle.MutedText);
+
+            if (_detailText != null)
+                UiTmpUtil.ApplyLayoutCell(_detailText, RuntimeUiTmpFont.Get(), ExplorationHudLayoutMetrics.PartyDetailFontSize, TextAnchor.UpperLeft, lineCount: 2, color: ModernUiStyle.MutedText);
         }
-
-        private static string GetRoleLabel(CharacterRole role) =>
-            role switch
-            {
-                CharacterRole.Warrior => "전사",
-                CharacterRole.Rogue => "도적",
-                CharacterRole.Mage => "마법사",
-                CharacterRole.Bard => "음유시인",
-                CharacterRole.Cleric => "성직자",
-                _ => role.ToString()
-            };
-
-        private static string GetInjuryLabel(InjurySeverity severity) =>
-            severity switch
-            {
-                InjurySeverity.Light => "경상",
-                InjurySeverity.Moderate => "중상",
-                InjurySeverity.Severe => "중증",
-                InjurySeverity.Fatal => "치명",
-                _ => severity.ToString()
-            };
-
-        private static Color GetRoleTintColor(CharacterRole role) =>
-            role switch
-            {
-                CharacterRole.Warrior => new Color(0.88f, 0.48f, 0.48f, 1f),
-                CharacterRole.Rogue => new Color(0.62f, 0.83f, 0.62f, 1f),
-                CharacterRole.Mage => new Color(0.43f, 0.77f, 1f, 1f),
-                CharacterRole.Bard => new Color(1f, 0.85f, 0.4f, 1f),
-                CharacterRole.Cleric => new Color(0.79f, 0.63f, 1f, 1f),
-                _ => new Color(0.8f, 0.8f, 0.8f, 1f)
-            };
     }
 }

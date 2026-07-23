@@ -36,7 +36,7 @@ namespace Backend.GameSystems.LLM
 
             if (leader != null)
             {
-                var memoryContext = CharacterMemoryManager.BuildPromptContext(leader.CharacterId);
+                var memoryContext = CharacterMemorySystem.BuildPromptContext(leader.CharacterId);
                 if (!string.IsNullOrEmpty(memoryContext))
                 {
                     user.AppendLine(memoryContext);
