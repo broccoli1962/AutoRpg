@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07f8d5d9be0b34a4184d6612d971ceef
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_hp_fill.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 080a71eaf164acc4987e31f6ae7805e4
     m_Address: Assets/GameResource/Images/GameUI/v2/ui_panel_s.png
     m_ReadOnly: 0
@@ -32,6 +37,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1ea48afa1c04b864192b6e8865f234ae
     m_Address: Assets/GameResource/Images/GameUI/v2/ui_btn_secondary.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21bf86e60a2e4b2478839bd75a119f00
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_hp_track.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f1f2b1d389d2044fbbc475a4f325e65
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_log_card.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -52,6 +67,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 415abd21d1d6dcc48a3fa758cdf52383
     m_Address: Assets/Fonts/BMJUA_ttf.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 456536d6eaaf41d4cba02a6508eeeb4f
+    m_Address: Assets/GameResource/Images/GameUI/v2/ui_overlay_dim.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -100,6 +120,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e7cc8d25fd72fb4fa260a2a9211249b
+    m_Address: Assets/Fonts/BMJUA_ttf SDF.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 920380f647d359248b22fe6fbc931d71
     m_Address: Assets/GameResource/Images/GameUI/v2/ui_bar_bottom.png
     m_ReadOnly: 0
@@ -137,6 +162,56 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f73bc34bf05297e45913873958d05a48
     m_Address: Assets/GameResource/Images/GameUI/v2/portrait_frame.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0841f5b90efe4dc479aa237087a78c83
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_party_warrior.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50820b13912be3440bb95c394276ed72
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_party_rogue.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90375ebdf97a8d343923c9c141729d50
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_party_mage.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b1f8fd4039a6f04597a9a551efc143f
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_party_cleric.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a78b10eff921e1d489449fbcb68e9e24
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_party_bard.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1786dff73de0694409e3fc3f3d754ba4
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_monster_slime.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f40a9f2642b711b4d9febf4d6ebb9188
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_monster_beast.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6aa515cc1cf112e43be0ac01a279c483
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_monster_elite.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb807adf46ff13b40b2b717012366054
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_monster_boss.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d2f9289ac88e5f47b924a28dae9efcc
+    m_Address: Assets/GameResource/Images/GameUI/stage/stage_vfx_slash.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

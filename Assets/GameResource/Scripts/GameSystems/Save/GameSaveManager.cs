@@ -5,6 +5,7 @@ using Backend.GameSystems.Character.Data;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.LLM;
 using Backend.GameSystems.Exploration.Narration;
+using Backend.GameSystems.Exploration.Stage;
 using Backend.GameSystems.Prestige;
 using Backend.GameSystems.Prestige.Data;
 using Backend.GameSystems.Save.Data;
@@ -71,13 +72,14 @@ namespace Backend.GameSystems.Save
                 var data = new GameSaveData
                 {
                     Meta = CloneMeta(PrestigeManager.GetMeta()),
-                    CharacterMemories = CharacterMemoryManager.ExportMemories(),
-                    Affinities = RelationshipManager.ExportAffinities(),
+                    CharacterMemories = CharacterMemorySystem.ExportMemories(),
+                    Affinities = RelationshipSystem.ExportAffinities(),
                     LlmQualityMode = LlmQualitySettings.ExportMode(),
                     DynamicEventAutoPolicy = DynamicEventAutoPolicySettings.ExportPolicy(),
                     GoldenEventAutoPause = GoldenEventSettings.ExportSetting(),
                     LogFrequencyMode = LogFrequencySettings.ExportMode(),
-                    OfflineSummaryDetailMode = OfflineSummaryDetailSettings.ExportMode()
+                    OfflineSummaryDetailMode = OfflineSummaryDetailSettings.ExportMode(),
+                    StageVfxDensityMode = StageVfxDensitySettings.ExportMode()
                 };
 
                 var json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -105,13 +107,14 @@ namespace Backend.GameSystems.Save
                 if (data.Meta != null)
                     PrestigeManager.ImportMeta(data.Meta);
 
-                CharacterMemoryManager.ImportMemories(data.CharacterMemories);
-                RelationshipManager.ImportAffinities(data.Affinities);
+                CharacterMemorySystem.ImportMemories(data.CharacterMemories);
+                RelationshipSystem.ImportAffinities(data.Affinities);
                 LlmQualitySettings.ImportMode(data.LlmQualityMode);
                 DynamicEventAutoPolicySettings.ImportPolicy(data.DynamicEventAutoPolicy);
                 GoldenEventSettings.ImportSetting(data.GoldenEventAutoPause);
                 LogFrequencySettings.ImportMode(data.LogFrequencyMode);
                 OfflineSummaryDetailSettings.ImportMode(data.OfflineSummaryDetailMode);
+                StageVfxDensitySettings.ImportMode(data.StageVfxDensityMode);
                 Debug.Log($"[GameSaveManager] Loaded save (legacy={data.Meta?.LegacyPoints ?? 0})");
             }
             catch (System.Exception e)

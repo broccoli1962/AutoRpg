@@ -1,6 +1,8 @@
 using Backend.GameSystems.DynamicEvent.Data;
+using Backend.Object.UI;
 using Backend.Util;
 using R3;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,98 +11,71 @@ namespace Backend.GameSystems.DynamicEvent
     /// <summary>
     /// Phase 4 동적 이벤트 Standard/Golden 강도 런타임 팝업. LLM 연출 장면과 선택지를 표시한다.
     /// </summary>
-    public sealed class DynamicEventRuntimePopup : MonoBehaviour
+    public sealed class DynamicEventRuntimePopup : UIView<DynamicEventRuntimePresenter>
     {
         [SerializeField] private GameObject _panelRoot;
-        [SerializeField] private Text _titleText;
-        [SerializeField] private Text _narrationText;
-        [SerializeField] private Text _choicesText;
+        [SerializeField] private TextMeshProUGUI _titleText;
+        [SerializeField] private TextMeshProUGUI _narrationText;
+        [SerializeField] private TextMeshProUGUI _choicesText;
         [SerializeField] private RectTransform _choiceButtonRoot;
         [SerializeField] private Button _pauseForManualButton;
-        private DynamicEventInstance _currentInstance;
-        private CompositeDisposable _disposables;
 
-        private void Awake()
+        internal GameObject PanelRoot => _panelRoot;
+        internal TextMeshProUGUI TitleText => _titleText;
+        internal TextMeshProUGUI NarrationText => _narrationText;
+        internal TextMeshProUGUI ChoicesText => _choicesText;
+        internal RectTransform ChoiceButtonRoot => _choiceButtonRoot;
+        internal Button PauseForManualButton => _pauseForManualButton;
+
+        protected override void Awake()
         {
+            base.Awake();
+            HidePanel();
             if (_pauseForManualButton != null)
-                _pauseForManualButton.onClick.AddListener(OnPauseForManualClicked);
+                _pauseForManualButton.onClick.AddListener(() => Presenter?.OnPauseForManualClicked());
         }
 
         private void Start()
         {
-            Hide();
-
-            _disposables = new CompositeDisposable();
-            DynamicEventChannels.OnEventSceneReady
-                .Subscribe(ShowScene)
-                .AddTo(_disposables);
-
-            DynamicEventChannels.OnEventResolved
-                .Subscribe(_ => Hide())
-                .AddTo(_disposables);
+            Presenter?.OnOpen();
         }
 
         private void OnDestroy()
         {
-            _disposables?.Dispose();
-        }
-
-        private void ShowScene(DynamicEventInstance instance)
-        {
-            if (instance?.LlmNarration == null || _panelRoot == null || _titleText == null)
+            if (GameStateUtil.IsQuitting)
                 return;
 
-            _currentInstance = instance;
-            ApplyPresentation(instance.Intensity == DynamicEventIntensity.Golden);
-
-            _titleText.text = instance.Intensity == DynamicEventIntensity.Golden
-                ? $"<color=#ffd966>[★ 황금 이벤트]</color> {instance.TemplateId} · {instance.Floor}층"
-                : $"[이벤트] {instance.TemplateId} · {instance.Floor}층";
-            _narrationText.text = instance.LlmNarration.Narration;
-
-            _choicesText.text = instance.RequiresManualChoice
-                ? "<b>선택지 (버튼 또는 1/2 키)</b>"
-                : "<b>자동 진행 중 · 원하면 직접 선택</b>";
-
-            RebuildChoiceButtons(instance);
-            if (_pauseForManualButton != null)
-                _pauseForManualButton.gameObject.SetActive(!instance.RequiresManualChoice);
-            _panelRoot.SetActive(true);
+            Presenter?.OnClose();
         }
 
-        private void RebuildChoiceButtons(DynamicEventInstance instance)
+        /// <summary>패널 루트를 숨긴다.</summary>
+        internal void HidePanel()
+        {
+            if (_panelRoot != null)
+                _panelRoot.SetActive(false);
+        }
+
+        /// <summary>패널 루트를 표시한다.</summary>
+        internal void ShowPanel()
+        {
+            if (_panelRoot != null)
+                _panelRoot.SetActive(true);
+        }
+
+        /// <summary>선택지 버튼을 모두 제거한다.</summary>
+        internal void ClearChoiceButtons()
         {
             if (_choiceButtonRoot == null)
                 return;
 
             for (var i = _choiceButtonRoot.childCount - 1; i >= 0; i--)
                 Destroy(_choiceButtonRoot.GetChild(i).gameObject);
-
-            var choices = instance.LlmNarration.Choices;
-            if (choices == null)
-                return;
-
-            for (var i = 0; i < choices.Count; i++)
-            {
-                var choiceIndex = i;
-                var choice = choices[i];
-                var button = CreateChoiceButton(choiceIndex + 1, choice.Text);
-                button.onClick.AddListener(() => DynamicEventManager.TrySubmitManualChoice(choiceIndex));
-            }
         }
 
-        private void OnPauseForManualClicked()
+        /// <summary>선택지 버튼을 생성한다.</summary>
+        internal Button CreateChoiceButton(int number, string label)
         {
-            if (!DynamicEventManager.TryEnterManualChoiceMode())
-                return;
-
-            if (_currentInstance != null)
-                ShowScene(_currentInstance);
-        }
-
-        private Button CreateChoiceButton(int number, string label)
-        {
-            var font = RuntimeUiFont.Get();
+            var font = RuntimeUiTmpFont.Get();
             var go = new GameObject($"Choice_{number}", typeof(RectTransform), typeof(Image), typeof(Button));
             go.transform.SetParent(_choiceButtonRoot, false);
 
@@ -121,19 +96,15 @@ namespace Backend.GameSystems.DynamicEvent
             labelRect.offsetMin = new Vector2(8f, 8f);
             labelRect.offsetMax = new Vector2(-8f, -8f);
 
-            var text = labelGo.AddComponent<Text>();
-            text.font = font;
-            text.fontSize = 14;
-            text.alignment = TextAnchor.MiddleCenter;
+            var text = labelGo.AddComponent<TextMeshProUGUI>();
+            UiTmpUtil.ApplyButtonLabel(text, font, 15, TextAnchor.MiddleCenter);
             text.color = Color.white;
-            text.supportRichText = true;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-            text.verticalOverflow = VerticalWrapMode.Overflow;
             text.text = $"<b>{number}.</b> {label}";
             return button;
         }
 
-        private void ApplyPresentation(bool isSpecial)
+        /// <summary>Golden/Standard 프레젠테이션 스타일을 적용한다.</summary>
+        internal void ApplyPresentation(bool isSpecial)
         {
             if (_panelRoot == null)
                 return;
@@ -165,12 +136,88 @@ namespace Backend.GameSystems.DynamicEvent
             boxImage.color = new Color(0.12f, 0.12f, 0.16f, 0.95f);
             _panelRoot.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.65f);
         }
+    }
+
+    public sealed class DynamicEventRuntimePresenter : UIPresenter<DynamicEventRuntimePopup>
+    {
+        private DynamicEventInstance _currentInstance;
+        private CompositeDisposable _disposables;
+
+        public override void OnOpen()
+        {
+            _disposables?.Dispose();
+            _disposables = new CompositeDisposable();
+
+            DynamicEventChannels.OnEventSceneReady
+                .Subscribe(ShowScene)
+                .AddTo(_disposables);
+
+            DynamicEventChannels.OnEventResolved
+                .Subscribe(_ => Hide())
+                .AddTo(_disposables);
+        }
+
+        public override void OnClose()
+        {
+            _disposables?.Dispose();
+            _disposables = null;
+            _currentInstance = null;
+        }
+
+        /// <summary>수동 선택 모드 진입 후 UI를 갱신한다.</summary>
+        public void OnPauseForManualClicked()
+        {
+            if (!DynamicEventSystem.TryEnterManualChoiceMode())
+                return;
+
+            if (_currentInstance != null)
+                ShowScene(_currentInstance);
+        }
+
+        private void ShowScene(DynamicEventInstance instance)
+        {
+            if (instance?.LlmNarration == null || View.PanelRoot == null || View.TitleText == null)
+                return;
+
+            _currentInstance = instance;
+            View.ApplyPresentation(instance.Intensity == DynamicEventIntensity.Golden);
+
+            View.TitleText.text = instance.Intensity == DynamicEventIntensity.Golden
+                ? $"<color=#ffd966>[★ 황금 이벤트]</color> {instance.TemplateId} · {instance.Floor}층"
+                : $"[이벤트] {instance.TemplateId} · {instance.Floor}층";
+            View.NarrationText.text = instance.LlmNarration.Narration;
+
+            View.ChoicesText.text = instance.RequiresManualChoice
+                ? "<b>선택지 (버튼 또는 1/2 키)</b>"
+                : "<b>자동 진행 중 · 원하면 직접 선택</b>";
+
+            RebuildChoiceButtons(instance);
+            if (View.PauseForManualButton != null)
+                View.PauseForManualButton.gameObject.SetActive(!instance.RequiresManualChoice);
+            View.ShowPanel();
+        }
+
+        private void RebuildChoiceButtons(DynamicEventInstance instance)
+        {
+            View.ClearChoiceButtons();
+
+            var choices = instance.LlmNarration.Choices;
+            if (choices == null || View.ChoiceButtonRoot == null)
+                return;
+
+            for (var i = 0; i < choices.Count; i++)
+            {
+                var choiceIndex = i;
+                var choice = choices[i];
+                var button = View.CreateChoiceButton(choiceIndex + 1, choice.Text);
+                button.onClick.AddListener(() => DynamicEventSystem.TrySubmitManualChoice(choiceIndex));
+            }
+        }
 
         private void Hide()
         {
             _currentInstance = null;
-            if (_panelRoot != null)
-                _panelRoot.SetActive(false);
+            View.HidePanel();
         }
     }
 }

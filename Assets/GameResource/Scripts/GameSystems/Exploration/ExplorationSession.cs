@@ -5,6 +5,7 @@ using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
+using Backend.GameSystems.Exploration.Stage;
 
 namespace Backend.GameSystems.Exploration
 {
@@ -30,6 +31,7 @@ namespace Backend.GameSystems.Exploration
             _random = new DeterministicRandom(seed);
             _lastFloor = 1;
             _ticksSinceLastDynamicEvent = 0;
+            ExplorationStageSystem.Clear();
             ExplorationRollingSummary.Clear();
             State = new ExplorationState
             {
@@ -49,7 +51,10 @@ namespace Backend.GameSystems.Exploration
             if (State == null || !State.IsExploring || State.IsPaused)
                 return new ExplorationTickResult();
 
-            if (DynamicEventManager.HasActiveUnresolvedEvent)
+            if (DynamicEventSystem.HasActiveUnresolvedEvent)
+                return new ExplorationTickResult();
+
+            if (ExplorationStageSystem.IsBusy)
                 return new ExplorationTickResult();
 
             var tickResult = _simulator.Tick(State, _random);
@@ -58,16 +63,16 @@ namespace Backend.GameSystems.Exploration
             var eventTriggered = false;
             if (State.CurrentFloor > _lastFloor)
             {
-                eventTriggered = DynamicEventManager.TryTriggerOnFloorEnter(State, _random, State.CurrentFloor);
+                eventTriggered = DynamicEventSystem.TryTriggerOnFloorEnter(State, _random, State.CurrentFloor);
                 _lastFloor = State.CurrentFloor;
             }
 
             _ticksSinceLastDynamicEvent++;
             if (!eventTriggered &&
-                !DynamicEventManager.HasActiveUnresolvedEvent &&
+                !DynamicEventSystem.HasActiveUnresolvedEvent &&
                 _ticksSinceLastDynamicEvent >= GuaranteedEventTickInterval)
             {
-                eventTriggered = DynamicEventManager.TryTriggerGuaranteed(State, _random);
+                eventTriggered = DynamicEventSystem.TryTriggerGuaranteed(State, _random);
             }
 
             if (eventTriggered)
@@ -114,6 +119,8 @@ namespace Backend.GameSystems.Exploration
 
             ExplorationChannels.PublishLogAdded(summary);
 
+            StageHighlightReplay.EnqueueOfflineHighlights(offlineResult.TopEvents, State.Party);
+
             if (offlineResult.ExplorationEnded)
                 ExplorationChannels.PublishExplorationEnded(offlineResult.EndReason);
 
@@ -147,25 +154,70 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             State.IsExploring = false;
+            ExplorationStageSystem.Clear();
             ExplorationChannels.PublishExplorationEnded(ExplorationEndReason.ManualReturn);
             ExplorationChannels.PublishStateChanged(State);
         }
 
         private void PublishTickEvents(ExplorationTickResult tickResult)
         {
+            var trivialCombatBatch = new List<ExplorationEvent>();
+
             foreach (var explorationEvent in tickResult.Events)
             {
                 ExplorationRollingSummary.Record(explorationEvent, State.Party);
                 if (!LogFrequencySettings.ShouldPublishLog(explorationEvent, State.Party))
                     continue;
 
-                var log = _narrator.Narrate(explorationEvent, State.Party);
-                CharacterMemoryManager.RecordExplorationEvent(explorationEvent, State.Party);
-                RelationshipManager.RecordExplorationEvent(explorationEvent, State.Party);
-                LoreCompendiumManager.RecordDiscovery(explorationEvent);
-                MonsterCompendiumManager.RecordCombat(explorationEvent);
-                ExplorationChannels.PublishLogAdded(log);
+                if (explorationEvent.EventType == EventType.CombatResult &&
+                    explorationEvent.Salience <= SalienceGrade.Trivial)
+                {
+                    trivialCombatBatch.Add(explorationEvent);
+                    continue;
+                }
+
+                FlushTrivialCombatBatch(trivialCombatBatch);
+                EnqueueStageBeat(explorationEvent);
             }
+
+            FlushTrivialCombatBatch(trivialCombatBatch);
+        }
+
+        private void FlushTrivialCombatBatch(List<ExplorationEvent> batch)
+        {
+            if (batch.Count == 0)
+                return;
+
+            if (batch.Count == 1)
+            {
+                EnqueueStageBeat(batch[0]);
+                batch.Clear();
+                return;
+            }
+
+            var events = batch.ToArray();
+            batch.Clear();
+            var combatBatch = new StageCombatBatch(events, State.Party, () =>
+            {
+                foreach (var explorationEvent in events)
+                    PublishEventLog(explorationEvent);
+            });
+            ExplorationStageSystem.EnqueueCombatBatch(combatBatch);
+        }
+
+        private void EnqueueStageBeat(ExplorationEvent explorationEvent)
+        {
+            ExplorationStageSystem.Enqueue(explorationEvent, State.Party, () => PublishEventLog(explorationEvent));
+        }
+
+        private void PublishEventLog(ExplorationEvent explorationEvent)
+        {
+            var log = _narrator.Narrate(explorationEvent, State.Party);
+            CharacterMemorySystem.RecordExplorationEvent(explorationEvent, State.Party);
+            RelationshipSystem.RecordExplorationEvent(explorationEvent, State.Party);
+            LoreCompendiumSystem.RecordDiscovery(explorationEvent);
+            MonsterCompendiumSystem.RecordCombat(explorationEvent);
+            ExplorationChannels.PublishLogAdded(log);
         }
 
         private static int CountEvents(IReadOnlyList<ExplorationEvent> events, EventType eventType)

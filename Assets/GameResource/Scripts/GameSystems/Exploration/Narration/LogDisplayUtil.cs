@@ -40,11 +40,11 @@ namespace Backend.GameSystems.Exploration.Narration
         {
             return category switch
             {
-                LogCategory.Move => "▸ ",
-                LogCategory.Combat => "⚔ ",
-                LogCategory.Discovery => "✦ ",
-                LogCategory.Status => "♥ ",
-                LogCategory.Milestone => "★ ",
+                LogCategory.Move => "> ",
+                LogCategory.Combat => "! ",
+                LogCategory.Discovery => "+ ",
+                LogCategory.Status => "~ ",
+                LogCategory.Milestone => "* ",
                 _ => string.Empty
             };
         }
@@ -52,8 +52,8 @@ namespace Backend.GameSystems.Exploration.Narration
         public static string GetSaliencePrefix(SalienceGrade salience) =>
             salience switch
             {
-                SalienceGrade.Milestone => "◆ ",
-                SalienceGrade.Significant => "● ",
+                SalienceGrade.Milestone => "** ",
+                SalienceGrade.Significant => "* ",
                 _ => string.Empty
             };
 
@@ -68,12 +68,12 @@ namespace Backend.GameSystems.Exploration.Narration
             var text = entry.Text;
 
             if (entry.IsPending)
-                text = $"<i>{text}<color=#888888>▌</color></i>";
+                text = $"<i>{text}<color=#888888>|</color></i>";
 
             if (entry.Salience >= SalienceGrade.Milestone || entry.Category == LogCategory.Milestone)
             {
                 var accent = ColorUtility.ToHtmlStringRGB(MilestoneAccent);
-                return $"<color=#{accent}>▌</color><color=#{color}><b>{prefix}{icon}{text}</b></color><color=#{accent}> ▌</color>";
+                return $"<color=#{accent}>|</color><color=#{color}><b>{prefix}{icon}{text}</b></color><color=#{accent}> |</color>";
             }
 
             if (entry.Salience >= SalienceGrade.Significant)

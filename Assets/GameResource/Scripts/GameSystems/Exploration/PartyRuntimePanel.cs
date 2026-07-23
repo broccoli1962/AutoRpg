@@ -9,46 +9,47 @@ namespace Backend.GameSystems.Exploration
     /// <summary>
     /// v2 좌측 파티 카드 4장 갱신. UI 구조는 프리팹에 고정.
     /// </summary>
-    public sealed class PartyRuntimePanel : ExplorationOverlayView
+    public sealed class PartyRuntimePanel : ExplorationHudSubview<PartyRuntimePresenter>
+    {
+        public static float PanelWidthPx => ExplorationHudLayoutMetrics.PartyMemberCardWidth;
+    }
+
+    public sealed class PartyRuntimePresenter : UIPresenter<PartyRuntimePanel>
     {
         private PartyMemberCardView[] _cards;
         private CompositeDisposable _disposables;
 
-        public static float PanelWidthPx => ExplorationHudLayoutMetrics.PartyMemberCardWidth;
-
-        private void Start()
+        public override void OnOpen()
         {
             BindCards();
-            RelationshipManager.EnsureInitialized();
+            RelationshipSystem.EnsureInitialized();
+            _disposables?.Dispose();
             _disposables = new CompositeDisposable();
 
             ExplorationChannels.OnStateChanged
                 .Subscribe(Refresh)
                 .AddTo(_disposables);
 
-            Refresh(ExplorationManager.GetCurrentState());
+            Refresh(ExplorationSystem.GetCurrentState());
         }
 
-        private void OnDestroy()
+        public override void OnClose()
         {
             _disposables?.Dispose();
+            _disposables = null;
         }
 
         private void BindCards()
         {
             var content = FindHudTransform("Body/PartyRow/PartyScroll/Viewport/Content");
-            if (content == null)
-            {
-                _cards = GetComponentsInChildren<PartyMemberCardView>(true);
-                return;
-            }
-
-            _cards = content.GetComponentsInChildren<PartyMemberCardView>(true);
+            _cards = content == null
+                ? View.GetComponentsInChildren<PartyMemberCardView>(true)
+                : content.GetComponentsInChildren<PartyMemberCardView>(true);
         }
 
         private Transform FindHudTransform(string relativePath)
         {
-            var hudPanel = GetComponent<ExplorationHudPanel>() ?? GetComponentInParent<ExplorationHudPanel>();
+            var hudPanel = View.GetComponent<ExplorationHudPanel>() ?? View.GetComponentInParent<ExplorationHudPanel>();
             return hudPanel == null ? null : hudPanel.transform.Find(relativePath);
         }
 

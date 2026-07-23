@@ -10,11 +10,30 @@ namespace Backend.Object.UI
     {
         protected TPresenter Presenter { get; private set; }
 
+        /// <summary>외부 호출 시 Presenter 가 항상 준비된 상태를 보장한다.</summary>
+        protected TPresenter ReadyPresenter
+        {
+            get
+            {
+                EnsurePresenterReady();
+                return Presenter;
+            }
+        }
+
+        /// <summary>Awake 이전·비활성 컴포넌트 등 Presenter 미생성 시 지연 초기화.</summary>
+        internal void EnsurePresenterReady()
+        {
+            if (Presenter != null)
+                return;
+
+            Presenter = new TPresenter();
+            Presenter.AttachView(this);
+        }
+
         protected override void Awake()
         {
             base.Awake();
-            Presenter = new TPresenter();
-            Presenter.AttachView(this);
+            EnsurePresenterReady();
         }
 
         protected override void OnShow()

@@ -27,7 +27,7 @@ namespace Backend.GameSystems.Exploration.Simulation
             var loot = new System.Collections.Generic.List<LootEntry>();
             var expGained = new System.Collections.Generic.Dictionary<string, int>();
             var partyIds = new System.Collections.Generic.List<string>();
-            var bondMultiplier = RelationshipManager.GetBondCombatMultiplier(party);
+            var bondMultiplier = RelationshipSystem.GetBondCombatMultiplier(party);
             var riskMultiplier = ZoneDefinitions.GetRiskMultiplier(zoneId, floor);
             var rewardMultiplier = ZoneDefinitions.GetRewardMultiplier(zoneId, floor);
 
@@ -198,7 +198,7 @@ namespace Backend.GameSystems.Exploration.Simulation
                 _ => EquipmentService.GetEffectiveStr(attacker)
             };
 
-            var critMultiplier = random.RollChance(0.15f + SkillTreeManager.GetRogueCritChanceBonus(attacker)) ? 1.5f : 1f;
+            var critMultiplier = random.RollChance(0.15f + SkillTreeSystem.GetRogueCritChanceBonus(attacker)) ? 1.5f : 1f;
             var variance = random.NextRange(0.9f, 1.1f);
             var raw = (attack - monster.Defense * 0.5f) * critMultiplier * variance;
             return System.Math.Max(1, (int)raw);

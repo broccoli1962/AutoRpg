@@ -1,12 +1,14 @@
 using Backend.Util;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 namespace Backend.GameSystems.Exploration
 {
     /// <summary>
     /// 하단 탭바: 탐험 | 강화/장비 | 길드시설 | 연대기 | 도감 (12_UIUX.md).
     /// </summary>
-    public sealed class GuildHudTabController : MonoBehaviour
+    public sealed class GuildHudTabController : CachedMonobehaviour
     {
         private const float TabBarHeight = ExplorationHudLayoutMetrics.TabBarHeight;
 
@@ -45,6 +47,26 @@ namespace Backend.GameSystems.Exploration
             SelectTab(HudBottomTab.Explore);
         }
 
+        private void Start()
+        {
+            if (_tabButtons == null || !HasAnyWiredTab())
+                BuildTabBar();
+        }
+
+        private bool HasAnyWiredTab()
+        {
+            if (_tabButtons == null)
+                return false;
+
+            for (var i = 0; i < _tabButtons.Length; i++)
+            {
+                if (_tabButtons[i] != null)
+                    return true;
+            }
+
+            return false;
+        }
+
         private void Update()
         {
             if (_currentTab != HudBottomTab.Compendium ||
@@ -63,9 +85,6 @@ namespace Backend.GameSystems.Exploration
 
         private void BuildTabBar()
         {
-            if (GetComponentInParent<Canvas>() == null)
-                return;
-
             var existingBar = transform.Find("BottomTabBar");
             if (existingBar != null)
             {
@@ -79,6 +98,9 @@ namespace Backend.GameSystems.Exploration
                 WireExistingTabButtons(existingBar);
                 return;
             }
+
+            if (GetComponentInParent<Canvas>() == null)
+                return;
 
             var barRoot = new GameObject("BottomTabBar");
             barRoot.transform.SetParent(transform, false);
@@ -97,7 +119,7 @@ namespace Backend.GameSystems.Exploration
 
             var labels = new[] { "탐험", "강화/장비", "길드시설", "연대기", "도감" };
             _tabButtons = new Button[labels.Length];
-            var font = RuntimeUiFont.Get();
+            var font = RuntimeUiTmpFont.Get();
 
             for (var i = 0; i < labels.Length; i++)
             {
@@ -111,10 +133,11 @@ namespace Backend.GameSystems.Exploration
         {
             var labels = new[] { "탐험", "강화/장비", "길드시설", "연대기", "도감" };
             _tabButtons = new Button[labels.Length];
+            var tabsRoot = barRoot.Find("Tabs") ?? barRoot;
 
             for (var i = 0; i < labels.Length; i++)
             {
-                var tabTransform = barRoot.Find($"Tab_{labels[i]}");
+                var tabTransform = tabsRoot.Find($"Tab_{labels[i]}");
                 if (tabTransform == null)
                     continue;
 
@@ -132,7 +155,7 @@ namespace Backend.GameSystems.Exploration
             barRoot.SetAsLastSibling();
         }
 
-        private Button CreateTabButton(Transform parent, string label, int index, int count, Font font)
+        private Button CreateTabButton(Transform parent, string label, int index, int count, TMP_FontAsset font)
         {
             var go = new GameObject($"Tab_{label}");
             go.transform.SetParent(parent, false);
@@ -156,11 +179,9 @@ namespace Backend.GameSystems.Exploration
             labelRect.offsetMin = Vector2.zero;
             labelRect.offsetMax = Vector2.zero;
 
-            var text = labelGo.AddComponent<Text>();
-            text.font = font;
-            text.fontSize = 11;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.color = index == (int)_currentTab ? ModernUiStyle.TitleGold : ModernUiStyle.BodyText;
+            var text = labelGo.AddComponent<TextMeshProUGUI>();
+            UiTmpUtil.ApplyButtonLabel(text, font, ExplorationHudLayoutMetrics.TabLabelFontSize, TextAnchor.MiddleCenter);
+            ModernUiStyle.ApplyTabLabel(text, index == (int)_currentTab);
             text.text = label;
             return button;
         }
@@ -191,7 +212,7 @@ namespace Backend.GameSystems.Exploration
             UpdateTabHighlight();
             _onRefreshStatus?.Invoke();
 
-            var startPanel = GetComponent<ExplorationStartRuntimePanel>();
+            var startPanel = GetComponentInChildren<ExplorationStartRuntimePanel>(true);
             startPanel?.SetGuildTabActive(tab == HudBottomTab.Explore);
         }
 
@@ -216,7 +237,7 @@ namespace Backend.GameSystems.Exploration
             if (label == null)
                 return;
 
-            var text = label.GetComponent<Text>();
+            var text = label.GetComponent<TextMeshProUGUI>();
             if (text != null)
                 text.color = active ? ModernUiStyle.TitleGold : ModernUiStyle.BodyText;
         }

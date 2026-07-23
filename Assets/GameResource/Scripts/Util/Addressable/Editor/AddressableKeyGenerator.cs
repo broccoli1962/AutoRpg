@@ -19,7 +19,7 @@ namespace Backend.Editor
             string[] guids = AssetDatabase.FindAssets("t:AddressableGenSettings");
             if (guids.Length == 0)
             {
-                Debug.LogError("AddressableGenSettings 에셋을 생성해주세요.");
+                Debug.LogError("[AddressableKeyGenerator] AddressableGenSettings 에셋을 생성해주세요.");
                 return;
             }
 

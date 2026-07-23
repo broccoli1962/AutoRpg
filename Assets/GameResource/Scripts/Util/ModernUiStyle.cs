@@ -1,10 +1,10 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Backend.Util
 {
     /// <summary>
-    /// 12_UIUX v2 타이포·컬러 토큰.
+    /// 12_UIUX v2 타이포·컬러 토큰 (TextMeshPro).
     /// </summary>
     public static class ModernUiStyle
     {
@@ -20,82 +20,82 @@ namespace Backend.Util
         public static readonly Color PanelStroke = Hex("#3A4A66");
         public static readonly Color HpTrack = Hex("#1A2030");
 
-        public static void ApplyTitleLarge(Text text)
+        public static void ApplyTitleLarge(TMP_Text text)
         {
             if (text == null)
                 return;
 
-            text.font = RuntimeUiFont.Get();
-            text.fontSize = 24;
-            text.fontStyle = FontStyle.Bold;
+            text.font = RuntimeUiTmpFont.Get();
+            text.fontSize = 26;
+            text.fontStyle = FontStyles.Bold;
             text.color = TitleGold;
-            text.supportRichText = true;
+            text.richText = true;
         }
 
-        public static void ApplyTitleMedium(Text text)
+        public static void ApplyTitleMedium(TMP_Text text)
         {
             if (text == null)
                 return;
 
-            text.font = RuntimeUiFont.Get();
-            text.fontSize = 18;
-            text.fontStyle = FontStyle.Bold;
+            text.font = RuntimeUiTmpFont.Get();
+            text.fontSize = 20;
+            text.fontStyle = FontStyles.Bold;
             text.color = TitleMedium;
-            text.supportRichText = true;
+            text.richText = true;
         }
 
-        public static void ApplyBody(Text text, int fontSize = 15)
+        public static void ApplyBody(TMP_Text text, int fontSize = 16)
         {
             if (text == null)
                 return;
 
-            text.font = RuntimeUiFont.Get();
+            text.font = RuntimeUiTmpFont.Get();
             text.fontSize = fontSize;
             text.color = BodyText;
-            text.supportRichText = true;
+            text.richText = true;
         }
 
-        public static void ApplyMuted(Text text, int fontSize = 13)
+        public static void ApplyMuted(TMP_Text text, int fontSize = 14)
         {
             if (text == null)
                 return;
 
-            text.font = RuntimeUiFont.Get();
+            text.font = RuntimeUiTmpFont.Get();
             text.fontSize = fontSize;
             text.color = MutedText;
-            text.supportRichText = true;
+            text.richText = true;
         }
 
-        public static void ApplyButtonLabel(Text text, bool primary)
+        public static void ApplyButtonLabel(TMP_Text text, bool primary)
         {
             if (text == null)
                 return;
 
-            text.font = RuntimeUiFont.Get();
-            text.fontSize = 16;
-            text.fontStyle = FontStyle.Bold;
+            text.font = RuntimeUiTmpFont.Get();
+            text.fontSize = 27;
+            text.fontStyle = FontStyles.Bold;
             text.color = primary ? ButtonPrimaryText : BodyText;
-            text.supportRichText = false;
+            text.richText = false;
         }
 
-        public static void ApplyTabLabel(Text text, bool active)
+        public static void ApplyTabLabel(TMP_Text text, bool active)
         {
             if (text == null)
                 return;
 
-            text.font = RuntimeUiFont.Get();
-            text.fontSize = 11;
+            text.font = RuntimeUiTmpFont.Get();
+            text.fontSize = 23;
             text.color = active ? TitleGold : MutedText;
-            text.supportRichText = false;
+            text.richText = false;
         }
 
-        public static void ApplySectionHeader(Text text, string label)
+        public static void ApplySectionHeader(TMP_Text text, string label)
         {
             ApplyTitleMedium(text);
             text.text = label;
         }
 
-        public static void ApplyTitle(Text text, int fontSize = 24) => ApplyTitleLarge(text);
+        public static void ApplyTitle(TMP_Text text, int fontSize = 26) => ApplyTitleLarge(text);
 
         private static Color Hex(string hex)
         {

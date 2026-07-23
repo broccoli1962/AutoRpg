@@ -3,6 +3,7 @@ using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.Util;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace Backend.Object.UI.Exploration
 {
     public class ExplorationLogItemView : CachedMonobehaviour
     {
-        [SerializeField] private Text _messageText;
+        [SerializeField] private TextMeshProUGUI _messageText;
         [SerializeField] private Image _categoryIcon;
         [SerializeField] private Image _accentImage;
 
@@ -29,7 +30,7 @@ namespace Backend.Object.UI.Exploration
         private SalienceGrade _salience = SalienceGrade.Trivial;
         private LogCategory _category = LogCategory.Move;
 
-        internal void ConfigureRuntime(Text messageText, Image categoryIcon)
+        internal void ConfigureRuntime(TextMeshProUGUI messageText, Image categoryIcon)
         {
             _messageText = messageText;
             _categoryIcon = categoryIcon;
@@ -51,7 +52,7 @@ namespace Backend.Object.UI.Exploration
             IsNarrative = entry.UsedLlm
                 || entry.Salience >= SalienceGrade.Significant
                 || entry.Category == LogCategory.Milestone;
-            IsBookmarked = LogBookmarkManager.IsBookmarked(PlainText, Floor);
+            IsBookmarked = LogBookmarkSystem.IsBookmarked(PlainText, Floor);
             _salience = entry.Salience;
             _category = entry.Category;
 
@@ -77,7 +78,7 @@ namespace Backend.Object.UI.Exploration
             IsDiscovery = false;
             IsDynamicEvent = isDynamicEvent;
             IsNarrative = isNarrative;
-            IsBookmarked = LogBookmarkManager.IsBookmarked(PlainText, Floor);
+            IsBookmarked = LogBookmarkSystem.IsBookmarked(PlainText, Floor);
             _salience = SalienceGrade.Notable;
             _category = category;
             _baseRichText = LogDisplayUtil.FormatTaggedLine(tag, plainText, LogDisplayUtil.GetCategoryColor(category));
@@ -102,12 +103,23 @@ namespace Backend.Object.UI.Exploration
             RefreshRichText();
         }
 
+        /// <summary>로그 스트립 모드 — 글자 크기·한 줄 높이 축소.</summary>
+        public void ApplyStripTypography(int fontSize)
+        {
+            if (_messageText == null)
+                return;
+
+            _messageText.fontSize = fontSize;
+            UiTmpUtil.ApplyLogMessageCell(_messageText, RuntimeUiTmpFont.Get(), fontSize);
+            UiTmpUtil.RebuildLogItemLayout(transform as RectTransform, _messageText);
+        }
+
         public void RefreshRichText()
         {
             if (_messageText == null)
                 return;
 
-            _messageText.text = LogBookmarkManager.ApplyBookmarkPrefix(_baseRichText, IsBookmarked);
+            _messageText.text = LogBookmarkSystem.ApplyBookmarkPrefix(_baseRichText, IsBookmarked);
         }
 
         private async UniTaskVoid RunTypewriterAsync(LogEntry entry)
@@ -161,11 +173,12 @@ namespace Backend.Object.UI.Exploration
             RefreshRichText();
             if (_messageText != null)
             {
-                _messageText.fontStyle = fontStyle;
+                _messageText.fontStyle = UiTmpUtil.ToFontStyles(fontStyle);
                 _messageText.color = ModernUiStyle.BodyText;
             }
 
             ApplyCategoryIcon();
+            UiTmpUtil.RebuildLogItemLayout(transform as RectTransform, _messageText);
         }
 
         private void ApplyCategoryIcon()

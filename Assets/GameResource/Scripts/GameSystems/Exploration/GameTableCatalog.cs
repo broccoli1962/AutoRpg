@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Backend.GameSystems.DynamicEvent.Data;
 using Backend.GameSystems.Exploration.Data;
 using Backend.Object.Management;
+using Backend.Util;
 
 namespace Backend.GameSystems.Exploration
 {
@@ -11,7 +12,10 @@ namespace Backend.GameSystems.Exploration
     public static class GameTableCatalog
     {
         /// <summary>GSSL 테이블 사용 가능 여부.</summary>
-        public static bool IsReady => TableManager.IsInitialized && TableManager.ZoneTable != null;
+        public static bool IsReady =>
+            GameStateUtil.CanAccessManagers() &&
+            TableManager.IsInitialized &&
+            TableManager.ZoneTable != null;
 
         /// <summary>구역 표시 이름을 반환한다.</summary>
         public static string GetZoneDisplayName(string zoneId)
@@ -87,6 +91,15 @@ namespace Backend.GameSystems.Exploration
             }
 
             return list.Count > 0 ? list : ZoneDefinitions.GetMonstersFallback(zoneId);
+        }
+
+        /// <summary>몬스터 ID 로 GSSL 행을 조회한다. 없으면 null.</summary>
+        public static MonsterData GetMonsterRow(string monsterId)
+        {
+            if (!IsReady || string.IsNullOrEmpty(monsterId))
+                return null;
+
+            return TableManager.TryGetMonsterData(monsterId, out var row) ? row : null;
         }
 
         /// <summary>구역 발견 아이템 목록을 반환한다.</summary>

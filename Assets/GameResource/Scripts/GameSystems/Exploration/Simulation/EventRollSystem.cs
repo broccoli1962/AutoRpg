@@ -137,7 +137,7 @@ namespace Backend.GameSystems.Exploration.Simulation
 
         private ExplorationEvent CreateRestEvent(ExplorationState state, float partyHpRatio)
         {
-            InnManager.ApplyRest(state.Party);
+            InnSystem.ApplyRest(state.Party);
             var salience = SalienceCalculator.Calculate(
                 EventType.Rest,
                 null,
