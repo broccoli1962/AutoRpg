@@ -19,18 +19,18 @@ namespace Backend.GameSystems.Exploration
         /// <summary>탐험 중 스테이지 확대를 위해 파티 행을 축소.</summary>
         public const float PartyRowCompactHeight = 96f;
         /// <summary>탐험 중 하단 로그 스트립 (스테이지 우선 레이아웃).</summary>
-        public const float LogStripHeight = 160f;
+        public const float LogStripHeight = 128f;
         public const float LogPanelHeight = LogStripHeight;
-        public const int LogStripMaxVisibleLines = 5;
+        public const int LogStripMaxVisibleLines = 4;
         public const int LogStripBodyFontSize = 22;
 
-        public const float CenterPanelMinHeight = 960f;
+        public const float CenterPanelMinHeight = 1180f;
 
-        public const float StageActorPartyWidth = 96f;
-        public const float StageActorPartyHeight = 128f;
-        public const float StageActorMonsterWidth = 112f;
-        public const float StageActorMonsterHeight = 144f;
-        public const float StageGroundInset = 52f;
+        public const float StageActorPartyWidth = 120f;
+        public const float StageActorPartyHeight = 160f;
+        public const float StageActorMonsterWidth = 136f;
+        public const float StageActorMonsterHeight = 176f;
+        public const float StageGroundInset = 64f;
 
         public const int PartyMemberCount = 4;
 
@@ -86,12 +86,17 @@ namespace Backend.GameSystems.Exploration
 
         public static float StartCardWidth => ContentWidth - PanelInnerPadding * 2f;
 
-        public static float OverlayPanelWidth => ContentWidth;
+        public static float OverlayPanelWidth => ContentWidth - 24f;
 
-        public static float OverlayPanelHeightLarge => 540f;
+        public static float OverlayPanelHeightLarge => 920f;
 
-        public static float OverlayPanelHeightMedium => 460f;
+        public static float OverlayPanelHeightMedium => 780f;
 
         public static float OverlayContentWidth => ContentWidth - PanelInnerPadding * 2f;
+
+        public const int OverlayBodyFontSize = 28;
+        public const int OverlayTitleFontSize = 34;
+        public const int OverlayActionButtonFontSize = 26;
+        public const float OverlayActionButtonHeight = 72f;
     }
 }

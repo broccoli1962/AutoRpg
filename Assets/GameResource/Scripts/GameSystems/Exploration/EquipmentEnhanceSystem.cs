@@ -67,12 +67,6 @@ namespace Backend.GameSystems.Exploration
         public static bool TryEnhance(string characterId, EquipmentSlot slot, out string message)
         {
             message = null;
-            if (BlacksmithSystem.Level < 1)
-            {
-                message = "대장간 Lv.1 필요";
-                return false;
-            }
-
             if (GameStateUtil.IsQuitting || string.IsNullOrEmpty(characterId))
             {
                 message = "캐릭터 없음";
@@ -90,6 +84,13 @@ namespace Backend.GameSystems.Exploration
             if (current >= GetMaxEnhanceLevel())
             {
                 message = "강화 상한";
+                return false;
+            }
+
+            // 대장간 미해금이어도 +1까지는 가능. 그 이상은 Lv.1+ 필요.
+            if (BlacksmithSystem.Level < 1 && current >= 1)
+            {
+                message = "추가 강화는 대장간 Lv.1 필요 (길드시설 탭)";
                 return false;
             }
 

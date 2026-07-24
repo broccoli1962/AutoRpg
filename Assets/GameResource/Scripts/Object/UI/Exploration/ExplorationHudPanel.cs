@@ -106,7 +106,6 @@ namespace Backend.Object.UI
             PrestigeManager.EnsureInitialized();
             ExplorationSystem.EnsureRuntime();
             View.BindControllers(() => RefreshState(ExplorationSystem.GetCurrentState()));
-            ExplorationHudLayoutApplier.ApplyStageFirstLayout(View.transform, ExplorationSystem.GetCurrentState()?.IsExploring == true);
             BindControls();
             RefreshState(ExplorationSystem.GetCurrentState());
 
@@ -153,7 +152,6 @@ namespace Backend.Object.UI
         private void RefreshState(ExplorationState state)
         {
             var isWaiting = state == null || !state.IsExploring;
-            ExplorationHudLayoutApplier.ApplyStageFirstLayout(View.transform, !isWaiting);
 
             if (View.ZoneFloorText != null)
             {

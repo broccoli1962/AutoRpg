@@ -116,7 +116,8 @@ namespace Backend.GameSystems.Exploration
                 $"<b>전직 비용 (다음)</b>\n명성 {nextTier.reputation} · 유산 {nextTier.legacy} · 유물 {nextTier.relic}\n\n" +
                 $"<b>보유 자원</b>\n명성 {meta?.Reputation ?? 0} · 유산 {meta?.LegacyPoints ?? 0} · " +
                 $"마나 {meta?.ManaShards ?? 0} · 유물 {meta?.RelicFragments ?? 0}\n" +
-                $"대장간 {BlacksmithSystem.GetDisplayLabel()}";
+                $"대장간 {BlacksmithSystem.GetDisplayLabel()}\n\n" +
+                "<size=24><color=#9AA8BC>하단 버튼으로 전직·무기/방어구 강화를 실행하세요.</color></size>";
         }
 
         public static string BuildFacilityPanelText() => BuildFacilitySummaryBlock();
