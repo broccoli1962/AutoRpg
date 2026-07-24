@@ -685,22 +685,6 @@ namespace Backend.GameSystems.Exploration
                 ExplorationStageSystem.CompleteCurrentBeat();
         }
 
-        private static float GetPartyHpRatio(PartyState party)
-        {
-            if (party?.Members == null || party.Members.Count == 0)
-                return 1f;
-
-            var current = 0;
-            var max = 0;
-            foreach (var member in party.Members)
-            {
-                current += member.CurrentHp;
-                max += member.MaxHp;
-            }
-
-            return max <= 0 ? 1f : Mathf.Clamp01((float)current / max);
-        }
-
         private Transform ResolveExploreContent()
         {
             if (View.transform.name == "ExploreContent")
