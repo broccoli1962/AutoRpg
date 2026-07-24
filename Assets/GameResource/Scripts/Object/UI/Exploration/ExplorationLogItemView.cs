@@ -103,14 +103,13 @@ namespace Backend.Object.UI.Exploration
             RefreshRichText();
         }
 
-        /// <summary>로그 스트립 모드 — 글자 크기·한 줄 높이 축소.</summary>
+        /// <summary>로그 스트립 — Prefab TMP 유지 (런타임 fontSize 강제 금지).</summary>
         public void ApplyStripTypography(int fontSize)
         {
             if (_messageText == null)
                 return;
 
-            _messageText.fontSize = fontSize;
-            UiTmpUtil.ApplyLogMessageCell(_messageText, RuntimeUiTmpFont.Get(), fontSize);
+            // fontSize 인자는 하위 호환용. 타이포는 Prefab bake 값을 사용한다.
             UiTmpUtil.RebuildLogItemLayout(transform as RectTransform, _messageText);
         }
 
