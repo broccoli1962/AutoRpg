@@ -143,9 +143,12 @@ namespace Backend.GameSystems.Exploration
             var memberCount = members?.Count ?? 0;
 
             View.ContentText.text = ExplorationHudStatusFormatter.BuildCharacterDetailText(member, party);
-            View.HintText.text = memberCount > 1
-                ? $"I:닫기  Q/E:캐릭터 {_memberIndex + 1}/{memberCount}  Esc:닫기"
-                : "I 또는 Esc:닫기";
+            if (View.HintText != null)
+            {
+                View.HintText.text = memberCount > 1
+                    ? $"I:닫기  Q/E:캐릭터 {_memberIndex + 1}/{memberCount}  Esc:닫기"
+                    : "I 또는 Esc:닫기";
+            }
         }
 
         private bool IsOtherPanelVisible()

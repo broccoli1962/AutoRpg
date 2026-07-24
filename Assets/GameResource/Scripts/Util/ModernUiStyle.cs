@@ -26,7 +26,7 @@ namespace Backend.Util
                 return;
 
             text.font = RuntimeUiTmpFont.Get();
-            text.fontSize = 26;
+            text.fontSize = 32;
             text.fontStyle = FontStyles.Bold;
             text.color = TitleGold;
             text.richText = true;
@@ -38,13 +38,13 @@ namespace Backend.Util
                 return;
 
             text.font = RuntimeUiTmpFont.Get();
-            text.fontSize = 20;
+            text.fontSize = 28;
             text.fontStyle = FontStyles.Bold;
             text.color = TitleMedium;
             text.richText = true;
         }
 
-        public static void ApplyBody(TMP_Text text, int fontSize = 16)
+        public static void ApplyBody(TMP_Text text, int fontSize = 26)
         {
             if (text == null)
                 return;
@@ -55,7 +55,7 @@ namespace Backend.Util
             text.richText = true;
         }
 
-        public static void ApplyMuted(TMP_Text text, int fontSize = 14)
+        public static void ApplyMuted(TMP_Text text, int fontSize = 22)
         {
             if (text == null)
                 return;

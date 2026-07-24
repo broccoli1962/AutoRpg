@@ -86,47 +86,20 @@ namespace Backend.GameSystems.Exploration
         private void BuildTabBar()
         {
             var existingBar = transform.Find("BottomTabBar");
-            if (existingBar != null)
+            if (existingBar == null)
             {
-                var existingRect = existingBar.GetComponent<RectTransform>();
-                if (existingRect != null)
-                {
-                    existingRect.anchoredPosition = Vector2.zero;
-                    existingRect.sizeDelta = new Vector2(0f, TabBarHeight);
-                }
-
-                WireExistingTabButtons(existingBar);
+                Debug.LogError("[GuildHudTabController] Prefab BottomTabBar missing. Bake tabs via Unity MCP.");
                 return;
             }
 
-            if (GetComponentInParent<Canvas>() == null)
-                return;
-
-            var barRoot = new GameObject("BottomTabBar");
-            barRoot.transform.SetParent(transform, false);
-
-            var barRect = barRoot.AddComponent<RectTransform>();
-            barRect.anchorMin = new Vector2(0f, 0f);
-            barRect.anchorMax = new Vector2(1f, 0f);
-            barRect.pivot = new Vector2(0.5f, 0f);
-            barRect.anchoredPosition = Vector2.zero;
-            barRect.sizeDelta = new Vector2(0f, TabBarHeight);
-
-            var barImage = barRoot.AddComponent<Image>();
-            RuntimeUiSprites.ApplyTabBarBackground(barImage);
-            if (barImage.sprite == null)
-                barImage.color = new Color(0.06f, 0.07f, 0.1f, 0.94f);
-
-            var labels = new[] { "탐험", "강화/장비", "길드시설", "연대기", "도감" };
-            _tabButtons = new Button[labels.Length];
-            var font = RuntimeUiTmpFont.Get();
-
-            for (var i = 0; i < labels.Length; i++)
+            var existingRect = existingBar.GetComponent<RectTransform>();
+            if (existingRect != null)
             {
-                var tabIndex = i;
-                _tabButtons[i] = CreateTabButton(barRoot.transform, labels[i], i, labels.Length, font);
-                _tabButtons[i].onClick.AddListener(() => SelectTab((HudBottomTab)tabIndex));
+                existingRect.anchoredPosition = Vector2.zero;
+                existingRect.sizeDelta = new Vector2(0f, TabBarHeight);
             }
+
+            WireExistingTabButtons(existingBar);
         }
 
         private void WireExistingTabButtons(Transform barRoot)
@@ -153,37 +126,6 @@ namespace Backend.GameSystems.Exploration
             }
 
             barRoot.SetAsLastSibling();
-        }
-
-        private Button CreateTabButton(Transform parent, string label, int index, int count, TMP_FontAsset font)
-        {
-            var go = new GameObject($"Tab_{label}");
-            go.transform.SetParent(parent, false);
-
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2((float)index / count, 0f);
-            rect.anchorMax = new Vector2((float)(index + 1) / count, 1f);
-            rect.offsetMin = new Vector2(2f, 4f);
-            rect.offsetMax = new Vector2(-2f, -4f);
-
-            var image = go.AddComponent<Image>();
-            StyleTabButtonImage(image, index == (int)_currentTab);
-            var button = go.AddComponent<Button>();
-            button.targetGraphic = image;
-
-            var labelGo = new GameObject("Label");
-            labelGo.transform.SetParent(go.transform, false);
-            var labelRect = labelGo.AddComponent<RectTransform>();
-            labelRect.anchorMin = Vector2.zero;
-            labelRect.anchorMax = Vector2.one;
-            labelRect.offsetMin = Vector2.zero;
-            labelRect.offsetMax = Vector2.zero;
-
-            var text = labelGo.AddComponent<TextMeshProUGUI>();
-            UiTmpUtil.ApplyButtonLabel(text, font, ExplorationHudLayoutMetrics.TabLabelFontSize, TextAnchor.MiddleCenter);
-            ModernUiStyle.ApplyTabLabel(text, index == (int)_currentTab);
-            text.text = label;
-            return button;
         }
 
         private void SelectTab(HudBottomTab tab)

@@ -117,84 +117,75 @@ namespace Backend.GameSystems.Exploration
             if (exploreRoot == null)
                 return;
 
-            _stageRoot = CreateRect("StageViewport", exploreRoot, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-            _stageRoot.SetAsFirstSibling();
+            _stageRoot = exploreRoot.Find("StageViewport") as RectTransform;
+            if (_stageRoot == null)
+            {
+                Debug.LogError("[ExplorationStageRuntimePanel] Prefab StageViewport missing under ExploreContent. Bake via Unity MCP.");
+                return;
+            }
 
-            var bg = CreateImage("StageBackground", _stageRoot, new Color(0.08f, 0.12f, 0.1f, 0.92f));
-            _stageBackground = bg;
-            Stretch(bg.rectTransform);
+            _stageBackground = _stageRoot.Find("StageBackground")?.GetComponent<Image>();
+            _parallaxFar = _stageRoot.Find("ParallaxFar") as RectTransform;
+            _parallaxBanner = _parallaxFar != null ? _parallaxFar.GetComponent<Image>() : null;
+            if (_parallaxBanner != null)
+                RuntimeUiSprites.ApplySimpleImage(_parallaxBanner, RuntimeUiSprites.IllustZoneBanner, Color.white);
 
-            _parallaxFar = CreateImage("ParallaxFar", _stageRoot, new Color(0.12f, 0.18f, 0.16f, 0.55f)).rectTransform;
-            _parallaxBanner = _parallaxFar.GetComponent<Image>();
-            _parallaxFar.anchorMin = new Vector2(0f, 0.18f);
-            _parallaxFar.anchorMax = new Vector2(1f, 0.92f);
-            _parallaxFar.offsetMin = Vector2.zero;
-            _parallaxFar.offsetMax = Vector2.zero;
-            RuntimeUiSprites.ApplySimpleImage(_parallaxBanner, RuntimeUiSprites.IllustZoneBanner, Color.white);
+            _segmentLabel = _stageRoot.Find("SegmentLabel")?.GetComponent<TextMeshProUGUI>();
+            _slashVfx = _stageRoot.Find("SlashVfx")?.GetComponent<Image>();
+            if (_slashVfx != null)
+            {
+                if (!_slashVfx.TryGetComponent(out _slashCanvasGroup))
+                    _slashCanvasGroup = _slashVfx.gameObject.AddComponent<CanvasGroup>();
+                RuntimeStageSprites.ApplyVfx(_slashVfx, StageVisualCatalog.VfxSlash, Color.white);
+            }
 
-            _segmentLabel = CreateLabel("SegmentLabel", _stageRoot, 20, TextAnchor.UpperRight, new Vector2(-16f, -12f));
-            _segmentLabel.alignment = TextAlignmentOptions.TopRight;
+            _groundLine = _stageRoot.Find("GroundLine")?.GetComponent<Image>();
+            _partyActor = _stageRoot.Find("PartyActor") as RectTransform;
+            _partyBody = _partyActor != null ? _partyActor.Find("Body")?.GetComponent<Image>() : null;
+            _partyHpBar = _partyActor != null ? _partyActor.Find("HpBar")?.GetComponent<Slider>() : null;
 
-            _slashVfx = CreateImage("SlashVfx", _stageRoot, new Color(1f, 0.95f, 0.55f, 0.85f));
-            _slashVfx.rectTransform.sizeDelta = new Vector2(96f, 96f);
-            _slashVfx.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            _slashCanvasGroup = _slashVfx.gameObject.AddComponent<CanvasGroup>();
-            RuntimeStageSprites.ApplyVfx(_slashVfx, StageVisualCatalog.VfxSlash, Color.white);
-            _slashVfx.gameObject.SetActive(false);
-
-            var ground = CreateImage("GroundLine", _stageRoot, new Color(0.22f, 0.32f, 0.24f, 1f));
-            _groundLine = ground;
-            var groundRt = ground.rectTransform;
-            groundRt.anchorMin = new Vector2(0f, 0f);
-            groundRt.anchorMax = new Vector2(1f, 0f);
-            groundRt.pivot = new Vector2(0.5f, 0f);
-            groundRt.sizeDelta = new Vector2(0f, 10f);
-            groundRt.anchoredPosition = new Vector2(0f, ExplorationHudLayoutMetrics.StageGroundInset);
-
-            _partyActor = CreateActorRoot("PartyActor", _stageRoot, new Color(1f, 1f, 1f, 0f), out _partyBody, out _partyHpBar, true);
             _companionActors = new RectTransform[MaxVisibleParty - 1];
             _companionBodies = new Image[MaxVisibleParty - 1];
             _companionHpBars = new Slider[MaxVisibleParty - 1];
             _companionHomeOffsets = new float[MaxVisibleParty - 1];
             for (var i = 0; i < _companionActors.Length; i++)
             {
-                _companionActors[i] = CreateActorRoot(
-                    $"PartyCompanion{i + 1}",
-                    _stageRoot,
-                    new Color(1f, 1f, 1f, 0f),
-                    out _companionBodies[i],
-                    out _companionHpBars[i],
-                    true);
+                _companionActors[i] = _stageRoot.Find($"PartyCompanion{i + 1}") as RectTransform;
+                _companionBodies[i] = _companionActors[i] != null
+                    ? _companionActors[i].Find("Body")?.GetComponent<Image>()
+                    : null;
+                _companionHpBars[i] = _companionActors[i] != null
+                    ? _companionActors[i].Find("HpBar")?.GetComponent<Slider>()
+                    : null;
                 _companionHomeOffsets[i] = -CompanionSpacingX * (i + 1);
-                _companionActors[i].localScale = Vector3.one * CompanionScale;
-                _companionActors[i].gameObject.SetActive(false);
-                _companionActors[i].SetSiblingIndex(_partyActor.GetSiblingIndex());
+                if (_companionActors[i] != null)
+                    _companionActors[i].gameObject.SetActive(false);
             }
 
-            _monsterActor = CreateActorRoot("MonsterActor", _stageRoot, new Color(1f, 1f, 1f, 0f), out _monsterBody, out _monsterHpBar, false);
-            _monsterEliteRing = CreateImage("EliteRing", _monsterActor, new Color(1f, 0.82f, 0.35f, 0.55f));
-            var ringRt = _monsterEliteRing.rectTransform;
-            ringRt.anchorMin = new Vector2(0.5f, 0f);
-            ringRt.anchorMax = new Vector2(0.5f, 0f);
-            ringRt.pivot = new Vector2(0.5f, 0.5f);
-            ringRt.sizeDelta = new Vector2(88f, 88f);
-            ringRt.anchoredPosition = new Vector2(0f, 44f);
-            _monsterEliteRing.gameObject.SetActive(false);
-            _monsterActor.gameObject.SetActive(false);
+            _monsterActor = _stageRoot.Find("MonsterActor") as RectTransform;
+            _monsterBody = _monsterActor != null ? _monsterActor.Find("Body")?.GetComponent<Image>() : null;
+            _monsterHpBar = _monsterActor != null ? _monsterActor.Find("HpBar")?.GetComponent<Slider>() : null;
+            _monsterEliteRing = _monsterActor != null ? _monsterActor.Find("EliteRing")?.GetComponent<Image>() : null;
+            _monsterNameText = _monsterActor != null
+                ? _monsterActor.Find("MonsterName")?.GetComponent<TextMeshProUGUI>()
+                : null;
+            if (_monsterActor != null)
+                _monsterActor.gameObject.SetActive(false);
+            if (_monsterEliteRing != null)
+                _monsterEliteRing.gameObject.SetActive(false);
 
-            _monsterNameText = CreateLabel("MonsterName", _monsterActor, 16, TextAnchor.LowerCenter, new Vector2(0f, 58f));
-            _floatRoot = CreateRect("FloatingTextRoot", _stageRoot, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-            _floatPool = new StageFloatingTextPool(_floatRoot);
+            _floatRoot = _stageRoot.Find("FloatingTextRoot") as RectTransform;
+            if (_floatRoot != null)
+                _floatPool = new StageFloatingTextPool(_floatRoot);
 
-            _statusLine = CreateLabel("StageStatus", _stageRoot, 18, TextAnchor.LowerLeft, new Vector2(16f, 12f));
-            _statusLine.alignment = TextAlignmentOptions.BottomLeft;
+            _statusLine = _stageRoot.Find("StageStatus")?.GetComponent<TextMeshProUGUI>();
 
-            _partyHomeX = -168f;
-            _monsterHomeX = 188f;
-            var actorY = ExplorationHudLayoutMetrics.StageGroundInset + 8f;
-            _partyActor.anchoredPosition = new Vector2(_partyHomeX, actorY);
+            _partyHomeX = _partyActor != null ? _partyActor.anchoredPosition.x : -168f;
+            _monsterHomeX = _monsterActor != null ? _monsterActor.anchoredPosition.x : 188f;
+            var actorY = _partyActor != null
+                ? _partyActor.anchoredPosition.y
+                : ExplorationHudLayoutMetrics.StageGroundInset + 8f;
             PlaceCompanionsAtLeaderX(_partyHomeX, actorY);
-            _monsterActor.anchoredPosition = new Vector2(_monsterHomeX, actorY);
 
             ApplyPartyVisual(ExplorationSystem.GetCurrentState()?.Party);
         }
@@ -697,122 +688,6 @@ namespace Backend.GameSystems.Exploration
 
             var hud = View.GetComponent<ExplorationHudPanel>() ?? View.GetComponentInParent<ExplorationHudPanel>();
             return hud == null ? null : hud.transform.Find("Body/CenterPanel/ExploreContent");
-        }
-
-        private static RectTransform CreateRect(
-            string name,
-            Transform parent,
-            Vector2 anchorMin,
-            Vector2 anchorMax,
-            Vector2 offsetMin,
-            Vector2 offsetMax)
-        {
-            var go = new GameObject(name, typeof(RectTransform));
-            go.transform.SetParent(parent, false);
-            var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = anchorMin;
-            rt.anchorMax = anchorMax;
-            rt.offsetMin = offsetMin;
-            rt.offsetMax = offsetMax;
-            return rt;
-        }
-
-        private static void Stretch(RectTransform rt)
-        {
-            rt.anchorMin = Vector2.zero;
-            rt.anchorMax = Vector2.one;
-            rt.offsetMin = Vector2.zero;
-            rt.offsetMax = Vector2.zero;
-        }
-
-        private static Image CreateImage(string name, Transform parent, Color color)
-        {
-            var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            go.transform.SetParent(parent, false);
-            var image = go.GetComponent<Image>();
-            image.color = color;
-            image.raycastTarget = false;
-            return image;
-        }
-
-        private static RectTransform CreateActorRoot(
-            string name,
-            Transform parent,
-            Color bodyColor,
-            out Image body,
-            out Slider hpBar,
-            bool isParty)
-        {
-            var root = CreateRect(name, parent, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), Vector2.zero, Vector2.zero);
-            root.sizeDelta = new Vector2(
-                isParty ? ExplorationHudLayoutMetrics.StageActorPartyWidth + 16f : ExplorationHudLayoutMetrics.StageActorMonsterWidth + 16f,
-                isParty ? ExplorationHudLayoutMetrics.StageActorPartyHeight + 24f : ExplorationHudLayoutMetrics.StageActorMonsterHeight + 24f);
-
-            body = CreateImage("Body", root, new Color(1f, 1f, 1f, 0f));
-            var bodyRt = body.rectTransform;
-            bodyRt.anchorMin = new Vector2(0.5f, 0f);
-            bodyRt.anchorMax = new Vector2(0.5f, 0f);
-            bodyRt.pivot = new Vector2(0.5f, 0f);
-            bodyRt.sizeDelta = new Vector2(
-                isParty ? ExplorationHudLayoutMetrics.StageActorPartyWidth : ExplorationHudLayoutMetrics.StageActorMonsterWidth,
-                isParty ? ExplorationHudLayoutMetrics.StageActorPartyHeight : ExplorationHudLayoutMetrics.StageActorMonsterHeight);
-            bodyRt.anchoredPosition = new Vector2(0f, 8f);
-
-            var hpGo = new GameObject("HpBar", typeof(RectTransform), typeof(Slider));
-            hpGo.transform.SetParent(root, false);
-            var hpRt = hpGo.GetComponent<RectTransform>();
-            hpRt.anchorMin = new Vector2(0.5f, 1f);
-            hpRt.anchorMax = new Vector2(0.5f, 1f);
-            hpRt.pivot = new Vector2(0.5f, 1f);
-            hpRt.sizeDelta = new Vector2(64f, 10f);
-            hpRt.anchoredPosition = new Vector2(0f, 8f);
-
-            hpBar = hpGo.GetComponent<Slider>();
-            hpBar.minValue = 0f;
-            hpBar.maxValue = 1f;
-            hpBar.value = 1f;
-            hpBar.interactable = false;
-            hpBar.transition = Selectable.Transition.None;
-
-            var bg = CreateImage("Background", hpRt, new Color(0.15f, 0.15f, 0.15f, 0.85f));
-            Stretch(bg.rectTransform);
-            RuntimeUiSprites.ApplyHpTrack(bg);
-
-            var fillArea = CreateRect("Fill Area", hpRt, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-            var fill = CreateImage("Fill", fillArea, isParty ? new Color(0.35f, 0.9f, 0.45f) : new Color(0.95f, 0.25f, 0.25f));
-            Stretch(fill.rectTransform);
-            RuntimeUiSprites.ApplyHpFill(fill);
-            hpBar.fillRect = fill.rectTransform;
-            hpBar.targetGraphic = fill;
-            fill.type = Image.Type.Filled;
-            fill.fillMethod = Image.FillMethod.Horizontal;
-
-            return root;
-        }
-
-        private static TextMeshProUGUI CreateLabel(
-            string name,
-            Transform parent,
-            int fontSize,
-            TextAnchor anchor,
-            Vector2 anchoredPosition)
-        {
-            var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-            go.transform.SetParent(parent, false);
-            var rt = go.GetComponent<RectTransform>();
-            rt.anchorMin = new Vector2(0.5f, 0f);
-            rt.anchorMax = new Vector2(0.5f, 0f);
-            rt.pivot = new Vector2(0.5f, 0f);
-            rt.sizeDelta = new Vector2(220f, 40f);
-            rt.anchoredPosition = anchoredPosition;
-
-            var text = go.GetComponent<TextMeshProUGUI>();
-            text.font = RuntimeUiTmpFont.Get();
-            text.fontSize = fontSize;
-            text.alignment = UiTmpUtil.ToAlignment(anchor);
-            text.raycastTarget = false;
-            text.textWrappingMode = TextWrappingModes.NoWrap;
-            return text;
         }
     }
 }
