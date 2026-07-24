@@ -6,7 +6,9 @@ description: Unity MCP로 UI 프리팹을 직접 편집하는 Prefab-first 워�
 # Unity MCP Prefab-First UI
 
 UI 크기·글씨·버튼·스테이지 액터는 **코드로 만들지 않는다.**  
-`user-unityMCP`로 프리팹을 수정하고, C# Presenter는 **SerializeField / Find 바인딩 + 로직만** 담당한다.
+`user-unityMCP`로 프리팹을 수정하고, C# 은 **SerializeField / Find 바인딩 + 로직만** 담당한다.
+
+관련: 화면 코드 골격 → `add-ui-screen`. 도구 카탈로그 → `unity-mcp-tools`. 검증 → `verify-in-unity`.
 
 ## 금지 (우회 패턴)
 

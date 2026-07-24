@@ -14,7 +14,8 @@ description: 기획 .md 파일을 읽고 자율적으로 Unity 개발을 진행�
   - `unity-csharp-conventions.mdc` — 네이밍, UniTask, 로그 접두어, XML 주석
   - `unity-ui-system.mdc`, `unity-scene-system.mdc`, `unity-assets.mdc`
 - **`.meta` 파일은 절대 생성/수정하지 않는다.** Unity가 임포트 시 자동 생성한다.
-- 스크립트 생성/수정은 unityMCP 도구(`create_script`, `manage_script`, `apply_text_edits`, `script_apply_edits`)를 우선 사용한다.
+- 스크립트는 Cursor 디스크 편집(Read/StrReplace/Write)을 우선하고, 검증은 `verify-in-unity`.
+  UI 레이아웃은 `unity-mcp-prefab-ui`. unityMCP 스크립트 도구는 보조.
 
 ## 워크플로우
 
@@ -53,16 +54,13 @@ description: 기획 .md 파일을 읽고 자율적으로 Unity 개발을 진행�
 ### 4. 구현
 
 - `unity-csharp-conventions.mdc`를 지켜 구현한다: `_camelCase` private 필드, UniTask 비동기(`.Forget()`), 로그에 `[ClassName]` 접두어, public 메서드 `<summary>`, `TryGetComponent` 우선.
-- 스크립트 작성/수정은 unityMCP 도구로 수행한다.
-- 앱 종료 대응: Manager 접근 전 `GameStateUtil.IsQuitting` 체크(규칙 준수).
+- `harness-boundaries` / Prefab-first 준수. 앱 종료 시 `GameStateUtil.IsQuitting` 체크.
 
 ### 5. 컴파일/동작 검증 (필수 피드백 루프)
 
-- 스크립트를 생성/수정한 직후 unityMCP `read_console`(Error/Warning 필터)로 컴파일 오류를 확인한다.
-- `editor_state` 리소스의 `isCompiling`이 끝날 때까지 대기한 뒤 확인한다. 필요 시 `refresh_unity`.
-- 오류가 있으면 → 원인 분석 → 수정 → 다시 `read_console`. **오류 0이 될 때까지 반복.**
-- 테스트가 있는 항목은 `run_tests`로 검증한다.
-- 컴파일이 통과해야만 새 타입/컴포넌트를 다른 코드에서 사용할 수 있다.
+- `verify-in-unity` 스킬을 그대로 따른다: `refresh_unity` → `read_console` Error 0 → (필요 시) tests/play.
+- 폴백으로 `dotnet build Assembly-CSharp.csproj` 도 허용.
+- 오류가 있으면 고치고 재검증. **Error 0 전까지 완료로 보고하지 않는다.**
 
 ### 6. 기획서에 진행 상황 반영
 
