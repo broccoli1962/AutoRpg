@@ -1,4 +1,5 @@
 ---
+description: Unity C# 네이밍, UniTask, 로그, XML 주석, TryGetComponent
 globs: "**/*.cs"
 alwaysApply: false
 ---

@@ -1,5 +1,5 @@
 ---
-description: Manager 싱글톤, ObjectPoolManager, ResourceManager 사용법
+description: SceneContext, Manager 싱글톤, ResourceManager/AddressableKeys, ObjectPool, GameStateUtil
 globs: "**/*.cs"
 alwaysApply: false
 ---
