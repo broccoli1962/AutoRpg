@@ -124,7 +124,7 @@ namespace Backend.GameSystems.Exploration
             return list.Count > 0 ? list : ZoneDefinitions.GetDiscoveriesFallback(zoneId);
         }
 
-        /// <summary>GSSL Character 테이블 기반 기본 파티를 생성한다.</summary>
+        /// <summary>GSSL Character 테이블 기반 기본 파티를 생성한다. MVP는 최대 3인.</summary>
         public static PartyState CreateDefaultParty()
         {
             if (!IsReady || TableManager.CharacterTable?.dataList == null)
@@ -137,6 +137,8 @@ namespace Backend.GameSystems.Exploration
                     continue;
 
                 party.Members.Add(CreateCharacterFromRow(row));
+                if (party.Members.Count >= 3)
+                    break;
             }
 
             return party.Members.Count > 0 ? party : ZoneDefinitions.CreateDefaultPartyFallback();
