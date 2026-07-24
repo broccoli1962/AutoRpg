@@ -4,6 +4,7 @@ using Backend.GameSystems.Character;
 using Backend.GameSystems.Character.Data;
 using Backend.GameSystems.DynamicEvent;
 using Backend.GameSystems.LLM;
+using Backend.GameSystems.Exploration;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Stage;
 using Backend.GameSystems.Prestige;
@@ -17,7 +18,7 @@ using UnityEngine;
 namespace Backend.GameSystems.Save
 {
     /// <summary>
-    /// 메타 진행·캐릭터 기억·관계 데이터를 JSON으로 영속화한다.
+    /// 메타 진행·캐릭터 기억·관계·진행 중 탐험 데이터를 JSON으로 영속화한다.
     /// </summary>
     public sealed class GameSaveManager : SingletonGameObject<GameSaveManager>
     {
@@ -79,7 +80,8 @@ namespace Backend.GameSystems.Save
                     GoldenEventAutoPause = GoldenEventSettings.ExportSetting(),
                     LogFrequencyMode = LogFrequencySettings.ExportMode(),
                     OfflineSummaryDetailMode = OfflineSummaryDetailSettings.ExportMode(),
-                    StageVfxDensityMode = StageVfxDensitySettings.ExportMode()
+                    StageVfxDensityMode = StageVfxDensitySettings.ExportMode(),
+                    ExplorationRun = ExplorationSystem.ExportRunSave()
                 };
 
                 var json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -115,7 +117,9 @@ namespace Backend.GameSystems.Save
                 LogFrequencySettings.ImportMode(data.LogFrequencyMode);
                 OfflineSummaryDetailSettings.ImportMode(data.OfflineSummaryDetailMode);
                 StageVfxDensitySettings.ImportMode(data.StageVfxDensityMode);
-                Debug.Log($"[GameSaveManager] Loaded save (legacy={data.Meta?.LegacyPoints ?? 0})");
+                ExplorationSystem.QueueRunRestore(data.ExplorationRun);
+                Debug.Log(
+                    $"[GameSaveManager] Loaded save (legacy={data.Meta?.LegacyPoints ?? 0}, run={data.ExplorationRun?.HasActiveRun == true})");
             }
             catch (System.Exception e)
             {

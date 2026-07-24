@@ -8,6 +8,7 @@ using Backend.GameSystems.Exploration.Simulation;
 using Backend.GameSystems.LLM;
 using Backend.GameSystems.Prestige;
 using Backend.GameSystems.Save;
+using Backend.GameSystems.Save.Data;
 using Backend.Object.Controller;
 using Backend.Util;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace Backend.GameSystems.Exploration
         private static ExplorationSession _session;
         private static float _tickAccumulator;
         private static bool _initialized;
+        private static ExplorationRunSaveData _pendingRunRestore;
 
         /// <summary>현재 탐험 상태.</summary>
         public static ExplorationState CurrentState => _session?.State;
@@ -49,6 +51,7 @@ namespace Backend.GameSystems.Exploration
             _session = new ExplorationSession(new HybridLogNarrator());
             _tickAccumulator = 0f;
             _initialized = true;
+            TryRestorePendingRun();
         }
 
         /// <summary>System 리소스를 해제한다.</summary>
@@ -57,6 +60,22 @@ namespace Backend.GameSystems.Exploration
             _session = null;
             _tickAccumulator = 0f;
             _initialized = false;
+            _pendingRunRestore = null;
+        }
+
+        /// <summary>세이브 로드 직후 복원할 탐험 스냅샷을 보관한다.</summary>
+        public static void QueueRunRestore(ExplorationRunSaveData runSave)
+        {
+            _pendingRunRestore = runSave;
+        }
+
+        /// <summary>진행 중 탐험 스냅샷을 내보낸다.</summary>
+        public static ExplorationRunSaveData ExportRunSave()
+        {
+            if (GameStateUtil.IsQuitting)
+                return null;
+
+            return _session?.ExportRunSave();
         }
 
         /// <summary>현재 탐험 상태를 반환한다.</summary>
@@ -115,6 +134,7 @@ namespace Backend.GameSystems.Exploration
 
             EnsureInitialized();
             _session?.Pause();
+            GameSaveManager.Save();
         }
 
         /// <summary>수동 귀환을 수행한다.</summary>
@@ -125,6 +145,7 @@ namespace Backend.GameSystems.Exploration
 
             EnsureInitialized();
             _session?.ReturnToGuild();
+            GameSaveManager.Save();
         }
 
         /// <summary>플레이어 입력으로 탐험을 시작한다.</summary>
@@ -133,8 +154,15 @@ namespace Backend.GameSystems.Exploration
             if (GameStateUtil.IsQuitting)
                 return;
 
-            ProcessOfflineElapsed();
+            EnsureInitialized();
+            if (IsRunning)
+            {
+                ProcessOfflineElapsed();
+                return;
+            }
+
             StartExploration(seed);
+            GameSaveManager.Save();
         }
 
         /// <summary>마지막 접속 이후 경과 시간을 오프라인 시뮬레이션으로 처리한다.</summary>
@@ -144,7 +172,7 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             EnsureInitialized();
-            if (_session?.State == null)
+            if (_session?.State == null || !_session.State.IsExploring)
                 return;
 
             var elapsed = DateTime.UtcNow - _session.State.LastOnlineUtc;
@@ -152,6 +180,7 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             _session.ProcessOffline(elapsed);
+            GameSaveManager.Save();
         }
 
         /// <summary>System 과 Tick Controller 런타임을 보장한다.</summary>
@@ -170,6 +199,21 @@ namespace Backend.GameSystems.Exploration
         {
             if (!_initialized)
                 Initialize();
+        }
+
+        private static void TryRestorePendingRun()
+        {
+            var pending = _pendingRunRestore;
+            _pendingRunRestore = null;
+            if (pending == null || _session == null)
+                return;
+
+            if (!_session.TryRestoreRun(pending))
+                return;
+
+            Debug.Log(
+                $"[ExplorationSystem] Restored exploration run. Floor={_session.State.CurrentFloor} Tick={_session.State.CurrentTick}");
+            ProcessOfflineElapsed();
         }
 
         private static void StartExplorationInternal(int seed)
