@@ -117,7 +117,9 @@ namespace Backend.GameSystems.Exploration
                 StyleTabLabel(tabTransform, (int)_currentTab == i);
             }
 
+            // CR UX: 하단 탭은 항상 최상단 입력. 오버레이는 한 단계 깊이.
             barRoot.SetAsLastSibling();
+            transform.Find("BottomTabBar")?.SetAsLastSibling();
         }
 
         private void SelectTab(HudBottomTab tab)

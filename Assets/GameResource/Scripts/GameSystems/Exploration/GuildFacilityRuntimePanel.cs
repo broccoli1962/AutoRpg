@@ -35,15 +35,28 @@ namespace Backend.GameSystems.Exploration
                 return;
 
             if (_scriptoriumButton == null)
-                _scriptoriumButton = bar.Find("서고")?.GetComponent<Button>();
+                _scriptoriumButton = ResolveButton(bar, "서고", 0);
             if (_trainingButton == null)
-                _trainingButton = bar.Find("훈련소")?.GetComponent<Button>();
+                _trainingButton = ResolveButton(bar, "훈련소", 1);
             if (_blacksmithButton == null)
-                _blacksmithButton = bar.Find("대장간")?.GetComponent<Button>();
+                _blacksmithButton = ResolveButton(bar, "대장간", 2);
             if (_innButton == null)
-                _innButton = bar.Find("여관")?.GetComponent<Button>();
+                _innButton = ResolveButton(bar, "여관", 3);
             if (_bookshopButton == null)
-                _bookshopButton = bar.Find("서점")?.GetComponent<Button>();
+                _bookshopButton = ResolveButton(bar, "서점", 4);
+        }
+
+        private static Button ResolveButton(Transform bar, string childName, int siblingIndex)
+        {
+            var named = bar.Find(childName);
+            if (named != null && named.TryGetComponent<Button>(out var byName))
+                return byName;
+
+            if (siblingIndex >= 0 && siblingIndex < bar.childCount &&
+                bar.GetChild(siblingIndex).TryGetComponent<Button>(out var byIndex))
+                return byIndex;
+
+            return null;
         }
 
         internal TextMeshProUGUI ContentText => _contentText;
