@@ -6,6 +6,7 @@ using Backend.GameSystems.Exploration.Data;
 using Backend.GameSystems.Exploration.Narration;
 using Backend.GameSystems.Exploration.Simulation;
 using Backend.GameSystems.Exploration.Stage;
+using Backend.GameSystems.Save.Data;
 
 namespace Backend.GameSystems.Exploration
 {
@@ -159,6 +160,46 @@ namespace Backend.GameSystems.Exploration
             ExplorationChannels.PublishStateChanged(State);
         }
 
+        /// <summary>
+        /// 진행 중 탐험 스냅샷을 내보낸다. 탐험 중이 아니면 null.
+        /// </summary>
+        public ExplorationRunSaveData ExportRunSave()
+        {
+            if (State == null || !State.IsExploring)
+                return null;
+
+            State.LastOnlineUtc = DateTime.UtcNow;
+            return new ExplorationRunSaveData
+            {
+                HasActiveRun = true,
+                State = CloneExplorationState(State),
+                RandomState = _random?.ExportState() ?? (uint)Math.Max(State.Seed, 1),
+                LastFloor = _lastFloor,
+                TicksSinceLastDynamicEvent = _ticksSinceLastDynamicEvent
+            };
+        }
+
+        /// <summary>
+        /// 저장된 탐험 스냅샷으로 세션을 복원한다.
+        /// </summary>
+        public bool TryRestoreRun(ExplorationRunSaveData runSave)
+        {
+            if (runSave == null || !runSave.HasActiveRun || runSave.State == null || !runSave.State.IsExploring)
+                return false;
+
+            State = CloneExplorationState(runSave.State);
+            _random = new DeterministicRandom(State.Seed);
+            _random.ImportState(runSave.RandomState);
+            _lastFloor = runSave.LastFloor > 0 ? runSave.LastFloor : State.CurrentFloor;
+            _ticksSinceLastDynamicEvent = Math.Max(0, runSave.TicksSinceLastDynamicEvent);
+            ExplorationStageSystem.Clear();
+            ExplorationRollingSummary.Clear();
+            CharacterMemorySystem.BindParty(State.Party);
+            RelationshipSystem.BindParty(State.Party);
+            ExplorationChannels.PublishStateChanged(State);
+            return true;
+        }
+
         private void PublishTickEvents(ExplorationTickResult tickResult)
         {
             var trivialCombatBatch = new List<ExplorationEvent>();
@@ -251,8 +292,14 @@ namespace Backend.GameSystems.Exploration
         private static PartyState CloneParty(PartyState source)
         {
             var clone = new PartyState();
+            if (source?.Members == null)
+                return clone;
+
             foreach (var member in source.Members)
             {
+                if (member == null)
+                    continue;
+
                 clone.Members.Add(new CharacterState
                 {
                     CharacterId = member.CharacterId,
@@ -271,11 +318,37 @@ namespace Backend.GameSystems.Exploration
                     EquippedArmorId = member.EquippedArmorId,
                     WeaponEnhanceLevel = member.WeaponEnhanceLevel,
                     ArmorEnhanceLevel = member.ArmorEnhanceLevel,
-                    PersonalityTags = new List<PersonalityTag>(member.PersonalityTags)
+                    PersonalityTags = member.PersonalityTags != null
+                        ? new List<PersonalityTag>(member.PersonalityTags)
+                        : new List<PersonalityTag>()
                 });
             }
 
             return clone;
+        }
+
+        private static ExplorationState CloneExplorationState(ExplorationState source)
+        {
+            if (source == null)
+                return null;
+
+            return new ExplorationState
+            {
+                Seed = source.Seed,
+                CurrentTick = source.CurrentTick,
+                ZoneId = source.ZoneId,
+                CurrentFloor = source.CurrentFloor,
+                FloorProgress = source.FloorProgress,
+                MaxFloor = source.MaxFloor,
+                Party = CloneParty(source.Party),
+                Gold = source.Gold,
+                ManaShards = source.ManaShards,
+                Reputation = source.Reputation,
+                RelicFragments = source.RelicFragments,
+                IsExploring = source.IsExploring,
+                IsPaused = source.IsPaused,
+                LastOnlineUtc = source.LastOnlineUtc
+            };
         }
     }
 }

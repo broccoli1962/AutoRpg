@@ -12,6 +12,19 @@ namespace Backend.GameSystems.Exploration.Simulation
             _state = seed == 0 ? 1u : (uint)seed;
         }
 
+        /// <summary>
+        /// 내부 RNG 상태를 직렬화용으로 내보낸다.
+        /// </summary>
+        public uint ExportState() => _state;
+
+        /// <summary>
+        /// 직렬화된 RNG 상태로 생성기를 복원한다.
+        /// </summary>
+        public void ImportState(uint state)
+        {
+            _state = state == 0 ? 1u : state;
+        }
+
         public int NextInt(int maxExclusive)
         {
             if (maxExclusive <= 0)
