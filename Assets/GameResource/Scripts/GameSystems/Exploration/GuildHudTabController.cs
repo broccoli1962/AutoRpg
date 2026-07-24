@@ -10,8 +10,6 @@ namespace Backend.GameSystems.Exploration
     /// </summary>
     public sealed class GuildHudTabController : CachedMonobehaviour
     {
-        private const float TabBarHeight = ExplorationHudLayoutMetrics.TabBarHeight;
-
         public static float BottomInsetPx => ExplorationHudLayoutMetrics.BottomInsetPx;
 
         private enum HudBottomTab
@@ -92,13 +90,7 @@ namespace Backend.GameSystems.Exploration
                 return;
             }
 
-            var existingRect = existingBar.GetComponent<RectTransform>();
-            if (existingRect != null)
-            {
-                existingRect.anchoredPosition = Vector2.zero;
-                existingRect.sizeDelta = new Vector2(0f, TabBarHeight);
-            }
-
+            // Prefab 앵커/높이가 진실 공급원. sizeDelta 런타임 강제 금지.
             WireExistingTabButtons(existingBar);
         }
 

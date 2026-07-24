@@ -61,14 +61,26 @@ namespace Backend.GameSystems.Exploration
 
         private void ApplyTextLayout()
         {
+            // 글자 크기는 Prefab. 색·말줄임만 런타임 보정.
             if (_nameText != null)
-                UiTmpUtil.ApplyLayoutCell(_nameText, RuntimeUiTmpFont.Get(), ExplorationHudLayoutMetrics.PartyNameFontSize, TextAnchor.UpperLeft, lineCount: 1);
+            {
+                _nameText.overflowMode = TextOverflowModes.Ellipsis;
+                _nameText.textWrappingMode = TextWrappingModes.NoWrap;
+            }
 
             if (_roleText != null)
-                UiTmpUtil.ApplyLayoutCell(_roleText, RuntimeUiTmpFont.Get(), ExplorationHudLayoutMetrics.PartyRoleFontSize, TextAnchor.UpperLeft, lineCount: 1, color: ModernUiStyle.MutedText);
+            {
+                _roleText.color = ModernUiStyle.MutedText;
+                _roleText.overflowMode = TextOverflowModes.Ellipsis;
+                _roleText.textWrappingMode = TextWrappingModes.NoWrap;
+            }
 
             if (_detailText != null)
-                UiTmpUtil.ApplyLayoutCell(_detailText, RuntimeUiTmpFont.Get(), ExplorationHudLayoutMetrics.PartyDetailFontSize, TextAnchor.UpperLeft, lineCount: 2, color: ModernUiStyle.MutedText);
+            {
+                _detailText.color = ModernUiStyle.MutedText;
+                _detailText.overflowMode = TextOverflowModes.Ellipsis;
+                _detailText.textWrappingMode = TextWrappingModes.Normal;
+            }
         }
     }
 }
