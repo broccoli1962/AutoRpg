@@ -21,20 +21,34 @@ namespace Backend.GameSystems.Exploration
         /// <summary>프리팹 ActionButtonBar 를 찾아 버튼 참조를 채운다.</summary>
         public void ResolvePrefabBindings()
         {
-            if (_promoteButton != null && _enhanceWeaponButton != null && _enhanceArmorButton != null)
-                return;
-
             var root = OverlayRoot != null ? OverlayRoot.transform : transform;
             var bar = root.Find("ActionButtonBar");
             if (bar == null)
+            {
+                Debug.LogError("[EnhanceRuntimePanel] ActionButtonBar missing in prefab.");
                 return;
+            }
 
-            if (_promoteButton == null)
-                _promoteButton = bar.Find("전직")?.GetComponent<Button>();
-            if (_enhanceWeaponButton == null)
-                _enhanceWeaponButton = bar.Find("무기 강화")?.GetComponent<Button>();
-            if (_enhanceArmorButton == null)
-                _enhanceArmorButton = bar.Find("방어구 강화")?.GetComponent<Button>();
+            _promoteButton = ResolveButton(bar, _promoteButton, "전직", 0);
+            _enhanceWeaponButton = ResolveButton(bar, _enhanceWeaponButton, "무기 강화", 1);
+            _enhanceArmorButton = ResolveButton(bar, _enhanceArmorButton, "방어구 강화", 2);
+        }
+
+        private static Button ResolveButton(Transform bar, Button current, string childName, int siblingIndex)
+        {
+            if (current != null)
+                return current;
+
+            var named = bar.Find(childName);
+            if (named != null && named.TryGetComponent<Button>(out var byName))
+                return byName;
+
+            if (siblingIndex >= 0 && siblingIndex < bar.childCount &&
+                bar.GetChild(siblingIndex).TryGetComponent<Button>(out var byIndex))
+                return byIndex;
+
+            Debug.LogError($"[EnhanceRuntimePanel] Button '{childName}' (index {siblingIndex}) not found.");
+            return null;
         }
 
         internal TextMeshProUGUI ContentText => _contentText;
@@ -54,6 +68,9 @@ namespace Backend.GameSystems.Exploration
             Bind(View.EnhanceWeaponButton, () => TryAndLog(EquipmentEnhanceSystem.TryEnhanceLeaderWeapon));
             Bind(View.EnhanceArmorButton, () => TryAndLog(EquipmentEnhanceSystem.TryEnhanceLeaderArmor));
             RefreshContent();
+
+            if (View.PromoteButton == null && View.EnhanceWeaponButton == null && View.EnhanceArmorButton == null)
+                Debug.LogError("[EnhanceRuntimePanel] No action buttons bound — enhance tab will not respond to touch.");
         }
 
         public void HandleKeyboardInput()
