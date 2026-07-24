@@ -28,17 +28,23 @@ namespace Backend.GameSystems.Exploration
         private const float MoveDuration = 0.65f;
         private const float CombatHitInterval = 0.28f;
         private const float ShortBeatDuration = 0.45f;
+        private const int MaxVisibleParty = 3;
+        private const float CompanionSpacingX = 52f;
+        private const float CompanionScale = 0.82f;
 
         private RectTransform _stageRoot;
         private Image _stageBackground;
         private Image _groundLine;
         private RectTransform _partyActor;
+        private RectTransform[] _companionActors;
         private RectTransform _monsterActor;
         private Image _partyBody;
+        private Image[] _companionBodies;
         private Image _monsterBody;
         private Image _monsterEliteRing;
         private Image _parallaxBanner;
         private Slider _partyHpBar;
+        private Slider[] _companionHpBars;
         private Slider _monsterHpBar;
         private TextMeshProUGUI _monsterNameText;
         private RectTransform _floatRoot;
@@ -52,6 +58,7 @@ namespace Backend.GameSystems.Exploration
         private CompositeDisposable _disposables;
         private float _partyHomeX;
         private float _monsterHomeX;
+        private float[] _companionHomeOffsets;
 
         public override void OnOpen()
         {
@@ -145,6 +152,25 @@ namespace Backend.GameSystems.Exploration
             groundRt.anchoredPosition = new Vector2(0f, ExplorationHudLayoutMetrics.StageGroundInset);
 
             _partyActor = CreateActorRoot("PartyActor", _stageRoot, new Color(1f, 1f, 1f, 0f), out _partyBody, out _partyHpBar, true);
+            _companionActors = new RectTransform[MaxVisibleParty - 1];
+            _companionBodies = new Image[MaxVisibleParty - 1];
+            _companionHpBars = new Slider[MaxVisibleParty - 1];
+            _companionHomeOffsets = new float[MaxVisibleParty - 1];
+            for (var i = 0; i < _companionActors.Length; i++)
+            {
+                _companionActors[i] = CreateActorRoot(
+                    $"PartyCompanion{i + 1}",
+                    _stageRoot,
+                    new Color(1f, 1f, 1f, 0f),
+                    out _companionBodies[i],
+                    out _companionHpBars[i],
+                    true);
+                _companionHomeOffsets[i] = -CompanionSpacingX * (i + 1);
+                _companionActors[i].localScale = Vector3.one * CompanionScale;
+                _companionActors[i].gameObject.SetActive(false);
+                _companionActors[i].SetSiblingIndex(_partyActor.GetSiblingIndex());
+            }
+
             _monsterActor = CreateActorRoot("MonsterActor", _stageRoot, new Color(1f, 1f, 1f, 0f), out _monsterBody, out _monsterHpBar, false);
             _monsterEliteRing = CreateImage("EliteRing", _monsterActor, new Color(1f, 0.82f, 0.35f, 0.55f));
             var ringRt = _monsterEliteRing.rectTransform;
@@ -167,6 +193,7 @@ namespace Backend.GameSystems.Exploration
             _monsterHomeX = 188f;
             var actorY = ExplorationHudLayoutMetrics.StageGroundInset + 8f;
             _partyActor.anchoredPosition = new Vector2(_partyHomeX, actorY);
+            PlaceCompanionsAtLeaderX(_partyHomeX, actorY);
             _monsterActor.anchoredPosition = new Vector2(_monsterHomeX, actorY);
 
             ApplyPartyVisual(ExplorationSystem.GetCurrentState()?.Party);
@@ -243,7 +270,7 @@ namespace Backend.GameSystems.Exploration
             _monsterActor.gameObject.SetActive(true);
             _monsterNameText.text = monsterName;
             _monsterHpBar.value = 1f;
-            _partyHpBar.value = GetPartyHpRatio(request.Party);
+            ApplyPartyVisual(request.Party);
 
             _monsterActor.localScale = Vector3.zero;
             await StageActorMotion.PlaySpawnScaleAsync(_monsterActor, monsterVisual.Scale, token);
@@ -268,7 +295,7 @@ namespace Backend.GameSystems.Exploration
                     var taken = Mathf.Max(1, combat.DamageTaken / Mathf.Max(1, hitCount / 2));
                     SpawnFloatingText(_partyActor.anchoredPosition + new Vector2(0f, 40f), $"-{taken}", new Color(1f, 0.45f, 0.45f));
                     await StageActorMotion.PlayHitShakeAsync(_partyActor, token);
-                    _partyHpBar.value = GetPartyHpRatio(request.Party);
+                    ApplyPartyVisual(request.Party);
                 }
 
                 await UniTask.Delay(TimeSpan.FromSeconds(hitInterval), cancellationToken: token);
@@ -350,7 +377,7 @@ namespace Backend.GameSystems.Exploration
             _monsterActor.gameObject.SetActive(true);
             _monsterNameText.text = $"{monsterName} ×{count}";
             _monsterHpBar.value = 1f;
-            _partyHpBar.value = GetPartyHpRatio(party);
+            ApplyPartyVisual(party);
 
             _monsterActor.localScale = Vector3.zero;
             await StageActorMotion.PlaySpawnScaleAsync(_monsterActor, batchVisual.Scale, token);
@@ -431,6 +458,7 @@ namespace Backend.GameSystems.Exploration
                 .Bind(value =>
                 {
                     _partyActor.anchoredPosition = value;
+                    PlaceCompanionsAtLeaderX(value.x, value.y);
                     if (_parallaxFar != null)
                     {
                         var t = Mathf.InverseLerp(start.x, end.x, value.x);
@@ -438,6 +466,20 @@ namespace Backend.GameSystems.Exploration
                     }
                 })
                 .ToUniTask(token);
+        }
+
+        private void PlaceCompanionsAtLeaderX(float leaderX, float actorY)
+        {
+            if (_companionActors == null || _companionHomeOffsets == null)
+                return;
+
+            for (var i = 0; i < _companionActors.Length; i++)
+            {
+                if (_companionActors[i] == null)
+                    continue;
+
+                _companionActors[i].anchoredPosition = new Vector2(leaderX + _companionHomeOffsets[i], actorY);
+            }
         }
 
         private void SpawnFloatingText(Vector2 anchoredPosition, string text, Color color)
@@ -528,18 +570,70 @@ namespace Backend.GameSystems.Exploration
             if (_partyBody == null)
                 return;
 
-            var leader = party?.Leader;
-            if (leader == null)
+            var members = party?.Members;
+            if (members == null || members.Count == 0)
+            {
+                HideCompanions();
+                return;
+            }
+
+            ApplyMemberVisual(_partyBody, _partyHpBar, members[0], isCompanion: false);
+
+            if (_companionActors == null)
                 return;
 
-            var spriteKey = StageVisualCatalog.ResolvePartySpriteKey(leader.Role);
-            var tint = ExplorationHudStatusFormatter.GetRoleTintColor(leader.Role);
+            for (var i = 0; i < _companionActors.Length; i++)
+            {
+                var memberIndex = i + 1;
+                var show = memberIndex < members.Count && memberIndex < MaxVisibleParty;
+                if (_companionActors[i] != null)
+                    _companionActors[i].gameObject.SetActive(show);
+
+                if (!show)
+                    continue;
+
+                ApplyMemberVisual(_companionBodies[i], _companionHpBars[i], members[memberIndex], isCompanion: true);
+            }
+
+            var actorY = _partyActor != null
+                ? _partyActor.anchoredPosition.y
+                : ExplorationHudLayoutMetrics.StageGroundInset + 8f;
+            var leaderX = _partyActor != null ? _partyActor.anchoredPosition.x : _partyHomeX;
+            PlaceCompanionsAtLeaderX(leaderX, actorY);
+        }
+
+        private static void ApplyMemberVisual(Image body, Slider hpBar, CharacterState member, bool isCompanion)
+        {
+            if (body == null || member == null)
+                return;
+
+            var spriteKey = StageVisualCatalog.ResolvePartySpriteKey(member.Role);
+            var tint = ExplorationHudStatusFormatter.GetRoleTintColor(member.Role);
             var hasSprite = RuntimeStageSprites.Get(spriteKey) != null;
-            RuntimeStageSprites.ApplyActor(_partyBody, spriteKey, hasSprite ? Color.white : tint);
-            _partyBody.rectTransform.localScale = Vector3.one;
-            _partyBody.rectTransform.sizeDelta = new Vector2(
-                ExplorationHudLayoutMetrics.StageActorPartyWidth,
-                ExplorationHudLayoutMetrics.StageActorPartyHeight);
+            RuntimeStageSprites.ApplyActor(body, spriteKey, hasSprite ? Color.white : tint);
+            body.rectTransform.localScale = Vector3.one;
+            var width = isCompanion
+                ? ExplorationHudLayoutMetrics.StageActorPartyWidth * CompanionScale
+                : ExplorationHudLayoutMetrics.StageActorPartyWidth;
+            var height = isCompanion
+                ? ExplorationHudLayoutMetrics.StageActorPartyHeight * CompanionScale
+                : ExplorationHudLayoutMetrics.StageActorPartyHeight;
+            body.rectTransform.sizeDelta = new Vector2(width, height);
+
+            if (hpBar != null)
+                hpBar.value = member.MaxHp <= 0 ? 1f : Mathf.Clamp01((float)member.CurrentHp / member.MaxHp);
+        }
+
+        private void HideCompanions()
+        {
+            if (_companionActors == null)
+                return;
+
+            foreach (var companion in _companionActors)
+            {
+                if (companion != null)
+                    companion.gameObject.SetActive(false);
+            }
         }
 
         private void ApplyMonsterVisual(StageMonsterVisual visual)
@@ -567,8 +661,10 @@ namespace Backend.GameSystems.Exploration
         private void ResetStageVisual()
         {
             CancelBeatPlayback(flushBeat: true);
+            var actorY = ExplorationHudLayoutMetrics.StageGroundInset + 8f;
             if (_partyActor != null)
-                _partyActor.anchoredPosition = new Vector2(_partyHomeX, ExplorationHudLayoutMetrics.StageGroundInset + 8f);
+                _partyActor.anchoredPosition = new Vector2(_partyHomeX, actorY);
+            PlaceCompanionsAtLeaderX(_partyHomeX, actorY);
             if (_monsterActor != null)
             {
                 _monsterActor.gameObject.SetActive(false);
