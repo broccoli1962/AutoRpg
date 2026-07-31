@@ -1,0 +1,310 @@
+{
+  "eventType": "rest",
+  "slots": {
+    "Intro": [
+      {
+        "text": "잠시 멈춰 선 파티는",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "안전해 보이는 틈에서",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "긴 전투 뒤",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "지친 기색으로",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "{character}는",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "일행은",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "어두운 alcove에서",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "낡은 캠프파이어 옆에서",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "조용한 동굴 구석에서",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "잠깐의 휴식을 위해",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "호흡을 고르며",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "빛나는 균열 옆에서",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      }
+    ],
+    "Action": [
+      {
+        "text": "상처를 돌보고",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "물을 나누며",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "장비를 점검하고",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "짧은 명상을 하며",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "따뜻한 차를 마시며",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "지도를 펼쳐 보고",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "무기를 닦으며",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "동료의 상태를 확인하며",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "눈을 감고 쉬며",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "간단한 식사를 하며",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "긴장을 풀며",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "다음 구간을 논의하며",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "붕대를 감으며",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "마력을 정비하며",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "발을 쉬게 하며",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ],
+    "Result": [
+      {
+        "text": "기력을 회복했다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "숨을 고르며 쉬었다",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "잠시 숨을 돌렸다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "다시 일어섰다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "의지를 다잡았다",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "준비를 마쳤다",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "전열을 재정비했다",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "피로를 덜었다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "다음 목표를 확인했다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "침묵 속에서 쉬었다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      }
+    ],
+    "Afterglow": [
+      {
+        "text": ".",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "쉬는 시간은 짧았다.",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "심연은 기다려주지 않았다.",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "다시 발걸음을 옮겼다.",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "누군가는 조용히 기도했다.",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "휴식은 필요했다.",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "긴장만은 풀리지 않았다.",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "곧 전진을 재개했다.",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ]
+  }
+}

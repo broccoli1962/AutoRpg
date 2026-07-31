@@ -60,6 +60,7 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
+  - {fileID: 11400000, guid: bd757b8a9ced65c47a2d7501d6ec182b, type: 2}
   - {fileID: 11400000, guid: b07804fcad42cec429831bf3469d98bf, type: 2}
   - {fileID: 11400000, guid: 26c3da955bef72e4497df0068b484438, type: 2}
   - {fileID: 11400000, guid: 9c3a6082966f7e045a88752008ba382f, type: 2}

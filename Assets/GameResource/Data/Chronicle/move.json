@@ -1,0 +1,310 @@
+{
+  "eventType": "move",
+  "slots": {
+    "Intro": [
+      {
+        "text": "탐험대는",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "일행은",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "{character}는",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "선두의 {character}는",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "파티는",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "어둠 속에서",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "침묵을 깨며",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "조심스럽게",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "주변을 살피며",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "발밑을 확인하며",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "긴 통로 끝에서",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "습기 찬 공기 속에서",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      }
+    ],
+    "Action": [
+      {
+        "text": "어두운 통로를",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "좁은 틈을",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "발광 이끼가 드리운 길을",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "미끄러운 바닥을",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "무너진 돌더미를",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "깊은 심연 쪽으로",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "낡은 석문 너머로",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "계단을",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "물기 배인 암벽 옆을",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "끊어진 다리를",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "안개 낀 복도를",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "빛나는 결정 군집을",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "고요한 수로를",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "끝없이 이어진 회랑을",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "바람이 새는 틈을",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ],
+    "Result": [
+      {
+        "text": "조심스럽게 지나갔다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "천천히 전진했다",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "발걸음을 옮겼다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "길을 이어갔다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "무사히 통과했다",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "방향을 잡고 나아갔다",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "숨을 고르며 걸었다",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "흔적을 따라갔다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "망설임 없이 건넜다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "발소리를 죽이며 이동했다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      }
+    ],
+    "Afterglow": [
+      {
+        "text": ".",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "고개를 끄덕였다.",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "다음 지점을 확인했다.",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "지도에 표시를 남겼다.",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "뒤를 돌아보지 않았다.",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "긴장을 풀지 않았다.",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "침묵을 유지했다.",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "발걸음을 재촉하지 않았다.",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ]
+  }
+}

@@ -84,5 +84,24 @@ namespace Backend.AddressableKey
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;
             public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
         }
+
+        public static class Chronicle
+        {
+            private const string Root = "Assets/GameResource/Data/Chronicle/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "move", Root + "move.json" },
+                { "combat_result", Root + "combat_result.json" },
+                { "discovery", Root + "discovery.json" },
+                { "trap", Root + "trap.json" },
+                { "rest", Root + "rest.json" },
+                { "injury", Root + "injury.json" },
+                { "floor_clear", Root + "floor_clear.json" },
+                { "milestone", Root + "milestone.json" },
+            };
+
+            public static string Get(string eventType) => Keys.TryGetValue(eventType, out var key) ? key : null;
+        }
     }
 }

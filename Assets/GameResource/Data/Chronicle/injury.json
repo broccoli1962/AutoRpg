@@ -1,0 +1,310 @@
+{
+  "eventType": "injury",
+  "slots": {
+    "Intro": [
+      {
+        "text": "교전 중",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "함정을 피하다",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "낙석을 맞으며",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "급격한 공격에",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "{character}는",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "전열의 {character}가",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "파티는",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "예상치 못한 일격에",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "미끄러운 바닥에서",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "적의 반격에",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "긴 전투 끝에",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "피로가 쌓인 탓에",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      }
+    ],
+    "Action": [
+      {
+        "text": "팔을 다치고",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "발목을 삐고",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "방패가 부서지며",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "갑옷이 찢기며",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "크게 넘어지며",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "피를 흘리며",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "호흡이 가빠지며",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "시야가 흐려지며",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "무릎을 다치며",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "어깨에 상처를 입으며",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "지쳐 주저앉으며",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "치명적이진 않은 부상을 입으며",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "동료를 감싸다",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "균형을 잃으며",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "급히 뒤로 물러나며",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ],
+    "Result": [
+      {
+        "text": "전투를 이어갔다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "간신히 버텼다",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "치료를 요청했다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "전열을 유지했다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "이를 악물고 섰다",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "동료의 부축을 받았다",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "상처를 대략 처리했다",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "전진을 멈췄다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "위험을 감수했다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "기록에 남길 만한 상처를 입었다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      }
+    ],
+    "Afterglow": [
+      {
+        "text": ".",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "다행히 목숨은 걸었다.",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "회복이 필요했다.",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "다음 전투가 걱정됐다.",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "심연은 자비롭지 않았다.",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "분노보다 경계가 앞섰다.",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "치료 없이는 오래가지 못할 것 같았다.",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "파티는 더 조심스러워졌다.",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ]
+  }
+}

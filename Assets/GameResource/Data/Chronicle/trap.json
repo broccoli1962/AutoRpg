@@ -1,0 +1,310 @@
+{
+  "eventType": "trap",
+  "slots": {
+    "Intro": [
+      {
+        "text": "갑작스럽게",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "발밑에서",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "조용히",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "예고 없이",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "{character}는",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "앞선 {character}가",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "파티는",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "어둠 속에서",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "길목 한복판에서",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "낡은 함정이",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "숨겨진 압력판이",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "Intro 변형 12",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      }
+    ],
+    "Action": [
+      {
+        "text": "바닥이 꺼지며",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "독침이 솟아오르고",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "벽에서 화살이 쏟아지며",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "바닥이 미끄러지며",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "연기가 피어오르고",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "돌덩이가 굴러 떨어지며",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "마법 함정이 작동하며",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "가시 덫에 걸리며",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "발밑의 그물이 올라오며",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "빛나는 룬이 폭발하며",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "천장이 흔들리며",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "낡은 줄이 끊어지며",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "독가스가 새어 나오며",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "바닥의 칼날이 회전하며",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "숨겨진 구덩이가 드러나며",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ],
+    "Result": [
+      {
+        "text": "균형을 잃었다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "급히 뒤로 물러났다",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "피해를 입었다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "몸을 날렸다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "동료를 밀쳐 냈다",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "방패로 막아냈다",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "간신히 피했다",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "발을 헛디뎠다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "넘어졌다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "비명을 삼켰다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      }
+    ],
+    "Afterglow": [
+      {
+        "text": ".",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "다행히 치명상은 아니었다.",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "분노보다 경계가 앞섰다.",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "다음 함정을 경계했다.",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "길이 더욱 위험해졌다.",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "치료가 필요했다.",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "심연은 아직 친절하지 않았다.",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "기록에 경고를 남겼다.",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "eventType": "floor_clear",
+  "slots": {
+    "Intro": [
+      {
+        "text": "마지막 적이 쓰러지자",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "웨이브가 끝나자",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "긴 전투가 마무리되자",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "침묵이 내려앉자",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "{character}는",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "파티는",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "탐험대는",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "승리의 여운 속에서",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "피곤하지만",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "심연의 한 층을",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "긴 복도 끝에서",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "보스의 잔해를 밟으며",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      }
+    ],
+    "Action": [
+      {
+        "text": "{floor}층을",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "이 구역의 마지막 문을",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "장애물을",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "최종 함정을",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "깊은 심연의 문턱을",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "다음 층으로 향하는 길을",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "어두운 계단을",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "봉인된 통로를",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "마지막 방어선을",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "층의 끝을",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "위험한 구역을",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "긴 복도를",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "Action 변형 13",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "Action 변형 14",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "Action 변형 15",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ],
+    "Result": [
+      {
+        "text": "완전히 돌파했다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "정복했다",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "넘어섰다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "개방했다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "기록에 새겼다",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "확보했다",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "지나갔다",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "정리했다",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "마무리했다",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "돌파했다",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      }
+    ],
+    "Afterglow": [
+      {
+        "text": ".",
+        "weight": 1,
+        "conditionTags": []
+      },
+      {
+        "text": "다음 층이 기다리고 있었다.",
+        "weight": 2,
+        "conditionTags": [
+          "reckless"
+        ]
+      },
+      {
+        "text": "잠깐의 안도감이 스쳤다.",
+        "weight": 2,
+        "conditionTags": [
+          "greedy"
+        ]
+      },
+      {
+        "text": "곧 다시 전진했다.",
+        "weight": 2,
+        "conditionTags": [
+          "cheerful"
+        ]
+      },
+      {
+        "text": "심연은 더 깊었다.",
+        "weight": 2,
+        "conditionTags": [
+          "cynical"
+        ]
+      },
+      {
+        "text": "파티는 숨을 고르며 전진했다.",
+        "weight": 2,
+        "conditionTags": [
+          "loyal"
+        ]
+      },
+      {
+        "text": "승리는 짧았지만 분명했다.",
+        "weight": 2,
+        "conditionTags": [
+          "cautious"
+        ]
+      },
+      {
+        "text": "연대기에 한 페이지가 더해졌다.",
+        "weight": 1,
+        "conditionTags": []
+      }
+    ]
+  }
+}

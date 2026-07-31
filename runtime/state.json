@@ -1,0 +1,116 @@
+{
+  "project": "심연기록 (Abyss Chronicle)",
+  "currentStepId": 3,
+  "status": "completed",
+  "attempts": {
+    "1": 2,
+    "2": 1,
+    "3": 2
+  },
+  "completedSteps": [
+    1,
+    2,
+    3
+  ],
+  "memories": [
+    {
+      "stepId": 1,
+      "title": "로컬 LLM 레이어 제거 및 내레이션 추상화",
+      "status": "completed",
+      "summary": [
+        "Batchmode 컴파일이 성공했습니다(exit code 0). `state.json`을 갱신해 Step 1 완료 상태를 반영합니다.",
+        "NEXT: Step 2 — docs/reference/05_연대기엔진.md 설계에 따라 ChronicleEngine(문장 뱅크 조합기) 순수 C# 코어 구현",
+        "SUMMARY: 로컬 LLM 잔존물 없음을 확인하고 INarrationSource/PassthroughNarrationSource 내레이션 추상화를 GameManager 부트스트랩에 연결했습니다. batchmode 실패(exit 1)는 Editor 잠금이 원인이었으며, Editor 종료 후 재검증으로 컴파일 성공을 확인했습니다.",
+        "내레이션 추상화 레이어는 `Backend.Chronicle` 네임스페이스에 구현되어 있으며, `PassthroughNarrationSource`는 `TemplateLine` → `FallbackLine` → 기본 문장 순으로 폴백합니다."
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Chronicle.meta",
+        "Assets/GameResource/Scripts/Chronicle/INarrationSource.cs",
+        "Assets/GameResource/Scripts/Chronicle/INarrationSource.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/NarrationProvider.cs",
+        "Assets/GameResource/Scripts/Chronicle/NarrationProvider.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/NarrationRequest.cs",
+        "Assets/GameResource/Scripts/Chronicle/NarrationRequest.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/PassthroughNarrationSource.cs",
+        "Assets/GameResource/Scripts/Chronicle/PassthroughNarrationSource.cs.meta",
+        "Assets/GameResource/Scripts/Object/Management/GameManager.cs",
+        "runtime/state.json"
+      ],
+      "attempts": 2,
+      "finishedAt": "2026-07-31T13:26:20.835Z"
+    },
+    {
+      "stepId": 2,
+      "title": "연대기 엔진 코어 — 문장 뱅크 조합기",
+      "status": "completed",
+      "summary": [
+        "NEXT: Step 3 — ChronicleNarrationSource를 구현해 INarrationSource에 ChronicleEngine을 연결하고 GSSL 문장 뱅크 데이터를 로드합니다.",
+        "SUMMARY: 문장 뱅크 조합기 ChronicleEngine과 PhraseSlot/PhraseEntry/PhraseBank, IRandomSource/SeededRandomSource, ChronicleGenerationRequest를 순수 C#으로 구현했습니다.",
+        "슬롯별 가중 추첨 후 4구를 이어 문장 생성",
+        "Step 2 연대기 엔진 코어를 구현했고, Unity batchmode 컴파일도 통과했습니다(exit code 0)."
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Chronicle.meta",
+        "Assets/GameResource/Scripts/Chronicle/ChronicleEngine.cs",
+        "Assets/GameResource/Scripts/Chronicle/ChronicleEngine.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/ChronicleGenerationRequest.cs",
+        "Assets/GameResource/Scripts/Chronicle/ChronicleGenerationRequest.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/INarrationSource.cs",
+        "Assets/GameResource/Scripts/Chronicle/INarrationSource.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/IRandomSource.cs",
+        "Assets/GameResource/Scripts/Chronicle/IRandomSource.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/NarrationProvider.cs",
+        "Assets/GameResource/Scripts/Chronicle/NarrationProvider.cs.meta",
+        "Assets/GameResource/Scripts/Chronicle/NarrationRequest.cs"
+      ],
+      "attempts": 1,
+      "finishedAt": "2026-07-31T13:30:43.225Z"
+    },
+    {
+      "stepId": 3,
+      "title": "문장 뱅크 데이터 구축 및 로그 파이프라인 연결",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: 8종 문장 뱅크 JSON(타입당 14,400 조합)과 ChronicleNarrationSource·SalienceRouter·LogStripPipeline을 연결했고, Unity MCP 컴파일 에러 0건·Addressables Chronicle 그룹 등록까지 검증했습니다.",
+        "FILES: Assets/GameResource/Data/Chronicle/*.json, Assets/GameResource/Scripts/Chronicle/ChroniclePhraseBankLoader.cs, ChronicleNarrationSource.cs, SalienceRouter.cs, LogStripPipeline.cs, GameManager.cs, AddressableKeys.cs, Tools/generate_chronicle_banks.py, Assets/AddressableAssetsData/AssetGroups/Chronicle.asset, runtime/state.json",
+        "NEXT: Step 4 — 스테이지 시스템에서 `StageLogEvent`를 발생시키고 `LogStripPipeline`을 ExplorationHud 로그 UI에 구독 연결"
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Data/Chronicle.meta",
+        "Assets/GameResource/Data/Chronicle/combat_result.json",
+        "Assets/GameResource/Data/Chronicle/combat_result.json.meta",
+        "Assets/GameResource/Data/Chronicle/discovery.json",
+        "Assets/GameResource/Data/Chronicle/discovery.json.meta",
+        "Assets/GameResource/Data/Chronicle/floor_clear.json",
+        "Assets/GameResource/Data/Chronicle/floor_clear.json.meta",
+        "Assets/GameResource/Data/Chronicle/injury.json",
+        "Assets/GameResource/Data/Chronicle/injury.json.meta",
+        "Assets/GameResource/Data/Chronicle/milestone.json",
+        "Assets/GameResource/Data/Chronicle/milestone.json.meta",
+        "Assets/GameResource/Data/Chronicle/move.json",
+        "Assets/GameResource/Data/Chronicle/move.json.meta",
+        "Assets/GameResource/Data/Chronicle/rest.json",
+        "Assets/GameResource/Data/Chronicle/rest.json.meta",
+        "Assets/GameResource/Data/Chronicle/trap.json",
+        "Assets/GameResource/Data/Chronicle/trap.json.meta",
+        "Assets/GameResource/Scripts/Chronicle/ChronicleEventTypes.cs",
+        "Assets/GameResource/Scripts/Chronicle/ChronicleNarrationSource.cs",
+        "Assets/GameResource/Scripts/Chronicle/ChroniclePhraseBankLoader.cs",
+        "Assets/GameResource/Scripts/Chronicle/LogStripPipeline.cs",
+        "Assets/GameResource/Scripts/Chronicle/PhraseBankJsonDto.cs",
+        "Assets/GameResource/Scripts/Chronicle/SalienceRouter.cs",
+        "Assets/GameResource/Scripts/Chronicle/StageLogEvent.cs",
+        "Assets/GameResource/Scripts/Chronicle/TrivialCombatBatchAggregator.cs",
+        "Assets/GameResource/Scripts/Object/Management/GameManager.cs",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Tools/generate_chronicle_banks.py",
+        "runtime/state.json"
+      ],
+      "attempts": 2,
+      "finishedAt": "2026-08-01T04:30:00.000Z"
+    }
+  ],
+  "startedAt": "2026-07-31T12:41:29.726Z",
+  "updatedAt": "2026-08-01T04:30:00.000Z",
+  "lastError": null
+}

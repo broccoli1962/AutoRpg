@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Chronicle
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Chronicle
+  m_GUID: 3602458fcd506204da55c9e88f67f87e
+  m_SerializeEntries:
+  - m_GUID: 2d89c96322fe4264c9be7be062595176
+    m_Address: Assets/GameResource/Data/Chronicle/milestone.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4576997cc0b469c4293575c12bb3598a
+    m_Address: Assets/GameResource/Data/Chronicle/rest.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 643262603c007d841bbd10ca22225328
+    m_Address: Assets/GameResource/Data/Chronicle/floor_clear.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71313789acacbb1418f253c112558c7e
+    m_Address: Assets/GameResource/Data/Chronicle/trap.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 749c1ae175347b741ab8ab0088355f0a
+    m_Address: Assets/GameResource/Data/Chronicle/injury.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b81172be695bfde4b9eb0c1352dca024
+    m_Address: Assets/GameResource/Data/Chronicle/discovery.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d41387e70f9c0574eae658c5e42b3c40
+    m_Address: Assets/GameResource/Data/Chronicle/move.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dbd1eb0d6fe5f7044b2bffe27922cf6f
+    m_Address: Assets/GameResource/Data/Chronicle/combat_result.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 06a8086d208db744eb95cc682474d785, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 157ee74e5ea66b049aa76800d0b98c9f, type: 2}

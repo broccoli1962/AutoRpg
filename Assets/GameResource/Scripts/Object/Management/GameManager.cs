@@ -1,3 +1,4 @@
+using Backend.Chronicle;
 using Backend.Object.UI;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
@@ -17,6 +18,9 @@ namespace Backend.Object.Management
 
         private async UniTask InitializeCore_Internal()
         {
+            var phraseBank = await ChroniclePhraseBankLoader.LoadAsync();
+            NarrationProvider.SetSource(new ChronicleNarrationSource(phraseBank));
+            LogStripPipeline.Reset();
             await AudioManager.InitMixer();
             TableManager.Init();
             await UIManager.EnsureReadyAsync();
