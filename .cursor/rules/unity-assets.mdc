@@ -1,8 +1,3 @@
----
-description: Unity 에셋 관련 규칙 — .meta 파일 생성 금지
-alwaysApply: true
----
-
 # Unity Assets
 
 ## .meta 파일 생성 금지

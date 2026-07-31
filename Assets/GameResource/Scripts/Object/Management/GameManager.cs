@@ -20,7 +20,6 @@ namespace Backend.Object.Management
             await AudioManager.InitMixer();
             TableManager.Init();
             await UIManager.EnsureReadyAsync();
-            await UIManager.PreWarmAsync<ExplorationHudPanel>();
         }
 
         private void StartGameplay_Internal()

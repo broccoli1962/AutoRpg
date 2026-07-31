@@ -68,6 +68,7 @@ namespace Backend.AddressableKey
                 { "ui_overlay_dim", V2 + "ui_overlay_dim.png" },
                 { "ui_log_card", V2 + "ui_log_card.png" },
                 { "stage_party_warrior", Stage + "stage_party_warrior.png" },
+                { "stage_party_warrior_walk", Stage + "stage_party_warrior_walk.png" },
                 { "stage_party_rogue", Stage + "stage_party_rogue.png" },
                 { "stage_party_mage", Stage + "stage_party_mage.png" },
                 { "stage_party_cleric", Stage + "stage_party_cleric.png" },

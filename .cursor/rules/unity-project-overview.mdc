@@ -1,5 +1,5 @@
 ---
-description: AutoRpg Unity 프로젝트 전체 구조 및 핵심 시스템 개요
+description: MinerReady Unity 프로젝트 전체 구조 및 핵심 시스템 개요
 alwaysApply: true
 ---
 
@@ -8,22 +8,22 @@ alwaysApply: true
 ## 디렉토리 구조
 
 ```
-Assets/GameResource/
+Assets/GameResources/
   Scenes/GameScene.unity
-  Data/ — ScriptableObject, GameSettings
+  Data/  — ScriptableObject, GameSettings
   Scripts/
     Object/
-      Controller/ — 게임 화면에 실제로 존재하는 객체
-      FX/ — ParticleAutoReturn 등 이펙트
-      GameSystems/ — 게임 시스템 구현
-      UI/ — PopupBase, SafeArea
-      Management/ — GameManager, InputManager, ObjectPoolManager, AudioManager
-    Util/ — Extension, GameStateUtil, PlatformUtil, Attribute
-    Addressable/
-    Input/
-    Interface/ — 인터페이스 구현
-    Enum/ — 열거형 구현
-    Management/ — Singleton, SingletonBehavior, SingletonGameObject
+      Controller/     — 게임 화면에 실제로 존재하는 객체
+      FX/             — ParticleAutoReturn 등 이펙트
+      GameSystems/    — 게임 시스템 구현
+      UI/             — PopupBase, SafeArea
+      Management/     — GameManager, InputManager, ObjectPoolManager, AudioManager
+    Util/             — Extension, GameStateUtil, PlatformUtil, Attribute
+      Addressable/
+      Input/
+      Interface/      — 인터페이스 구현
+      Enum/           — 열거형 구현
+      Management/     — Singleton, SingletonBehavior, SingletonGameObject
 ```
 
 ## 핵심 외부 패키지
@@ -44,14 +44,3 @@ Assets/GameResource/
 ## 필수 패턴
 
 앱 종료 시 Manager 접근 전 `GameStateUtil.IsQuitting` 체크 필수. null 반환하여 새 인스턴스 생성 방지.
-
-## 관련 규칙 / 스킬
-
-| 주제 | 규칙 | 스킬 |
-|------|------|------|
-| 자율 루프 | `harness-workflow`, `continuous-autonomous-agent` | `develop-from-plan`, `verify-in-unity` |
-| 수정 금지 경계 | `harness-boundaries` | — |
-| UI | `unity-ui-system` | `add-ui-screen`, `unity-mcp-prefab-ui` |
-| 씬/매니저 | `unity-scene-system` | `add-gameplay-feature` |
-| 테이블 | `gssl-agent-cache` | `table-data-workflow`, `gssl-agent-workflow`, `add-table-data` |
-| Unity 에디터 | — | `unity-mcp-tools`, `verify-in-unity` |

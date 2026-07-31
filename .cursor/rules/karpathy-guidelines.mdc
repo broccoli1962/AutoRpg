@@ -1,65 +1,65 @@
----
-description: Karpathy식 행동 가이드 — 가정 명시, 단순성, 수술적 변경, 검증 가능한 목표
-alwaysApply: true
----
-
 # Karpathy behavioral guidelines
 
-LLM 코딩 실수를 줄이기 위한 행동 가이드. 프로젝트 규칙(`harness-*`, `unity-*`)과 함께 적용한다.
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
-**Tradeoff:** 속도보다 신중함에 편향. 사소한 작업에는 판단으로 완화한다.
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
 ## 1. Think Before Coding
 
-**가정하지 말고, 혼란을 숨기지 말며, 트레이드오프를 드러낸다.**
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
 
-구현 전에:
-- 가정을 명시한다. 불확실하면 묻는다.
-- 해석이 여러 개면 조용히 고르지 말고 제시한다.
-- 더 단순한 방법이 있으면 말한다. 필요하면 반박한다.
-- 불명확하면 멈춘다. 무엇이 헷갈리는지 이름 붙이고 묻는다.
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
 
 ## 2. Simplicity First
 
-**문제를 푸는 최소 코드. 추측성 구현 금지.**
+**Minimum code that solves the problem. Nothing speculative.**
 
-- 요청 밖의 기능 추가 금지
-- 한 번만 쓰는 코드에 추상화 금지
-- 요청되지 않은 "유연성/설정화" 금지
-- 불가능한 시나리오용 에러 처리 금지
-- 200줄이 50줄로 가능하면 다시 쓴다
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
 
-기준: "시니어가 과하다고 말할까?" → 예이면 단순화.
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
 ## 3. Surgical Changes
 
-**꼭 필요한 곳만 건드린다. 내 변경으로 생긴 쓰레기만 치운다.**
+**Touch only what you must. Clean up only your own mess.**
 
-기존 코드 수정 시:
-- 인접 코드·주석·포맷을 "개선"하지 않는다
-- 안 고장난 것을 리팩터하지 않는다
-- 기존 스타일을 맞춘다
-- 무관한 죽은 코드를 발견하면 언급만 하고 지우지 않는다
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
 
-내 변경이 orphan 을 만들면:
-- 내가 쓰이지 않게 만든 import/변수/함수만 제거
-- 기존 dead code 는 요청 없이 제거 금지
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
 
-테스트: 바뀐 모든 줄이 사용자 요청으로 추적 가능해야 한다.
+The test: Every changed line should trace directly to the user's request.
 
 ## 4. Goal-Driven Execution
 
-**성공 기준을 정하고, 검증될 때까지 루프한다.**
+**Define success criteria. Loop until verified.**
 
-작업을 검증 가능한 목표로 바꾼다:
-- "검증 추가" → 잘못된 입력 테스트 작성 후 통과
-- "버그 수정" → 재현 테스트 후 통과
-- "리팩터 X" → 전후 테스트/빌드 통과
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
 
-다단계면 짧은 계획:
+For multi-step tasks, state a brief plan:
 ```
 1. [Step] → verify: [check]
 2. [Step] → verify: [check]
+3. [Step] → verify: [check]
 ```
 
-약한 기준("되게 해줘")은 구현 전 명확히 한다. 상세 루프는 `harness-workflow` / `continuous-autonomous-agent` 참조.
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+---
+
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.

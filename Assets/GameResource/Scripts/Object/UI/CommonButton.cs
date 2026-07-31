@@ -1,4 +1,3 @@
-using Backend.AddressableKey;
 using Backend.Util;
 using R3;
 using System;
@@ -17,45 +16,15 @@ namespace Backend.Object.UI
 {
     public class CommonButton : CachedMonobehaviour, IPointerClickHandler
     {
-        [SerializeField] private bool _interactable = true;
-        [SerializeField] private bool _useAnimation;
-        [SerializeField] private bool _useSound = true;
-        [ShowIf(ActionOnConditionFail.JustDisable, ConditionOperator.And, nameof(_useSound))]
-        [SerializeField] private bool _useCustomSoundId;
+        public bool interactable = true;
+        public bool useAnimation = false;
+        public bool useSound = true;
+        [ShowIf(ActionOnConditionFail.JustDisable, ConditionOperator.And, nameof(useSound))]
+        public bool useCustomSoundId = false;
         
-        [ShowIf(ActionOnConditionFail.JustDisable, ConditionOperator.And, nameof(_useCustomSoundId))]
-        [SerializeField] private string _customSoundId = SoundKeyRegistry.ButtonClick;
+        [ShowIf(ActionOnConditionFail.JustDisable, ConditionOperator.And, nameof(useCustomSoundId))]
+        public string customSoundId = "sfx_button";
         public UnityEvent OnClick;
-
-        public bool Interactable
-        {
-            get => _interactable;
-            set => _interactable = value;
-        }
-
-        public bool UseAnimation
-        {
-            get => _useAnimation;
-            set => _useAnimation = value;
-        }
-
-        public bool UseSound
-        {
-            get => _useSound;
-            set => _useSound = value;
-        }
-
-        public bool UseCustomSoundId
-        {
-            get => _useCustomSoundId;
-            set => _useCustomSoundId = value;
-        }
-
-        public string CustomSoundId
-        {
-            get => _customSoundId;
-            set => _customSoundId = value;
-        }
 
         public Observable<Unit> OnClickAsObservable() =>
             Observable.FromEvent<UnityAction>(
@@ -113,23 +82,26 @@ namespace Backend.Object.UI
 #endif
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (!_interactable){
+            if (!interactable){
                 eventData.Use();
                 return;
             }
 
             OnClick?.Invoke();
 
-            if(_useAnimation)
+            if(useAnimation)
                 gameObject.ButtonAnimation();
             
             eventData.Use();
 
-            if(!_useSound || GameStateUtil.IsQuitting)
-                return;
-
-            var soundKey = _useCustomSoundId ? _customSoundId : SoundKeyRegistry.ButtonClick;
-            AudioManager.PlaySfx(soundKey);
+            if(useSound){
+                if(useCustomSoundId){
+                    AudioManager.PlaySfx(customSoundId);
+                }
+                else{
+                    AudioManager.PlaySfx("sfx_button");
+                }
+            }
         }
 
         private void OnDisable(){
