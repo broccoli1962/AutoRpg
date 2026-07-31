@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 410368fddca9f15418679ffe6d1c77f6, type: 3}
+  m_Name: BalanceTable
+  m_EditorClassIdentifier: 
+  _monsterHpBase: 100
+  _monsterHpGrowth: 1.135
+  _monsterAtkBase: 10
+  _monsterAtkGrowth: 1.13
+  _monsterDefBase: 5
+  _monsterDefGrowth: 1.13
+  _goldDropBase: 10
+  _goldDropGrowth: 1.12
+  _upgradeCostBase: 50
+  _upgradeCostGrowth: 1.08
+  _upgradeLevelCapMultiplier: 1.5
+  _expRequiredBase: 100
+  _expRequiredGrowth: 1.095
+  _floorsPerZone: 25
+  _zoneMultipliers:
+  - 1
+  - 1.1
+  - 1.25
+  - 1.45
+  - 1.7
+  - 2
+  - 2.35
+  - 2.75
+  _infiniteZoneBaseMultiplier: 2.75
+  _infiniteZoneGrowth: 1.15
+  _infiniteZoneStart: 9
+  _damageVarianceMin: 0.9
+  _damageVarianceMax: 1.1

@@ -85,6 +85,18 @@ namespace Backend.AddressableKey
             public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
         }
 
+        public static class Balance
+        {
+            private const string Root = "Assets/GameResource/Data/Balance/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "BalanceTable", Root + "BalanceTable.asset" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
+
         public static class Chronicle
         {
             private const string Root = "Assets/GameResource/Data/Chronicle/";
