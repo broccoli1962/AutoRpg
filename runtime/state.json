@@ -1,6 +1,6 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 18,
+  "currentStepId": 19,
   "status": "in_progress",
   "attempts": {
     "1": 2,
@@ -20,7 +20,8 @@
     "15": 1,
     "16": 2,
     "17": 1,
-    "18": 2
+    "18": 2,
+    "19": 1
   },
   "completedSteps": [
     1,
@@ -39,7 +40,8 @@
     14,
     15,
     16,
-    17
+    17,
+    18
   ],
   "memories": [
     {
@@ -518,12 +520,12 @@
     {
       "stepId": 18,
       "title": "현지화 체계 구축",
-      "status": "failed",
+      "status": "completed",
       "summary": [
-        "NEXT: Step 19 — 성장 벽 UX 및 `BackendAnalyticsEvents.ReportGrowthWall` 게임플레이 연결, 튜토리얼 완료 후 상점/광고 노출 부트스트랩 배선",
-        "SUMMARY: 한/영/일 3언어 GSSL 현지화 테이블(432키)과 `LocalizationService`·`LocaleFormatUtil`·`LargeNumberFormatter` API를 구축하고, UI·연대기 문장뱅크(360구)의 하드코딩 문자열을 키 기반으로 전환했습니다. BMJUA(한글)·NotoSansJP(일본어)·NotoSans(라틴) TMP SDF 및 Fallback 체인을 설정했으며 EditMode 153건 중 현지화 12건 포함 151건 통과(튜토리얼 2건은 기존 테스트 격리 이슈).",
-        "현지화 API와 마이그레이션 스크립트를 작성 중입니다.",
-        "Step 18 현지화 체계 구축을 시작합니다. 기존 코드·GSSL 구조·하드코딩 문자열을 먼저 파악합니다."
+        "NEXT: Step 19 — 성장 벽 UX 및 BackendAnalyticsEvents.ReportGrowthWall 게임플레이 연결, 튜토리얼 완료 후 상점/광고 노출 부트스트랩 배선",
+        "검수 실패 원인인 `Debug.Log` 호출부터 확인하고, 프로젝트의 대체 패턴을 찾아 수정하겠습니다.",
+        "FILES: Assets/GameResource/Scripts/Util/Localization/LocalizationService.cs, Assets/GameResource/Scripts/Util/Localization/Editor/LocalizationFontSetup.cs",
+        "`LocalizationFontSetup.cs`**"
       ],
       "changedFiles": [
         ".cursor/gssl-result.json",
@@ -539,11 +541,11 @@
         "Assets/GameResource/Prefabs/UI/ExplorationHudPanel.prefab",
         "Assets/GameResource/Prefabs/UI/GachaRateDisclosurePopup.prefab"
       ],
-      "attempts": 1,
-      "finishedAt": "2026-08-01T04:53:36.379Z"
+      "commitHash": "247f65d",
+      "attempts": 2,
+      "finishedAt": "2026-08-01T04:54:45.637Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:53:36.779Z",
-  "lastError": "린트/컨벤션 위반이 감지되었습니다:\n- Assets/GameResource/Scripts/Util/Localization/Editor/LocalizationFontSetup.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Util/Localization/LocalizationService.cs: Debug.Log 계열 호출이 추가되었습니다."
+  "updatedAt": "2026-08-01T04:54:46.013Z"
 }

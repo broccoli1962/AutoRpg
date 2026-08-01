@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CombatPool
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: CombatPool
+  m_GUID: a88883d915d69544c8b4a353c8c7dbe5
+  m_SerializeEntries:
+  - m_GUID: 1c01d671c84b27340b1d0a3592fbdaca
+    m_Address: Assets/GameResource/Prefabs/CombatPool/MonsterSprite.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a13fb0644a5dfe7418ceec4c0bd7baba
+    m_Address: Assets/GameResource/Prefabs/CombatPool/DamageText.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0621d53d13446842938613763032ee8
+    m_Address: Assets/GameResource/Prefabs/CombatPool/HitVfx.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0e88e7475e31244f8211fd14aa3525d
+    m_Address: Assets/GameResource/Prefabs/CombatPool/DropIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 06a8086d208db744eb95cc682474d785, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d78e9e740eb97f944976269b5377f556, type: 2}

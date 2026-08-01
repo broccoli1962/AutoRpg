@@ -1,4 +1,5 @@
 using Backend.Chronicle;
+using Backend.GameSystems.Performance;
 using Backend.Object.UI;
 using Backend.Services;
 using Backend.Util.Localization;
@@ -14,8 +15,6 @@ namespace Backend.Object.Management
         protected override void OnAwake()
         {
             base.OnAwake();
-
-            Application.targetFrameRate = 60;
         }
 
         private async UniTask InitializeCore_Internal()
@@ -27,6 +26,7 @@ namespace Backend.Object.Management
             await AudioManager.InitMixer();
             TableManager.Init();
             await UIManager.EnsureReadyAsync();
+            await PerformanceManager.InitializeAsync();
             await BackendManager.BootstrapAsync();
         }
 

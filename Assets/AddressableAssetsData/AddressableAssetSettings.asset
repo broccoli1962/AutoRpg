@@ -61,16 +61,28 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 7516116cfd0f0b145a881486ad1153b2, type: 2}
+  - {fileID: 11400000, guid: 8bf2cd8adb1f20a4d82ff7fa3bcd00a5, type: 2}
   - {fileID: 11400000, guid: bd757b8a9ced65c47a2d7501d6ec182b, type: 2}
   - {fileID: 11400000, guid: 185e29f75d2a8af4fa5769c0f8d3be5c, type: 2}
+  - {fileID: 11400000, guid: ee30a42f0be17f74dbd807eaa974182f, type: 2}
   - {fileID: 11400000, guid: 1e4f0e53b6f00f94e95c9db1fb161d9b, type: 2}
+  - {fileID: 11400000, guid: baeac312753840d47aa731add6b33fcd, type: 2}
+  - {fileID: 11400000, guid: 3f81bd5e7faefd845a2a3c567d8e4368, type: 2}
+  - {fileID: 11400000, guid: afcebfc3149187a40b310d56c7e3bd64, type: 2}
   - {fileID: 11400000, guid: a06107adb30e1004095b46e5239c0298, type: 2}
+  - {fileID: 11400000, guid: e0aec28a5b21bd04a8fc86c6a3f91a9d, type: 2}
   - {fileID: 11400000, guid: b07804fcad42cec429831bf3469d98bf, type: 2}
   - {fileID: 11400000, guid: 1d9cb5f073362cc4f846be94f58df696, type: 2}
+  - {fileID: 11400000, guid: b08b809e48c710840b040c433d383ee8, type: 2}
+  - {fileID: 11400000, guid: 57a29cd34dacce5409e20f579fc92425, type: 2}
+  - {fileID: 11400000, guid: bfb0a3de178146b4d8fb41d87efe1193, type: 2}
   - {fileID: 11400000, guid: 26c3da955bef72e4497df0068b484438, type: 2}
+  - {fileID: 11400000, guid: 81f5035a1d227de449e305347518b9a0, type: 2}
   - {fileID: 11400000, guid: 25bbd490cb6079b4784a1f6cf8ca0b00, type: 2}
+  - {fileID: 11400000, guid: 0e4c4da67fb5b054c959f59b0877da2a, type: 2}
   - {fileID: 11400000, guid: b0c043fb330742e438e2347bde2a8eb0, type: 2}
   - {fileID: 11400000, guid: 9c3a6082966f7e045a88752008ba382f, type: 2}
+  - {fileID: 11400000, guid: 545cc249d1b1c104fb37b0e948965d90, type: 2}
   m_BuildSettings:
     m_LogResourceManagerExceptions: 1
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
@@ -110,6 +122,14 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - ZoneArt_01
+    - ZoneArt_02
+    - ZoneArt_03
+    - ZoneArt_04
+    - ZoneArt_05
+    - ZoneArt_06
+    - ZoneArt_07
+    - ZoneArt_08
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 07fbb5294073a844f9c9c6e73e3b07a6, type: 2}

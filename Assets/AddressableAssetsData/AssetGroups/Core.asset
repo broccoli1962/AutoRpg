@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Core
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Core
+  m_GUID: ca4bd73d30121fe4f835a174830a6206
+  m_SerializeEntries:
+  - m_GUID: 37a2d2dfe1ca6a24fab6b7aa2f935720
+    m_Address: Assets/GameResource/Images/GameUI/v2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 415abd21d1d6dcc48a3fa758cdf52383
+    m_Address: Assets/Fonts/BMJUA_ttf.ttf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65f46047eef667b4ea43c46291b4e81f
+    m_Address: Assets/GameResource/Images/GameUI/stage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e7cc8d25fd72fb4fa260a2a9211249b
+    m_Address: Assets/Fonts/BMJUA_ttf SDF.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 06a8086d208db744eb95cc682474d785, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 21f436f1592ab414ea93f24f9f56720b, type: 2}
+    - {fileID: 11400000, guid: 1b3d2408e12c48b4e93dc0f766c76a76, type: 2}

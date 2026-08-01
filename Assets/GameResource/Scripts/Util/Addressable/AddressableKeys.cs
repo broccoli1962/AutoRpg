@@ -205,5 +205,46 @@ namespace Backend.AddressableKey
 
             public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
         }
+
+        public static class Performance
+        {
+            private const string Root = "Assets/GameResource/Data/Performance/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "PerformancePolicyTable", Root + "PerformancePolicyTable.asset" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
+
+        public static class CombatPool
+        {
+            private const string Root = "Assets/GameResource/Prefabs/CombatPool/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "MonsterSprite", Root + "MonsterSprite.prefab" },
+                { "DamageText", Root + "DamageText.prefab" },
+                { "DropIcon", Root + "DropIcon.prefab" },
+                { "HitVfx", Root + "HitVfx.prefab" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
+
+        public static class ZoneArt
+        {
+            /// <summary>
+            /// 구역별 Addressables 라벨을 반환한다 (ZoneArt_01 … ZoneArt_08).
+            /// </summary>
+            public static string GetZoneLabel(int zoneIndex)
+            {
+                if (zoneIndex < 1 || zoneIndex > 8)
+                    return null;
+
+                return $"ZoneArt_{zoneIndex:D2}";
+            }
+        }
     }
 }

@@ -80,11 +80,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 415abd21d1d6dcc48a3fa758cdf52383
-    m_Address: Assets/Fonts/BMJUA_ttf.ttf
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 456536d6eaaf41d4cba02a6508eeeb4f
     m_Address: Assets/GameResource/Images/GameUI/v2/ui_overlay_dim.png
     m_ReadOnly: 0
@@ -145,16 +140,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 854f06931533db64cbbfb86cfcafca09
-    m_Address: Assets/GameResource/Images/GameUI/v2/illust_zone_banner.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8e7cc8d25fd72fb4fa260a2a9211249b
-    m_Address: Assets/Fonts/BMJUA_ttf SDF.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 90375ebdf97a8d343923c9c141729d50
     m_Address: Assets/GameResource/Images/GameUI/stage/stage_party_mage.png
     m_ReadOnly: 0
@@ -177,11 +162,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 99bad822e04079947ae796ff8299ab52
     m_Address: Assets/GameResource/Images/GameUI/v2/illust_guild_start.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9a3aad7f6d62f35448a7c0139e29879a
-    m_Address: Assets/GameResource/Images
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
