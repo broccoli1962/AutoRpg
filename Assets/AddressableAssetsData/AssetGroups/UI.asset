@@ -50,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d52c12fa4eef4484f96d868c03d9995c
+    m_Address: UI/StoreCompliancePanel.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d7b79dfb6dcf96248907f0553b2497b3
     m_Address: UI/OfflineReturnSummaryPopup.prefab
     m_ReadOnly: 0

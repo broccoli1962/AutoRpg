@@ -1,6 +1,6 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 19,
+  "currentStepId": 20,
   "status": "in_progress",
   "attempts": {
     "1": 2,
@@ -21,7 +21,8 @@
     "16": 2,
     "17": 1,
     "18": 2,
-    "19": 1
+    "19": 1,
+    "20": 1
   },
   "completedSteps": [
     1,
@@ -41,7 +42,8 @@
     15,
     16,
     17,
-    18
+    18,
+    19
   ],
   "memories": [
     {
@@ -544,8 +546,36 @@
       "commitHash": "247f65d",
       "attempts": 2,
       "finishedAt": "2026-08-01T04:54:45.637Z"
+    },
+    {
+      "stepId": 19,
+      "title": "성능 · 용량 최적화 및 저사양 대응",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: spec 7.3 기준으로 Addressables Core/ZoneArt 분리, 전투 4종 풀링, 품질 프리셋·절전 모드, ASTC/스트리pping 빌드 최적화를 구현했습니다.",
+        "Step 19 구현을 시작합니다. 성능 시스템, 전투 풀링, Addressables 재구성, 빌드 최적화를 순차적으로 추가합니다.",
+        "NEXT: Step 20 — 성장 벽 UX 및 `BackendAnalyticsEvents.ReportGrowthWall` 게임플레이 연결, 튜토리얼 완료 후 상점/광고 노출 부트스트랩 배선",
+        "`PerformanceSettingsStore` + `SetUserPreset()`으로 설정 변경 지원"
+      ],
+      "changedFiles": [
+        "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
+        "Assets/AddressableAssetsData/AssetGroups/InGame.asset",
+        "Assets/GameResource/Images/GameUI/Borders/CharacterSlotOutLine.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UICircleIconSmall.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UICircleIconSmallFillMask.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UIPanelIcon.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UIPanelIcon2.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UIPanelIconFillMask.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UIPanelIconFillMask2.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UISquareLine.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UISquareLine2.png.meta",
+        "Assets/GameResource/Images/GameUI/Borders/UISquareLineMask.png.meta"
+      ],
+      "commitHash": "1e1473c",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T04:58:46.777Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:54:46.013Z"
+  "updatedAt": "2026-08-01T04:58:47.099Z"
 }

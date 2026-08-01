@@ -1,0 +1,89 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  UNITY_VERSION: 6000.3.6f1
+
+jobs:
+  build-android:
+    name: Android AAB (${{ matrix.environment }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [Staging, Production]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Decode Android keystore
+        if: matrix.environment == 'Production'
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > ${{ runner.temp }}/release.keystore
+
+      - name: Build Android AAB
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          ABYSS_BUILD_ENV: ${{ matrix.environment }}
+          ABYSS_VERSION: ${{ github.ref_name }}
+          ABYSS_BUILD_NUMBER: ${{ github.run_number }}
+          ABYSS_ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/release.keystore
+          ABYSS_ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          ABYSS_ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ABYSS_ANDROID_KEY_PASS: ${{ secrets.ANDROID_KEY_PASS }}
+          ABYSS_PRIVACY_POLICY_URL: ${{ secrets.PRIVACY_POLICY_URL }}
+          ABYSS_TERMS_URL: ${{ secrets.TERMS_URL }}
+          ABYSS_ACCOUNT_DELETION_URL: ${{ secrets.ACCOUNT_DELETION_URL }}
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: Android
+          buildMethod: AbyssChronicle.Editor.Build.AbyssChronicleBuildPipeline.BuildAndroid
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-aab-${{ matrix.environment }}
+          path: Builds/Android/**
+
+  build-ios:
+    name: iOS Xcode (${{ matrix.environment }})
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        environment: [Staging, Production]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Build iOS
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          ABYSS_BUILD_ENV: ${{ matrix.environment }}
+          ABYSS_VERSION: ${{ github.ref_name }}
+          ABYSS_BUILD_NUMBER: ${{ github.run_number }}
+          ABYSS_IOS_TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+          ABYSS_IOS_PROVISIONING_PROFILE: ${{ secrets.IOS_PROVISIONING_PROFILE }}
+          ABYSS_PRIVACY_POLICY_URL: ${{ secrets.PRIVACY_POLICY_URL }}
+          ABYSS_TERMS_URL: ${{ secrets.TERMS_URL }}
+          ABYSS_ACCOUNT_DELETION_URL: ${{ secrets.ACCOUNT_DELETION_URL }}
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: iOS
+          buildMethod: AbyssChronicle.Editor.Build.AbyssChronicleBuildPipeline.BuildIos
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-xcode-${{ matrix.environment }}
+          path: Builds/iOS/**

@@ -81,6 +81,15 @@ mono_crash.*
 *.unitypackage.meta
 *.app
 
+# Release secrets / signing (never commit)
+*.keystore
+*.jks
+**/google-services.json
+**/GoogleService-Info.plist
+.env
+.env.*
+!.env.example
+
 # Crashlytics generated file
 crashlytics-build.properties
 
@@ -107,3 +116,4 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 docs
 Docs
+!docs/release_checklist.md

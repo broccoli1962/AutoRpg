@@ -17,6 +17,7 @@ namespace Backend.AddressableKey
                 { "OfflineReturnSummaryPopup", "UI/OfflineReturnSummaryPopup.prefab" },
                 { "ShopPanel", "UI/ShopPanel.prefab" },
                 { "SaveConflictPopup", "UI/SaveConflictPopup.prefab" },
+                { "StoreCompliancePanel", "UI/StoreCompliancePanel.prefab" },
             };
 
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;
@@ -213,6 +214,18 @@ namespace Backend.AddressableKey
             private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
             {
                 { "PerformancePolicyTable", Root + "PerformancePolicyTable.asset" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
+
+        public static class StoreCompliance
+        {
+            private const string Root = "Assets/GameResource/Data/StoreCompliance/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "StoreComplianceConfig", Root + "StoreComplianceConfig.asset" },
             };
 
             public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;

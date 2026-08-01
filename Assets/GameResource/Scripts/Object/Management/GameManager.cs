@@ -1,5 +1,6 @@
 using Backend.Chronicle;
 using Backend.GameSystems.Performance;
+using Backend.Meta.StoreCompliance;
 using Backend.Object.UI;
 using Backend.Services;
 using Backend.Util.Localization;
@@ -26,6 +27,7 @@ namespace Backend.Object.Management
             await AudioManager.InitMixer();
             TableManager.Init();
             await UIManager.EnsureReadyAsync();
+            await StoreComplianceManager.InitializeAsync();
             await PerformanceManager.InitializeAsync();
             await BackendManager.BootstrapAsync();
         }
