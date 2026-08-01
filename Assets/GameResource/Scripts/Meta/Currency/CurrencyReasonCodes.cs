@@ -15,5 +15,6 @@ namespace Backend.Meta.Currency
         public const string AttendanceReward = "attendance_reward";
         public const string QuestCompletionChest = "quest_completion_chest";
         public const string MailboxReward = "mailbox_reward";
+        public const string AchievementReward = "achievement_reward";
     }
 }

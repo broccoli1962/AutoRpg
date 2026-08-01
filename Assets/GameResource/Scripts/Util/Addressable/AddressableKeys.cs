@@ -131,5 +131,17 @@ namespace Backend.AddressableKey
 
             public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
         }
+
+        public static class Achievements
+        {
+            private const string Root = "Assets/GameResource/Data/Achievements/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "AchievementTable", Root + "AchievementTable.asset" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
     }
 }

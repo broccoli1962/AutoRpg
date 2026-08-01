@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4c8893382df4c40a7ed85d1d9bb333, type: 3}
+  m_Name: AchievementTable
+  m_EditorClassIdentifier: Assembly-CSharp::Backend.Meta.Achievements.AchievementTable
+  _categories:
+  - Category: 0
+    CategoryId: total_kills
+    ProgressMode: 0
+    Tiers:
+    - TierId: total_kills_tier_0
+      TierIndex: 0
+      TargetValue: 100
+      BaseAbyssStoneReward: 10
+      RemoteConfigKey: achievement_reward_total_kills_tier_0
+    - TierId: total_kills_tier_1
+      TierIndex: 1
+      TargetValue: 1000
+      BaseAbyssStoneReward: 30
+      RemoteConfigKey: achievement_reward_total_kills_tier_1
+    - TierId: total_kills_tier_2
+      TierIndex: 2
+      TargetValue: 10000
+      BaseAbyssStoneReward: 100
+      RemoteConfigKey: achievement_reward_total_kills_tier_2
+  - Category: 1
+    CategoryId: highest_floor
+    ProgressMode: 1
+    Tiers:
+    - TierId: highest_floor_tier_0
+      TierIndex: 0
+      TargetValue: 25
+      BaseAbyssStoneReward: 10
+      RemoteConfigKey: achievement_reward_highest_floor_tier_0
+    - TierId: highest_floor_tier_1
+      TierIndex: 1
+      TargetValue: 50
+      BaseAbyssStoneReward: 30
+      RemoteConfigKey: achievement_reward_highest_floor_tier_1
+    - TierId: highest_floor_tier_2
+      TierIndex: 2
+      TargetValue: 100
+      BaseAbyssStoneReward: 100
+      RemoteConfigKey: achievement_reward_highest_floor_tier_2
+  - Category: 2
+    CategoryId: equipment_upgrades
+    ProgressMode: 0
+    Tiers:
+    - TierId: equipment_upgrades_tier_0
+      TierIndex: 0
+      TargetValue: 10
+      BaseAbyssStoneReward: 10
+      RemoteConfigKey: achievement_reward_equipment_upgrades_tier_0
+    - TierId: equipment_upgrades_tier_1
+      TierIndex: 1
+      TargetValue: 100
+      BaseAbyssStoneReward: 30
+      RemoteConfigKey: achievement_reward_equipment_upgrades_tier_1
+    - TierId: equipment_upgrades_tier_2
+      TierIndex: 2
+      TargetValue: 500
+      BaseAbyssStoneReward: 100
+      RemoteConfigKey: achievement_reward_equipment_upgrades_tier_2
+  - Category: 3
+    CategoryId: summon_count
+    ProgressMode: 0
+    Tiers:
+    - TierId: summon_count_tier_0
+      TierIndex: 0
+      TargetValue: 10
+      BaseAbyssStoneReward: 10
+      RemoteConfigKey: achievement_reward_summon_count_tier_0
+    - TierId: summon_count_tier_1
+      TierIndex: 1
+      TargetValue: 50
+      BaseAbyssStoneReward: 30
+      RemoteConfigKey: achievement_reward_summon_count_tier_1
+    - TierId: summon_count_tier_2
+      TierIndex: 2
+      TargetValue: 200
+      BaseAbyssStoneReward: 100
+      RemoteConfigKey: achievement_reward_summon_count_tier_2
+  - Category: 4
+    CategoryId: collection_completion
+    ProgressMode: 2
+    Tiers:
+    - TierId: collection_completion_tier_0
+      TierIndex: 0
+      TargetValue: 25
+      BaseAbyssStoneReward: 10
+      RemoteConfigKey: achievement_reward_collection_completion_tier_0
+    - TierId: collection_completion_tier_1
+      TierIndex: 1
+      TargetValue: 50
+      BaseAbyssStoneReward: 30
+      RemoteConfigKey: achievement_reward_collection_completion_tier_1
+    - TierId: collection_completion_tier_2
+      TierIndex: 2
+      TargetValue: 100
+      BaseAbyssStoneReward: 100
+      RemoteConfigKey: achievement_reward_collection_completion_tier_2
+  - Category: 5
+    CategoryId: prestige_count
+    ProgressMode: 0
+    Tiers:
+    - TierId: prestige_count_tier_0
+      TierIndex: 0
+      TargetValue: 1
+      BaseAbyssStoneReward: 10
+      RemoteConfigKey: achievement_reward_prestige_count_tier_0
+    - TierId: prestige_count_tier_1
+      TierIndex: 1
+      TargetValue: 5
+      BaseAbyssStoneReward: 30
+      RemoteConfigKey: achievement_reward_prestige_count_tier_1
+    - TierId: prestige_count_tier_2
+      TierIndex: 2
+      TargetValue: 20
+      BaseAbyssStoneReward: 100
+      RemoteConfigKey: achievement_reward_prestige_count_tier_2
+  - Category: 6
+    CategoryId: compendium_entries
+    ProgressMode: 0
+    Tiers:
+    - TierId: compendium_entries_tier_0
+      TierIndex: 0
+      TargetValue: 5
+      BaseAbyssStoneReward: 10
+      RemoteConfigKey: achievement_reward_compendium_entries_tier_0
+    - TierId: compendium_entries_tier_1
+      TierIndex: 1
+      TargetValue: 15
+      BaseAbyssStoneReward: 30
+      RemoteConfigKey: achievement_reward_compendium_entries_tier_1
+    - TierId: compendium_entries_tier_2
+      TierIndex: 2
+      TargetValue: 30
+      BaseAbyssStoneReward: 100
+      RemoteConfigKey: achievement_reward_compendium_entries_tier_2
