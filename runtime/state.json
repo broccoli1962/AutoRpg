@@ -1,6 +1,6 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 10,
+  "currentStepId": 11,
   "status": "in_progress",
   "attempts": {
     "1": 2,
@@ -12,7 +12,7 @@
     "7": 1,
     "8": 1,
     "9": 1,
-    "10": 0
+    "10": 1
   },
   "completedSteps": [
     1,
@@ -23,7 +23,8 @@
     6,
     7,
     8,
-    9
+    9,
+    10
   ],
   "memories": [
     {
@@ -249,30 +250,60 @@
     },
     {
       "stepId": 9,
-      "title": "게임산업법 확률형 아이템 정보공개 화면",
+      "title": "확률 공시 화면 (법적 의무)",
       "status": "completed",
       "summary": [
-        "SUMMARY: GachaSummonPanel에서 1탭으로 GachaRateDisclosurePopup 진입, GachaRateTable·GachaBannerPool 단일 출처 확률 표시, 천장 카운터·10연차 보장, 오프라인 Addressables, GSSL 현지화 키 연동을 구현했습니다.",
-        "FILES: Assets/GameResource/Scripts/Object/UI/Gacha/*.cs, Assets/GameResource/Scripts/Meta/Gacha/GachaRateDisclosure*.cs, Assets/GameResource/Prefabs/UI/Gacha*.prefab, Assets/Resources/Localize_*.json, runtime/state.json",
-        "NEXT: Step 10 — 인게임 스테이지 뷰 및 자동전투 관찰 루프 구현"
+        "SUMMARY: 게임산업법 확률형 아이템 정보공개 화면을 구현했습니다. 소환 패널에서 1탭 진입, GachaRateTable 단일 출처 확률 표시, 천장 카운터·10연차 보장, 오프라인 Addressables, GSSL 현지화 키를 모두 연동했습니다.",
+        "NEXT: Step 10 — 인게임 스테이지 뷰 및 자동전투 관찰 루프 구현",
+        "`LocalizeTable`을 GSSL 출력 형식(`Localize_ko`/`Localize_en` 딕셔너리 JSON)에 맞게 수정",
+        "GSSL Localization 시트에 gacha 관련 키 23개 추가 및 동기화"
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/Object/UI/Gacha/GachaSummonPanel.cs",
-        "Assets/GameResource/Scripts/Object/UI/Gacha/GachaRateDisclosurePopup.cs",
-        "Assets/GameResource/Scripts/Meta/Gacha/GachaRateDisclosureBuilder.cs",
-        "Assets/GameResource/Scripts/Meta/Gacha/GachaDataProvider.cs",
-        "Assets/GameResource/Scripts/Meta/MetaRuntimeProvider.cs",
-        "Assets/GameResource/Prefabs/UI/GachaSummonPanel.prefab",
-        "Assets/GameResource/Prefabs/UI/GachaRateDisclosurePopup.prefab",
+        "Assets/AddressableAssetsData/AssetGroups/UI.asset",
+        "Assets/GameResource/Scripts/Meta/Gacha/GachaBannerPool.cs",
+        "Assets/GameResource/Scripts/Object/UI/ExplorationHudPanel.cs",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Assets/GoogleSpreadSheetLoader/Generated/Cache/Localization.txt",
+        "Assets/GoogleSpreadSheetLoader/Generated/Cache/cache_index.json",
+        "Assets/GoogleSpreadSheetLoader/Runtime/LocalizeTable.cs",
+        "Assets/Resources/Localize_en.json",
+        "Assets/Resources/Localize_key.json",
+        "Assets/Resources/Localize_ko.json",
+        "runtime/state.json",
+        ".cursor/gssl-result.json"
+      ],
+      "commitHash": "2d06016",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T03:52:07.693Z"
+    },
+    {
+      "stepId": 10,
+      "title": "오프라인 정산 재설계",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: spec.md 2.3 기준 오프라인 정산을 재설계했습니다. 기본 4h·여관/월간 계약 최대 12h 상한, 70% 효율, 서버 시간 정산·로컬 시간 조작 무효화, 복귀 요약 모달(자원+연대기 하이라이트), EditMode 테스트 9건 통과.",
+        "NEXT: Step 11 — 출석·일일/주간 퀘스트·일일 갱신 기준 시각 구현",
+        "FILES: Assets/GameResource/Scripts/GameSystems/Offline/*.cs, Assets/GameResource/Scripts/Object/UI/Offline/*.cs, Assets/Tests/EditMode/Editor/Offline/OfflineSettlementTests.cs, Assets/GameResource/Prefabs/UI/OfflineReturnSummaryPopup.prefab, Assets/Resources/Localize_*.json"
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/GameSystems/Offline/OfflinePolicy.cs",
+        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineCapCalculator.cs",
+        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineTimeResolver.cs",
+        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineRewardCalculator.cs",
+        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineSettlementService.cs",
+        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineHighlightGenerator.cs",
+        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineSettlementFlow.cs",
+        "Assets/GameResource/Scripts/Object/UI/Offline/OfflineReturnSummaryPopup.cs",
+        "Assets/GameResource/Prefabs/UI/OfflineReturnSummaryPopup.prefab",
+        "Assets/Tests/EditMode/Editor/Offline/OfflineSettlementTests.cs",
         "Assets/Resources/Localize_ko.json",
         "Assets/Resources/Localize_en.json",
-        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
         "runtime/state.json"
       ],
       "attempts": 1,
-      "finishedAt": "2026-08-01T03:50:00.000Z"
+      "finishedAt": "2026-08-01T03:58:00.000Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T03:50:00.000Z"
+  "updatedAt": "2026-08-01T03:58:00.000Z"
 }

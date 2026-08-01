@@ -14,6 +14,7 @@ namespace Backend.AddressableKey
                 { "ExplorationHudPanel", "UI/ExplorationHudPanel.prefab" },
                 { "GachaSummonPanel", "UI/GachaSummonPanel.prefab" },
                 { "GachaRateDisclosurePopup", "UI/GachaRateDisclosurePopup.prefab" },
+                { "OfflineReturnSummaryPopup", "UI/OfflineReturnSummaryPopup.prefab" },
             };
 
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;

@@ -11,5 +11,6 @@ namespace Backend.Meta.Currency
         public const string PrestigeGrant = "prestige_grant";
         public const string SummonCost = "summon_cost";
         public const string IapGrant = "iap_grant";
+        public const string OfflineReward = "offline_reward";
     }
 }

@@ -1,3 +1,4 @@
+using Backend.GameSystems.Offline;
 using Backend.Object.UI;
 using Cysharp.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Backend.Object.Management
         {
             UIManager.CloseAllUI();
             await UIManager.OpenAsync<ExplorationHudPanel>();
+            await OfflineSettlementFlow.TrySettleOnReturnAsync();
         }
     }
 }

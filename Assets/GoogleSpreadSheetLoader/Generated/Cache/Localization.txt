@@ -138,5 +138,35 @@
     "gacha.character.explorer_ur_01",
     "탐험가·전설",
     "Explorer Legend"
+  ],
+  [
+    "offline.summary.title",
+    "오프라인 보상",
+    "Offline Rewards"
+  ],
+  [
+    "offline.summary.elapsed",
+    "경과 시간: {0}",
+    "Time away: {0}"
+  ],
+  [
+    "offline.summary.resources",
+    "획득 자원",
+    "Resources Gained"
+  ],
+  [
+    "offline.summary.highlights",
+    "탐험 하이라이트",
+    "Expedition Highlights"
+  ],
+  [
+    "offline.summary.confirm",
+    "확인",
+    "Confirm"
+  ],
+  [
+    "offline.summary.gold_line",
+    "골드 +{0}",
+    "Gold +{0}"
   ]
 ]
