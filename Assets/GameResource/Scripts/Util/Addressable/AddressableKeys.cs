@@ -115,5 +115,18 @@ namespace Backend.AddressableKey
 
             public static string Get(string eventType) => Keys.TryGetValue(eventType, out var key) ? key : null;
         }
+
+        public static class Gacha
+        {
+            private const string Root = "Assets/GameResource/Data/Gacha/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "GachaRateTable", Root + "GachaRateTable.asset" },
+                { "GachaBannerPool", Root + "GachaBannerPool.asset" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
     }
 }

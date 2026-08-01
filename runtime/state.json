@@ -1,7 +1,7 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 8,
-  "status": "in_progress",
+  "currentStepId": 9,
+  "status": "pending",
   "attempts": {
     "1": 2,
     "2": 1,
@@ -19,7 +19,8 @@
     4,
     5,
     6,
-    7
+    7,
+    8
   ],
   "memories": [
     {
@@ -192,27 +193,51 @@
       "title": "탐험가 등급 · 한계돌파 · 조각 전환",
       "status": "completed",
       "summary": [
+        "BalanceTable.asset의 잘못된 배열 직렬화를 수정합니다.",
+        "NEXT: Step 8 — 소환(가챠) 시스템 및 천장(SSR/UR 독립 카운터) 구현",
         "SUMMARY: R/SR/SSR/UR 등급·스탯 배율을 BalanceTable에 추가하고 ExplorerCatalog로 중복 조각 전환·한계돌파(최대 5단계)·도감/보유 목록을 구현했습니다.",
-        "FILES: Assets/GameResource/Scripts/Meta/Characters/*.cs, Assets/GameResource/Scripts/Simulation/BalanceTable.cs, Assets/GameResource/Data/Balance/BalanceTable.asset, Assets/Tests/EditMode/Editor/Characters/ExplorerCatalogTests.cs",
-        "NEXT: Step 8 — 소환(가챠) 시스템 및 천장(SSR/UR 독립 카운터) 구현"
+        "`Backend.Meta.Characters`** — `ExplorerCatalog`(도감+보유 목록), `TryAcquire`(미보유→캐릭터 지급 / 보유→조각 전환), `TryLimitBreak`(조각 소모·상한 5단계), `ExplorerBalanceFormulas`, 세이브/복원을 구현했습니다."
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/Meta/Characters/ExplorerGrade.cs",
-        "Assets/GameResource/Scripts/Meta/Characters/OwnedExplorerEntry.cs",
-        "Assets/GameResource/Scripts/Meta/Characters/ExplorerAcquireResult.cs",
-        "Assets/GameResource/Scripts/Meta/Characters/LimitBreakResult.cs",
-        "Assets/GameResource/Scripts/Meta/Characters/ExplorerBalanceFormulas.cs",
-        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalogSaveData.cs",
-        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalog.cs",
-        "Assets/GameResource/Scripts/Simulation/BalanceTable.cs",
         "Assets/GameResource/Data/Balance/BalanceTable.asset",
-        "Assets/Tests/EditMode/Editor/Characters/ExplorerCatalogTests.cs",
+        "Assets/GameResource/Scripts/Simulation/BalanceTable.cs",
+        "runtime/state.json",
+        "Assets/GameResource/Scripts/Meta/Characters.meta",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerAcquireResult.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerAcquireResult.cs.meta",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerBalanceFormulas.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerBalanceFormulas.cs.meta",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalog.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalog.cs.meta",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalogSaveData.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalogSaveData.cs.meta"
+      ],
+      "commitHash": "827d06f",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T03:43:07.820Z"
+    },
+    {
+      "stepId": 8,
+      "title": "소환(가챠) 시스템 및 천장",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: R/SR/SSR/UR 만분율 확률 테이블·단차/10연차 비용·SSR/UR 독립 천장·시드 원장을 GachaService로 구현하고 EditMode 테스트 11건을 통과했습니다.",
+        "FILES: Assets/GameResource/Scripts/Meta/Gacha/*.cs, Assets/GameResource/Data/Gacha/*.asset, Assets/Tests/EditMode/Editor/Gacha/GachaServiceTests.cs, Assets/AddressableAssetsData/AssetGroups/Gacha.asset",
+        "NEXT: Step 9 — 게임산업법 확률형 아이템 정보공개 화면 구현"
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Meta/Gacha",
+        "Assets/GameResource/Data/Gacha/GachaRateTable.asset",
+        "Assets/GameResource/Data/Gacha/GachaBannerPool.asset",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Assets/Tests/EditMode/Editor/Gacha/GachaServiceTests.cs",
+        "Assets/AddressableAssetsData/AssetGroups/Gacha.asset",
         "runtime/state.json"
       ],
       "attempts": 1,
-      "finishedAt": "2026-08-01T03:45:00.000Z"
+      "finishedAt": "2026-08-01T03:50:00.000Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T03:45:00.000Z"
+  "updatedAt": "2026-08-01T03:50:00.000Z"
 }

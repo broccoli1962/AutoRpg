@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: babfc620166354d42bc3c1c1c45f6886, type: 3}
+  m_Name: GachaRateTable
+  m_EditorClassIdentifier: 
+  _rateR: 7000
+  _rateSr: 2400
+  _rateSsr: 550
+  _rateUr: 50
+  _singlePullCost: 300
+  _tenPullCost: 2700
+  _ssrPityThreshold: 100
+  _urPityThreshold: 200

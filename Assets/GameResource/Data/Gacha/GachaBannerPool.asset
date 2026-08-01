@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67bce75fed63be842894f9db5ddd6c9e, type: 3}
+  m_Name: GachaBannerPool
+  m_EditorClassIdentifier: 
+  _bannerId: standard
+  _rPool:
+  - explorer_r_01
+  - explorer_r_02
+  _srPool:
+  - explorer_sr_01
+  - explorer_sr_02
+  _ssrPool:
+  - explorer_ssr_01
+  _urPool:
+  - explorer_ur_01
