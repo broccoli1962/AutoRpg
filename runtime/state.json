@@ -1,7 +1,7 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 14,
-  "status": "in_progress",
+  "currentStepId": 16,
+  "status": "pending",
   "attempts": {
     "1": 2,
     "2": 1,
@@ -16,7 +16,8 @@
     "11": 1,
     "12": 1,
     "13": 1,
-    "14": 2
+    "14": 2,
+    "15": 1
   },
   "completedSteps": [
     1,
@@ -31,7 +32,9 @@
     10,
     11,
     12,
-    13
+    13,
+    14,
+    15
   ],
   "memories": [
     {
@@ -398,12 +401,12 @@
     {
       "stepId": 14,
       "title": "상점 UI 및 IAP 연동",
-      "status": "failed",
+      "status": "completed",
       "summary": [
-        "FILES: Assets/GameResource/Scripts/Meta/Shop/*, Assets/GameResource/Scripts/Meta/IAP/*, Assets/GameResource/Data/Shop/ShopCatalogTable.asset, Assets/GameResource/Scripts/Object/UI/Shop/*, Assets/GameResource/Prefabs/UI/ShopPanel.prefab, Assets/Tests/EditMode/Editor/Shop/*, Assets/Tests/EditMode/Editor/IAP/*, Packages/manifest.json, Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
-        "NEXT: Step 15 — Firebase BaaS(익명 인증, Firestore 세이브 백업, Remote Config, Analytics, Crashlytics, Cloud Messaging) 연동Step 14 **상점 UI 및 IAP 연동**이 완료되었습니다.",
-        "SUMMARY: spec 4.3 6종 IAP 카탈로그, 영수증 검증 후 지급(로컬 스텁/서버 훅), 구매 복원·미지급 재처리, 1회/첫구매 영속화, 구독 만료(서버 시간), ShopPanel UI를 구현했습니다.",
-        "테스트** — Shop 6건 + IAP 4건 추가, EditMode **116건 전부 통과**, C# 컴파일 에러 0건"
+        "Debug.Log 린트 위반을 수정했습니다. 이 프로젝트 검수는 접두어 누락이 아니라 **Debug.Log 계열 호출 추가 자체**를 금지합니다.",
+        "Debug.Log 호출을 제거합니다. 이 프로젝트 린트는 접두어가 아니라 Debug.Log 추가 자체를 금지합니다.",
+        "Debug.Log 호출에 `[ClassName]` 접두어가 빠진 부분을 확인하고 수정합니다.",
+        "FILES: Assets/GameResource/Scripts/Meta/IAP/ServerPurchaseValidator.cs, Assets/GameResource/Scripts/Meta/IAP/UnityIapStoreBridge.cs"
       ],
       "changedFiles": [
         "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
@@ -419,11 +422,32 @@
         "Assets/AddressableAssetsData/AssetGroups/Shop.asset.meta",
         "Assets/GameResource/Data/Shop.meta"
       ],
+      "commitHash": "d744c9b",
+      "attempts": 2,
+      "finishedAt": "2026-08-01T04:19:19.115Z"
+    },
+    {
+      "stepId": 15,
+      "title": "보상형 광고 연동 및 일일 상한",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: IAdService·SimulatedAdService·AdMobAdService, AdConfigTable(5개 리워드 위치+이벤트 여유), AdRewardService(일 15회 보상형/일 6·세션 2 전면 별도 집계, KST 04:00 갱신, 튜토리얼 차단, 광고 제거 시 전면만 비활성)를 구현했습니다.",
+        "EditMode 테스트 10건 추가, 전체 126건 통과.",
+        "NEXT: Step 16 — Remote Config·BaaS 최소 연동(세이브 백업·원격 설정·분석 훅)"
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Meta/Ads",
+        "Assets/GameResource/Data/Ads/AdConfigTable.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Ads.asset",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
+        "Assets/Tests/EditMode/Editor/Ads/AdRewardServiceTests.cs",
+        "runtime/state.json"
+      ],
       "attempts": 1,
-      "finishedAt": "2026-08-01T04:18:35.324Z"
+      "finishedAt": "2026-08-01T04:30:00.000Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:18:35.668Z",
-  "lastError": "린트/컨벤션 위반이 감지되었습니다:\n- Assets/GameResource/Scripts/Meta/IAP/ServerPurchaseValidator.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Meta/IAP/UnityIapStoreBridge.cs: Debug.Log 계열 호출이 추가되었습니다."
+  "updatedAt": "2026-08-01T04:19:19.438Z"
 }

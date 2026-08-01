@@ -168,5 +168,17 @@ namespace Backend.AddressableKey
 
             public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
         }
+
+        public static class Ads
+        {
+            private const string Root = "Assets/GameResource/Data/Ads/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "AdConfigTable", Root + "AdConfigTable.asset" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
     }
 }

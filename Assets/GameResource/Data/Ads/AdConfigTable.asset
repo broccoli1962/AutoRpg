@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a424d5170db7e646a034944203a9b21, type: 3}
+  m_Name: AdConfigTable
+  m_EditorClassIdentifier: Assembly-CSharp::Backend.Meta.Ads.AdConfigTable
+  _totalRewardedDailyLimit: 15
+  _interstitialDailyLimit: 6
+  _interstitialSessionLimit: 2
+  _instantProgressMinutes: 30
+  _enhancementDiscountPercent: 30
+  _enhancementDiscountUses: 3
+  _rewardedAdUnitId: ca-app-pub-3940256099942544/5224354917
+  _interstitialAdUnitId: ca-app-pub-3940256099942544/1033173712
+  _placements:
+  - _placement: 0
+    _placementId: offline_double
+    _dailyLimit: 3
+  - _placement: 1
+    _placementId: instant_progress
+    _dailyLimit: 5
+  - _placement: 2
+    _placementId: free_summon
+    _dailyLimit: 1
+  - _placement: 3
+    _placementId: instant_retry
+    _dailyLimit: 3
+  - _placement: 4
+    _placementId: enhancement_boost
+    _dailyLimit: 2
+  - _placement: 5
+    _placementId: event_reserve
+    _dailyLimit: 1
