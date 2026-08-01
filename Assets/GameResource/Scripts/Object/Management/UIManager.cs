@@ -6,7 +6,6 @@ using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Pool;
 using UnityEngine.UI;
 
@@ -17,7 +16,7 @@ namespace Backend.Object.Management
     /// - Open / Close: 풀이 이미 만들어진 UI 의 동기 오픈/닫기
     /// - OpenAsync (동적 오픈): Addressable 로 풀을 만들고 첫 인스턴스 반환
     /// - CloseDynamic (동적 닫기): 닫음과 동시에 해당 UI 의 풀 자체를 해제
-    /// - PopBack: 모바일 뒤로가기 / PC ESC. PuzzleControl.UI.Cancel 액션으로 직접 구독.
+    /// - PopBack: 모바일 뒤로가기(UI Cancel). MobileBackInput 이 구독한다.
     /// </summary>
     public class UIManager : SingletonGameObject<UIManager>
     {
@@ -44,7 +43,6 @@ namespace Backend.Object.Management
         private readonly Subject<Unit> _onBackEmpty = new();
 
         private GameObject _blockerRoot;
-        private Action<InputAction.CallbackContext> _onCancelPerformed;
 
         /// <summary> 백 스택이 비어있을 때 뒤로가기 입력이 들어오면 발행되는 이벤트. </summary>
         public static Observable<Unit> OnBackEmpty => Instance._onBackEmpty;
@@ -319,6 +317,7 @@ namespace Backend.Object.Management
             var canvas = _blockerRoot.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = short.MaxValue;
+            MobileCanvasScaler.Ensure(_blockerRoot);
             _blockerRoot.AddComponent<GraphicRaycaster>();
 
             var imageGo = new GameObject("Image");

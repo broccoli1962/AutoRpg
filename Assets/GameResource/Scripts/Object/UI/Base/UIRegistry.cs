@@ -41,14 +41,10 @@ namespace Backend.Object.UI
             var canvas = go.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-            var scaler = go.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1080f, 1920f);
-            scaler.matchWidthOrHeight = 0f;
-
+            MobileCanvasScaler.Ensure(go);
             go.AddComponent<GraphicRaycaster>();
 
-            var hudRoot = CreateLayerRoot(rootRect, "Layer_HUD");
+            var hudRoot = CreateSafeAreaLayerRoot(rootRect, "Layer_HUD");
             var panelRoot = CreateLayerRoot(rootRect, "Layer_Panel");
             var navigationRoot = CreateLayerRoot(rootRect, "Layer_Navigation");
             var popupRoot = CreateLayerRoot(rootRect, "Layer_Popup");
@@ -86,6 +82,13 @@ namespace Backend.Object.UI
             layerGo.transform.SetParent(parent, false);
             var rect = layerGo.GetComponent<RectTransform>();
             StretchFull(rect);
+            return rect;
+        }
+
+        private static RectTransform CreateSafeAreaLayerRoot(RectTransform parent, string name)
+        {
+            var rect = CreateLayerRoot(parent, name);
+            rect.gameObject.AddComponent<SafeArea>();
             return rect;
         }
 

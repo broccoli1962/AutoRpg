@@ -1,5 +1,7 @@
+using Backend.Object.UI;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEditor.SceneManagement;
 
 public class CustomCreateGameObject
@@ -32,7 +34,8 @@ public class CustomCreateGameObject
             Canvas canvas = selectedObjects[0].GetComponentInParent<Canvas>();
             if (canvas == null)
             {
-                canvas = new GameObject("Canvas", typeof(Canvas), typeof(UnityEngine.UI.CanvasScaler), typeof(UnityEngine.UI.GraphicRaycaster)).GetComponent<Canvas>();
+                canvas = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster)).GetComponent<Canvas>();
+                MobileCanvasScaler.Apply(canvas.GetComponent<CanvasScaler>());
                 // Canvas를 선택된 오브젝트의 부모 아래에 생성
                 canvas.transform.SetParent(selectedObjects[0].transform.parent, false);
             }

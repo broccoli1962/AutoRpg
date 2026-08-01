@@ -1,18 +1,20 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 5,
+  "currentStepId": 6,
   "status": "pending",
   "attempts": {
     "1": 2,
     "2": 1,
     "3": 1,
-    "4": 2
+    "4": 2,
+    "5": 2
   },
   "completedSteps": [
     1,
     2,
     3,
-    4
+    4,
+    5
   ],
   "memories": [
     {
@@ -101,29 +103,61 @@
       "title": "밸런스 수치 외부화 및 감쇠 데미지 공식 교체",
       "status": "completed",
       "summary": [
-        "SUMMARY: BalanceTable SO·감쇠식 데미지·성장 곡선·Lmax 강화 상한 시뮬레이션 레이어를 구현하고, Debug.Log 린트 위반을 제거한 뒤 Balance Addressables 그룹 등록 및 EditMode 테스트 10건 통과를 확인했습니다.",
-        "FILES: Assets/GameResource/Data/Balance/BalanceTable.asset, Assets/GameResource/Scripts/Simulation/*.cs, Assets/GameResource/Scripts/Simulation/Editor/BalanceFormulasTests.cs, Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs, Assets/AddressableAssetsData/AssetGroups/Balance.asset, runtime/state.json",
-        "NEXT: Step 5 — 시드 기반 결정론적 StageSimulator 코어 및 Tick 루프 연결"
+        "`BalanceTableAssetCreator.cs` — `Debug.Log` 제거, Addressables `Balance` 그룹 자동 생성·등록 로직 추가",
+        "Step 4를 완료했습니다. 직전 시도에서 실패한 **Debug.Log 린트 위반**을 먼저 해결했고, 이어서 Addressables 등록과 테스트 검증까지 마쳤습니다.",
+        "Addressables 등록을 `BalanceTableAssetCreator`에 추가하고 Unity에서 검증합니다.",
+        "FILES: Assets/GameResource/Data/Balance/BalanceTable.asset, Assets/GameResource/Scripts/Simulation/*.cs, Assets/GameResource/Scripts/Simulation/Editor/BalanceFormulasTests.cs, Assets/GameResource/Scripts/Simulation/Editor/BalanceTableAssetCreator.cs, Assets/AddressableAssetsData/AssetGroups/Balance.asset, Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs, runtime/state.json"
       ],
       "changedFiles": [
         "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
-        "Assets/AddressableAssetsData/AssetGroups/Balance.asset",
-        "Assets/GameResource/Data/Balance/BalanceTable.asset",
-        "Assets/GameResource/Scripts/Simulation/BalanceFormulas.cs",
-        "Assets/GameResource/Scripts/Simulation/BalanceTable.cs",
-        "Assets/GameResource/Scripts/Simulation/BalanceTableProvider.cs",
-        "Assets/GameResource/Scripts/Simulation/DamageCalculator.cs",
-        "Assets/GameResource/Scripts/Simulation/StageBalance.cs",
-        "Assets/GameResource/Scripts/Simulation/Editor/BalanceFormulasTests.cs",
-        "Assets/GameResource/Scripts/Simulation/Editor/BalanceTableAssetCreator.cs",
         "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "runtime/state.json",
+        "Assets/AddressableAssetsData/AssetGroups/Balance.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Balance.asset.meta",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Balance_BundledAssetGroupSchema.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Balance_BundledAssetGroupSchema.asset.meta",
+        "Assets/GameResource/Data/Balance.meta",
+        "Assets/GameResource/Data/Balance/BalanceTable.asset",
+        "Assets/GameResource/Data/Balance/BalanceTable.asset.meta",
+        "Assets/GameResource/Scripts/Simulation.meta",
+        "Assets/GameResource/Scripts/Simulation/BalanceFormulas.cs"
+      ],
+      "commitHash": "454a059",
+      "attempts": 2,
+      "finishedAt": "2026-07-31T16:41:14.141Z"
+    },
+    {
+      "stepId": 5,
+      "title": "세로 모바일 해상도 및 터치 입력 대응",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: Portrait 고정 ProjectSettings, CanvasScaler 1080×1920/Match 0.5, Layer_HUD SafeArea, KeyboardInputUtil 제거, MobileBackInput·ExplorationHudPanel 터치 대응, MobileLayoutTests 3건 통과.",
+        "FILES: MobileBackInput.cs, ExplorationHudPanel.cs, MobileCanvasScaler.cs, TouchTargetSize.cs, SafeArea.cs, UIRegistry.cs, UIRoot.prefab, ExplorationHudPanel.prefab, InputSystem_Actions.inputactions, ProjectSettings.asset",
+        "NEXT: Step 6 — 인게임 스테이지 뷰 및 자동전투 관찰 루프 구현"
+      ],
+      "changedFiles": [
+        "Assets/AddressableAssetsData/AssetGroups/UI.asset",
+        "Assets/GameResource/Prefabs/UI/UIRoot.prefab",
+        "Assets/GameResource/Prefabs/UI/ExplorationHudPanel.prefab",
+        "Assets/GameResource/Scripts/Object/Management/MobileBackInput.cs",
+        "Assets/GameResource/Scripts/Object/Management/UIManager.cs",
+        "Assets/GameResource/Scripts/Object/Management/Scene/SampleSceneContext.cs",
+        "Assets/GameResource/Scripts/Object/UI/Base/UIRegistry.cs",
+        "Assets/GameResource/Scripts/Object/UI/ExplorationHudPanel.cs",
+        "Assets/GameResource/Scripts/Object/UI/MobileCanvasScaler.cs",
+        "Assets/GameResource/Scripts/Object/UI/TouchTargetSize.cs",
+        "Assets/GameResource/Scripts/Object/UI/Editor/MobileLayoutTests.cs",
+        "Assets/GameResource/Scripts/Util/Editor/CustomCreateGameObject.cs",
+        "Assets/InputSystem_Actions.inputactions",
+        "Assets/Scenes/SampleScene.unity",
+        "ProjectSettings/ProjectSettings.asset",
         "runtime/state.json"
       ],
       "attempts": 2,
-      "finishedAt": "2026-08-01T04:45:00.000Z"
+      "finishedAt": "2026-08-01T03:36:22.000Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:45:00.000Z",
+  "updatedAt": "2026-08-01T03:36:22.000Z",
   "lastError": null
 }
