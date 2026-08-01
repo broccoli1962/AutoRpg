@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Backend.Services.RemoteConfig;
 using UnityEngine;
 
 namespace Backend.Simulation
@@ -176,6 +178,38 @@ namespace Backend.Simulation
                 return fallback;
 
             return values[index];
+        }
+
+        /// <summary>
+        /// Remote Config 값으로 성장 곡선 계수를 덮어쓴다.
+        /// </summary>
+        public void ApplyRemoteOverrides(IReadOnlyDictionary<string, string> remoteValues)
+        {
+            if (remoteValues == null)
+                return;
+
+            if (TryParseFloat(remoteValues, RemoteConfigKeys.MonsterHpGrowth, out var hpGrowth))
+                _monsterHpGrowth = hpGrowth;
+            if (TryParseFloat(remoteValues, RemoteConfigKeys.MonsterAtkGrowth, out var atkGrowth))
+                _monsterAtkGrowth = atkGrowth;
+            if (TryParseFloat(remoteValues, RemoteConfigKeys.MonsterDefGrowth, out var defGrowth))
+                _monsterDefGrowth = defGrowth;
+            if (TryParseFloat(remoteValues, RemoteConfigKeys.GoldDropGrowth, out var goldGrowth))
+                _goldDropGrowth = goldGrowth;
+            if (TryParseFloat(remoteValues, RemoteConfigKeys.UpgradeCostGrowth, out var upgradeGrowth))
+                _upgradeCostGrowth = upgradeGrowth;
+        }
+
+        private static bool TryParseFloat(
+            IReadOnlyDictionary<string, string> remoteValues,
+            string key,
+            out float value)
+        {
+            value = 0f;
+            if (!remoteValues.TryGetValue(key, out var raw))
+                return false;
+
+            return float.TryParse(raw, out value) && value > 0f;
         }
 
         /// <summary>

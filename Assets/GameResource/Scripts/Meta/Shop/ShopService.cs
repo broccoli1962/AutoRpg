@@ -5,6 +5,7 @@ using Backend.Meta.Characters;
 using Backend.Meta.Currency;
 using Backend.Meta.Retention;
 using Backend.Meta.SeasonPass;
+using Backend.Services.Analytics;
 using Backend.Simulation;
 
 namespace Backend.Meta.Shop
@@ -193,6 +194,7 @@ namespace Backend.Meta.Shop
                 _processedTransactions.Add(transactionId);
 
             PersistStateInternal();
+            BackendAnalyticsEvents.ReportShopPurchase(product.ProductId);
             return ShopPurchaseResult.Succeeded(product.ProductId, grantedCount);
         }
 

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 892cdd7de8a17164db79a3d99271439f, type: 3}
+  m_Name: RemoteConfigDefaultsTable
+  m_EditorClassIdentifier: Assembly-CSharp::Backend.Services.RemoteConfig.RemoteConfigDefaultsTable
+  _entries:
+  - Key: balance_monster_hp_growth
+    Value: 1.135
+  - Key: balance_monster_atk_growth
+    Value: 1.130
+  - Key: balance_monster_def_growth
+    Value: 1.130
+  - Key: balance_gold_drop_growth
+    Value: 1.120
+  - Key: balance_upgrade_cost_growth
+    Value: 1.080
+  - Key: ads_total_rewarded_daily_limit
+    Value: 15
+  - Key: ads_interstitial_daily_limit
+    Value: 6
+  - Key: achievement_global_reward_multiplier
+    Value: 1.0
+  - Key: event_season_pass_enabled
+    Value: true
+  - Key: event_gacha_banner_enabled
+    Value: true

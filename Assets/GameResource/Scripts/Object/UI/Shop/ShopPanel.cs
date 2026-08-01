@@ -3,6 +3,7 @@ using Backend.Meta.IAP;
 using Backend.Meta.Shop;
 using Backend.Object.Management;
 using Backend.Object.UI;
+using Backend.Services.Analytics;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -100,6 +101,7 @@ namespace Backend.Object.UI.Shop
 
         public override void OnOpen()
         {
+            BackendAnalyticsEvents.ReportShopView();
             RefreshLabels();
             RefreshProducts();
             BindButtons();

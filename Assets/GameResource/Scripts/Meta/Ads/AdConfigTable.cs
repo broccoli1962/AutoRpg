@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Backend.Services.RemoteConfig;
 using UnityEngine;
 
 namespace Backend.Meta.Ads
@@ -102,6 +103,32 @@ namespace Backend.Meta.Ads
                 CreatePlacement(RewardedAdPlacement.EnhancementBoost, "enhancement_boost", 2),
                 CreatePlacement(RewardedAdPlacement.EventReserve, "event_reserve", 1),
             };
+        }
+
+        /// <summary>
+        /// Remote Config 값으로 광고 일일 상한을 덮어쓴다.
+        /// </summary>
+        public void ApplyRemoteOverrides(IReadOnlyDictionary<string, string> remoteValues)
+        {
+            if (remoteValues == null)
+                return;
+
+            if (TryParseInt(remoteValues, RemoteConfigKeys.TotalRewardedDailyLimit, out var rewardedLimit))
+                _totalRewardedDailyLimit = rewardedLimit;
+            if (TryParseInt(remoteValues, RemoteConfigKeys.InterstitialDailyLimit, out var interstitialLimit))
+                _interstitialDailyLimit = interstitialLimit;
+        }
+
+        private static bool TryParseInt(
+            IReadOnlyDictionary<string, string> remoteValues,
+            string key,
+            out int value)
+        {
+            value = 0;
+            if (!remoteValues.TryGetValue(key, out var raw))
+                return false;
+
+            return int.TryParse(raw, out value) && value >= 0;
         }
 
         private static AdPlacementDefinition CreatePlacement(

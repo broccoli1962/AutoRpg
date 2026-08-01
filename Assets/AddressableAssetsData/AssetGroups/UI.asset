@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: UI
   m_GUID: 9edeb4aa96d0b1348a9713b612656fd2
   m_SerializeEntries:
+  - m_GUID: 0da82ccd833f2c6428a57237bce507d6
+    m_Address: UI/SaveConflictPopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4fb54b585df32fc4a91c3563f28e057c
     m_Address: UI/ShopPanel.prefab
     m_ReadOnly: 0

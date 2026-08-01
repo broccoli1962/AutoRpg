@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Backend.GameSystems.Offline;
 using Backend.Meta.Retention;
 using Backend.Meta.Shop;
+using Backend.Services.Analytics;
 using Cysharp.Threading.Tasks;
 
 namespace Backend.Meta.Ads
@@ -212,6 +214,8 @@ namespace Backend.Meta.Ads
                     AdShowOutcome.Failed,
                     grant.FailureReason);
             }
+
+            BackendAnalyticsEvents.ReportAdWatch(definition.PlacementId);
 
             return AdRewardResult.Succeeded(
                 placement,

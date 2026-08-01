@@ -1,7 +1,7 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
   "currentStepId": 16,
-  "status": "pending",
+  "status": "in_progress",
   "attempts": {
     "1": 2,
     "2": 1,
@@ -17,7 +17,8 @@
     "12": 1,
     "13": 1,
     "14": 2,
-    "15": 1
+    "15": 1,
+    "16": 2
   },
   "completedSteps": [
     1,
@@ -431,23 +432,58 @@
       "title": "보상형 광고 연동 및 일일 상한",
       "status": "completed",
       "summary": [
-        "SUMMARY: IAdService·SimulatedAdService·AdMobAdService, AdConfigTable(5개 리워드 위치+이벤트 여유), AdRewardService(일 15회 보상형/일 6·세션 2 전면 별도 집계, KST 04:00 갱신, 튜토리얼 차단, 광고 제거 시 전면만 비활성)를 구현했습니다.",
-        "EditMode 테스트 10건 추가, 전체 126건 통과.",
-        "NEXT: Step 16 — Remote Config·BaaS 최소 연동(세이브 백업·원격 설정·분석 훅)"
+        "FILES: Assets/GameResource/Scripts/Meta/Ads/**, Assets/GameResource/Data/Ads/AdConfigTable.asset, Assets/AddressableAssetsData/AssetGroups/Ads.asset, Assets/Tests/EditMode/Editor/Ads/AdRewardServiceTests.cs, Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs, Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
+        "NEXT: Step 16 — Remote Config·BaaS 최소 연동(세이브 백업·원격 설정·분석 훅)",
+        "SUMMARY: IAdService·SimulatedAdService·AdMobAdService, AdConfigTable(5개 리워드+이벤트 여유), AdRewardService(일일 상한·전면/보상형 분리·튜토리얼 차단·광고 제거 연동)를 구현했습니다.",
+        "EditMode 테스트 **10건 추가, 전체 126건 통과**."
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/Meta/Ads",
-        "Assets/GameResource/Data/Ads/AdConfigTable.asset",
-        "Assets/AddressableAssetsData/AssetGroups/Ads.asset",
-        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
         "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
-        "Assets/Tests/EditMode/Editor/Ads/AdRewardServiceTests.cs",
-        "runtime/state.json"
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "runtime/state.json",
+        "Assets/AddressableAssetsData/AssetGroups/Ads.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Ads.asset.meta",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Ads_BundledAssetGroupSchema.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Ads_BundledAssetGroupSchema.asset.meta",
+        "Assets/GameResource/Data/Ads.meta",
+        "Assets/GameResource/Data/Ads/AdConfigTable.asset",
+        "Assets/GameResource/Data/Ads/AdConfigTable.asset.meta",
+        "Assets/GameResource/Scripts/Meta/Ads.meta"
+      ],
+      "commitHash": "b79fb4f",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T04:23:13.392Z"
+    },
+    {
+      "stepId": 16,
+      "title": "백엔드 연동 — 인증 · 세이브 백업 · 원격 설정 · 분석",
+      "status": "failed",
+      "summary": [
+        "NEXT: Step 17 — 튜토리얼·온보딩 플로우 및 성장 벽 UX (Analytics 훅 `BackendAnalyticsEvents` 연결)",
+        "SUMMARY: Firebase BaaS 최소 연동(인증·AES 로컬 세이브+클라우드 백업·충돌 UI·Remote Config·Analytics·Crashlytics·FCM)을 인터페이스 기반으로 구현하고 BackendManager 부트스트랩에 통합했습니다. 오프라인/페치 실패 시에도 번들 기본값·Simulated 구현체로 정상 동작합니다.",
+        "EditMode 테스트 **8건 추가, 전체 134건 통과**, C# 컴파일 에러 0건.",
+        "통합** — `BackendManager`가 부트스트랩(`GameManager.InitializeCore`)에 연결"
+      ],
+      "changedFiles": [
+        "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
+        "Assets/AddressableAssetsData/AssetGroups/UI.asset",
+        "Assets/GameResource/Scripts/Meta/Ads/AdConfigTable.cs",
+        "Assets/GameResource/Scripts/Meta/Ads/AdRewardService.cs",
+        "Assets/GameResource/Scripts/Meta/Shop/ShopService.cs",
+        "Assets/GameResource/Scripts/Object/Management/GameManager.cs",
+        "Assets/GameResource/Scripts/Object/UI/Shop/ShopPanel.cs",
+        "Assets/GameResource/Scripts/Simulation/BalanceTable.cs",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "runtime/state.json",
+        "Assets/AddressableAssetsData/AssetGroups/Backend.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Backend.asset.meta"
       ],
       "attempts": 1,
-      "finishedAt": "2026-08-01T04:30:00.000Z"
+      "finishedAt": "2026-08-01T04:31:11.152Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:19:19.438Z"
+  "updatedAt": "2026-08-01T04:31:11.488Z",
+  "lastError": "린트/컨벤션 위반이 감지되었습니다:\n- Assets/GameResource/Scripts/Backend/Auth/FirebaseAuthService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/CrashReporting/FirebaseCrashlyticsService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/Push/FirebaseCloudMessagingService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/RemoteConfig/FirebaseRemoteConfigService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/Save/EncryptedLocalSaveStore.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/Save/FirebaseCloudSaveStore.cs: Debug.Log 계열 호출이 추가되었습니다."
 }
