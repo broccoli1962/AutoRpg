@@ -23,5 +23,6 @@ namespace Backend.Meta.Currency
         public const string AdRewardOfflineDouble = "ad_reward_offline_double";
         public const string AdRewardInstantProgress = "ad_reward_instant_progress";
         public const string AdRewardFreeSummon = "ad_reward_free_summon";
+        public const string TutorialStarterGrant = "tutorial_starter_grant";
     }
 }

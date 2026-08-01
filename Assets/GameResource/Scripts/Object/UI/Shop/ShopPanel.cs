@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Backend.Meta.IAP;
 using Backend.Meta.Shop;
+using Backend.Meta.Tutorial;
 using Backend.Object.Management;
 using Backend.Object.UI;
 using Backend.Services.Analytics;
@@ -101,6 +102,12 @@ namespace Backend.Object.UI.Shop
 
         public override void OnOpen()
         {
+            if (IsBlockedByTutorial())
+            {
+                UIManager.Close(View);
+                return;
+            }
+
             BackendAnalyticsEvents.ReportShopView();
             RefreshLabels();
             RefreshProducts();
@@ -170,6 +177,12 @@ namespace Backend.Object.UI.Shop
             }
 
             View.SetProductRows(_rows);
+        }
+
+        private static bool IsBlockedByTutorial()
+        {
+            var gate = TutorialManager.TryGetGate();
+            return gate != null && gate.IsTutorialActive;
         }
 
         private static ShopService ResolveShopService()

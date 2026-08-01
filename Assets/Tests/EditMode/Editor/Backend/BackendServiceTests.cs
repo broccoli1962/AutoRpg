@@ -118,6 +118,8 @@ namespace Backend.Services.Tests
         public void GameplayAnalyticsBridge_LogsCoreEvents()
         {
             BackendAnalyticsEvents.ReportTutorialStep(3);
+            BackendAnalyticsEvents.ReportTutorialStepEntered(1);
+            BackendAnalyticsEvents.ReportTutorialStepCompleted(1);
             MetaGameplayEvents.ReportFloorReached(42);
             MetaGameplayEvents.ReportPrestige();
             MetaGameplayEvents.ReportSummon(10);
@@ -126,15 +128,17 @@ namespace Backend.Services.Tests
             BackendAnalyticsEvents.ReportAdWatch("offline_double");
             BackendAnalyticsEvents.ReportGrowthWall(50);
 
-            Assert.AreEqual(8, _analytics.Records.Count);
+            Assert.AreEqual(10, _analytics.Records.Count);
             Assert.AreEqual(GameAnalyticsEvents.TutorialStep, _analytics.Records[0].EventName);
-            Assert.AreEqual(GameAnalyticsEvents.FloorReached, _analytics.Records[1].EventName);
-            Assert.AreEqual(GameAnalyticsEvents.Prestige, _analytics.Records[2].EventName);
-            Assert.AreEqual(GameAnalyticsEvents.Summon, _analytics.Records[3].EventName);
-            Assert.AreEqual(GameAnalyticsEvents.ShopView, _analytics.Records[4].EventName);
-            Assert.AreEqual(GameAnalyticsEvents.ShopPurchase, _analytics.Records[5].EventName);
-            Assert.AreEqual(GameAnalyticsEvents.AdWatch, _analytics.Records[6].EventName);
-            Assert.AreEqual(GameAnalyticsEvents.GrowthWall, _analytics.Records[7].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.TutorialStepEnter, _analytics.Records[1].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.TutorialStepComplete, _analytics.Records[2].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.FloorReached, _analytics.Records[3].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.Prestige, _analytics.Records[4].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.Summon, _analytics.Records[5].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.ShopView, _analytics.Records[6].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.ShopPurchase, _analytics.Records[7].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.AdWatch, _analytics.Records[8].EventName);
+            Assert.AreEqual(GameAnalyticsEvents.GrowthWall, _analytics.Records[9].EventName);
         }
     }
 

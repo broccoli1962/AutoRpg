@@ -3,6 +3,7 @@ using Backend.Meta;
 using Backend.Meta.Currency;
 using Backend.Meta.IAP;
 using Backend.Meta.Shop;
+using Backend.Meta.Tutorial;
 using Backend.Simulation;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
@@ -57,6 +58,7 @@ namespace Backend.Meta.Ads
                     adService,
                     config,
                     grantor,
+                    tutorialGate: TutorialManager.TryGetGate() ?? (ITutorialGate)new DefaultTutorialGate(),
                     shouldShowInterstitialAds: () => _shopService == null || _shopService.ShouldShowInterstitialAds);
             }
 

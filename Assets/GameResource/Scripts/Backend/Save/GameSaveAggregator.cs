@@ -10,6 +10,7 @@ using Backend.Meta.Mailbox;
 using Backend.Meta.Quests;
 using Backend.Meta.SeasonPass;
 using Backend.Meta.Shop;
+using Backend.Meta.Tutorial;
 using Backend.GameSystems.Offline;
 
 namespace Backend.Services.Save
@@ -59,6 +60,8 @@ namespace Backend.Services.Save
         private readonly Action<SeasonPassSaveData> _importSeasonPass;
         private readonly Func<OfflineProgressSaveData> _exportOffline;
         private readonly Action<OfflineProgressSaveData> _importOffline;
+        private readonly Func<TutorialSaveData> _exportTutorial;
+        private readonly Action<TutorialSaveData> _importTutorial;
 
         public GameSaveAggregator(
             Func<WalletSaveData> exportWallet = null,
@@ -84,7 +87,9 @@ namespace Backend.Services.Save
             Func<SeasonPassSaveData> exportSeasonPass = null,
             Action<SeasonPassSaveData> importSeasonPass = null,
             Func<OfflineProgressSaveData> exportOffline = null,
-            Action<OfflineProgressSaveData> importOffline = null)
+            Action<OfflineProgressSaveData> importOffline = null,
+            Func<TutorialSaveData> exportTutorial = null,
+            Action<TutorialSaveData> importTutorial = null)
         {
             _exportWallet = exportWallet;
             _importWallet = importWallet;
@@ -110,6 +115,8 @@ namespace Backend.Services.Save
             _importSeasonPass = importSeasonPass;
             _exportOffline = exportOffline;
             _importOffline = importOffline;
+            _exportTutorial = exportTutorial;
+            _importTutorial = importTutorial;
         }
 
         /// <summary>
@@ -132,6 +139,7 @@ namespace Backend.Services.Save
                 Achievements = _exportAchievements?.Invoke() ?? new AchievementSaveData(),
                 SeasonPass = _exportSeasonPass?.Invoke() ?? new SeasonPassSaveData(),
                 Offline = _exportOffline?.Invoke() ?? new OfflineProgressSaveData(),
+                Tutorial = _exportTutorial?.Invoke() ?? new TutorialSaveData(),
             };
         }
 
@@ -167,6 +175,8 @@ namespace Backend.Services.Save
                 _importSeasonPass?.Invoke(snapshot.SeasonPass);
             if (snapshot.Offline != null)
                 _importOffline?.Invoke(snapshot.Offline);
+            if (snapshot.Tutorial != null)
+                _importTutorial?.Invoke(snapshot.Tutorial);
         }
     }
 }

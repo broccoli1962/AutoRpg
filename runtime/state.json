@@ -1,6 +1,6 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 16,
+  "currentStepId": 17,
   "status": "in_progress",
   "attempts": {
     "1": 2,
@@ -18,7 +18,8 @@
     "13": 1,
     "14": 2,
     "15": 1,
-    "16": 2
+    "16": 2,
+    "17": 1
   },
   "completedSteps": [
     1,
@@ -35,7 +36,8 @@
     12,
     13,
     14,
-    15
+    15,
+    16
   ],
   "memories": [
     {
@@ -458,12 +460,12 @@
     {
       "stepId": 16,
       "title": "백엔드 연동 — 인증 · 세이브 백업 · 원격 설정 · 분석",
-      "status": "failed",
+      "status": "completed",
       "summary": [
-        "NEXT: Step 17 — 튜토리얼·온보딩 플로우 및 성장 벽 UX (Analytics 훅 `BackendAnalyticsEvents` 연결)",
-        "SUMMARY: Firebase BaaS 최소 연동(인증·AES 로컬 세이브+클라우드 백업·충돌 UI·Remote Config·Analytics·Crashlytics·FCM)을 인터페이스 기반으로 구현하고 BackendManager 부트스트랩에 통합했습니다. 오프라인/페치 실패 시에도 번들 기본값·Simulated 구현체로 정상 동작합니다.",
-        "EditMode 테스트 **8건 추가, 전체 134건 통과**, C# 컴파일 에러 0건.",
-        "통합** — `BackendManager`가 부트스트랩(`GameManager.InitializeCore`)에 연결"
+        "NEXT: Step 17 — 튜토리얼·온보딩 플로우 및 성장 벽 UX 구현, `BackendAnalyticsEvents` 훅 연결",
+        "SUMMARY: Step 16 검수 실패(Backend 스크립트 Debug.Log 금지 위반)를 수정했습니다. 6개 Firebase/세이브 파일에서 Debug.LogError를 제거하고 EditMode 테스트 134건 전부 통과를 확인했습니다.",
+        "검수 실패 원인이었던 Backend Firebase/세이브 구현체 6개 파일의 `Debug.LogError` 호출을 모두 제거했습니다. 예외는 기존과 같이 실패 반환·기본값 폴백만 수행하며, Crashlytics no-op 경로는 `NullCrashReportingService`와 동일하게 무음 처리합니다.",
+        "FILES: Assets/GameResource/Scripts/Backend/Auth/FirebaseAuthService.cs, CrashReporting/FirebaseCrashlyticsService.cs, Push/FirebaseCloudMessagingService.cs, RemoteConfig/FirebaseRemoteConfigService.cs, Save/EncryptedLocalSaveStore.cs, Save/FirebaseCloudSaveStore.cs"
       ],
       "changedFiles": [
         "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
@@ -479,11 +481,11 @@
         "Assets/AddressableAssetsData/AssetGroups/Backend.asset",
         "Assets/AddressableAssetsData/AssetGroups/Backend.asset.meta"
       ],
-      "attempts": 1,
-      "finishedAt": "2026-08-01T04:31:11.152Z"
+      "commitHash": "2cfa95f",
+      "attempts": 2,
+      "finishedAt": "2026-08-01T04:31:55.190Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:31:11.488Z",
-  "lastError": "린트/컨벤션 위반이 감지되었습니다:\n- Assets/GameResource/Scripts/Backend/Auth/FirebaseAuthService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/CrashReporting/FirebaseCrashlyticsService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/Push/FirebaseCloudMessagingService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/RemoteConfig/FirebaseRemoteConfigService.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/Save/EncryptedLocalSaveStore.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Backend/Save/FirebaseCloudSaveStore.cs: Debug.Log 계열 호출이 추가되었습니다."
+  "updatedAt": "2026-08-01T04:31:55.484Z"
 }

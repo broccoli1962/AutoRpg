@@ -1,5 +1,6 @@
 using System;
 using Backend.GameSystems.Offline;
+using Backend.Meta.Ads;
 using Backend.Meta.Characters;
 using Backend.Meta.Currency;
 using Backend.Meta.IAP;
@@ -139,6 +140,24 @@ namespace Backend.Meta.Shop.Tests
             Assert.IsTrue(reloaded.IsOneTimeProductConsumed("starter_growth_pack"));
             Assert.IsTrue(_stateSync.TryRestorePurchaseState(out var serverState));
             Assert.Contains("starter_growth_pack", serverState.ConsumedOneTimeProductIds);
+        }
+
+        [Test]
+        public void CanPurchase_BlockedDuringTutorial()
+        {
+            var tutorialGate = new DefaultTutorialGate { IsTutorialActive = true };
+            var service = new ShopService(
+                _wallet,
+                _catalog,
+                _balance,
+                new FixedServerTimeProvider(() => _nowUtc),
+                () => _nowUtc,
+                _stateSync,
+                tutorialGate);
+
+            var product = _table.FindByProductId("abyss_stone_1");
+            Assert.IsFalse(service.ShouldShowShopOffers);
+            Assert.IsFalse(service.CanPurchase(product));
         }
 
         private sealed class FixedServerTimeProvider : IServerTimeProvider

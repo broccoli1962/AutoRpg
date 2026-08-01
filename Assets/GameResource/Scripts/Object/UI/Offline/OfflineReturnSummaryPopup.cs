@@ -1,5 +1,6 @@
 using System.Text;
 using Backend.GameSystems.Offline;
+using Backend.Meta.Achievements;
 using Backend.Object.Management;
 using R3;
 using UnityEngine;
@@ -92,7 +93,11 @@ namespace Backend.Object.UI.Offline
                 return;
 
             View.ConfirmButton.OnClickAsObservable()
-                .Subscribe(_ => UIManager.Close(View))
+                .Subscribe(_ =>
+                {
+                    MetaGameplayEvents.ReportOfflineRewardClaimed();
+                    UIManager.Close(View);
+                })
                 .AddTo(View);
         }
 

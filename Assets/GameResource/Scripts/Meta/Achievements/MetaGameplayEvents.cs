@@ -8,13 +8,24 @@ namespace Backend.Meta.Achievements
     public static class MetaGameplayEvents
     {
         public static event Action<int> EnemyKillsReported;
+        public static event Action DispatchStarted;
         public static event Action<int> FloorReached;
         public static event Action<int> EquipmentUpgraded;
+        public static event Action<int> EquipmentEquipped;
         public static event Action<int> SummonPerformed;
         public static event Action<int, int> CollectionProgressReported;
         public static event Action PrestigePerformed;
         public static event Action<int> CompendiumEntryAdded;
         public static event Action<int> BossKilled;
+        public static event Action OfflineRewardClaimed;
+
+        /// <summary>
+        /// 파견 시작을 발행한다.
+        /// </summary>
+        public static void ReportDispatchStarted()
+        {
+            DispatchStarted?.Invoke();
+        }
 
         /// <summary>
         /// 적 처치 수를 발행한다.
@@ -41,6 +52,15 @@ namespace Backend.Meta.Achievements
         {
             if (count > 0)
                 EquipmentUpgraded?.Invoke(count);
+        }
+
+        /// <summary>
+        /// 장비 장착 횟수를 발행한다.
+        /// </summary>
+        public static void ReportEquipmentEquipped(int count = 1)
+        {
+            if (count > 0)
+                EquipmentEquipped?.Invoke(count);
         }
 
         /// <summary>
@@ -88,18 +108,29 @@ namespace Backend.Meta.Achievements
         }
 
         /// <summary>
+        /// 오프라인 보상 수령을 발행한다.
+        /// </summary>
+        public static void ReportOfflineRewardClaimed()
+        {
+            OfflineRewardClaimed?.Invoke();
+        }
+
+        /// <summary>
         /// 테스트·씬 전환용 구독자를 모두 해제한다.
         /// </summary>
         public static void ClearSubscribers()
         {
             EnemyKillsReported = null;
+            DispatchStarted = null;
             FloorReached = null;
             EquipmentUpgraded = null;
+            EquipmentEquipped = null;
             SummonPerformed = null;
             CollectionProgressReported = null;
             PrestigePerformed = null;
             CompendiumEntryAdded = null;
             BossKilled = null;
+            OfflineRewardClaimed = null;
         }
     }
 }

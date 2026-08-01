@@ -10,6 +10,8 @@ namespace Backend.Services.Analytics
     public static class BackendAnalyticsEvents
     {
         public static event Action<int> TutorialStepReported;
+        public static event Action<int> TutorialStepEnteredReported;
+        public static event Action<int> TutorialStepCompletedReported;
         public static event Action<int> FloorReachedReported;
         public static event Action PrestigeReported;
         public static event Action<int> SummonReported;
@@ -25,6 +27,24 @@ namespace Backend.Services.Analytics
         {
             if (step >= 0)
                 TutorialStepReported?.Invoke(step);
+        }
+
+        /// <summary>
+        /// 튜토리얼 단계 진입을 발행한다.
+        /// </summary>
+        public static void ReportTutorialStepEntered(int step)
+        {
+            if (step > 0)
+                TutorialStepEnteredReported?.Invoke(step);
+        }
+
+        /// <summary>
+        /// 튜토리얼 단계 완료를 발행한다.
+        /// </summary>
+        public static void ReportTutorialStepCompleted(int step)
+        {
+            if (step > 0)
+                TutorialStepCompletedReported?.Invoke(step);
         }
 
         /// <summary>
@@ -94,6 +114,8 @@ namespace Backend.Services.Analytics
         public static void ClearSubscribers()
         {
             TutorialStepReported = null;
+            TutorialStepEnteredReported = null;
+            TutorialStepCompletedReported = null;
             FloorReachedReported = null;
             PrestigeReported = null;
             SummonReported = null;
@@ -126,6 +148,8 @@ namespace Backend.Services.Analytics
             MetaGameplayEvents.SummonPerformed += OnSummon;
 
             BackendAnalyticsEvents.TutorialStepReported += OnTutorialStep;
+            BackendAnalyticsEvents.TutorialStepEnteredReported += OnTutorialStepEntered;
+            BackendAnalyticsEvents.TutorialStepCompletedReported += OnTutorialStepCompleted;
             BackendAnalyticsEvents.FloorReachedReported += OnFloorReached;
             BackendAnalyticsEvents.PrestigeReported += OnPrestige;
             BackendAnalyticsEvents.SummonReported += OnSummon;
@@ -145,6 +169,8 @@ namespace Backend.Services.Analytics
             MetaGameplayEvents.SummonPerformed -= OnSummon;
 
             BackendAnalyticsEvents.TutorialStepReported -= OnTutorialStep;
+            BackendAnalyticsEvents.TutorialStepEnteredReported -= OnTutorialStepEntered;
+            BackendAnalyticsEvents.TutorialStepCompletedReported -= OnTutorialStepCompleted;
             BackendAnalyticsEvents.FloorReachedReported -= OnFloorReached;
             BackendAnalyticsEvents.PrestigeReported -= OnPrestige;
             BackendAnalyticsEvents.SummonReported -= OnSummon;
@@ -157,6 +183,16 @@ namespace Backend.Services.Analytics
         private void OnTutorialStep(int step)
         {
             _analytics.LogEvent(GameAnalyticsEvents.TutorialStep, Param("step", step));
+        }
+
+        private void OnTutorialStepEntered(int step)
+        {
+            _analytics.LogEvent(GameAnalyticsEvents.TutorialStepEnter, Param("step", step));
+        }
+
+        private void OnTutorialStepCompleted(int step)
+        {
+            _analytics.LogEvent(GameAnalyticsEvents.TutorialStepComplete, Param("step", step));
         }
 
         private void OnFloorReached(int floor)

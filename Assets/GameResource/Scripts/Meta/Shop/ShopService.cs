@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Backend.GameSystems.Offline;
 using Backend.Meta.Characters;
 using Backend.Meta.Currency;
+using Backend.Meta.Ads;
 using Backend.Meta.Retention;
 using Backend.Meta.SeasonPass;
 using Backend.Services.Analytics;
@@ -27,6 +28,7 @@ namespace Backend.Meta.Shop
         private readonly IServerTimeProvider _serverTimeProvider;
         private readonly Func<DateTimeOffset> _localUtcNow;
         private readonly IShopPurchaseStateSync _purchaseStateSync;
+        private readonly ITutorialGate _tutorialGate;
         private readonly HashSet<string> _consumedOneTime = new();
         private readonly HashSet<string> _firstPurchaseBonusUsed = new();
         private readonly HashSet<string> _processedTransactions = new();
@@ -43,7 +45,8 @@ namespace Backend.Meta.Shop
             BalanceTable balanceTable,
             IServerTimeProvider serverTimeProvider = null,
             Func<DateTimeOffset> localUtcNow = null,
-            IShopPurchaseStateSync purchaseStateSync = null)
+            IShopPurchaseStateSync purchaseStateSync = null,
+            ITutorialGate tutorialGate = null)
         {
             _wallet = wallet ?? throw new ArgumentNullException(nameof(wallet));
             _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog));
@@ -51,6 +54,7 @@ namespace Backend.Meta.Shop
             _serverTimeProvider = serverTimeProvider;
             _localUtcNow = localUtcNow ?? (() => DateTimeOffset.UtcNow);
             _purchaseStateSync = purchaseStateSync ?? new LocalStubShopPurchaseStateSync();
+            _tutorialGate = tutorialGate ?? new DefaultTutorialGate();
         }
 
         /// <summary>
@@ -109,11 +113,19 @@ namespace Backend.Meta.Shop
         }
 
         /// <summary>
+        /// 상점 오퍼를 노출할 수 있는지 여부. 튜토리얼 중에는 false.
+        /// </summary>
+        public bool ShouldShowShopOffers => _tutorialGate == null || !_tutorialGate.IsTutorialActive;
+
+        /// <summary>
         /// 상품 구매 가능 여부를 반환한다.
         /// </summary>
         public bool CanPurchase(ShopProductDefinition product)
         {
             if (product == null)
+                return false;
+
+            if (!ShouldShowShopOffers)
                 return false;
 
             if (product.IsOneTimeLimited && IsOneTimeProductConsumed(product.ProductId))

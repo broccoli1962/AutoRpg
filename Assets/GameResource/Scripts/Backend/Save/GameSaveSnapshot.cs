@@ -11,6 +11,7 @@ using Backend.Meta.Mailbox;
 using Backend.Meta.Quests;
 using Backend.Meta.SeasonPass;
 using Backend.Meta.Shop;
+using Backend.Meta.Tutorial;
 
 namespace Backend.Services.Save
 {
@@ -34,5 +35,6 @@ namespace Backend.Services.Save
         public AchievementSaveData Achievements = new();
         public SeasonPassSaveData SeasonPass = new();
         public OfflineProgressSaveData Offline = new();
+        public TutorialSaveData Tutorial = new();
     }
 }

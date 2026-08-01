@@ -1,3 +1,4 @@
+using Backend.Meta.Achievements;
 using Backend.Object.Management;
 using Backend.Object.UI.Gacha;
 using Cysharp.Threading.Tasks;
@@ -44,6 +45,7 @@ namespace Backend.Object.UI
 
         private void OnDispatchTapped()
         {
+            MetaGameplayEvents.ReportDispatchStarted();
         }
 
         private void OnReturnTapped()

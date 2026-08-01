@@ -6,6 +6,8 @@ namespace Backend.Services.Analytics
     public static class GameAnalyticsEvents
     {
         public const string TutorialStep = "tutorial_step";
+        public const string TutorialStepEnter = "tutorial_step_enter";
+        public const string TutorialStepComplete = "tutorial_step_complete";
         public const string FloorReached = "floor_reached";
         public const string Prestige = "prestige";
         public const string Summon = "summon";
