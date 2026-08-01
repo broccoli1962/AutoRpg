@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d27357b630e4d4395eac4fd9c50ee0, type: 3}
+  m_Name: QuestTable
+  m_EditorClassIdentifier: Assembly-CSharp::Backend.Meta.Quests.QuestTable
+  _dailyQuests:
+  - QuestId: daily_login
+    Period: 0
+    ObjectiveType: 0
+    TargetCount: 1
+    Rewards:
+    - CurrencyType: 0
+      Amount: 500
+  - QuestId: daily_kill_50
+    Period: 0
+    ObjectiveType: 1
+    TargetCount: 50
+    Rewards:
+    - CurrencyType: 0
+      Amount: 1000
+  - QuestId: daily_clear_5
+    Period: 0
+    ObjectiveType: 2
+    TargetCount: 5
+    Rewards:
+    - CurrencyType: 0
+      Amount: 1500
+  - QuestId: daily_upgrade_3
+    Period: 0
+    ObjectiveType: 3
+    TargetCount: 3
+    Rewards:
+    - CurrencyType: 1
+      Amount: 20
+  - QuestId: daily_summon_1
+    Period: 0
+    ObjectiveType: 4
+    TargetCount: 1
+    Rewards:
+    - CurrencyType: 3
+      Amount: 5
+  - QuestId: daily_offline_1
+    Period: 0
+    ObjectiveType: 5
+    TargetCount: 1
+    Rewards:
+    - CurrencyType: 0
+      Amount: 800
+  _weeklyQuests:
+  - QuestId: weekly_kill_500
+    Period: 1
+    ObjectiveType: 1
+    TargetCount: 500
+    Rewards:
+    - CurrencyType: 0
+      Amount: 5000
+  - QuestId: weekly_clear_50
+    Period: 1
+    ObjectiveType: 2
+    TargetCount: 50
+    Rewards:
+    - CurrencyType: 1
+      Amount: 100
+  - QuestId: weekly_summon_10
+    Period: 1
+    ObjectiveType: 4
+    TargetCount: 10
+    Rewards:
+    - CurrencyType: 4
+      Amount: 1
+  - QuestId: weekly_upgrade_20
+    Period: 1
+    ObjectiveType: 3
+    TargetCount: 20
+    Rewards:
+    - CurrencyType: 2
+      Amount: 50
+  - QuestId: weekly_daily_all_5
+    Period: 1
+    ObjectiveType: 6
+    TargetCount: 5
+    Rewards:
+    - CurrencyType: 3
+      Amount: 30
+  _dailyCompletionRewards:
+  - CurrencyType: 0
+    Amount: 5000
+  - CurrencyType: 3
+    Amount: 10
+  _weeklyCompletionRewards:
+  - CurrencyType: 0
+    Amount: 30000
+  - CurrencyType: 4
+    Amount: 1

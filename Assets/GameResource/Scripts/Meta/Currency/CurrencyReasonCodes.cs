@@ -12,5 +12,8 @@ namespace Backend.Meta.Currency
         public const string SummonCost = "summon_cost";
         public const string IapGrant = "iap_grant";
         public const string OfflineReward = "offline_reward";
+        public const string AttendanceReward = "attendance_reward";
+        public const string QuestCompletionChest = "quest_completion_chest";
+        public const string MailboxReward = "mailbox_reward";
     }
 }

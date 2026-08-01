@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3cbd1649a11b2643871af312fe6150a, type: 3}
+  m_Name: AttendanceTable
+  m_EditorClassIdentifier: Assembly-CSharp::Backend.Meta.Attendance.AttendanceTable
+  _newPlayerRewards:
+  - DayIndex: 1
+    CurrencyType: 0
+    Amount: 1000
+  - DayIndex: 2
+    CurrencyType: 0
+    Amount: 2000
+  - DayIndex: 3
+    CurrencyType: 1
+    Amount: 50
+  - DayIndex: 4
+    CurrencyType: 0
+    Amount: 5000
+  - DayIndex: 5
+    CurrencyType: 4
+    Amount: 1
+  - DayIndex: 6
+    CurrencyType: 3
+    Amount: 50
+  - DayIndex: 7
+    CurrencyType: 3
+    Amount: 100
+  _monthlyRewards:
+  - DayIndex: 1
+    CurrencyType: 0
+    Amount: 300
+  - DayIndex: 2
+    CurrencyType: 0
+    Amount: 600
+  - DayIndex: 3
+    CurrencyType: 0
+    Amount: 900
+  - DayIndex: 4
+    CurrencyType: 0
+    Amount: 1200
+  - DayIndex: 5
+    CurrencyType: 0
+    Amount: 1500
+  - DayIndex: 6
+    CurrencyType: 0
+    Amount: 1800
+  - DayIndex: 7
+    CurrencyType: 3
+    Amount: 20
+  - DayIndex: 8
+    CurrencyType: 0
+    Amount: 2400
+  - DayIndex: 9
+    CurrencyType: 0
+    Amount: 2700
+  - DayIndex: 10
+    CurrencyType: 0
+    Amount: 3000
+  - DayIndex: 11
+    CurrencyType: 0
+    Amount: 3300
+  - DayIndex: 12
+    CurrencyType: 0
+    Amount: 3600
+  - DayIndex: 13
+    CurrencyType: 0
+    Amount: 3900
+  - DayIndex: 14
+    CurrencyType: 3
+    Amount: 20
+  - DayIndex: 15
+    CurrencyType: 0
+    Amount: 4500
+  - DayIndex: 16
+    CurrencyType: 0
+    Amount: 4800
+  - DayIndex: 17
+    CurrencyType: 0
+    Amount: 5100
+  - DayIndex: 18
+    CurrencyType: 0
+    Amount: 5400
+  - DayIndex: 19
+    CurrencyType: 0
+    Amount: 5700
+  - DayIndex: 20
+    CurrencyType: 0
+    Amount: 6000
+  - DayIndex: 21
+    CurrencyType: 3
+    Amount: 20
+  - DayIndex: 22
+    CurrencyType: 0
+    Amount: 6600
+  - DayIndex: 23
+    CurrencyType: 0
+    Amount: 6900
+  - DayIndex: 24
+    CurrencyType: 0
+    Amount: 7200
+  - DayIndex: 25
+    CurrencyType: 0
+    Amount: 7500
+  - DayIndex: 26
+    CurrencyType: 0
+    Amount: 7800
+  - DayIndex: 27
+    CurrencyType: 0
+    Amount: 8100
+  - DayIndex: 28
+    CurrencyType: 3
+    Amount: 20

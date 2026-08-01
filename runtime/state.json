@@ -12,7 +12,8 @@
     "7": 1,
     "8": 1,
     "9": 1,
-    "10": 1
+    "10": 1,
+    "11": 1
   },
   "completedSteps": [
     1,
@@ -281,29 +282,30 @@
       "title": "오프라인 정산 재설계",
       "status": "completed",
       "summary": [
-        "SUMMARY: spec.md 2.3 기준 오프라인 정산을 재설계했습니다. 기본 4h·여관/월간 계약 최대 12h 상한, 70% 효율, 서버 시간 정산·로컬 시간 조작 무효화, 복귀 요약 모달(자원+연대기 하이라이트), EditMode 테스트 9건 통과.",
         "NEXT: Step 11 — 출석·일일/주간 퀘스트·일일 갱신 기준 시각 구현",
-        "FILES: Assets/GameResource/Scripts/GameSystems/Offline/*.cs, Assets/GameResource/Scripts/Object/UI/Offline/*.cs, Assets/Tests/EditMode/Editor/Offline/OfflineSettlementTests.cs, Assets/GameResource/Prefabs/UI/OfflineReturnSummaryPopup.prefab, Assets/Resources/Localize_*.json"
+        "SUMMARY: spec.md 2.3 기준 오프라인 정산(4~12h 상한, 70% 효율, 서버 시간·조작 방지)과 복귀 요약 모달(자원+연대기 하이라이트)을 구현했습니다.",
+        "GSSL Localization 키 6개 추가·동기화 (`offline.summary.*`)",
+        "EditMode 테스트 9건 추가 — 상한 절삭, 70% 효율, 시간 조작 무효화, 서버 시간 등"
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/GameSystems/Offline/OfflinePolicy.cs",
-        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineCapCalculator.cs",
-        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineTimeResolver.cs",
-        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineRewardCalculator.cs",
-        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineSettlementService.cs",
-        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineHighlightGenerator.cs",
-        "Assets/GameResource/Scripts/GameSystems/Offline/OfflineSettlementFlow.cs",
-        "Assets/GameResource/Scripts/Object/UI/Offline/OfflineReturnSummaryPopup.cs",
-        "Assets/GameResource/Prefabs/UI/OfflineReturnSummaryPopup.prefab",
-        "Assets/Tests/EditMode/Editor/Offline/OfflineSettlementTests.cs",
-        "Assets/Resources/Localize_ko.json",
+        ".cursor/gssl-result.json",
+        "Assets/AddressableAssetsData/AssetGroups/UI.asset",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
+        "Assets/GameResource/Scripts/Object/Management/Scene/SampleSceneContext.cs",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Assets/GoogleSpreadSheetLoader/Generated/Cache/Localization.txt",
         "Assets/Resources/Localize_en.json",
-        "runtime/state.json"
+        "Assets/Resources/Localize_ko.json",
+        "runtime/state.json",
+        "Assets/GameResource/Prefabs/UI/OfflineReturnSummaryPopup.prefab",
+        "Assets/GameResource/Prefabs/UI/OfflineReturnSummaryPopup.prefab.meta",
+        "Assets/GameResource/Scripts/GameSystems/Offline.meta"
       ],
+      "commitHash": "4ee8725",
       "attempts": 1,
-      "finishedAt": "2026-08-01T03:58:00.000Z"
+      "finishedAt": "2026-08-01T03:56:55.780Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T03:58:00.000Z"
+  "updatedAt": "2026-08-01T03:56:56.131Z"
 }
