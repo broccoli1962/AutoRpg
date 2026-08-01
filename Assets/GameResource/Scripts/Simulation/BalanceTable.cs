@@ -49,6 +49,29 @@ namespace Backend.Simulation
         [SerializeField] private float _damageVarianceMin = 0.9f;
         [SerializeField] private float _damageVarianceMax = 1.1f;
 
+        [Header("Explorer grade — base stat multiplier (R/SR/SSR/UR)")]
+        [SerializeField] private float[] _gradeStatMultipliers = { 1.00f, 1.15f, 1.35f, 1.60f };
+
+        [Header("Explorer grade — duplicate acquisition fragment yield")]
+        [SerializeField] private int[] _duplicateFragmentYields = { 10, 20, 50, 100 };
+
+        [Header("Limit break — max stage & per-stage stat bonus (additive)")]
+        [SerializeField] private int _maxLimitBreakStage = 5;
+        [SerializeField] private float _limitBreakStatBonusPerStage = 0.04f;
+
+        [Header("Limit break — skill level cap (base + bonus per stage)")]
+        [SerializeField] private int _baseSkillLevelCap = 10;
+        [SerializeField] private int _limitBreakSkillCapBonusPerStage = 2;
+
+        [Header("Limit break — fragment cost per target stage (5 stages × 4 grades, row-major)")]
+        [SerializeField] private int[] _limitBreakFragmentCosts =
+        {
+            20, 30, 40, 50, 60,
+            30, 45, 60, 75, 90,
+            50, 75, 100, 125, 150,
+            80, 120, 160, 200, 240,
+        };
+
         public float MonsterHpBase => _monsterHpBase;
         public float MonsterHpGrowth => _monsterHpGrowth;
         public float MonsterAtkBase => _monsterAtkBase;
@@ -68,6 +91,41 @@ namespace Backend.Simulation
         public int InfiniteZoneStart => _infiniteZoneStart;
         public float DamageVarianceMin => _damageVarianceMin;
         public float DamageVarianceMax => _damageVarianceMax;
+        public int MaxLimitBreakStage => _maxLimitBreakStage;
+        public float LimitBreakStatBonusPerStage => _limitBreakStatBonusPerStage;
+        public int BaseSkillLevelCap => _baseSkillLevelCap;
+        public int LimitBreakSkillCapBonusPerStage => _limitBreakSkillCapBonusPerStage;
+
+        /// <summary>
+        /// 등급별 기본 스탯 배율을 반환한다.
+        /// </summary>
+        public float GetGradeStatMultiplier(int gradeIndex)
+        {
+            return GetIndexedValue(_gradeStatMultipliers, gradeIndex, 1f);
+        }
+
+        /// <summary>
+        /// 중복 획득 시 등급별 조각 전환량을 반환한다.
+        /// </summary>
+        public int GetDuplicateFragmentYield(int gradeIndex)
+        {
+            return GetIndexedValue(_duplicateFragmentYields, gradeIndex, 0);
+        }
+
+        /// <summary>
+        /// 한계돌파 목표 단계(1-based)에 필요한 조각 수를 반환한다.
+        /// </summary>
+        public int GetLimitBreakFragmentCost(int gradeIndex, int targetStage)
+        {
+            if (targetStage < 1 || targetStage > _maxLimitBreakStage)
+                return 0;
+
+            var index = gradeIndex * _maxLimitBreakStage + (targetStage - 1);
+            if (index < 0 || index >= _limitBreakFragmentCosts.Length)
+                return 0;
+
+            return _limitBreakFragmentCosts[index];
+        }
 
         /// <summary>
         /// spec.md 3.2 기본값으로 직렬화 필드를 채운다.
@@ -97,6 +155,27 @@ namespace Backend.Simulation
             _infiniteZoneStart = 9;
             _damageVarianceMin = 0.9f;
             _damageVarianceMax = 1.1f;
+            _gradeStatMultipliers = new[] { 1.00f, 1.15f, 1.35f, 1.60f };
+            _duplicateFragmentYields = new[] { 10, 20, 50, 100 };
+            _maxLimitBreakStage = 5;
+            _limitBreakStatBonusPerStage = 0.04f;
+            _baseSkillLevelCap = 10;
+            _limitBreakSkillCapBonusPerStage = 2;
+            _limitBreakFragmentCosts = new[]
+            {
+                20, 30, 40, 50, 60,
+                30, 45, 60, 75, 90,
+                50, 75, 100, 125, 150,
+                80, 120, 160, 200, 240,
+            };
+        }
+
+        private static T GetIndexedValue<T>(T[] values, int index, T fallback)
+        {
+            if (values == null || index < 0 || index >= values.Length)
+                return fallback;
+
+            return values[index];
         }
 
         /// <summary>

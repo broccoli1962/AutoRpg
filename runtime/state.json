@@ -1,6 +1,6 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 7,
+  "currentStepId": 8,
   "status": "in_progress",
   "attempts": {
     "1": 2,
@@ -9,7 +9,8 @@
     "4": 2,
     "5": 2,
     "6": 1,
-    "7": 1
+    "7": 1,
+    "8": 1
   },
   "completedSteps": [
     1,
@@ -17,7 +18,8 @@
     3,
     4,
     5,
-    6
+    6,
+    7
   ],
   "memories": [
     {
@@ -162,21 +164,49 @@
       "title": "재화 지갑 및 거래 원장",
       "status": "completed",
       "summary": [
-        "SUMMARY: 7종 CurrencyType, Wallet(TryCredit/TryDebit/CanAfford), TransactionLedger(최근 100건), 세이브 스냅샷, 하드→소프트 교환 API 미제공을 구현했습니다.",
-        "FILES: Assets/GameResource/Scripts/Meta/Currency/*.cs, Assets/Tests/EditMode/Editor/Currency/WalletTests.cs",
-        "NEXT: Step 7 — 탐험가 등급·한계돌파·조각 전환 구현"
+        "NEXT: Step 7 — 탐험가 등급(R/SR/SSR/UR), 한계돌파, 중복 획득 조각 전환 구현",
+        "SUMMARY: 7종 재화 `CurrencyType`, 음수 방지·결과 객체 반환 `Wallet`, 사유 코드 기록 `TransactionLedger`(최근 100건 세이브), 하드→소프트 직접 구매 경로 미제공을 구현했습니다.",
+        "`Backend.Meta.Currency`** 네임스페이스에 재화 시스템 코어를 추가했습니다.",
+        "Step 6 **재화 지갑 및 거래 원장** 구현을 완료했습니다."
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/Meta/Currency/CurrencyType.cs",
+        "runtime/state.json",
+        "Assets/GameResource/Scripts/Meta.meta",
+        "Assets/GameResource/Scripts/Meta/Currency.meta",
         "Assets/GameResource/Scripts/Meta/Currency/CurrencyPolicy.cs",
-        "Assets/GameResource/Scripts/Meta/Currency/CurrencyTransactionResult.cs",
-        "Assets/GameResource/Scripts/Meta/Currency/LedgerEntry.cs",
-        "Assets/GameResource/Scripts/Meta/Currency/TransactionLedger.cs",
-        "Assets/GameResource/Scripts/Meta/Currency/TransactionLedgerSaveData.cs",
-        "Assets/GameResource/Scripts/Meta/Currency/WalletSaveData.cs",
-        "Assets/GameResource/Scripts/Meta/Currency/Wallet.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyPolicy.cs.meta",
         "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
-        "Assets/Tests/EditMode/Editor/Currency/WalletTests.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs.meta",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyTransactionResult.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyTransactionResult.cs.meta",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyType.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyType.cs.meta",
+        "Assets/GameResource/Scripts/Meta/Currency/LedgerEntry.cs"
+      ],
+      "commitHash": "8bef003",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T03:39:49.462Z"
+    },
+    {
+      "stepId": 7,
+      "title": "탐험가 등급 · 한계돌파 · 조각 전환",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: R/SR/SSR/UR 등급·스탯 배율을 BalanceTable에 추가하고 ExplorerCatalog로 중복 조각 전환·한계돌파(최대 5단계)·도감/보유 목록을 구현했습니다.",
+        "FILES: Assets/GameResource/Scripts/Meta/Characters/*.cs, Assets/GameResource/Scripts/Simulation/BalanceTable.cs, Assets/GameResource/Data/Balance/BalanceTable.asset, Assets/Tests/EditMode/Editor/Characters/ExplorerCatalogTests.cs",
+        "NEXT: Step 8 — 소환(가챠) 시스템 및 천장(SSR/UR 독립 카운터) 구현"
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerGrade.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/OwnedExplorerEntry.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerAcquireResult.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/LimitBreakResult.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerBalanceFormulas.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalogSaveData.cs",
+        "Assets/GameResource/Scripts/Meta/Characters/ExplorerCatalog.cs",
+        "Assets/GameResource/Scripts/Simulation/BalanceTable.cs",
+        "Assets/GameResource/Data/Balance/BalanceTable.asset",
+        "Assets/Tests/EditMode/Editor/Characters/ExplorerCatalogTests.cs",
         "runtime/state.json"
       ],
       "attempts": 1,
