@@ -15,6 +15,7 @@ namespace Backend.AddressableKey
                 { "GachaSummonPanel", "UI/GachaSummonPanel.prefab" },
                 { "GachaRateDisclosurePopup", "UI/GachaRateDisclosurePopup.prefab" },
                 { "OfflineReturnSummaryPopup", "UI/OfflineReturnSummaryPopup.prefab" },
+                { "ShopPanel", "UI/ShopPanel.prefab" },
             };
 
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;
@@ -151,6 +152,18 @@ namespace Backend.AddressableKey
             private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
             {
                 { "SeasonPassTable", Root + "SeasonPassTable.asset" },
+            };
+
+            public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;
+        }
+
+        public static class Shop
+        {
+            private const string Root = "Assets/GameResource/Data/Shop/";
+
+            private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+            {
+                { "ShopCatalogTable", Root + "ShopCatalogTable.asset" },
             };
 
             public static string Get(string keyName) => Keys.TryGetValue(keyName, out var key) ? key : null;

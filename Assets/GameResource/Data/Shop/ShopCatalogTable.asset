@@ -1,0 +1,245 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e572f369d7721d4085dceec54217194, type: 3}
+  m_Name: ShopCatalogTable
+  m_EditorClassIdentifier: Assembly-CSharp::Backend.Meta.Shop.ShopCatalogTable
+  Products:
+  - ProductId: starter_growth_pack
+    StoreProductId: com.abysschronicle.shop.starter_pack
+    Category: 0
+    ProductKind: 1
+    DisplayNameKey: shop.product.starter_pack
+    PriceKrw: 1100
+    PurchaseLimit: 1
+    FirstPurchaseBonusEligible: 0
+    BaseAbyssStoneAmount: 0
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 1200
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    - RewardType: 1
+      CurrencyType: 3
+      Amount: 0
+      CharacterId: explorer_sr_starter
+      CharacterGrade: 1
+      Entitlement: 0
+    - RewardType: 0
+      CurrencyType: 4
+      Amount: 5
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    Entitlement: 0
+  - ProductId: abyss_stone_1
+    StoreProductId: com.abysschronicle.shop.abyss_stone_1
+    Category: 1
+    ProductKind: 0
+    DisplayNameKey: shop.product.abyss_stone_1
+    PriceKrw: 3300
+    PurchaseLimit: 0
+    FirstPurchaseBonusEligible: 1
+    BaseAbyssStoneAmount: 300
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 300
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    Entitlement: 0
+  - ProductId: abyss_stone_2
+    StoreProductId: com.abysschronicle.shop.abyss_stone_2
+    Category: 1
+    ProductKind: 0
+    DisplayNameKey: shop.product.abyss_stone_2
+    PriceKrw: 11000
+    PurchaseLimit: 0
+    FirstPurchaseBonusEligible: 1
+    BaseAbyssStoneAmount: 1100
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 1100
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    Entitlement: 0
+  - ProductId: abyss_stone_3
+    StoreProductId: com.abysschronicle.shop.abyss_stone_3
+    Category: 1
+    ProductKind: 0
+    DisplayNameKey: shop.product.abyss_stone_3
+    PriceKrw: 33000
+    PurchaseLimit: 0
+    FirstPurchaseBonusEligible: 1
+    BaseAbyssStoneAmount: 3500
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 3500
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    Entitlement: 0
+  - ProductId: abyss_stone_4
+    StoreProductId: com.abysschronicle.shop.abyss_stone_4
+    Category: 1
+    ProductKind: 0
+    DisplayNameKey: shop.product.abyss_stone_4
+    PriceKrw: 110000
+    PurchaseLimit: 0
+    FirstPurchaseBonusEligible: 1
+    BaseAbyssStoneAmount: 12500
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 12500
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    Entitlement: 0
+  - ProductId: monthly_abyss_contract
+    StoreProductId: com.abysschronicle.shop.monthly_contract
+    Category: 2
+    ProductKind: 2
+    DisplayNameKey: shop.product.monthly_contract
+    PriceKrw: 11000
+    PurchaseLimit: 0
+    FirstPurchaseBonusEligible: 0
+    BaseAbyssStoneAmount: 0
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 100
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 1200
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    - RewardType: 2
+      CurrencyType: 3
+      Amount: 0
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 2
+    Entitlement: 2
+  - ProductId: season_pass
+    StoreProductId: com.abysschronicle.shop.season_pass
+    Category: 3
+    ProductKind: 1
+    DisplayNameKey: shop.product.season_pass
+    PriceKrw: 9900
+    PurchaseLimit: 0
+    FirstPurchaseBonusEligible: 0
+    BaseAbyssStoneAmount: 0
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 2
+      CurrencyType: 3
+      Amount: 0
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 3
+    Entitlement: 3
+  - ProductId: ad_removal
+    StoreProductId: com.abysschronicle.shop.ad_removal
+    Category: 4
+    ProductKind: 1
+    DisplayNameKey: shop.product.ad_removal
+    PriceKrw: 5500
+    PurchaseLimit: 0
+    FirstPurchaseBonusEligible: 0
+    BaseAbyssStoneAmount: 0
+    RequiredFloor: 0
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 2
+      CurrencyType: 3
+      Amount: 0
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 1
+    Entitlement: 1
+  - ProductId: growth_pack_50
+    StoreProductId: com.abysschronicle.shop.growth_pack_50
+    Category: 5
+    ProductKind: 1
+    DisplayNameKey: shop.product.growth_pack_50
+    PriceKrw: 2200
+    PurchaseLimit: 1
+    FirstPurchaseBonusEligible: 0
+    BaseAbyssStoneAmount: 0
+    RequiredFloor: 50
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 800
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    - RewardType: 0
+      CurrencyType: 4
+      Amount: 3
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    Entitlement: 0
+  - ProductId: growth_pack_100
+    StoreProductId: com.abysschronicle.shop.growth_pack_100
+    Category: 5
+    ProductKind: 1
+    DisplayNameKey: shop.product.growth_pack_100
+    PriceKrw: 5500
+    PurchaseLimit: 1
+    FirstPurchaseBonusEligible: 0
+    BaseAbyssStoneAmount: 0
+    RequiredFloor: 100
+    SubscriptionDailyAbyssStone: 0
+    SubscriptionDurationDays: 30
+    Rewards:
+    - RewardType: 0
+      CurrencyType: 3
+      Amount: 1500
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    - RewardType: 0
+      CurrencyType: 4
+      Amount: 3
+      CharacterId: 
+      CharacterGrade: 1
+      Entitlement: 0
+    Entitlement: 0

@@ -19,5 +19,6 @@ namespace Backend.Meta.Currency
         public const string SeasonPassFreeReward = "season_pass_free_reward";
         public const string SeasonPassPremiumReward = "season_pass_premium_reward";
         public const string SeasonPassPremiumRetroactive = "season_pass_premium_retroactive";
+        public const string ShopSubscriptionDaily = "shop_subscription_daily";
     }
 }

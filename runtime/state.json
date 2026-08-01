@@ -1,7 +1,7 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
   "currentStepId": 14,
-  "status": "pending",
+  "status": "in_progress",
   "attempts": {
     "1": 2,
     "2": 1,
@@ -15,7 +15,8 @@
     "10": 1,
     "11": 1,
     "12": 1,
-    "13": 1
+    "13": 1,
+    "14": 2
   },
   "completedSteps": [
     1,
@@ -371,26 +372,58 @@
       "title": "시즌 패스 — 심연 연대기",
       "status": "completed",
       "summary": [
-        "SUMMARY: 4주·50단계 무료/프리미엄 시즌 패스를 SeasonPassTable/SeasonPassService로 구현했습니다. 일일 획득 상한(300pt), 프리미엄 해금 소급 지급, 시즌 종료 미수령 우편함 이관, 푸시·서버 영속화 훅(ISeasonPassPushNotifier/ISeasonPassPremiumSync)을 포함합니다.",
-        "FILES: Assets/GameResource/Scripts/Meta/SeasonPass/*.cs, Assets/GameResource/Data/SeasonPass/SeasonPassTable.asset, Assets/Tests/EditMode/Editor/SeasonPass/SeasonPassServiceTests.cs, Assets/AddressableAssetsData/AssetGroups/SeasonPass.asset, Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
-        "NEXT: Step 14 — Unity IAP 상점 연동(상품 카탈로그, IPurchaseValidator, 구독·1회한정·첫구매 보너스)"
+        "전체 106개 테스트 통과. `state.json`을 갱신하고 Addressables 그룹 생성 여부를 확인합니다.",
+        "FILES: `Assets/GameResource/Scripts/Meta/SeasonPass/*.cs`, `Assets/GameResource/Data/SeasonPass/SeasonPassTable.asset`, `Assets/Tests/EditMode/Editor/SeasonPass/SeasonPassServiceTests.cs`, `Assets/AddressableAssetsData/AssetGroups/SeasonPass.asset`, `Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs`",
+        "SUMMARY: 4주·50단계 무료/프리미엄 시즌 패스(일일 상한, 프리미엄 소급 지급, 시즌 종료 우편함 이관, 푸시/서버 훅)를 구현했습니다.",
+        "EditMode 테스트 8건 추가, **전체 106건 통과**"
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/Meta/SeasonPass",
-        "Assets/GameResource/Data/SeasonPass/SeasonPassTable.asset",
-        "Assets/Tests/EditMode/Editor/SeasonPass/SeasonPassServiceTests.cs",
-        "Assets/AddressableAssetsData/AssetGroups/SeasonPass.asset",
-        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
-        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
+        "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
         "Assets/GameResource/Scripts/Meta/Achievements/MetaGameplayEvents.cs",
-        "Assets/GameResource/Scripts/Meta/Retention/MetaRetentionEvents.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
         "Assets/GameResource/Scripts/Meta/Quests/QuestService.cs",
-        "runtime/state.json"
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "runtime/state.json",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/SeasonPass_BundledAssetGroupSchema.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/SeasonPass_BundledAssetGroupSchema.asset.meta",
+        "Assets/AddressableAssetsData/AssetGroups/SeasonPass.asset",
+        "Assets/AddressableAssetsData/AssetGroups/SeasonPass.asset.meta",
+        "Assets/GameResource/Data/SeasonPass.meta",
+        "Assets/GameResource/Data/SeasonPass/SeasonPassTable.asset"
+      ],
+      "commitHash": "baaef42",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T04:13:51.956Z"
+    },
+    {
+      "stepId": 14,
+      "title": "상점 UI 및 IAP 연동",
+      "status": "failed",
+      "summary": [
+        "FILES: Assets/GameResource/Scripts/Meta/Shop/*, Assets/GameResource/Scripts/Meta/IAP/*, Assets/GameResource/Data/Shop/ShopCatalogTable.asset, Assets/GameResource/Scripts/Object/UI/Shop/*, Assets/GameResource/Prefabs/UI/ShopPanel.prefab, Assets/Tests/EditMode/Editor/Shop/*, Assets/Tests/EditMode/Editor/IAP/*, Packages/manifest.json, Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "NEXT: Step 15 — Firebase BaaS(익명 인증, Firestore 세이브 백업, Remote Config, Analytics, Crashlytics, Cloud Messaging) 연동Step 14 **상점 UI 및 IAP 연동**이 완료되었습니다.",
+        "SUMMARY: spec 4.3 6종 IAP 카탈로그, 영수증 검증 후 지급(로컬 스텁/서버 훅), 구매 복원·미지급 재처리, 1회/첫구매 영속화, 구독 만료(서버 시간), ShopPanel UI를 구현했습니다.",
+        "테스트** — Shop 6건 + IAP 4건 추가, EditMode **116건 전부 통과**, C# 컴파일 에러 0건"
+      ],
+      "changedFiles": [
+        "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
+        "Assets/AddressableAssetsData/AssetGroups/UI.asset",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Packages/manifest.json",
+        "Packages/packages-lock.json",
+        "runtime/state.json",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Shop_BundledAssetGroupSchema.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Shop_BundledAssetGroupSchema.asset.meta",
+        "Assets/AddressableAssetsData/AssetGroups/Shop.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Shop.asset.meta",
+        "Assets/GameResource/Data/Shop.meta"
       ],
       "attempts": 1,
-      "finishedAt": "2026-08-01T05:00:00.000Z"
+      "finishedAt": "2026-08-01T04:18:35.324Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T05:00:00.000Z"
+  "updatedAt": "2026-08-01T04:18:35.668Z",
+  "lastError": "린트/컨벤션 위반이 감지되었습니다:\n- Assets/GameResource/Scripts/Meta/IAP/ServerPurchaseValidator.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Meta/IAP/UnityIapStoreBridge.cs: Debug.Log 계열 호출이 추가되었습니다."
 }
