@@ -16,5 +16,8 @@ namespace Backend.Meta.Currency
         public const string QuestCompletionChest = "quest_completion_chest";
         public const string MailboxReward = "mailbox_reward";
         public const string AchievementReward = "achievement_reward";
+        public const string SeasonPassFreeReward = "season_pass_free_reward";
+        public const string SeasonPassPremiumReward = "season_pass_premium_reward";
+        public const string SeasonPassPremiumRetroactive = "season_pass_premium_retroactive";
     }
 }

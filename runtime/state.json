@@ -1,7 +1,7 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 13,
-  "status": "completed",
+  "currentStepId": 14,
+  "status": "pending",
   "attempts": {
     "1": 2,
     "2": 1,
@@ -14,7 +14,8 @@
     "9": 1,
     "10": 1,
     "11": 1,
-    "12": 1
+    "12": 1,
+    "13": 1
   },
   "completedSteps": [
     1,
@@ -28,7 +29,8 @@
     9,
     10,
     11,
-    12
+    12,
+    13
   ],
   "memories": [
     {
@@ -341,23 +343,54 @@
       "title": "업적 시스템",
       "status": "completed",
       "summary": [
-        "SUMMARY: 7종 카테고리 다단계 업적(AchievementTable·AchievementService), MetaGameplayEvents 자동 누적, Remote Config 보상 오버레이, 프레스티지 후 진행도 유지, Wallet 경유 보상 지급을 구현했습니다. EditMode 테스트 8건 추가, 전체 98건 통과.",
-        "FILES: Assets/GameResource/Scripts/Meta/Achievements/*.cs, Assets/GameResource/Data/Achievements/AchievementTable.asset, Assets/Tests/EditMode/Editor/Achievements/AchievementServiceTests.cs, Assets/AddressableAssetsData/AssetGroups/Achievements.asset",
-        "NEXT: Step 13 — 4주 단위 시즌 패스(무료/프리미엄 50단계 트랙, 소급 지급, 시즌 종료 우편함 이관) 구현"
+        "Addressables 등록을 에디터 스크립트에 추가합니다.",
+        "FILES:** `Assets/GameResource/Scripts/Meta/Achievements/*.cs`, `Assets/GameResource/Data/Achievements/AchievementTable.asset`, `Assets/Tests/EditMode/Editor/Achievements/AchievementServiceTests.cs`, `Assets/AddressableAssetsData/AssetGroups/Achievements.asset`, `Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs`, `Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs`",
+        "NEXT:** Step 13 — 4주 단위 시즌 패스(무료/프리미엄 50단계 트랙, 소급 지급, 시즌 종료 우편함 이관) 구현",
+        "SUMMARY:** 7종 카테고리(누적 처치·최고 층·강화·소환·수집 완성도·프레스티지·도감) 다단계 업적을 `AchievementTable`/`AchievementService`로 구현했습니다. `MetaGameplayEvents` + `AchievementEventBridge`로 자동 누적, `AchievementRemoteConfigOverlay`로 Remote Config 보상 조정, 프레스티지 후에도 진행도·수령 상태가 유지되며 보상은 `Wallet`/`TransactionLedger`를 경유합니다. EditMode 테스트 8건 추가, **전체 98건 통과**."
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/Meta/Achievements",
-        "Assets/GameResource/Data/Achievements/AchievementTable.asset",
-        "Assets/Tests/EditMode/Editor/Achievements/AchievementServiceTests.cs",
+        "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
         "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
         "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "runtime/state.json",
         "Assets/AddressableAssetsData/AssetGroups/Achievements.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Achievements.asset.meta",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Achievements_BundledAssetGroupSchema.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Achievements_BundledAssetGroupSchema.asset.meta",
+        "Assets/GameResource/Data/Achievements.meta",
+        "Assets/GameResource/Data/Achievements/AchievementTable.asset",
+        "Assets/GameResource/Data/Achievements/AchievementTable.asset.meta",
+        "Assets/GameResource/Scripts/Meta/Achievements.meta"
+      ],
+      "commitHash": "9f15f6b",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T04:11:06.122Z"
+    },
+    {
+      "stepId": 13,
+      "title": "시즌 패스 — 심연 연대기",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: 4주·50단계 무료/프리미엄 시즌 패스를 SeasonPassTable/SeasonPassService로 구현했습니다. 일일 획득 상한(300pt), 프리미엄 해금 소급 지급, 시즌 종료 미수령 우편함 이관, 푸시·서버 영속화 훅(ISeasonPassPushNotifier/ISeasonPassPremiumSync)을 포함합니다.",
+        "FILES: Assets/GameResource/Scripts/Meta/SeasonPass/*.cs, Assets/GameResource/Data/SeasonPass/SeasonPassTable.asset, Assets/Tests/EditMode/Editor/SeasonPass/SeasonPassServiceTests.cs, Assets/AddressableAssetsData/AssetGroups/SeasonPass.asset, Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "NEXT: Step 14 — Unity IAP 상점 연동(상품 카탈로그, IPurchaseValidator, 구독·1회한정·첫구매 보너스)"
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Meta/SeasonPass",
+        "Assets/GameResource/Data/SeasonPass/SeasonPassTable.asset",
+        "Assets/Tests/EditMode/Editor/SeasonPass/SeasonPassServiceTests.cs",
+        "Assets/AddressableAssetsData/AssetGroups/SeasonPass.asset",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
+        "Assets/GameResource/Scripts/Meta/Achievements/MetaGameplayEvents.cs",
+        "Assets/GameResource/Scripts/Meta/Retention/MetaRetentionEvents.cs",
+        "Assets/GameResource/Scripts/Meta/Quests/QuestService.cs",
         "runtime/state.json"
       ],
       "attempts": 1,
-      "finishedAt": "2026-08-01T04:15:00.000Z"
+      "finishedAt": "2026-08-01T05:00:00.000Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:15:00.000Z"
+  "updatedAt": "2026-08-01T05:00:00.000Z"
 }

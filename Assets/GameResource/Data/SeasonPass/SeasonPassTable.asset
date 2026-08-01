@@ -1,0 +1,438 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fa72575ffd61aa45a92af0ea193e4a3, type: 3}
+  m_Name: SeasonPassTable
+  m_EditorClassIdentifier: Assembly-CSharp::Backend.Meta.SeasonPass.SeasonPassTable
+  _seasons:
+  - SeasonNumber: 1
+    StartUtcTicks: 639211212000000000
+    EndUtcTicks: 639235404000000000
+  - SeasonNumber: 2
+    StartUtcTicks: 639235404000000000
+    EndUtcTicks: 639259596000000000
+  _tiers:
+  - TierIndex: 1
+    RequiredPoints: 100
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 550
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 2
+    RequiredPoints: 200
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 600
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 3
+    RequiredPoints: 300
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 650
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 4
+    RequiredPoints: 400
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 700
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 5
+    RequiredPoints: 500
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 750
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 6
+    RequiredPoints: 600
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 800
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 7
+    RequiredPoints: 700
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 850
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 8
+    RequiredPoints: 800
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 900
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 9
+    RequiredPoints: 900
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 950
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 10
+    RequiredPoints: 1000
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1000
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 10
+    - CurrencyType: 4
+      Amount: 1
+  - TierIndex: 11
+    RequiredPoints: 1100
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1050
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 12
+    RequiredPoints: 1200
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1100
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 13
+    RequiredPoints: 1300
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1150
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 14
+    RequiredPoints: 1400
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1200
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 15
+    RequiredPoints: 1500
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1250
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 16
+    RequiredPoints: 1600
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1300
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 17
+    RequiredPoints: 1700
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1350
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 18
+    RequiredPoints: 1800
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1400
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 19
+    RequiredPoints: 1900
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1450
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 20
+    RequiredPoints: 2000
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1500
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 10
+    - CurrencyType: 4
+      Amount: 1
+  - TierIndex: 21
+    RequiredPoints: 2100
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1550
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 22
+    RequiredPoints: 2200
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1600
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 23
+    RequiredPoints: 2300
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1650
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 24
+    RequiredPoints: 2400
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1700
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 25
+    RequiredPoints: 2500
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1750
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 26
+    RequiredPoints: 2600
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1800
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 27
+    RequiredPoints: 2700
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1850
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 28
+    RequiredPoints: 2800
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1900
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 29
+    RequiredPoints: 2900
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 1950
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 30
+    RequiredPoints: 3000
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2000
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 10
+    - CurrencyType: 4
+      Amount: 1
+  - TierIndex: 31
+    RequiredPoints: 3100
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2050
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 32
+    RequiredPoints: 3200
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2100
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 33
+    RequiredPoints: 3300
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2150
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 34
+    RequiredPoints: 3400
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2200
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 35
+    RequiredPoints: 3500
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2250
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 36
+    RequiredPoints: 3600
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2300
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 37
+    RequiredPoints: 3700
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2350
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 38
+    RequiredPoints: 3800
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2400
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 39
+    RequiredPoints: 3900
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2450
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 40
+    RequiredPoints: 4000
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2500
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 10
+    - CurrencyType: 4
+      Amount: 1
+  - TierIndex: 41
+    RequiredPoints: 4100
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2550
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 42
+    RequiredPoints: 4200
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2600
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 43
+    RequiredPoints: 4300
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2650
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 44
+    RequiredPoints: 4400
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2700
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 45
+    RequiredPoints: 4500
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2750
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 46
+    RequiredPoints: 4600
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2800
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 47
+    RequiredPoints: 4700
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2850
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 48
+    RequiredPoints: 4800
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2900
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 49
+    RequiredPoints: 4900
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 2950
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 5
+  - TierIndex: 50
+    RequiredPoints: 5000
+    FreeRewards:
+    - CurrencyType: 0
+      Amount: 3000
+    PremiumRewards:
+    - CurrencyType: 3
+      Amount: 10
+    - CurrencyType: 4
+      Amount: 1
+  _pointConfig:
+    DailyQuestCompletePoints: 40
+    WeeklyQuestCompletePoints: 120
+    FloorReachedPoints: 15
+    BossKillPoints: 25
+    DailyEarnCap: 300

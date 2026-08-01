@@ -14,6 +14,7 @@ namespace Backend.Meta.Achievements
         public static event Action<int, int> CollectionProgressReported;
         public static event Action PrestigePerformed;
         public static event Action<int> CompendiumEntryAdded;
+        public static event Action<int> BossKilled;
 
         /// <summary>
         /// 적 처치 수를 발행한다.
@@ -78,6 +79,15 @@ namespace Backend.Meta.Achievements
         }
 
         /// <summary>
+        /// 보스 처치 수를 발행한다.
+        /// </summary>
+        public static void ReportBossKill(int count = 1)
+        {
+            if (count > 0)
+                BossKilled?.Invoke(count);
+        }
+
+        /// <summary>
         /// 테스트·씬 전환용 구독자를 모두 해제한다.
         /// </summary>
         public static void ClearSubscribers()
@@ -89,6 +99,7 @@ namespace Backend.Meta.Achievements
             CollectionProgressReported = null;
             PrestigePerformed = null;
             CompendiumEntryAdded = null;
+            BossKilled = null;
         }
     }
 }

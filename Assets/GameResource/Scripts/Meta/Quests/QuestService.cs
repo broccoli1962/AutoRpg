@@ -131,6 +131,7 @@ namespace Backend.Meta.Quests
                 return QuestClaimResult.Failed(questId, quest.Period, "Failed to credit reward.");
 
             _claimedQuestIds.Add(questId);
+            MetaRetentionEvents.ReportQuestRewardClaimed(quest.Period);
 
             return QuestClaimResult.Succeeded(questId, quest.Period);
         }
