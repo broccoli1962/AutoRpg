@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Backend.Chronicle;
 using Backend.Meta.Characters;
 using UnityEngine;
@@ -18,6 +19,15 @@ namespace Backend.Meta.Gacha
         [SerializeField] private string[] _urPool = { "explorer_ur_01" };
 
         public string BannerId => _bannerId;
+
+        /// <summary>
+        /// 등급별 풀에 등록된 캐릭터 ID 목록을 반환한다.
+        /// </summary>
+        public IReadOnlyList<string> GetGradePoolMembers(ExplorerGrade grade)
+        {
+            var pool = GetPool(grade);
+            return pool ?? Array.Empty<string>();
+        }
 
         /// <summary>
         /// 등급 풀에서 캐릭터 1명을 추첨한다.

@@ -1,4 +1,6 @@
 using Backend.Object.Management;
+using Backend.Object.UI.Gacha;
+using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 
@@ -54,6 +56,7 @@ namespace Backend.Object.UI
 
         private void OnSummonTapped()
         {
+            UIManager.OpenAsync<GachaSummonPanel>().Forget();
         }
     }
 }

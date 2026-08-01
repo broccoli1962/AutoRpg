@@ -18,32 +18,28 @@ public static class LocalizeTable
 
     public static void Initialize(SystemLanguage language)
     {
-        var assetName = $"Localize_";
-        switch (language)
+        var suffix = language switch
         {
-            case SystemLanguage.Korean:
-            case SystemLanguage.English:
-                assetName += $"{language}";
-                break;
-            default:
-                // Util.Debug.LogError($"해당 국가코드 ({language}) 는 정의 되지 않아 en으로 대체합니다.");
-                assetName += $"{SystemLanguage.English}";
-                break;
-        }
+            SystemLanguage.Korean => "ko",
+            SystemLanguage.English => "en",
+            _ => "en",
+        };
 
+        var assetName = $"Localize_{suffix}";
         var obj = Resources.Load<TextAsset>(assetName);
 
-        // 배열 형태의 JSON을 먼저 역직렬화
-        var localizeArray = JsonConvert.DeserializeObject<LocalizeKeyValue[]>(obj.text);
-
-        // 딕셔너리로 변환
         dicLocalize.Clear();
-        foreach (var item in localizeArray)
+        if (obj == null || string.IsNullOrEmpty(obj.text))
+            return;
+
+        var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(obj.text);
+        if (dictionary == null)
+            return;
+
+        foreach (var pair in dictionary)
         {
-            if (!string.IsNullOrEmpty(item.Key))
-            {
-                dicLocalize[item.Key] = item.Value ?? string.Empty;
-            }
+            if (!string.IsNullOrEmpty(pair.Key))
+                dicLocalize[pair.Key] = pair.Value ?? string.Empty;
         }
     }
 
@@ -58,6 +54,9 @@ public static class LocalizeTable
 
     public static string GetLocalizeText(this string key, params object[] param)
     {
+        if (dicLocalize.Count == 0)
+            Initialize(Application.systemLanguage);
+
         if (dicLocalize.TryGetValue(key, out var result))
         {
             return string.Format(result, param);

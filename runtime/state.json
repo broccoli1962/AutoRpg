@@ -1,7 +1,7 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 9,
-  "status": "pending",
+  "currentStepId": 10,
+  "status": "in_progress",
   "attempts": {
     "1": 2,
     "2": 1,
@@ -10,7 +10,9 @@
     "5": 2,
     "6": 1,
     "7": 1,
-    "8": 1
+    "8": 1,
+    "9": 1,
+    "10": 0
   },
   "completedSteps": [
     1,
@@ -20,7 +22,8 @@
     5,
     6,
     7,
-    8
+    8,
+    9
   ],
   "memories": [
     {
@@ -221,17 +224,49 @@
       "title": "소환(가챠) 시스템 및 천장",
       "status": "completed",
       "summary": [
-        "SUMMARY: R/SR/SSR/UR 만분율 확률 테이블·단차/10연차 비용·SSR/UR 독립 천장·시드 원장을 GachaService로 구현하고 EditMode 테스트 11건을 통과했습니다.",
-        "FILES: Assets/GameResource/Scripts/Meta/Gacha/*.cs, Assets/GameResource/Data/Gacha/*.asset, Assets/Tests/EditMode/Editor/Gacha/GachaServiceTests.cs, Assets/AddressableAssetsData/AssetGroups/Gacha.asset",
-        "NEXT: Step 9 — 게임산업법 확률형 아이템 정보공개 화면 구현"
+        "Addressables `Gacha` 그룹 등록 완료",
+        "FILES: `Assets/GameResource/Scripts/Meta/Gacha/*.cs`, `Assets/GameResource/Data/Gacha/*.asset`, `Assets/Tests/EditMode/Editor/Gacha/GachaServiceTests.cs`, `Assets/AddressableAssetsData/AssetGroups/Gacha.asset`, `Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs`, `runtime/state.json`",
+        "51개 테스트가 모두 통과했습니다. Addressables 등록과 state.json 갱신을 진행합니다.",
+        "NEXT: Step 9 — 게임산업법 확률형 아이템 정보공개 화면 구현 (확률 테이블 단일 출처 연동)"
       ],
       "changedFiles": [
-        "Assets/GameResource/Scripts/Meta/Gacha",
-        "Assets/GameResource/Data/Gacha/GachaRateTable.asset",
-        "Assets/GameResource/Data/Gacha/GachaBannerPool.asset",
+        "Assets/AddressableAssetsData/AddressableAssetSettings.asset",
         "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
-        "Assets/Tests/EditMode/Editor/Gacha/GachaServiceTests.cs",
+        "runtime/state.json",
         "Assets/AddressableAssetsData/AssetGroups/Gacha.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Gacha.asset.meta",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Gacha_BundledAssetGroupSchema.asset",
+        "Assets/AddressableAssetsData/AssetGroups/Schemas/Gacha_BundledAssetGroupSchema.asset.meta",
+        "Assets/GameResource/Data/Gacha.meta",
+        "Assets/GameResource/Data/Gacha/GachaBannerPool.asset",
+        "Assets/GameResource/Data/Gacha/GachaBannerPool.asset.meta",
+        "Assets/GameResource/Data/Gacha/GachaRateTable.asset",
+        "Assets/GameResource/Data/Gacha/GachaRateTable.asset.meta"
+      ],
+      "commitHash": "79099b9",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T03:46:22.368Z"
+    },
+    {
+      "stepId": 9,
+      "title": "게임산업법 확률형 아이템 정보공개 화면",
+      "status": "completed",
+      "summary": [
+        "SUMMARY: GachaSummonPanel에서 1탭으로 GachaRateDisclosurePopup 진입, GachaRateTable·GachaBannerPool 단일 출처 확률 표시, 천장 카운터·10연차 보장, 오프라인 Addressables, GSSL 현지화 키 연동을 구현했습니다.",
+        "FILES: Assets/GameResource/Scripts/Object/UI/Gacha/*.cs, Assets/GameResource/Scripts/Meta/Gacha/GachaRateDisclosure*.cs, Assets/GameResource/Prefabs/UI/Gacha*.prefab, Assets/Resources/Localize_*.json, runtime/state.json",
+        "NEXT: Step 10 — 인게임 스테이지 뷰 및 자동전투 관찰 루프 구현"
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Object/UI/Gacha/GachaSummonPanel.cs",
+        "Assets/GameResource/Scripts/Object/UI/Gacha/GachaRateDisclosurePopup.cs",
+        "Assets/GameResource/Scripts/Meta/Gacha/GachaRateDisclosureBuilder.cs",
+        "Assets/GameResource/Scripts/Meta/Gacha/GachaDataProvider.cs",
+        "Assets/GameResource/Scripts/Meta/MetaRuntimeProvider.cs",
+        "Assets/GameResource/Prefabs/UI/GachaSummonPanel.prefab",
+        "Assets/GameResource/Prefabs/UI/GachaRateDisclosurePopup.prefab",
+        "Assets/Resources/Localize_ko.json",
+        "Assets/Resources/Localize_en.json",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs",
         "runtime/state.json"
       ],
       "attempts": 1,

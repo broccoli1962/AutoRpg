@@ -30,6 +30,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ffe446d86c16bf40ac3e73b73c6ce82
+    m_Address: UI/GachaSummonPanel.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a7c40841dc9090147b07d362ac5f20d1
+    m_Address: UI/GachaRateDisclosurePopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 06a8086d208db744eb95cc682474d785, type: 2}
   m_SchemaSet:
