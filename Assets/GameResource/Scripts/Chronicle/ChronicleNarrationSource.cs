@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using Backend.Util.Localization;
+
 namespace Backend.Chronicle
 {
     /// <summary>
@@ -25,7 +27,7 @@ namespace Backend.Chronicle
         public string BuildLine(NarrationRequest request)
         {
             if (request == null)
-                return PassthroughNarrationSource.DefaultFallbackLine;
+                return LocalizationService.Get(PassthroughNarrationSource.DefaultFallbackKey);
 
             if (!string.IsNullOrWhiteSpace(request.TemplateLine))
                 return request.TemplateLine.Trim();
@@ -41,7 +43,7 @@ namespace Backend.Chronicle
                 CharacterPersonalityTags = request.CharacterPersonalityTags,
                 ZoneToneTag = request.ZoneToneTag,
                 Variables = request.Slots,
-                ResolveText = key => key
+                ResolveText = LocalizationService.ResolveKey
             };
 
             var line = _engine.Generate(generationRequest, new SeededRandomSource(seed));

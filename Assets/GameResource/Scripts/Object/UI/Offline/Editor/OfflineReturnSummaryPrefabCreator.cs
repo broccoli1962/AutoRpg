@@ -58,7 +58,7 @@ namespace Backend.Object.UI.Offline.Editor
                 new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(48f, 120f), new Vector2(-32f, -320f));
             highlightsContent.alignment = TextAnchor.UpperLeft;
 
-            var confirm = CreateTouchButton(panel.transform, "Btn_Confirm", "확인", 240f,
+            var confirm = CreateTouchButton(panel.transform, "Btn_Confirm", string.Empty, 240f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-120f, 24f), new Vector2(120f, 96f));
 
             var so = new SerializedObject(popup);

@@ -45,7 +45,7 @@ namespace Backend.Object.UI.Gacha.Editor
             var title = CreateText(root.transform, "Title", 36, TextAnchor.UpperCenter,
                 new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -120f), new Vector2(0f, -24f));
 
-            var rateLink = CreateTouchButton(root.transform, "Btn_RateInfo", "확률 정보", 320f,
+            var rateLink = CreateTouchButton(root.transform, "Btn_RateInfo", string.Empty, 320f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 280f), new Vector2(0f, 360f));
 
             var actionBar = CreateRect("ActionBar", root.transform);
@@ -63,10 +63,10 @@ namespace Backend.Object.UI.Gacha.Editor
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = true;
 
-            var single = CreateTouchButton(actionBar.transform, "Btn_SingleSummon", "1회 소환", 0f);
-            var ten = CreateTouchButton(actionBar.transform, "Btn_TenSummon", "10회 소환", 0f);
+            var single = CreateTouchButton(actionBar.transform, "Btn_SingleSummon", string.Empty, 0f);
+            var ten = CreateTouchButton(actionBar.transform, "Btn_TenSummon", string.Empty, 0f);
 
-            var close = CreateTouchButton(root.transform, "Btn_Close", "닫기", 200f,
+            var close = CreateTouchButton(root.transform, "Btn_Close", string.Empty, 200f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-100f, 32f), new Vector2(100f, 104f));
 
             var so = new SerializedObject(panel);
@@ -138,7 +138,7 @@ namespace Backend.Object.UI.Gacha.Editor
             var pityContent = CreateSectionBody(content.transform, "PityContent");
             var tenPull = CreateSectionBody(content.transform, "TenPullContent");
 
-            var close = CreateTouchButton(panel.transform, "Btn_Close", "닫기", 200f,
+            var close = CreateTouchButton(panel.transform, "Btn_Close", string.Empty, 200f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-100f, 16f), new Vector2(100f, 80f));
 
             var so = new SerializedObject(popup);

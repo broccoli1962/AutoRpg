@@ -3,307 +3,307 @@
   "slots": {
     "Intro": [
       {
-        "text": "탐험대는",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.intro.001"
       },
       {
-        "text": "일행은",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.move.intro.002"
       },
       {
-        "text": "{character}는",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.move.intro.003"
       },
       {
-        "text": "선두의 {character}는",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.move.intro.004"
       },
       {
-        "text": "파티는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.move.intro.005"
       },
       {
-        "text": "어둠 속에서",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.move.intro.006"
       },
       {
-        "text": "침묵을 깨며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.move.intro.007"
       },
       {
-        "text": "조심스럽게",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.intro.008"
       },
       {
-        "text": "주변을 살피며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.move.intro.009"
       },
       {
-        "text": "발밑을 확인하며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.move.intro.010"
       },
       {
-        "text": "긴 통로 끝에서",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.move.intro.011"
       },
       {
-        "text": "습기 찬 공기 속에서",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.move.intro.012"
       }
     ],
     "Action": [
       {
-        "text": "어두운 통로를",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.action.001"
       },
       {
-        "text": "좁은 틈을",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.move.action.002"
       },
       {
-        "text": "발광 이끼가 드리운 길을",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.move.action.003"
       },
       {
-        "text": "미끄러운 바닥을",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.move.action.004"
       },
       {
-        "text": "무너진 돌더미를",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.move.action.005"
       },
       {
-        "text": "깊은 심연 쪽으로",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.move.action.006"
       },
       {
-        "text": "낡은 석문 너머로",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.move.action.007"
       },
       {
-        "text": "계단을",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.action.008"
       },
       {
-        "text": "물기 배인 암벽 옆을",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.move.action.009"
       },
       {
-        "text": "끊어진 다리를",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.move.action.010"
       },
       {
-        "text": "안개 낀 복도를",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.move.action.011"
       },
       {
-        "text": "빛나는 결정 군집을",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.move.action.012"
       },
       {
-        "text": "고요한 수로를",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.move.action.013"
       },
       {
-        "text": "끝없이 이어진 회랑을",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.move.action.014"
       },
       {
-        "text": "바람이 새는 틈을",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.action.015"
       }
     ],
     "Result": [
       {
-        "text": "조심스럽게 지나갔다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.result.001"
       },
       {
-        "text": "천천히 전진했다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.move.result.002"
       },
       {
-        "text": "발걸음을 옮겼다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.move.result.003"
       },
       {
-        "text": "길을 이어갔다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.move.result.004"
       },
       {
-        "text": "무사히 통과했다",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.move.result.005"
       },
       {
-        "text": "방향을 잡고 나아갔다",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.move.result.006"
       },
       {
-        "text": "숨을 고르며 걸었다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.move.result.007"
       },
       {
-        "text": "흔적을 따라갔다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.result.008"
       },
       {
-        "text": "망설임 없이 건넜다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.move.result.009"
       },
       {
-        "text": "발소리를 죽이며 이동했다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.move.result.010"
       }
     ],
     "Afterglow": [
       {
-        "text": ".",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.afterglow.001"
       },
       {
-        "text": "고개를 끄덕였다.",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.move.afterglow.002"
       },
       {
-        "text": "다음 지점을 확인했다.",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.move.afterglow.003"
       },
       {
-        "text": "지도에 표시를 남겼다.",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.move.afterglow.004"
       },
       {
-        "text": "뒤를 돌아보지 않았다.",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.move.afterglow.005"
       },
       {
-        "text": "긴장을 풀지 않았다.",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.move.afterglow.006"
       },
       {
-        "text": "침묵을 유지했다.",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.move.afterglow.007"
       },
       {
-        "text": "발걸음을 재촉하지 않았다.",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.move.afterglow.008"
       }
     ]
   }

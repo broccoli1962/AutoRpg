@@ -49,10 +49,10 @@ namespace Backend.Object.UI.Editor
                 Vector2.zero, new Vector2(0f, 128f));
 
             var actionLayout = CreateHorizontalLayout(actionBar);
-            var dispatch = CreateTouchButton(actionLayout.transform, "Btn_Dispatch", "파견", 240f);
-            var enhance = CreateTouchButton(actionLayout.transform, "Btn_Enhance", "강화", 240f);
-            var summon = CreateTouchButton(actionLayout.transform, "Btn_Summon", "소환", 240f);
-            var ret = CreateTouchButton(actionLayout.transform, "Btn_Return", "귀환", 240f);
+            var dispatch = CreateTouchButton(actionLayout.transform, "Btn_Dispatch", string.Empty, 240f);
+            var enhance = CreateTouchButton(actionLayout.transform, "Btn_Enhance", string.Empty, 240f);
+            var summon = CreateTouchButton(actionLayout.transform, "Btn_Summon", string.Empty, 240f);
+            var ret = CreateTouchButton(actionLayout.transform, "Btn_Return", string.Empty, 240f);
 
             var panel = root.GetComponent<ExplorationHudPanel>();
             var so = new SerializedObject(panel);

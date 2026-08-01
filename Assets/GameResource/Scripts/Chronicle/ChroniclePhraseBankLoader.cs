@@ -89,11 +89,18 @@ namespace Backend.Chronicle
             var result = new List<PhraseEntry>(entries.Length);
             foreach (var entry in entries)
             {
-                if (entry == null || string.IsNullOrWhiteSpace(entry.text))
+                if (entry == null)
+                    continue;
+
+                var localizationKey = !string.IsNullOrWhiteSpace(entry.key)
+                    ? entry.key.Trim()
+                    : entry.text?.Trim();
+
+                if (string.IsNullOrWhiteSpace(localizationKey))
                     continue;
 
                 result.Add(new PhraseEntry(
-                    entry.text.Trim(),
+                    localizationKey,
                     entry.weight,
                     entry.conditionTags ?? Array.Empty<string>()));
             }

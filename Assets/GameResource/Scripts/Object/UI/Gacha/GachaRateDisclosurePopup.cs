@@ -127,6 +127,17 @@ namespace Backend.Object.UI.Gacha
                 "gacha.rate.pity_section".GetLocalizeText(),
                 BuildPityContent(snapshot));
             View.SetTenPullGuarantee("gacha.rate.ten_pull".GetLocalizeText());
+            SetButtonLabel(View.CloseButton, "ui.common.close".GetLocalizeText());
+        }
+
+        private static void SetButtonLabel(CommonButton button, string text)
+        {
+            if (button == null)
+                return;
+
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+                label.text = text;
         }
 
         private static string BuildGradeContent(GachaRateDisclosureSnapshot snapshot)

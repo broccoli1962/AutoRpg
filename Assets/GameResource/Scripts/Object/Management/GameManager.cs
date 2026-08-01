@@ -1,6 +1,7 @@
 using Backend.Chronicle;
 using Backend.Object.UI;
 using Backend.Services;
+using Backend.Util.Localization;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -19,6 +20,7 @@ namespace Backend.Object.Management
 
         private async UniTask InitializeCore_Internal()
         {
+            LocalizationService.Initialize();
             var phraseBank = await ChroniclePhraseBankLoader.LoadAsync();
             NarrationProvider.SetSource(new ChronicleNarrationSource(phraseBank));
             LogStripPipeline.Reset();

@@ -1,9 +1,11 @@
 using Backend.Meta.Achievements;
 using Backend.Object.Management;
 using Backend.Object.UI.Gacha;
+using Backend.Util.Localization;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Backend.Object.UI
 {
@@ -22,7 +24,33 @@ namespace Backend.Object.UI
 
         protected override void OnOpen()
         {
+            RefreshLabels();
             BindTouchActions();
+            LocalizeTable.OnChangedLanguage += RefreshLabels;
+        }
+
+        protected override void OnClose()
+        {
+            LocalizeTable.OnChangedLanguage -= RefreshLabels;
+            base.OnClose();
+        }
+
+        private void RefreshLabels()
+        {
+            SetButtonLabel(_dispatchButton, "ui.hud.dispatch".GetLocalizeText());
+            SetButtonLabel(_enhanceButton, "ui.hud.enhance".GetLocalizeText());
+            SetButtonLabel(_summonButton, "ui.hud.summon".GetLocalizeText());
+            SetButtonLabel(_returnButton, "ui.hud.return".GetLocalizeText());
+        }
+
+        private static void SetButtonLabel(CommonButton button, string text)
+        {
+            if (button == null)
+                return;
+
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+                label.text = text;
         }
 
         private void BindTouchActions()

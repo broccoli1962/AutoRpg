@@ -3,307 +3,307 @@
   "slots": {
     "Intro": [
       {
-        "text": "교전 중",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.intro.001"
       },
       {
-        "text": "함정을 피하다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.injury.intro.002"
       },
       {
-        "text": "낙석을 맞으며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.injury.intro.003"
       },
       {
-        "text": "급격한 공격에",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.injury.intro.004"
       },
       {
-        "text": "{character}는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.injury.intro.005"
       },
       {
-        "text": "전열의 {character}가",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.injury.intro.006"
       },
       {
-        "text": "파티는",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.injury.intro.007"
       },
       {
-        "text": "예상치 못한 일격에",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.intro.008"
       },
       {
-        "text": "미끄러운 바닥에서",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.injury.intro.009"
       },
       {
-        "text": "적의 반격에",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.injury.intro.010"
       },
       {
-        "text": "긴 전투 끝에",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.injury.intro.011"
       },
       {
-        "text": "피로가 쌓인 탓에",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.injury.intro.012"
       }
     ],
     "Action": [
       {
-        "text": "팔을 다치고",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.action.001"
       },
       {
-        "text": "발목을 삐고",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.injury.action.002"
       },
       {
-        "text": "방패가 부서지며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.injury.action.003"
       },
       {
-        "text": "갑옷이 찢기며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.injury.action.004"
       },
       {
-        "text": "크게 넘어지며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.injury.action.005"
       },
       {
-        "text": "피를 흘리며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.injury.action.006"
       },
       {
-        "text": "호흡이 가빠지며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.injury.action.007"
       },
       {
-        "text": "시야가 흐려지며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.action.008"
       },
       {
-        "text": "무릎을 다치며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.injury.action.009"
       },
       {
-        "text": "어깨에 상처를 입으며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.injury.action.010"
       },
       {
-        "text": "지쳐 주저앉으며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.injury.action.011"
       },
       {
-        "text": "치명적이진 않은 부상을 입으며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.injury.action.012"
       },
       {
-        "text": "동료를 감싸다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.injury.action.013"
       },
       {
-        "text": "균형을 잃으며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.injury.action.014"
       },
       {
-        "text": "급히 뒤로 물러나며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.action.015"
       }
     ],
     "Result": [
       {
-        "text": "전투를 이어갔다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.result.001"
       },
       {
-        "text": "간신히 버텼다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.injury.result.002"
       },
       {
-        "text": "치료를 요청했다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.injury.result.003"
       },
       {
-        "text": "전열을 유지했다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.injury.result.004"
       },
       {
-        "text": "이를 악물고 섰다",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.injury.result.005"
       },
       {
-        "text": "동료의 부축을 받았다",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.injury.result.006"
       },
       {
-        "text": "상처를 대략 처리했다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.injury.result.007"
       },
       {
-        "text": "전진을 멈췄다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.result.008"
       },
       {
-        "text": "위험을 감수했다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.injury.result.009"
       },
       {
-        "text": "기록에 남길 만한 상처를 입었다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.injury.result.010"
       }
     ],
     "Afterglow": [
       {
-        "text": ".",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.afterglow.001"
       },
       {
-        "text": "다행히 목숨은 걸었다.",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.injury.afterglow.002"
       },
       {
-        "text": "회복이 필요했다.",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.injury.afterglow.003"
       },
       {
-        "text": "다음 전투가 걱정됐다.",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.injury.afterglow.004"
       },
       {
-        "text": "심연은 자비롭지 않았다.",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.injury.afterglow.005"
       },
       {
-        "text": "분노보다 경계가 앞섰다.",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.injury.afterglow.006"
       },
       {
-        "text": "치료 없이는 오래가지 못할 것 같았다.",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.injury.afterglow.007"
       },
       {
-        "text": "파티는 더 조심스러워졌다.",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.injury.afterglow.008"
       }
     ]
   }

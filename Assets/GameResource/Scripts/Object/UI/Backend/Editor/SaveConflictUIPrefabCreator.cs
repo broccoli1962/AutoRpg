@@ -45,10 +45,10 @@ namespace Backend.Object.UI.Backend.Editor
             var cloudInfo = CreateText(root.transform, "CloudInfo", 24, TextAnchor.UpperLeft,
                 new Vector2(0.05f, 0.25f), new Vector2(0.95f, 0.55f), Vector2.zero, Vector2.zero);
 
-            var useLocal = CreateTouchButton(root.transform, "Btn_UseLocal", "Use Local Save", 320f,
+            var useLocal = CreateTouchButton(root.transform, "Btn_UseLocal", string.Empty, 320f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-170f, 120f), new Vector2(170f, 200f));
 
-            var useCloud = CreateTouchButton(root.transform, "Btn_UseCloud", "Use Cloud Save", 320f,
+            var useCloud = CreateTouchButton(root.transform, "Btn_UseCloud", string.Empty, 320f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-170f, 32f), new Vector2(170f, 104f));
 
             var so = new SerializedObject(popup);

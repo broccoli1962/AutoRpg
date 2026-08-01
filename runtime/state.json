@@ -1,6 +1,6 @@
 {
   "project": "심연기록 (Abyss Chronicle)",
-  "currentStepId": 17,
+  "currentStepId": 18,
   "status": "in_progress",
   "attempts": {
     "1": 2,
@@ -19,7 +19,8 @@
     "14": 2,
     "15": 1,
     "16": 2,
-    "17": 1
+    "17": 1,
+    "18": 2
   },
   "completedSteps": [
     1,
@@ -37,7 +38,8 @@
     13,
     14,
     15,
-    16
+    16,
+    17
   ],
   "memories": [
     {
@@ -484,8 +486,64 @@
       "commitHash": "2cfa95f",
       "attempts": 2,
       "finishedAt": "2026-08-01T04:31:55.190Z"
+    },
+    {
+      "stepId": 17,
+      "title": "FTUE — 튜토리얼 및 초반 온보딩",
+      "status": "completed",
+      "summary": [
+        "Unity 에디터에서 `Tools/Abyss Chronicle/Ensure Tutorial Data Assets`를 한 번 실행하면 `TutorialTable.asset`과 Addressables 등록이 완료됩니다.",
+        "FILES: `Assets/GameResource/Scripts/Meta/Tutorial/*`, `Assets/Tests/EditMode/Editor/Tutorial/TutorialServiceTests.cs`, `GameSaveSnapshot.cs`, `GameSaveAggregator.cs`, `GameplayAnalyticsBridge.cs`, `MetaGameplayEvents.cs`, `AdManager.cs`, `ShopService.cs`, `ShopPanel.cs`, `AddressableKeys.cs`",
+        "NEXT: Step 18 — 성장 벽 UX 및 `BackendAnalyticsEvents.ReportGrowthWall` 훅을 게임플레이에 연결하고, 튜토리얼 완료 후 상점/광고 노출 전환을 부트스트랩에 배선",
+        "SUMMARY: FTUE 6단계 튜토리얼(TutorialTable/Service/Manager), 세이브·진입/완료 분석, 광고·상점 차단, 초기 재화 지급을 구현했습니다."
+      ],
+      "changedFiles": [
+        "Assets/GameResource/Scripts/Backend/Analytics/GameAnalyticsEvents.cs",
+        "Assets/GameResource/Scripts/Backend/Analytics/GameplayAnalyticsBridge.cs",
+        "Assets/GameResource/Scripts/Backend/Save/GameSaveAggregator.cs",
+        "Assets/GameResource/Scripts/Backend/Save/GameSaveSnapshot.cs",
+        "Assets/GameResource/Scripts/Meta/Achievements/MetaGameplayEvents.cs",
+        "Assets/GameResource/Scripts/Meta/Ads/AdManager.cs",
+        "Assets/GameResource/Scripts/Meta/Currency/CurrencyReasonCodes.cs",
+        "Assets/GameResource/Scripts/Meta/Shop/ShopService.cs",
+        "Assets/GameResource/Scripts/Object/UI/ExplorationHudPanel.cs",
+        "Assets/GameResource/Scripts/Object/UI/Offline/OfflineReturnSummaryPopup.cs",
+        "Assets/GameResource/Scripts/Object/UI/Shop/ShopPanel.cs",
+        "Assets/GameResource/Scripts/Util/Addressable/AddressableKeys.cs"
+      ],
+      "commitHash": "1a19e16",
+      "attempts": 1,
+      "finishedAt": "2026-08-01T04:38:15.431Z"
+    },
+    {
+      "stepId": 18,
+      "title": "현지화 체계 구축",
+      "status": "failed",
+      "summary": [
+        "NEXT: Step 19 — 성장 벽 UX 및 `BackendAnalyticsEvents.ReportGrowthWall` 게임플레이 연결, 튜토리얼 완료 후 상점/광고 노출 부트스트랩 배선",
+        "SUMMARY: 한/영/일 3언어 GSSL 현지화 테이블(432키)과 `LocalizationService`·`LocaleFormatUtil`·`LargeNumberFormatter` API를 구축하고, UI·연대기 문장뱅크(360구)의 하드코딩 문자열을 키 기반으로 전환했습니다. BMJUA(한글)·NotoSansJP(일본어)·NotoSans(라틴) TMP SDF 및 Fallback 체인을 설정했으며 EditMode 153건 중 현지화 12건 포함 151건 통과(튜토리얼 2건은 기존 테스트 격리 이슈).",
+        "현지화 API와 마이그레이션 스크립트를 작성 중입니다.",
+        "Step 18 현지화 체계 구축을 시작합니다. 기존 코드·GSSL 구조·하드코딩 문자열을 먼저 파악합니다."
+      ],
+      "changedFiles": [
+        ".cursor/gssl-result.json",
+        "Assets/Fonts/BMJUA_ttf SDF.asset",
+        "Assets/GameResource/Data/Chronicle/combat_result.json",
+        "Assets/GameResource/Data/Chronicle/discovery.json",
+        "Assets/GameResource/Data/Chronicle/floor_clear.json",
+        "Assets/GameResource/Data/Chronicle/injury.json",
+        "Assets/GameResource/Data/Chronicle/milestone.json",
+        "Assets/GameResource/Data/Chronicle/move.json",
+        "Assets/GameResource/Data/Chronicle/rest.json",
+        "Assets/GameResource/Data/Chronicle/trap.json",
+        "Assets/GameResource/Prefabs/UI/ExplorationHudPanel.prefab",
+        "Assets/GameResource/Prefabs/UI/GachaRateDisclosurePopup.prefab"
+      ],
+      "attempts": 1,
+      "finishedAt": "2026-08-01T04:53:36.379Z"
     }
   ],
   "startedAt": "2026-07-31T12:41:29.726Z",
-  "updatedAt": "2026-08-01T04:31:55.484Z"
+  "updatedAt": "2026-08-01T04:53:36.779Z",
+  "lastError": "린트/컨벤션 위반이 감지되었습니다:\n- Assets/GameResource/Scripts/Util/Localization/Editor/LocalizationFontSetup.cs: Debug.Log 계열 호출이 추가되었습니다.\n- Assets/GameResource/Scripts/Util/Localization/LocalizationService.cs: Debug.Log 계열 호출이 추가되었습니다."
 }

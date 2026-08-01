@@ -5,6 +5,7 @@ using Backend.Meta.Tutorial;
 using Backend.Object.Management;
 using Backend.Object.UI;
 using Backend.Services.Analytics;
+using Backend.Util.Localization;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -139,7 +140,19 @@ namespace Backend.Object.UI.Shop
         private void RefreshLabels()
         {
             View.SetTitle("shop.title".GetLocalizeText());
+            SetButtonLabel(View.RestoreButton, "shop.restore".GetLocalizeText());
+            SetButtonLabel(View.CloseButton, "shop.close".GetLocalizeText());
             RefreshProducts();
+        }
+
+        private static void SetButtonLabel(CommonButton button, string text)
+        {
+            if (button == null)
+                return;
+
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+                label.text = text;
         }
 
         private void RefreshProducts()
@@ -164,11 +177,11 @@ namespace Backend.Object.UI.Shop
                     displayName = product.ProductId;
 
                 var priceLabel = product.PriceKrw > 0
-                    ? $"₩{product.PriceKrw:N0}"
+                    ? LocaleFormatUtil.FormatCurrency(product.PriceKrw)
                     : string.Empty;
 
                 var canPurchase = shopService == null || shopService.CanPurchase(product);
-                var statusSuffix = canPurchase ? string.Empty : " (sold out)";
+                var statusSuffix = canPurchase ? string.Empty : "shop.sold_out".GetLocalizeText();
 
                 _rows.Add(new ShopProductRowViewModel(
                     product.ProductId,

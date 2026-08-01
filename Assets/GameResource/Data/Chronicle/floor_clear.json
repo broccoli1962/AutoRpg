@@ -3,307 +3,307 @@
   "slots": {
     "Intro": [
       {
-        "text": "마지막 적이 쓰러지자",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.intro.001"
       },
       {
-        "text": "웨이브가 끝나자",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.002"
       },
       {
-        "text": "긴 전투가 마무리되자",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.003"
       },
       {
-        "text": "침묵이 내려앉자",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.004"
       },
       {
-        "text": "{character}는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.005"
       },
       {
-        "text": "파티는",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.006"
       },
       {
-        "text": "탐험대는",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.007"
       },
       {
-        "text": "승리의 여운 속에서",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.intro.008"
       },
       {
-        "text": "피곤하지만",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.009"
       },
       {
-        "text": "심연의 한 층을",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.010"
       },
       {
-        "text": "긴 복도 끝에서",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.011"
       },
       {
-        "text": "보스의 잔해를 밟으며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.floor_clear.intro.012"
       }
     ],
     "Action": [
       {
-        "text": "{floor}층을",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.action.001"
       },
       {
-        "text": "이 구역의 마지막 문을",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.002"
       },
       {
-        "text": "장애물을",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.003"
       },
       {
-        "text": "최종 함정을",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.004"
       },
       {
-        "text": "깊은 심연의 문턱을",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.005"
       },
       {
-        "text": "다음 층으로 향하는 길을",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.006"
       },
       {
-        "text": "어두운 계단을",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.007"
       },
       {
-        "text": "봉인된 통로를",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.action.008"
       },
       {
-        "text": "마지막 방어선을",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.009"
       },
       {
-        "text": "층의 끝을",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.010"
       },
       {
-        "text": "위험한 구역을",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.011"
       },
       {
-        "text": "긴 복도를",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.012"
       },
       {
-        "text": "Action 변형 13",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.013"
       },
       {
-        "text": "Action 변형 14",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.floor_clear.action.014"
       },
       {
-        "text": "Action 변형 15",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.action.015"
       }
     ],
     "Result": [
       {
-        "text": "완전히 돌파했다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.result.001"
       },
       {
-        "text": "정복했다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.002"
       },
       {
-        "text": "넘어섰다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.003"
       },
       {
-        "text": "개방했다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.004"
       },
       {
-        "text": "기록에 새겼다",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.005"
       },
       {
-        "text": "확보했다",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.006"
       },
       {
-        "text": "지나갔다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.007"
       },
       {
-        "text": "정리했다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.result.008"
       },
       {
-        "text": "마무리했다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.009"
       },
       {
-        "text": "돌파했다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.floor_clear.result.010"
       }
     ],
     "Afterglow": [
       {
-        "text": ".",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.afterglow.001"
       },
       {
-        "text": "다음 층이 기다리고 있었다.",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.floor_clear.afterglow.002"
       },
       {
-        "text": "잠깐의 안도감이 스쳤다.",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.floor_clear.afterglow.003"
       },
       {
-        "text": "곧 다시 전진했다.",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.floor_clear.afterglow.004"
       },
       {
-        "text": "심연은 더 깊었다.",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.floor_clear.afterglow.005"
       },
       {
-        "text": "파티는 숨을 고르며 전진했다.",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.floor_clear.afterglow.006"
       },
       {
-        "text": "승리는 짧았지만 분명했다.",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.floor_clear.afterglow.007"
       },
       {
-        "text": "연대기에 한 페이지가 더해졌다.",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.floor_clear.afterglow.008"
       }
     ]
   }

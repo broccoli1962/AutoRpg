@@ -58,10 +58,10 @@ namespace Backend.Object.UI.Shop.Editor
                 Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             rowTemplate.gameObject.SetActive(false);
 
-            var restore = CreateTouchButton(root.transform, "Btn_Restore", "Restore Purchases", 320f,
+            var restore = CreateTouchButton(root.transform, "Btn_Restore", string.Empty, 320f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-170f, 120f), new Vector2(170f, 200f));
 
-            var close = CreateTouchButton(root.transform, "Btn_Close", "Close", 200f,
+            var close = CreateTouchButton(root.transform, "Btn_Close", string.Empty, 200f,
                 new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-100f, 32f), new Vector2(100f, 104f));
 
             var so = new SerializedObject(panel);

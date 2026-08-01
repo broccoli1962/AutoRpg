@@ -3,307 +3,307 @@
   "slots": {
     "Intro": [
       {
-        "text": "전투가 끝나자",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.intro.001"
       },
       {
-        "text": "칼날이 멎자",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.002"
       },
       {
-        "text": "마지막 일격 후",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.003"
       },
       {
-        "text": "먼지가 가라앉자",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.004"
       },
       {
-        "text": "{character}는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.005"
       },
       {
-        "text": "전장 한복판에서",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.006"
       },
       {
-        "text": "피비린내 속에서",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.007"
       },
       {
-        "text": "승리의 여운 속에서",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.intro.008"
       },
       {
-        "text": "적의 기세가 꺾이자",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.009"
       },
       {
-        "text": "결정적 순간이 지나자",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.010"
       },
       {
-        "text": "파티는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.011"
       },
       {
-        "text": "긴 교전 끝에",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.combat_result.intro.012"
       }
     ],
     "Action": [
       {
-        "text": "{monster}을(를) 쓰러뜨리고",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.action.001"
       },
       {
-        "text": "전리품을 챙기며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.002"
       },
       {
-        "text": "무기를 닦으며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.003"
       },
       {
-        "text": "호흡을 가다듬으며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.004"
       },
       {
-        "text": "동료를 확인하며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.005"
       },
       {
-        "text": "상처를 대략 돌보며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.006"
       },
       {
-        "text": "전리품 주머니를 열며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.007"
       },
       {
-        "text": "적의 잔해를 밟으며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.action.008"
       },
       {
-        "text": "승리의 함성을 삼키며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.009"
       },
       {
-        "text": "다음 적을 경계하며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.010"
       },
       {
-        "text": "골드를 주워 담으며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.011"
       },
       {
-        "text": "경험의 파동을 느끼며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.012"
       },
       {
-        "text": "피를 닦으며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.013"
       },
       {
-        "text": "방패를 거두며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.combat_result.action.014"
       },
       {
-        "text": "전장을 정리하며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.action.015"
       }
     ],
     "Result": [
       {
-        "text": "전진을 재개했다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.result.001"
       },
       {
-        "text": "다음 구역으로 나아갔다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.002"
       },
       {
-        "text": "짧은 휴식을 취했다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.003"
       },
       {
-        "text": "길을 열었다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.004"
       },
       {
-        "text": "기록을 남겼다",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.005"
       },
       {
-        "text": "의기를 되살렸다",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.006"
       },
       {
-        "text": "전열을 재정비했다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.007"
       },
       {
-        "text": "심연을 더 깊이 파고들었다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.result.008"
       },
       {
-        "text": "승리를 확인했다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.009"
       },
       {
-        "text": "다음 목표를 세웠다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.combat_result.result.010"
       }
     ],
     "Afterglow": [
       {
-        "text": ". (+{amount}G)",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.afterglow.001"
       },
       {
-        "text": ".",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.combat_result.afterglow.002"
       },
       {
-        "text": "다만 긴장은 풀리지 않았다.",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.combat_result.afterglow.003"
       },
       {
-        "text": "누군가는 조용히 웃었다.",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.combat_result.afterglow.004"
       },
       {
-        "text": "승리는 짧았다.",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.combat_result.afterglow.005"
       },
       {
-        "text": "다음 전투를 예감했다.",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.combat_result.afterglow.006"
       },
       {
-        "text": "피로가 스며들었다.",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.combat_result.afterglow.007"
       },
       {
-        "text": "발걸음은 가벼웠다.",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.combat_result.afterglow.008"
       }
     ]
   }

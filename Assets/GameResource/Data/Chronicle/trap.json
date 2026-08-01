@@ -3,307 +3,307 @@
   "slots": {
     "Intro": [
       {
-        "text": "갑작스럽게",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.intro.001"
       },
       {
-        "text": "발밑에서",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.trap.intro.002"
       },
       {
-        "text": "조용히",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.trap.intro.003"
       },
       {
-        "text": "예고 없이",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.trap.intro.004"
       },
       {
-        "text": "{character}는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.trap.intro.005"
       },
       {
-        "text": "앞선 {character}가",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.trap.intro.006"
       },
       {
-        "text": "파티는",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.trap.intro.007"
       },
       {
-        "text": "어둠 속에서",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.intro.008"
       },
       {
-        "text": "길목 한복판에서",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.trap.intro.009"
       },
       {
-        "text": "낡은 함정이",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.trap.intro.010"
       },
       {
-        "text": "숨겨진 압력판이",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.trap.intro.011"
       },
       {
-        "text": "Intro 변형 12",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.trap.intro.012"
       }
     ],
     "Action": [
       {
-        "text": "바닥이 꺼지며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.action.001"
       },
       {
-        "text": "독침이 솟아오르고",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.trap.action.002"
       },
       {
-        "text": "벽에서 화살이 쏟아지며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.trap.action.003"
       },
       {
-        "text": "바닥이 미끄러지며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.trap.action.004"
       },
       {
-        "text": "연기가 피어오르고",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.trap.action.005"
       },
       {
-        "text": "돌덩이가 굴러 떨어지며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.trap.action.006"
       },
       {
-        "text": "마법 함정이 작동하며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.trap.action.007"
       },
       {
-        "text": "가시 덫에 걸리며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.action.008"
       },
       {
-        "text": "발밑의 그물이 올라오며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.trap.action.009"
       },
       {
-        "text": "빛나는 룬이 폭발하며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.trap.action.010"
       },
       {
-        "text": "천장이 흔들리며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.trap.action.011"
       },
       {
-        "text": "낡은 줄이 끊어지며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.trap.action.012"
       },
       {
-        "text": "독가스가 새어 나오며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.trap.action.013"
       },
       {
-        "text": "바닥의 칼날이 회전하며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.trap.action.014"
       },
       {
-        "text": "숨겨진 구덩이가 드러나며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.action.015"
       }
     ],
     "Result": [
       {
-        "text": "균형을 잃었다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.result.001"
       },
       {
-        "text": "급히 뒤로 물러났다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.trap.result.002"
       },
       {
-        "text": "피해를 입었다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.trap.result.003"
       },
       {
-        "text": "몸을 날렸다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.trap.result.004"
       },
       {
-        "text": "동료를 밀쳐 냈다",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.trap.result.005"
       },
       {
-        "text": "방패로 막아냈다",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.trap.result.006"
       },
       {
-        "text": "간신히 피했다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.trap.result.007"
       },
       {
-        "text": "발을 헛디뎠다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.result.008"
       },
       {
-        "text": "넘어졌다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.trap.result.009"
       },
       {
-        "text": "비명을 삼켰다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.trap.result.010"
       }
     ],
     "Afterglow": [
       {
-        "text": ".",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.afterglow.001"
       },
       {
-        "text": "다행히 치명상은 아니었다.",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.trap.afterglow.002"
       },
       {
-        "text": "분노보다 경계가 앞섰다.",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.trap.afterglow.003"
       },
       {
-        "text": "다음 함정을 경계했다.",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.trap.afterglow.004"
       },
       {
-        "text": "길이 더욱 위험해졌다.",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.trap.afterglow.005"
       },
       {
-        "text": "치료가 필요했다.",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.trap.afterglow.006"
       },
       {
-        "text": "심연은 아직 친절하지 않았다.",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.trap.afterglow.007"
       },
       {
-        "text": "기록에 경고를 남겼다.",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.trap.afterglow.008"
       }
     ]
   }

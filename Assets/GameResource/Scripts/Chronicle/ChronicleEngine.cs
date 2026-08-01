@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Backend.Util.Localization;
 
 namespace Backend.Chronicle
 {
@@ -23,10 +24,10 @@ namespace Backend.Chronicle
         private static readonly IReadOnlyDictionary<PhraseSlot, PhraseEntry> FallbackEntries =
             new Dictionary<PhraseSlot, PhraseEntry>
             {
-                [PhraseSlot.Intro] = new PhraseEntry("탐험대는", 1, Array.Empty<string>()),
-                [PhraseSlot.Action] = new PhraseEntry("조용히", 1, Array.Empty<string>()),
-                [PhraseSlot.Result] = new PhraseEntry("전진한다", 1, Array.Empty<string>()),
-                [PhraseSlot.Afterglow] = new PhraseEntry(".", 1, Array.Empty<string>())
+                [PhraseSlot.Intro] = new PhraseEntry("chronicle.fallback.intro", 1, Array.Empty<string>()),
+                [PhraseSlot.Action] = new PhraseEntry("chronicle.fallback.action", 1, Array.Empty<string>()),
+                [PhraseSlot.Result] = new PhraseEntry("chronicle.fallback.result", 1, Array.Empty<string>()),
+                [PhraseSlot.Afterglow] = new PhraseEntry("chronicle.fallback.afterglow", 1, Array.Empty<string>())
             };
 
         private readonly PhraseBank _bank;
@@ -67,7 +68,7 @@ namespace Backend.Chronicle
 
             var sentence = JoinParts(parts);
             return string.IsNullOrWhiteSpace(sentence)
-                ? PassthroughNarrationSource.DefaultFallbackLine
+                ? LocalizationService.Get(PassthroughNarrationSource.DefaultFallbackKey)
                 : sentence;
         }
 
@@ -254,7 +255,7 @@ namespace Backend.Chronicle
         {
             var key = entry?.LocalizationKey ?? string.Empty;
             if (string.IsNullOrEmpty(key))
-                return PassthroughNarrationSource.DefaultFallbackLine;
+                return LocalizationService.Get(PassthroughNarrationSource.DefaultFallbackKey);
 
             var resolved = resolveText != null ? resolveText(key) : key;
             if (string.IsNullOrWhiteSpace(resolved))

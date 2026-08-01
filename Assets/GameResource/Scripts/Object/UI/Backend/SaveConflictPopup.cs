@@ -2,6 +2,7 @@ using System;
 using Backend.Object.Management;
 using Backend.Object.UI;
 using Backend.Services.Save;
+using Backend.Util.Localization;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -20,11 +21,27 @@ namespace Backend.Object.UI.Backend
         [SerializeField] private CommonButton _useLocalButton;
         [SerializeField] private CommonButton _useCloudButton;
 
-        public Text TitleText => _titleText;
-        public Text LocalInfoText => _localInfoText;
-        public Text CloudInfoText => _cloudInfoText;
         public CommonButton UseLocalButton => _useLocalButton;
         public CommonButton UseCloudButton => _useCloudButton;
+
+        /// <summary>
+        /// 버튼 라벨을 현지화한다.
+        /// </summary>
+        public void SetButtonLabels(string useLocalLabel, string useCloudLabel)
+        {
+            SetButtonLabel(_useLocalButton, useLocalLabel);
+            SetButtonLabel(_useCloudButton, useCloudLabel);
+        }
+
+        private static void SetButtonLabel(CommonButton button, string text)
+        {
+            if (button == null)
+                return;
+
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+                label.text = text;
+        }
 
         /// <summary>
         /// 충돌 선택을 대기한다.
@@ -76,6 +93,9 @@ namespace Backend.Object.UI.Backend
         {
             _choiceSource = new UniTaskCompletionSource<SaveConflictChoice>();
             View.SetConflictInfo(local, cloud);
+            View.SetButtonLabels(
+                "save_conflict.use_local".GetLocalizeText(),
+                "save_conflict.use_cloud".GetLocalizeText());
             BindButtons();
             return _choiceSource.Task;
         }

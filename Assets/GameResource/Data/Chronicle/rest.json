@@ -3,307 +3,307 @@
   "slots": {
     "Intro": [
       {
-        "text": "잠시 멈춰 선 파티는",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.intro.001"
       },
       {
-        "text": "안전해 보이는 틈에서",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.rest.intro.002"
       },
       {
-        "text": "긴 전투 뒤",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.rest.intro.003"
       },
       {
-        "text": "지친 기색으로",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.rest.intro.004"
       },
       {
-        "text": "{character}는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.rest.intro.005"
       },
       {
-        "text": "일행은",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.rest.intro.006"
       },
       {
-        "text": "어두운 alcove에서",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.rest.intro.007"
       },
       {
-        "text": "낡은 캠프파이어 옆에서",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.intro.008"
       },
       {
-        "text": "조용한 동굴 구석에서",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.rest.intro.009"
       },
       {
-        "text": "잠깐의 휴식을 위해",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.rest.intro.010"
       },
       {
-        "text": "호흡을 고르며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.rest.intro.011"
       },
       {
-        "text": "빛나는 균열 옆에서",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.rest.intro.012"
       }
     ],
     "Action": [
       {
-        "text": "상처를 돌보고",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.action.001"
       },
       {
-        "text": "물을 나누며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.rest.action.002"
       },
       {
-        "text": "장비를 점검하고",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.rest.action.003"
       },
       {
-        "text": "짧은 명상을 하며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.rest.action.004"
       },
       {
-        "text": "따뜻한 차를 마시며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.rest.action.005"
       },
       {
-        "text": "지도를 펼쳐 보고",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.rest.action.006"
       },
       {
-        "text": "무기를 닦으며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.rest.action.007"
       },
       {
-        "text": "동료의 상태를 확인하며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.action.008"
       },
       {
-        "text": "눈을 감고 쉬며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.rest.action.009"
       },
       {
-        "text": "간단한 식사를 하며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.rest.action.010"
       },
       {
-        "text": "긴장을 풀며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.rest.action.011"
       },
       {
-        "text": "다음 구간을 논의하며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.rest.action.012"
       },
       {
-        "text": "붕대를 감으며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.rest.action.013"
       },
       {
-        "text": "마력을 정비하며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.rest.action.014"
       },
       {
-        "text": "발을 쉬게 하며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.action.015"
       }
     ],
     "Result": [
       {
-        "text": "기력을 회복했다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.result.001"
       },
       {
-        "text": "숨을 고르며 쉬었다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.rest.result.002"
       },
       {
-        "text": "잠시 숨을 돌렸다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.rest.result.003"
       },
       {
-        "text": "다시 일어섰다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.rest.result.004"
       },
       {
-        "text": "의지를 다잡았다",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.rest.result.005"
       },
       {
-        "text": "준비를 마쳤다",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.rest.result.006"
       },
       {
-        "text": "전열을 재정비했다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.rest.result.007"
       },
       {
-        "text": "피로를 덜었다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.result.008"
       },
       {
-        "text": "다음 목표를 확인했다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.rest.result.009"
       },
       {
-        "text": "침묵 속에서 쉬었다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.rest.result.010"
       }
     ],
     "Afterglow": [
       {
-        "text": ".",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.afterglow.001"
       },
       {
-        "text": "쉬는 시간은 짧았다.",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.rest.afterglow.002"
       },
       {
-        "text": "심연은 기다려주지 않았다.",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.rest.afterglow.003"
       },
       {
-        "text": "다시 발걸음을 옮겼다.",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.rest.afterglow.004"
       },
       {
-        "text": "누군가는 조용히 기도했다.",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.rest.afterglow.005"
       },
       {
-        "text": "휴식은 필요했다.",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.rest.afterglow.006"
       },
       {
-        "text": "긴장만은 풀리지 않았다.",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.rest.afterglow.007"
       },
       {
-        "text": "곧 전진을 재개했다.",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.rest.afterglow.008"
       }
     ]
   }

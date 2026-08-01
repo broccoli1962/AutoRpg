@@ -21,6 +21,7 @@ public static class LocalizeTable
         var suffix = language switch
         {
             SystemLanguage.Korean => "ko",
+            SystemLanguage.Japanese => "ja",
             SystemLanguage.English => "en",
             _ => "en",
         };
@@ -57,12 +58,14 @@ public static class LocalizeTable
         if (dicLocalize.Count == 0)
             Initialize(Application.systemLanguage);
 
-        if (dicLocalize.TryGetValue(key, out var result))
+        if (dicLocalize.TryGetValue(key, out var result) && !string.IsNullOrEmpty(result))
         {
-            return string.Format(result, param);
+            return param != null && param.Length > 0
+                ? string.Format(result, param)
+                : result;
         }
 
-        return "!" + key;
+        return key;
     }
 
 #if UNITY_EDITOR

@@ -125,6 +125,17 @@ namespace Backend.Object.UI.Gacha
             View.SetRateInfoLabel("gacha.summon.rate_info".GetLocalizeText());
             View.SetSingleSummonLabel("gacha.summon.single".GetLocalizeText());
             View.SetTenSummonLabel("gacha.summon.ten".GetLocalizeText());
+            SetButtonLabel(View.CloseButton, "ui.common.close".GetLocalizeText());
+        }
+
+        private static void SetButtonLabel(CommonButton button, string text)
+        {
+            if (button == null)
+                return;
+
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+                label.text = text;
         }
     }
 }

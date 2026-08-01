@@ -2,6 +2,7 @@ using System.Text;
 using Backend.GameSystems.Offline;
 using Backend.Meta.Achievements;
 using Backend.Object.Management;
+using Backend.Util.Localization;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
@@ -112,13 +113,24 @@ namespace Backend.Object.UI.Offline
 
             View.SetTitle("offline.summary.title".GetLocalizeText());
             View.SetElapsed("offline.summary.elapsed".GetLocalizeText(
-                FormatDuration(result.SettledDuration)));
+                LocaleFormatUtil.FormatDuration(result.SettledDuration)));
             View.SetResourcesSection(
                 "offline.summary.resources".GetLocalizeText(),
                 BuildResourcesContent(result));
             View.SetHighlightsSection(
                 "offline.summary.highlights".GetLocalizeText(),
                 BuildHighlightsContent(result));
+            SetButtonLabel(View.ConfirmButton, "offline.summary.confirm".GetLocalizeText());
+        }
+
+        private static void SetButtonLabel(CommonButton button, string text)
+        {
+            if (button == null)
+                return;
+
+            var label = button.GetComponentInChildren<Text>();
+            if (label != null)
+                label.text = text;
         }
 
         private static string BuildResourcesContent(OfflineSettlementResult result)
@@ -126,7 +138,8 @@ namespace Backend.Object.UI.Offline
             if (result.GoldReward <= 0L)
                 return string.Empty;
 
-            return "offline.summary.gold_line".GetLocalizeText(result.GoldReward);
+            return "offline.summary.gold_line".GetLocalizeText(
+                LocaleFormatUtil.FormatCompactNumber(result.GoldReward));
         }
 
         private static string BuildHighlightsContent(OfflineSettlementResult result)
@@ -144,17 +157,6 @@ namespace Backend.Object.UI.Offline
             }
 
             return builder.ToString().TrimEnd();
-        }
-
-        private static string FormatDuration(System.TimeSpan duration)
-        {
-            if (duration.TotalHours >= 1d)
-                return $"{(int)duration.TotalHours}h {duration.Minutes}m";
-
-            if (duration.TotalMinutes >= 1d)
-                return $"{duration.Minutes}m {duration.Seconds}s";
-
-            return $"{duration.Seconds}s";
         }
     }
 }

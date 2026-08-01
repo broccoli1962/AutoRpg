@@ -3,307 +3,307 @@
   "slots": {
     "Intro": [
       {
-        "text": "오랜 탐험 끝에",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.intro.001"
       },
       {
-        "text": "중대한 순간",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.002"
       },
       {
-        "text": "기록될 만한 사건이",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.003"
       },
       {
-        "text": "파티 전원이",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.004"
       },
       {
-        "text": "{character}는",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.005"
       },
       {
-        "text": "탐험대는",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.006"
       },
       {
-        "text": "심연 깊숙이서",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.007"
       },
       {
-        "text": "전설적인 장면 속에서",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.intro.008"
       },
       {
-        "text": "모두가",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.009"
       },
       {
-        "text": "눈을 마주치며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.010"
       },
       {
-        "text": "침묵 속에서",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.011"
       },
       {
-        "text": "기나긴 여정 속에서",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.milestone.intro.012"
       }
     ],
     "Action": [
       {
-        "text": "새로운 구역에 발을 디디고",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.action.001"
       },
       {
-        "text": "전설의 흔적을 확인하며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.milestone.action.002"
       },
       {
-        "text": "유산의 파편을 손에 쥐며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.milestone.action.003"
       },
       {
-        "text": "깊은 심연의 문을 열며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.milestone.action.004"
       },
       {
-        "text": "동료와 맹세를 맺으며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.milestone.action.005"
       },
       {
-        "text": "전투의 전환점을 맞으며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.milestone.action.006"
       },
       {
-        "text": "중대한 선택을 하며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.milestone.action.007"
       },
       {
-        "text": "새로운 기록을 세우며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.action.008"
       },
       {
-        "text": "파티의 이름을 각인하며",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.milestone.action.009"
       },
       {
-        "text": "심연의 비밀을 엿보며",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.milestone.action.010"
       },
       {
-        "text": "전설에 오를 만한 일을 하며",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.milestone.action.011"
       },
       {
-        "text": "모두의 의지를 모으며",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.milestone.action.012"
       },
       {
-        "text": "위험을 감수하며",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.milestone.action.013"
       },
       {
-        "text": "운명의 갈림길에 서며",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.milestone.action.014"
       },
       {
-        "text": "심연과 맞서며",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.action.015"
       }
     ],
     "Result": [
       {
-        "text": "전설이 되었다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.result.001"
       },
       {
-        "text": "역사를 남겼다",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.milestone.result.002"
       },
       {
-        "text": "새 장을 열었다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.milestone.result.003"
       },
       {
-        "text": "모두를 놀라게 했다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.milestone.result.004"
       },
       {
-        "text": "기록에 각인됐다",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.milestone.result.005"
       },
       {
-        "text": "심연을 뒤흔들었다",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.milestone.result.006"
       },
       {
-        "text": "전환점을 만들었다",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.milestone.result.007"
       },
       {
-        "text": "모두의 기억에 남았다",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.result.008"
       },
       {
-        "text": "의미 있는 순간을 맞았다",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.milestone.result.009"
       },
       {
-        "text": "다음 여정을 예고했다",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.milestone.result.010"
       }
     ],
     "Afterglow": [
       {
-        "text": ".",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.afterglow.001"
       },
       {
-        "text": "이 순간은 잊히지 않을 것이다.",
         "weight": 2,
         "conditionTags": [
           "reckless"
-        ]
+        ],
+        "key": "chronicle.milestone.afterglow.002"
       },
       {
-        "text": "연대기에 굵은 줄이 그어졌다.",
         "weight": 2,
         "conditionTags": [
           "greedy"
-        ]
+        ],
+        "key": "chronicle.milestone.afterglow.003"
       },
       {
-        "text": "심연도 잠시 침묵했다.",
         "weight": 2,
         "conditionTags": [
           "cheerful"
-        ]
+        ],
+        "key": "chronicle.milestone.afterglow.004"
       },
       {
-        "text": "파티는 더 깊이 나아갔다.",
         "weight": 2,
         "conditionTags": [
           "cynical"
-        ]
+        ],
+        "key": "chronicle.milestone.afterglow.005"
       },
       {
-        "text": "전설은 이어질 것이다.",
         "weight": 2,
         "conditionTags": [
           "loyal"
-        ]
+        ],
+        "key": "chronicle.milestone.afterglow.006"
       },
       {
-        "text": "모두의 눈에 빛이 있었다.",
         "weight": 2,
         "conditionTags": [
           "cautious"
-        ]
+        ],
+        "key": "chronicle.milestone.afterglow.007"
       },
       {
-        "text": "다음 도전이 기다렸다.",
         "weight": 1,
-        "conditionTags": []
+        "conditionTags": [],
+        "key": "chronicle.milestone.afterglow.008"
       }
     ]
   }

@@ -46,7 +46,7 @@ namespace Backend.Meta.Tutorial.Tests
             TutorialTableProvider.ResetCache();
 
             if (_table != null)
-                Object.DestroyImmediate(_table);
+                UnityEngine.Object.DestroyImmediate(_table);
         }
 
         [Test]
